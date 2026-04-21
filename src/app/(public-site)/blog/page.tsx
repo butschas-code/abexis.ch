@@ -18,7 +18,8 @@ export const metadata = {
   description: "Perspektiven zu Strategie, Transformation und Führung — kuratiert von Abexis.",
 };
 
-export const dynamic = "force-dynamic";
+/** Cache briefly so client navigations feel instant; `loading.tsx` covers the first paint. */
+export const revalidate = 120;
 
 export default async function BlogIndexPage() {
   const [posts, categories, deploymentSite] = await Promise.all([

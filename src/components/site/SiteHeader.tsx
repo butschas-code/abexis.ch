@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { mainNav } from "@/data/pages";
 import { logoUrl } from "@/data/site-images";
@@ -11,7 +11,12 @@ import { logoUrl } from "@/data/site-images";
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [pendingHref, setPendingHref] = useState<string | null>(null);
   const reduce = useReducedMotion();
+
+  useEffect(() => {
+    setPendingHref(null);
+  }, [pathname]);
 
   return (
     <header className="sticky top-0 z-40 border-b border-black/[0.06] bg-white pt-[env(safe-area-inset-top,0px)]">
@@ -28,15 +33,21 @@ export function SiteHeader() {
                 : item.href === "/admin"
                   ? pathname.startsWith("/admin")
                   : pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const navigatingHere = pendingHref === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => {
+                  if (active) return;
+                  setPendingHref(item.href);
+                }}
                 className={`text-[15px] leading-tight tracking-[-0.01em] transition-colors duration-200 ease-out ${
                   active
                     ? "font-semibold text-[#1d1d1f] hover:text-brand-900"
                     : "font-normal text-[#6e6e73] hover:text-brand-500"
-                }`}
+                } ${navigatingHere ? "pointer-events-none opacity-55" : ""}`}
+                aria-busy={navigatingHere || undefined}
               >
                 {item.label}
               </Link>
@@ -66,16 +77,31 @@ export function SiteHeader() {
               className="flex flex-col py-4 pl-[max(1.5rem,env(safe-area-inset-left,0px))] pr-[max(1.5rem,env(safe-area-inset-right,0px))] text-[19px] font-medium"
               aria-label="Hauptnavigation mobil"
             >
-              {mainNav.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="rounded-xl px-3 py-3 text-[#1d1d1f] transition-colors duration-200 hover:bg-[#f5f5f7] hover:text-brand-500"
-                  onClick={() => setOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {mainNav.map((item) => {
+                const active =
+                  item.href === "/"
+                    ? pathname === "/"
+                    : item.href === "/admin"
+                      ? pathname.startsWith("/admin")
+                      : pathname === item.href || pathname.startsWith(`${item.href}/`);
+                const navigatingHere = pendingHref === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`rounded-xl px-3 py-3 text-[#1d1d1f] transition-colors duration-200 hover:bg-[#f5f5f7] hover:text-brand-500 ${
+                      navigatingHere ? "pointer-events-none opacity-55" : ""
+                    }`}
+                    aria-busy={navigatingHere || undefined}
+                    onClick={() => {
+                      if (!active) setPendingHref(item.href);
+                      setOpen(false);
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
             </nav>
           </motion.div>
         )}

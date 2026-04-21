@@ -16,8 +16,8 @@ import {
 
 type Props = { params: Promise<{ slug: string }> };
 
-/** CMS-backed slugs must resolve on every request (no stale ISR / build-time param lock-in). */
-export const dynamic = "force-dynamic";
+/** New CMS slugs still resolve on-demand (`dynamicParams` default); cache avoids slow repeat visits. */
+export const revalidate = 120;
 
 export async function generateStaticParams() {
   return getAllBlogPosts().map((p) => ({ slug: p.slug }));
