@@ -16,27 +16,31 @@ import {
 
 type Props = { params: Promise<{ slug: string }> };
 
-/** New CMS slugs still resolve on-demand (`dynamicParams` default); cache avoids slow repeat visits. */
-export const revalidate = 120;
-
-export async function generateStaticParams() {
-  return getAllBlogPosts().map((p) => ({ slug: p.slug }));
-}
+/**
+ * Article pages must not be stuck on a stale ISR shell (seen as intermittent 500s on Vercel when
+ * prerender + live data diverge). Index can stay cached; detail is always rendered on the server.
+ */
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props) {
-  const { slug: raw } = await params;
-  const slug = normalizeBlogSlugParam(raw);
-  const cms = await getPublishedPostBySlug(slug);
-  if (cms) {
-    return buildCmsPostMetadata(cms, `/blog/${encodeURIComponent(slug)}`);
+  try {
+    const { slug: raw } = await params;
+    const slug = normalizeBlogSlugParam(raw);
+    const cms = await getPublishedPostBySlug(slug);
+    if (cms) {
+      return buildCmsPostMetadata(cms, `/blog/${encodeURIComponent(slug)}`);
+    }
+    const legacy = getBlogPostBySlug(slug);
+    if (!legacy) return { title: "Insights" };
+    return {
+      title: legacy.title,
+      description: undefined,
+      alternates: { canonical: `/blog/${encodeURIComponent(slug)}` },
+    };
+  } catch (err) {
+    console.error("[blog] generateMetadata failed.", err);
+    return { title: "Insights" };
   }
-  const legacy = getBlogPostBySlug(slug);
-  if (!legacy) return { title: "Insights" };
-  return {
-    title: legacy.title,
-    description: undefined,
-    alternates: { canonical: `/blog/${encodeURIComponent(slug)}` },
-  };
 }
 
 export default async function BlogPostPage({ params }: Props) {

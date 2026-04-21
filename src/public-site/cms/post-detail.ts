@@ -86,10 +86,11 @@ export function selectRelatedPublishedPosts(
   limit = 3,
 ): PublishedPostWithId[] {
   const others = pool.filter((p) => p.id !== current.id);
-  const shared = new Set(current.categoryIds);
+  const shared = new Set(Array.isArray(current.categoryIds) ? current.categoryIds : []);
   const scored = others.map((p) => {
     let score = 0;
-    for (const c of p.categoryIds) {
+    const cats = Array.isArray(p.categoryIds) ? p.categoryIds : [];
+    for (const c of cats) {
       if (shared.has(c)) score += 2;
     }
     const t = p.publishedAt ? Date.parse(p.publishedAt) : 0;

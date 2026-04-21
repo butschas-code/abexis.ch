@@ -29,7 +29,8 @@ export function CmsBlogPostView({ data, related }: Props) {
   const { post, authorName, categories } = data;
   const heroImage = post.heroImageUrl?.trim() || getBlogListCoverByIndex(0);
   const dateLong = formatDate(post.publishedAt);
-  const hasTags = post.tags && post.tags.length > 0;
+  const tagList = Array.isArray(post.tags) ? post.tags : [];
+  const hasTags = tagList.length > 0;
   const hasCategories = categories.length > 0;
 
   return (
@@ -113,7 +114,7 @@ export function CmsBlogPostView({ data, related }: Props) {
               <span className="mr-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#a1a1a6]">
                 Stichwörter
               </span>
-              <span>{post.tags!.join(" · ")}</span>
+              <span>{tagList.join(" · ")}</span>
             </div>
           ) : null}
         </footer>

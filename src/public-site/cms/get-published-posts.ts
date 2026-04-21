@@ -82,6 +82,8 @@ export async function getPublishedPostBySlug(slug: string): Promise<PublishedPos
 
   const deployment = await getResolvedPublicDeploymentSite();
   const db = getAdminFirestore();
+
+  /** Prefer Admin when configured; on empty result or errors still try Web SDK (rules / slug drift). */
   if (db) {
     try {
       const allowed = new Set(visiblePostSitesInClause(deployment));
@@ -94,13 +96,11 @@ export async function getPublishedPostBySlug(slug: string): Promise<PublishedPos
       }
     } catch (err) {
       console.error("[cms] Admin Firestore post by slug failed; falling back to Web SDK.", err);
-      const viaWeb = await getPublishedPostBySlugViaWebSdk(normalized);
-      if (viaWeb) return viaWeb;
     }
-  } else {
-    const viaWeb = await getPublishedPostBySlugViaWebSdk(normalized);
-    if (viaWeb) return viaWeb;
   }
+
+  const viaWeb = await getPublishedPostBySlugViaWebSdk(normalized);
+  if (viaWeb) return viaWeb;
 
   if (deployment === "abexis") {
     const legacy = getBlogPostBySlug(normalized);

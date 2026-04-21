@@ -12,8 +12,13 @@ type Props = {
  * Prefer this over `SafeHtml` for post bodies from the editor.
  */
 export function BlogBody({ storedBody, className }: Props) {
-  const { html } = parsePostBody(storedBody ?? "");
-  const clean = sanitizeBlogHtml(html);
+  const { html } = parsePostBody(typeof storedBody === "string" ? storedBody : String(storedBody ?? ""));
+  let clean = "";
+  try {
+    clean = sanitizeBlogHtml(html);
+  } catch (err) {
+    console.error("[blog] sanitizeBlogHtml failed; rendering empty body.", err);
+  }
   return (
     <article
       className={className ?? "blog-prose legacy-prose max-w-none"}
