@@ -47,11 +47,19 @@ export async function listPublishedPostsFromDb(db: Firestore, limit = 20): Promi
  * Published posts for the public blog. Prefers **Admin SDK** (bypasses rules, works for locked-down rules).
  * Falls back to the **Firebase Web SDK** when Admin env is missing so local dev with only
  * `NEXT_PUBLIC_FIREBASE_*` still lists posts (see `firestore.rules` — anonymous read of published posts).
+ *
+ * If Admin is configured but the query fails (missing composite index, IAM, transient outage), we fall back
+ * to the Web SDK so public pages do not hard-500 — check Vercel logs for `[cms] Admin Firestore post list failed`.
  */
 export async function getPublishedCmsPosts(limit = 20): Promise<PublishedPostWithId[]> {
   const db = getAdminFirestore();
   if (db) {
-    return listPublishedPostsFromDb(db, limit);
+    try {
+      return await listPublishedPostsFromDb(db, limit);
+    } catch (err) {
+      console.error("[cms] Admin Firestore post list failed; falling back to Web SDK.", err);
+      return listPublishedPostsViaWebSdk(limit);
+    }
   }
   return listPublishedPostsViaWebSdk(limit);
 }
@@ -65,16 +73,21 @@ export async function getPublishedPostBySlug(slug: string): Promise<PublishedPos
 
   const db = getAdminFirestore();
   if (db) {
-    const deployment = await getResolvedPublicDeploymentSite();
-    const allowed = new Set(visiblePostSitesInClause(deployment));
-    const snap = await db.collection(COLLECTIONS.posts).where("slug", "==", normalized).limit(40).get();
-    for (const doc of snap.docs) {
-      const post = mapPostDoc(doc.id, doc);
-      if (!post || post.status !== "published") continue;
-      if (!allowed.has(post.site)) continue;
-      return { id: doc.id, ...post };
+    try {
+      const deployment = await getResolvedPublicDeploymentSite();
+      const allowed = new Set(visiblePostSitesInClause(deployment));
+      const snap = await db.collection(COLLECTIONS.posts).where("slug", "==", normalized).limit(40).get();
+      for (const doc of snap.docs) {
+        const post = mapPostDoc(doc.id, doc);
+        if (!post || post.status !== "published") continue;
+        if (!allowed.has(post.site)) continue;
+        return { id: doc.id, ...post };
+      }
+      return null;
+    } catch (err) {
+      console.error("[cms] Admin Firestore post by slug failed; falling back to Web SDK.", err);
+      return getPublishedPostBySlugViaWebSdk(normalized);
     }
-    return null;
   }
   return getPublishedPostBySlugViaWebSdk(normalized);
 }

@@ -17,21 +17,26 @@ export async function listPublicCategoriesForDeployment(): Promise<PublicCategor
   const db = getAdminFirestore();
   if (!db) return [];
 
-  const snap = await db.collection(COLLECTIONS.categories).limit(300).get();
-  const allow = new Set(await getVisibleCategorySitesAsync());
-  const rows: PublicCategoryOption[] = [];
+  try {
+    const snap = await db.collection(COLLECTIONS.categories).limit(300).get();
+    const allow = new Set(await getVisibleCategorySitesAsync());
+    const rows: PublicCategoryOption[] = [];
 
-  for (const doc of snap.docs) {
-    const data = doc.data() as { name?: string; slug?: string; site?: string; siteScope?: string };
-    const site = normalizeCategorySite(data.site ?? data.siteScope);
-    if (!allow.has(site)) continue;
-    rows.push({
-      id: doc.id,
-      name: String(data.name ?? doc.id),
-      slug: String(data.slug ?? doc.id),
-    });
+    for (const doc of snap.docs) {
+      const data = doc.data() as { name?: string; slug?: string; site?: string; siteScope?: string };
+      const site = normalizeCategorySite(data.site ?? data.siteScope);
+      if (!allow.has(site)) continue;
+      rows.push({
+        id: doc.id,
+        name: String(data.name ?? doc.id),
+        slug: String(data.slug ?? doc.id),
+      });
+    }
+
+    rows.sort((a, b) => a.name.localeCompare(b.name, "de"));
+    return rows;
+  } catch (err) {
+    console.error("[cms] Admin Firestore categories list failed; returning empty.", err);
+    return [];
   }
-
-  rows.sort((a, b) => a.name.localeCompare(b.name, "de"));
-  return rows;
 }

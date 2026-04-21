@@ -98,3 +98,17 @@ export function resolveFirebaseAdminMode(env: Record<string, string | undefined>
   if (pid != null && String(pid).trim() !== "") return "application_default";
   return "none";
 }
+
+/**
+ * Firebase **Web API key** (Identity Toolkit REST, etc.) for **Route Handlers / server only**.
+ * Set `FIREBASE_WEB_API_KEY` in Vercel to the same string as `NEXT_PUBLIC_FIREBASE_API_KEY` so server code
+ * does not read `NEXT_PUBLIC_*` (quiets security tooling that flags “API key exposed to browser”).
+ * Falls back to `NEXT_PUBLIC_FIREBASE_API_KEY` for local dev when only one copy is defined.
+ */
+export function getFirebaseWebApiKeyForServer(
+  env: Record<string, string | undefined> = process.env,
+): string | undefined {
+  const server = env.FIREBASE_WEB_API_KEY?.trim();
+  if (server) return server;
+  return env.NEXT_PUBLIC_FIREBASE_API_KEY?.trim();
+}

@@ -33,21 +33,21 @@ export default function HomePage() {
       <HomeHero>
         <div className="max-w-[36rem] md:max-w-[40rem]">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Abexis Consulting</p>
-          <h1 className="mt-3 text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance md:text-[56px] md:leading-[1.02]">
+          <h1 className="mt-3 text-[clamp(1.875rem,6.5vw+0.6rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:text-[56px] md:leading-[1.02]">
             Managementberatung mit{" "}
             <BrandGrad variant="dark">Tiefe, Tempo und Verantwortung</BrandGrad>
           </h1>
-          <p className="mt-6 text-[19px] font-normal leading-relaxed text-white/88 md:text-[21px]">{homeLeadParagraph}</p>
-          <div className="mt-10 flex flex-wrap items-center gap-4">
+          <p className="mt-6 text-[17px] font-normal leading-relaxed text-white/88 sm:text-[19px] md:text-[21px]">{homeLeadParagraph}</p>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
             <Link
               href="/kontakt"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-brand-900 px-8 text-[17px] font-medium text-white shadow-lg shadow-brand-900/35 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-brand-900 px-7 text-[17px] font-medium text-white shadow-lg shadow-brand-900/35 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] sm:w-auto sm:min-h-[48px] sm:px-8"
             >
               Kontakt aufnehmen
             </Link>
             <Link
               href="/leistungen"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/35 bg-white/10 px-8 text-[17px] font-medium text-white backdrop-blur-sm transition-all duration-200 ease-out hover:border-white/60 hover:bg-white/22 hover:shadow-lg hover:shadow-black/15 hover:-translate-y-0.5 active:translate-y-0"
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/35 bg-white/10 px-7 text-[17px] font-medium text-white backdrop-blur-sm transition-all duration-200 ease-out hover:border-white/60 hover:bg-white/22 hover:shadow-lg hover:shadow-black/15 hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:min-h-[48px] sm:px-8"
             >
               Leistungen
             </Link>
@@ -65,9 +65,9 @@ export default function HomePage() {
       <WelcomeSection />
 
       <MotionSection className="apple-animated-gradient py-20 md:py-28">
-        <div className="mx-auto max-w-[1068px] px-6">
+        <div className="mx-auto max-w-[1068px] pl-[max(1.5rem,env(safe-area-inset-left,0px))] pr-[max(1.5rem,env(safe-area-inset-right,0px))] md:px-6">
           <p className="text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Leistungen</p>
-          <h2 className="mx-auto mt-2 max-w-[24ch] text-center text-[40px] font-semibold tracking-[-0.03em] text-[#1d1d1f] md:text-[48px]">
+          <h2 className="mx-auto mt-2 max-w-[24ch] text-center text-[32px] font-semibold tracking-[-0.03em] text-[#1d1d1f] sm:text-[40px] md:text-[48px]">
             Schwerpunkte der Beratung
           </h2>
           <p className="mx-auto mt-4 max-w-[54ch] text-center text-[17px] leading-relaxed text-[#6e6e73]">
@@ -88,7 +88,7 @@ export default function HomePage() {
                       alt=""
                       fill
                       className="object-cover transition duration-700 group-hover:scale-[1.04]"
-                      sizes="(min-width: 1024px) 30vw, 90vw"
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     />
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition group-hover:opacity-100" />
                   </div>
@@ -114,7 +114,7 @@ export default function HomePage() {
       </MotionSection>
 
       <MotionSection className="py-20 md:py-28">
-        <div className="mx-auto grid max-w-[1068px] items-center gap-12 px-6 lg:grid-cols-[1fr_1.05fr]">
+        <div className="mx-auto grid max-w-[1068px] items-center gap-10 px-6 sm:gap-12 lg:grid-cols-[1fr_1.05fr]">
           <div className="relative aspect-[4/3] overflow-hidden rounded-[32px] bg-[#f5f5f7] shadow-[var(--apple-shadow-lg)] ring-1 ring-black/[0.05]">
             <Image
               src={fokusPageHeroImages.prozessoptimierung}
@@ -191,7 +191,7 @@ export default function HomePage() {
       </MotionSection>
 
       <MotionSection className="px-6 pt-16 pb-24 md:pt-28">
-        <div className="relative mx-auto max-w-[1068px] overflow-hidden rounded-[32px] bg-gradient-to-br from-brand-900 via-[#2d3d8a] to-brand-500 px-8 py-14 text-center text-white md:px-16 md:py-20">
+        <div className="relative mx-auto max-w-[1068px] overflow-hidden rounded-[24px] bg-gradient-to-br from-brand-900 via-[#2d3d8a] to-brand-500 px-5 py-12 text-center text-white sm:rounded-[28px] sm:px-8 sm:py-14 md:rounded-[32px] md:px-16 md:py-20">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 opacity-50"

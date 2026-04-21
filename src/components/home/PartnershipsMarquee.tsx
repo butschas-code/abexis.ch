@@ -9,7 +9,7 @@ function PartnerLogoSlot({ label, logo }: { label: string; logo: string }) {
   return (
     <div className="flex shrink-0 cursor-default flex-col items-center gap-2 px-2 md:gap-2.5">
       <span className="relative flex h-12 w-[8.5rem] items-center md:h-14 md:w-36">
-        <Image src={logo} alt="" fill className="object-contain opacity-100" sizes="144px" />
+        <Image src={logo} alt="" fill className="object-contain opacity-100" sizes="(max-width: 768px) 120px, 144px" />
       </span>
       <span className="max-w-[9rem] text-center text-[10px] font-medium leading-tight text-[#6e6e73] md:max-w-[10rem] md:text-[11px]">{label}</span>
     </div>

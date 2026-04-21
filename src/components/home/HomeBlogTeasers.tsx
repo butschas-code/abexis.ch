@@ -3,8 +3,7 @@ import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { getAllBlogPosts } from "@/data/pages";
 import { getBlogListCoverByIndex } from "@/data/site-images";
-import type { PublishedPostWithId } from "@/public-site/cms";
-import { getPublishedCmsPosts } from "@/public-site/cms";
+import { getPublishedCmsPosts, type PublishedPostWithId } from "@/public-site/cms";
 
 export type HomeBlogTeaser = {
   slug: string;
@@ -32,7 +31,12 @@ function coverForCmsPost(post: PublishedPostWithId, fallbackIndex: number): stri
  * or legacy JSON posts when Admin SDK is unavailable (e.g. local without credentials).
  */
 export async function getHomeBlogTeasers(): Promise<HomeBlogTeaser[]> {
-  const cms = await getPublishedCmsPosts(4);
+  let cms: PublishedPostWithId[] = [];
+  try {
+    cms = await getPublishedCmsPosts(4);
+  } catch (err) {
+    console.error("[cms] getPublishedCmsPosts failed for home teasers; using legacy JSON.", err);
+  }
   // TODO(production): drop JSON fallback once builds always have Admin credentials, or feature-flag for staging only.
   if (cms.length > 0) {
     return cms.map((p, idx) => ({
@@ -96,7 +100,7 @@ export async function HomeBlogTeasers() {
                   alt=""
                   fill
                   className="object-cover transition duration-700 group-hover:scale-[1.03]"
-                  sizes="45vw"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
               <div className="px-6 pb-7 pt-5">

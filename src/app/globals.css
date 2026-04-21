@@ -47,6 +47,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
@@ -58,6 +59,13 @@ body {
     linear-gradient(180deg, #fbfbfd 0%, #f3f5fb 52%, #fbfbfd 100%);
   background-attachment: fixed;
   color: var(--apple-text);
+}
+
+/* `background-attachment: fixed` causes jank and repaint issues on many mobile browsers. */
+@media (max-width: 767px) {
+  body {
+    background-attachment: scroll;
+  }
 }
 
 ::selection {

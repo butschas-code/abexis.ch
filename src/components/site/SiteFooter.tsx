@@ -4,7 +4,7 @@ import { footerPartners, siteConfig } from "@/data/pages";
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-white/15 bg-[#26337c] text-white">
-      <div className="mx-auto max-w-[1068px] px-6 py-16 text-[12px]">
+      <div className="mx-auto max-w-[1068px] pt-16 pl-[max(1.5rem,env(safe-area-inset-left,0px))] pr-[max(1.5rem,env(safe-area-inset-right,0px))] pb-[max(4rem,calc(3rem+env(safe-area-inset-bottom,0px)))] text-[12px] md:px-6 md:py-16">
         <div className="grid gap-12 md:grid-cols-[1.2fr_1fr]">
           <div>
             <p className="text-[15px] font-semibold text-white">{siteConfig.company}</p>

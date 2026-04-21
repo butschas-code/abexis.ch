@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { CMS_PATHS } from "@/admin/paths";
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
 import { canAccessCmsDashboard } from "@/cms/auth/permissions";
+import { FirebaseWebEnvMissingPanel } from "@/components/cms/FirebaseWebEnvMissingPanel";
 import { AdminLayout } from "./AdminLayout";
 import { AdminProtectedBootSkeleton } from "./AdminLoading";
 import { LogoutButton } from "./LogoutButton";
@@ -34,11 +35,8 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
 
   if (!configured) {
     return (
-      <div className="mx-auto max-w-lg rounded-2xl border border-black/10 bg-white p-8 shadow-sm">
-        <h1 className="text-lg font-semibold text-[var(--apple-text)]">CMS nicht konfiguriert</h1>
-        <p className="mt-2 text-sm text-[var(--apple-text-secondary)]">
-          Bitte `.env.local` aus `.env.example` anlegen und die Firebase Web-Variablen setzen.
-        </p>
+      <div className="flex min-h-[60vh] items-start justify-center px-4 py-12">
+        <FirebaseWebEnvMissingPanel />
       </div>
     );
   }

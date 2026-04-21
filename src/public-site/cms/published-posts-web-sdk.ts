@@ -1,4 +1,4 @@
-import { getApps, initializeApp } from "firebase/app";
+import { getApp, getApps, initializeApp } from "firebase/app";
 import { collection, getDocs, getFirestore, limit, query, where } from "firebase/firestore";
 import { COLLECTIONS } from "@/cms/firestore/collections";
 import { parseFirebaseWebEnv } from "@/firebase/env.schema";
@@ -6,13 +6,25 @@ import { mapPostDocData } from "@/lib/cms/map-post";
 import type { PublishedPostWithId } from "@/public-site/cms/published-post";
 import { getResolvedPublicDeploymentSite, visiblePostSitesInClause } from "@/public-site/site";
 
-function getWebFirestore() {
+/**
+ * Default web app for **server** Route Handlers / RSC (anonymous Firestore reads).
+ * Uses `getApp()` when `[DEFAULT]` already exists so concurrent serverless invocations
+ * do not throw `FirebaseError: Firebase App named '[DEFAULT]' already exists`.
+ */
+function getServerWebFirestore() {
   const parsed = parseFirebaseWebEnv();
   if (!parsed.ok) return null;
-  if (getApps().length === 0) {
-    initializeApp(parsed.config);
+  if (getApps().length > 0) {
+    return getFirestore(getApp());
   }
-  return getFirestore(getApps()[0]!);
+  try {
+    return getFirestore(initializeApp(parsed.config));
+  } catch {
+    if (getApps().length > 0) {
+      return getFirestore(getApp());
+    }
+    return null;
+  }
 }
 
 /**
@@ -21,7 +33,7 @@ function getWebFirestore() {
  * `firestore.rules` (`posts`: read if published).
  */
 export async function listPublishedPostsViaWebSdk(fetchLimit: number): Promise<PublishedPostWithId[]> {
-  const db = getWebFirestore();
+  const db = getServerWebFirestore();
   if (!db) return [];
 
   const deployment = await getResolvedPublicDeploymentSite();
@@ -61,7 +73,7 @@ export async function listPublishedPostsViaWebSdk(fetchLimit: number): Promise<P
 }
 
 export async function getPublishedPostBySlugViaWebSdk(slug: string): Promise<PublishedPostWithId | null> {
-  const db = getWebFirestore();
+  const db = getServerWebFirestore();
   if (!db) return null;
 
   const deployment = await getResolvedPublicDeploymentSite();

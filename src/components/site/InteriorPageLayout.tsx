@@ -26,7 +26,7 @@ export function InteriorPageHeader({ eyebrow, title, description, maxWidth = "10
     <section className="border-b border-black/[0.06]">
       <div className={`mx-auto ${mx} px-6 py-14 md:py-20`}>
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">{eyebrow}</p>
-        <h1 className="mt-3 max-w-[40ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-[#1d1d1f] md:text-[48px]">
+        <h1 className="mt-3 max-w-[40ch] text-[32px] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f] sm:text-[40px] sm:leading-[1.05] md:text-[48px]">
           {title}
         </h1>
         {description != null ? <div className="mt-5 max-w-2xl text-[17px] leading-relaxed text-[#6e6e73]">{description}</div> : null}
@@ -66,7 +66,7 @@ export function InteriorPageLayout({
   const contentMx = maxMap[contentMaxWidth ?? maxWidth];
   const contentTopPad = wrapContentInMotion ? "pt-12 md:pt-16" : "";
   const inner = (
-    <div className={`mx-auto ${contentMx} px-6 pb-20 md:pb-28 ${contentTopPad} ${contentClassName}`.trim()}>
+      <div className={`mx-auto ${contentMx} px-4 pb-16 sm:px-6 sm:pb-20 md:pb-28 ${contentTopPad} ${contentClassName}`.trim()}>
       {children}
     </div>
   );
@@ -74,11 +74,11 @@ export function InteriorPageLayout({
     <InteriorPageRoot>
       <PageHero imageSrc={heroImage} priority={heroPriority}>
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{eyebrow}</p>
-        <h1 className="mt-3 max-w-[28ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance md:max-w-[40ch] md:text-[56px] md:leading-[1.02]">
+        <h1 className="mt-3 max-w-[28ch] text-[clamp(1.875rem,6vw+0.65rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:max-w-[40ch] md:text-[56px] md:leading-[1.02]">
           {title}
         </h1>
         {description != null ? (
-          <div className="mt-6 max-w-2xl text-[19px] font-normal leading-relaxed text-white/88 md:text-[21px] [&_a]:font-medium [&_a]:text-white [&_a]:underline [&_a]:underline-offset-4 [&_a]:transition-colors [&_a:hover]:text-[#b8e8f7] [&_strong]:font-semibold [&_strong]:text-white">
+          <div className="mt-6 max-w-2xl text-[17px] font-normal leading-relaxed text-white/88 sm:text-[19px] md:text-[21px] [&_a]:font-medium [&_a]:text-white [&_a]:underline [&_a]:underline-offset-4 [&_a]:transition-colors [&_a:hover]:text-[#b8e8f7] [&_strong]:font-semibold [&_strong]:text-white">
             {description}
           </div>
         ) : null}

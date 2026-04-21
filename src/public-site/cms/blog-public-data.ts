@@ -51,13 +51,18 @@ export async function getAuthorNameMap(authorIds: string[]): Promise<Map<string,
   const ids = [...new Set(authorIds.filter((x) => x && x !== "_"))];
   if (ids.length === 0) return new Map();
 
-  const snaps = await Promise.all(ids.map((id) => db.collection(COLLECTIONS.authors).doc(id).get()));
-  const out = new Map<string, string>();
-  snaps.forEach((snap, i) => {
-    const name = snap.exists ? String(snap.data()?.name ?? "") : "";
-    if (name) out.set(ids[i], name);
-  });
-  return out;
+  try {
+    const snaps = await Promise.all(ids.map((id) => db.collection(COLLECTIONS.authors).doc(id).get()));
+    const out = new Map<string, string>();
+    snaps.forEach((snap, i) => {
+      const name = snap.exists ? String(snap.data()?.name ?? "") : "";
+      if (name) out.set(ids[i], name);
+    });
+    return out;
+  } catch (err) {
+    console.error("[cms] Admin Firestore author name lookup failed; returning empty map.", err);
+    return new Map();
+  }
 }
 
 export function buildCategoryLabelLookup(categories: PublicCategoryOption[]): Map<string, string> {

@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { NextResponse } from "next/server";
+import { getFirebaseWebApiKeyForServer } from "@/firebase/env.schema";
 
 /**
  * Serves `data/legacy-abexis-posts.json` only when a valid Firebase **ID token** is presented.
@@ -16,10 +17,14 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "UNAUTHORIZED", message: "Empty token." }, { status: 401 });
   }
 
-  const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY?.trim();
+  const apiKey = getFirebaseWebApiKeyForServer();
   if (!apiKey) {
     return NextResponse.json(
-      { error: "SERVER_MISCONFIG", message: "NEXT_PUBLIC_FIREBASE_API_KEY is not set." },
+      {
+        error: "SERVER_MISCONFIG",
+        message:
+          "Set FIREBASE_WEB_API_KEY (server-only, same value as the Firebase Web API key) or NEXT_PUBLIC_FIREBASE_API_KEY.",
+      },
       { status: 500 },
     );
   }

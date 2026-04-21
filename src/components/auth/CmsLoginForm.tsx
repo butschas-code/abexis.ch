@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CMS_PATHS } from "@/admin/paths";
 import { mapFirebaseAuthErrorToMessage } from "@/cms/auth/map-auth-error";
+import { FirebaseWebEnvMissingPanel } from "@/components/cms/FirebaseWebEnvMissingPanel";
 import { getCmsAuth } from "@/firebase/auth";
 import { isFirebaseClientConfigured } from "@/firebase/client";
 
@@ -30,15 +31,14 @@ export function CmsLoginForm() {
 
   if (!isFirebaseClientConfigured()) {
     return (
-      <div className="rounded-2xl border border-black/10 bg-white p-8 shadow-sm">
-        <h1 className="text-lg font-semibold">Firebase fehlt</h1>
-        <p className="mt-2 text-sm text-[var(--apple-text-secondary)]">
-          Bitte `NEXT_PUBLIC_FIREBASE_*` in `.env.local` setzen (siehe `.env.example`).
-        </p>
-        <Link href="/" className="mt-6 inline-block text-sm font-medium text-[var(--brand-900)] hover:underline">
-          Zur Website
-        </Link>
-      </div>
+      <FirebaseWebEnvMissingPanel
+        title="Firebase fehlt"
+        footer={
+          <Link href="/" className="inline-block text-sm font-medium text-[var(--brand-900)] hover:underline">
+            Zur Website
+          </Link>
+        }
+      />
     );
   }
 
