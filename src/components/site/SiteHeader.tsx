@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { mainNav } from "@/data/pages";
+import { mainNav, siteConfig } from "@/data/pages";
 import { logoUrl } from "@/data/site-images";
 
 export function SiteHeader() {
@@ -18,8 +18,31 @@ export function SiteHeader() {
     setPendingHref(null);
   }, [pathname]);
 
+  const searchHref = `${siteConfig.searchSite.replace(/\/$/, "")}/`;
+
   return (
     <header className="sticky top-0 z-40 border-b border-black/[0.06] bg-white pt-[env(safe-area-inset-top,0px)]">
+      {/* Sister brand / Executive Search — same placement as early Abexis builds */}
+      <div className="border-b border-white/10 bg-[#26337c] text-white">
+        <nav
+          className="mx-auto flex max-w-[1068px] flex-wrap items-center justify-center gap-x-3 gap-y-1 py-2 pl-[max(1.5rem,env(safe-area-inset-left,0px))] pr-[max(1.5rem,env(safe-area-inset-right,0px))] text-[11px] font-medium uppercase tracking-[0.14em] text-white/80 md:justify-end md:px-6 md:text-[12px] md:tracking-[0.16em]"
+          aria-label="Weitere Angebote"
+        >
+          <span className="max-md:hidden">Executive Search</span>
+          <span className="text-white/35 max-md:hidden" aria-hidden>
+            ·
+          </span>
+          <a
+            href={searchHref}
+            className="text-white transition-colors duration-200 hover:text-white hover:underline hover:underline-offset-4 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+            rel="noopener noreferrer"
+          >
+            <span className="md:hidden">Executive Search — </span>
+            abexis-search.ch
+          </a>
+        </nav>
+      </div>
+
       <div className="mx-auto flex max-w-[1068px] items-center justify-between gap-4 py-3 pl-[max(1.5rem,env(safe-area-inset-left,0px))] pr-[max(1.5rem,env(safe-area-inset-right,0px))] md:gap-8 md:px-6 md:py-4">
         <Link href="/" className="flex items-center gap-2 focus-ring rounded-full">
           <Image src={logoUrl} alt="Abexis" width={128} height={44} className="h-9 w-auto object-contain md:h-10" priority />
