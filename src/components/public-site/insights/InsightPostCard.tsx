@@ -28,7 +28,7 @@ export function InsightPostCard({ post, href, categoryLine, authorName, sizes, d
   const titleSize = density === "compact" ? "text-[1.125rem] leading-snug" : "text-[1.35rem] md:text-[1.45rem] leading-[1.2]";
 
   return (
-    <article className="group relative">
+    <article className="group relative h-full">
       <div className="pointer-events-none absolute -inset-px rounded-[28px] bg-gradient-to-br from-white via-white to-[color-mix(in_srgb,var(--brand-500)_6%,white)] opacity-0 transition duration-500 group-hover:opacity-100" />
       <Link
         href={href}

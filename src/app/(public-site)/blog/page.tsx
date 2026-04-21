@@ -105,7 +105,7 @@ export default async function BlogIndexPage() {
               {gridPosts.map((post) => {
                 const catLine = categoryLabelsForPost(post.categoryIds, catLookup).slice(0, 2).join(" · ") || null;
                 return (
-                  <li key={post.id}>
+                  <li key={post.id} className="h-full">
                     <InsightPostCard
                       post={post}
                       href={href(post.slug)}

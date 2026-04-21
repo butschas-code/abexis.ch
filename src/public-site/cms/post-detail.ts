@@ -17,10 +17,15 @@ export async function getAuthorDisplayName(authorId: string | null | undefined):
   if (!authorId || authorId === "_") return null;
   const db = getAdminFirestore();
   if (!db) return null;
-  const snap = await db.collection(COLLECTIONS.authors).doc(authorId).get();
-  if (!snap.exists) return null;
-  const name = snap.data()?.name;
-  return typeof name === "string" && name.trim() ? name.trim() : null;
+  try {
+    const snap = await db.collection(COLLECTIONS.authors).doc(authorId).get();
+    if (!snap.exists) return null;
+    const name = snap.data()?.name;
+    return typeof name === "string" && name.trim() ? name.trim() : null;
+  } catch (err) {
+    console.error("[cms] Admin Firestore author lookup failed; returning null.", err);
+    return null;
+  }
 }
 
 /** Categories assigned to the post that also belong to this deployment’s taxonomy list. */
@@ -42,12 +47,25 @@ export function resolveCategoriesForPost(
  * Returns `null` if slug is missing, unpublished, or not visible for this site.
  */
 export async function loadPublishedPostPageData(slug: string): Promise<PublishedPostPageData | null> {
-  const post = await getPublishedPostBySlug(slug);
+  let post: PublishedPostWithId | null = null;
+  try {
+    post = await getPublishedPostBySlug(slug);
+  } catch (err) {
+    console.error("[cms] loadPublishedPostPageData: getPublishedPostBySlug threw.", err);
+    return null;
+  }
   if (!post) return null;
 
+  /** Best-effort enrichment; detail must render even when author/category lookups fail. */
   const [deploymentCategories, authorName] = await Promise.all([
-    listPublicCategoriesForDeployment(),
-    getAuthorDisplayName(post.authorId),
+    listPublicCategoriesForDeployment().catch((err) => {
+      console.error("[cms] loadPublishedPostPageData: category list failed.", err);
+      return [] as PublicCategoryOption[];
+    }),
+    getAuthorDisplayName(post.authorId).catch((err) => {
+      console.error("[cms] loadPublishedPostPageData: author lookup failed.", err);
+      return null as string | null;
+    }),
   ]);
 
   const categories = resolveCategoriesForPost(post.categoryIds, deploymentCategories);
@@ -88,6 +106,11 @@ export async function loadRelatedPublishedPosts(
   current: PublishedPostWithId,
   max = 3,
 ): Promise<PublishedPostWithId[]> {
-  const pool = await getPublishedCmsPosts(80);
-  return selectRelatedPublishedPosts(current, pool, max);
+  try {
+    const pool = await getPublishedCmsPosts(80);
+    return selectRelatedPublishedPosts(current, pool, max);
+  } catch (err) {
+    console.error("[cms] loadRelatedPublishedPosts failed; returning empty.", err);
+    return [];
+  }
 }

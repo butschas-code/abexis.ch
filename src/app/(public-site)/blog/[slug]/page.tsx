@@ -44,10 +44,16 @@ export default async function BlogPostPage({ params }: Props) {
   const slug = normalizeBlogSlugParam(raw);
   if (!slug) notFound();
 
-  const pageData = await loadPublishedPostPageData(slug);
-  if (pageData) {
-    const related = await loadRelatedPublishedPosts(pageData.post, 3);
-    return <CmsBlogPostView data={pageData} related={related} />;
+  /** CMS path may throw on transient Firebase/Admin issues (Vercel cold start, IAM, index missing):
+   * never hard-500 when a legacy JSON fallback exists. */
+  try {
+    const pageData = await loadPublishedPostPageData(slug);
+    if (pageData) {
+      const related = await loadRelatedPublishedPosts(pageData.post, 3).catch(() => []);
+      return <CmsBlogPostView data={pageData} related={related} />;
+    }
+  } catch (err) {
+    console.error("[blog] CMS render failed; attempting legacy fallback.", err);
   }
 
   const post = getBlogPostBySlug(slug);
