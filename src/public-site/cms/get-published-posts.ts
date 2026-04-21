@@ -1,6 +1,8 @@
 import type { Firestore } from "firebase-admin/firestore";
 import { COLLECTIONS } from "@/cms/firestore/collections";
+import { getBlogPostBySlug } from "@/data/pages";
 import { getAdminFirestore } from "@/firebase/server";
+import { legacyBlogPostToPublished, listLegacyPublishedPostsAsCms } from "@/lib/cms/legacy-blog-to-published";
 import { mapPostDoc } from "@/lib/cms/map-post";
 import type { PublishedPostWithId } from "@/public-site/cms/published-post";
 import {
@@ -52,16 +54,23 @@ export async function listPublishedPostsFromDb(db: Firestore, limit = 20): Promi
  * to the Web SDK so public pages do not hard-500 — check Vercel logs for `[cms] Admin Firestore post list failed`.
  */
 export async function getPublishedCmsPosts(limit = 20): Promise<PublishedPostWithId[]> {
+  const deployment = await getResolvedPublicDeploymentSite();
+  let rows: PublishedPostWithId[] = [];
   const db = getAdminFirestore();
   if (db) {
     try {
-      return await listPublishedPostsFromDb(db, limit);
+      rows = await listPublishedPostsFromDb(db, limit);
     } catch (err) {
       console.error("[cms] Admin Firestore post list failed; falling back to Web SDK.", err);
-      return listPublishedPostsViaWebSdk(limit);
+      rows = await listPublishedPostsViaWebSdk(limit);
     }
+  } else {
+    rows = await listPublishedPostsViaWebSdk(limit);
   }
-  return listPublishedPostsViaWebSdk(limit);
+  if (rows.length === 0 && deployment === "abexis") {
+    rows = listLegacyPublishedPostsAsCms(limit);
+  }
+  return rows;
 }
 
 /**
@@ -71,10 +80,10 @@ export async function getPublishedPostBySlug(slug: string): Promise<PublishedPos
   const normalized = normalizeBlogSlugParam(slug);
   if (!normalized) return null;
 
+  const deployment = await getResolvedPublicDeploymentSite();
   const db = getAdminFirestore();
   if (db) {
     try {
-      const deployment = await getResolvedPublicDeploymentSite();
       const allowed = new Set(visiblePostSitesInClause(deployment));
       const snap = await db.collection(COLLECTIONS.posts).where("slug", "==", normalized).limit(40).get();
       for (const doc of snap.docs) {
@@ -83,11 +92,19 @@ export async function getPublishedPostBySlug(slug: string): Promise<PublishedPos
         if (!allowed.has(post.site)) continue;
         return { id: doc.id, ...post };
       }
-      return null;
     } catch (err) {
       console.error("[cms] Admin Firestore post by slug failed; falling back to Web SDK.", err);
-      return getPublishedPostBySlugViaWebSdk(normalized);
+      const viaWeb = await getPublishedPostBySlugViaWebSdk(normalized);
+      if (viaWeb) return viaWeb;
     }
+  } else {
+    const viaWeb = await getPublishedPostBySlugViaWebSdk(normalized);
+    if (viaWeb) return viaWeb;
   }
-  return getPublishedPostBySlugViaWebSdk(normalized);
+
+  if (deployment === "abexis") {
+    const legacy = getBlogPostBySlug(normalized);
+    if (legacy) return legacyBlogPostToPublished(legacy);
+  }
+  return null;
 }
