@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { InsightPostCard } from "@/components/public-site/insights/InsightPostCard";
-import { InsightsCategoryFilter } from "@/components/public-site/insights/InsightsCategoryFilter";
 import { InsightsFeatured } from "@/components/public-site/insights/InsightsFeatured";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import {
@@ -21,16 +20,9 @@ export const metadata = {
 
 export const dynamic = "force-dynamic";
 
-type PageProps = {
-  searchParams: Promise<{ category?: string }>;
-};
-
-export default async function BlogIndexPage({ searchParams }: PageProps) {
-  const sp = await searchParams;
-  const categoryId = typeof sp.category === "string" && sp.category.trim() ? sp.category.trim() : null;
-
+export default async function BlogIndexPage() {
   const [posts, categories, deploymentSite] = await Promise.all([
-    listInsightsPublishedPosts({ categoryId }),
+    listInsightsPublishedPosts({}),
     listPublicCategoriesForDeployment(),
     /** Hostname hints (`NEXT_PUBLIC_SEARCH_SITE_HOST_HINTS`) + `NEXT_PUBLIC_CMS_SITE_ID` — drives Firestore filters. */
     getResolvedPublicDeploymentSite(),
@@ -40,8 +32,8 @@ export default async function BlogIndexPage({ searchParams }: PageProps) {
   const authorIds = [...new Set(posts.map((p) => p.authorId).filter(Boolean))];
   const authors = await getAuthorNameMap(authorIds);
 
-  const featured = categoryId == null ? pickFeaturedPosts(posts, 3) : [];
-  const gridPosts = categoryId == null ? partitionFeaturedForGrid(posts, featured) : posts;
+  const featured = pickFeaturedPosts(posts, 3);
+  const gridPosts = partitionFeaturedForGrid(posts, featured);
 
   const href = (slug: string) => `/blog/${encodeURIComponent(slug)}`;
   const primaryFeatured = featured[0];
@@ -74,11 +66,6 @@ export default async function BlogIndexPage({ searchParams }: PageProps) {
         </p>
       }
     >
-      <InsightsCategoryFilter
-        categories={categories.map((c) => ({ id: c.id, label: c.name }))}
-        activeCategoryId={categoryId}
-      />
-
       {posts.length === 0 ? (
         <div className="rounded-[28px] border border-dashed border-black/[0.1] bg-white/60 px-8 py-16 text-center">
           <p className="font-serif text-[22px] text-[#1d1d1f]">Noch keine Beiträge</p>
@@ -94,7 +81,7 @@ export default async function BlogIndexPage({ searchParams }: PageProps) {
         </div>
       ) : (
         <>
-          {primaryFeatured && categoryId == null ? (
+          {primaryFeatured ? (
             <InsightsFeatured
               primary={primaryFeatured}
               secondary={secondaryFeatured}
@@ -109,7 +96,7 @@ export default async function BlogIndexPage({ searchParams }: PageProps) {
           <section>
             <div className="mb-8 flex items-end justify-between gap-4">
               <h2 className="font-serif text-[22px] font-medium tracking-[-0.02em] text-[#1d1d1f] md:text-[24px]">
-                {categoryId ? catLookup.get(categoryId) ?? "Thema" : "Neueste Artikel"}
+                Neueste Artikel
               </h2>
               <div className="hidden h-px flex-1 translate-y-[-8px] bg-gradient-to-r from-black/[0.08] to-transparent md:block" />
             </div>

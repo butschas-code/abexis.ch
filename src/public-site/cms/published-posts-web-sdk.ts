@@ -43,10 +43,12 @@ export async function listPublishedPostsViaWebSdk(fetchLimit: number): Promise<P
     );
 
     const snap = await getDocs(q);
-    const rows = snap.docs.map((doc) => {
-      const post = mapPostDocData(doc.id, doc.data() as Record<string, unknown>);
-      return { id: doc.id, ...post };
-    });
+    const rows = snap.docs
+      .map((doc) => {
+        const post = mapPostDocData(doc.id, doc.data() as Record<string, unknown>);
+        return { id: doc.id, ...post };
+      })
+      .filter((p) => p.status === "published");
     rows.sort((a, b) => {
       const ta = a.publishedAt ? Date.parse(a.publishedAt) : 0;
       const tb = b.publishedAt ? Date.parse(b.publishedAt) : 0;

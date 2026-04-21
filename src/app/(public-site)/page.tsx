@@ -21,8 +21,11 @@ import { fokusPageHeroImages, serviceCardImages } from "@/data/site-images";
 
 type ServiceSlug = keyof typeof serviceCardImages;
 
-/** Align with `/blog` ISR — home teasers read the same published-post pipeline. */
-export const revalidate = 120;
+/**
+ * Home blog teasers read live Firestore (`getPublishedCmsPosts`). Avoid ISR here so removed or
+ * unpublished posts disappear immediately on `/` (blog index already uses `force-dynamic`).
+ */
+export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   return (
@@ -187,7 +190,7 @@ export default function HomePage() {
         <PartnershipsMarquee />
       </MotionSection>
 
-      <MotionSection className="px-6 pb-24">
+      <MotionSection className="px-6 pt-16 pb-24 md:pt-28">
         <div className="relative mx-auto max-w-[1068px] overflow-hidden rounded-[32px] bg-gradient-to-br from-brand-900 via-[#2d3d8a] to-brand-500 px-8 py-14 text-center text-white md:px-16 md:py-20">
           <div
             aria-hidden

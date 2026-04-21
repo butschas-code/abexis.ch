@@ -26,12 +26,13 @@ export function normalizeBlogSlugParam(raw: string): string {
 export async function listPublishedPostsFromDb(db: Firestore, limit = 20): Promise<PublishedPostWithId[]> {
   const deployment = await getResolvedPublicDeploymentSite();
   const sites = visiblePostSitesInClause(deployment);
+  const lim = Math.min(200, Math.max(1, limit));
   const snap = await db
     .collection(COLLECTIONS.posts)
     .where("status", "==", "published")
     .where("site", "in", sites)
     .orderBy("publishedAt", "desc")
-    .limit(Math.min(50, Math.max(1, limit)))
+    .limit(lim)
     .get();
 
   return snap.docs
@@ -39,7 +40,7 @@ export async function listPublishedPostsFromDb(db: Firestore, limit = 20): Promi
       const post = mapPostDoc(doc.id, doc);
       return post ? { id: doc.id, ...post } : null;
     })
-    .filter(Boolean) as PublishedPostWithId[];
+    .filter((p): p is PublishedPostWithId => p != null && p.status === "published");
 }
 
 /**

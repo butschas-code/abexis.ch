@@ -21,7 +21,13 @@ export async function listInsightsPublishedPosts(options: ListInsightsOptions = 
   const rows = await getPublishedCmsPosts(limit);
   const cat = options.categoryId?.trim();
   if (!cat) return rows;
-  return rows.filter((p) => p.categoryIds.includes(cat));
+  const filtered = rows.filter((p) => p.categoryIds.includes(cat));
+  if (filtered.length > 0) return filtered;
+  /** Legacy imports often have `categoryIds: []`; a stale `?category=` would hide everything. */
+  const noneHaveCategories =
+    rows.length > 0 && rows.every((p) => !Array.isArray(p.categoryIds) || p.categoryIds.length === 0);
+  if (noneHaveCategories) return rows;
+  return filtered;
 }
 
 /** Featured posts preserve `publishedAt` order from the already-sorted list. */

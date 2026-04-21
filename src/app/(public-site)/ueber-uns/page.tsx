@@ -14,13 +14,13 @@ export default function UeberUnsPage() {
       description={<p className="whitespace-pre-line">{homeAboutTeaser}</p>}
     >
       <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Team</h2>
-      <div className="mt-6 grid gap-6 md:grid-cols-2">
+      <div className="mt-6 grid items-stretch gap-6 md:grid-cols-2">
         {teamOrder.map((slug) => {
           const p = teamProfiles[slug];
           return (
             <article
               key={slug}
-              className="overflow-hidden rounded-[28px] bg-white p-6 shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] transition-shadow duration-300 hover:shadow-[var(--apple-shadow-lg)] hover:ring-brand-500/20"
+              className="flex h-full min-h-0 flex-col overflow-hidden rounded-[28px] bg-white p-6 shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] transition-shadow duration-300 hover:shadow-[var(--apple-shadow-lg)] hover:ring-brand-500/20"
             >
               <div className="flex gap-5">
                 <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-[#f5f5f7] ring-1 ring-black/[0.06]">
@@ -38,12 +38,12 @@ export default function UeberUnsPage() {
                   <p className="mt-1 text-[13px] font-medium text-[#86868b]">{p.title}</p>
                 </div>
               </div>
-              <p className="mt-5 whitespace-pre-line text-[15px] leading-relaxed text-[#6e6e73]">{p.body}</p>
+              <p className="mt-5 flex-1 whitespace-pre-line text-[15px] leading-relaxed text-[#6e6e73]">{p.body}</p>
               <Link
-                href={`/${slug}`}
-                className="mt-5 inline-flex text-[14px] font-medium text-brand-900 transition-colors duration-200 hover:text-brand-500 hover:underline"
+                href="/kontakt"
+                className="mt-6 inline-flex min-h-[44px] w-full items-center justify-center rounded-full bg-brand-900 px-6 text-[15px] font-medium text-white transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-lg hover:shadow-brand-900/25 hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:self-start"
               >
-                Vollständige Vorstellung →
+                Kontakt aufnehmen
               </Link>
             </article>
           );

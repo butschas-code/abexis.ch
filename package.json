@@ -9,8 +9,10 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "scrape:blog": "node scripts/scrape-blogs.mjs",
+    "scrape:legacy-abexis": "node scripts/scrape-legacy-abexis-posts.mjs",
     "scrape:images": "node scripts/scrape-images.mjs",
-    "cms:seed:dev": "tsx scripts/cms-seed-dev.ts"
+    "cms:seed:dev": "tsx scripts/cms-seed-dev.ts",
+    "cms:import:legacy": "tsx scripts/import-legacy-blog-posts.ts"
   },
   "dependencies": {
     "@tiptap/extension-image": "^2.27.2",

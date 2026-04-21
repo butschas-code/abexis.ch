@@ -54,14 +54,16 @@ export function getDeploymentSiteFromEnv(): PublicDeploymentSite {
 }
 
 /**
- * **Full resolution (async):** request hostname (when in a Next.js Server context) → env fallback.
- * Use for Firestore filters on public pages so preview domains / split hostnames work without redeploying.
+ * **Full resolution (async):** explicit env wins, then hostname, then env default.
  *
- * - Tries `x-forwarded-host` then `host`.
- * - If host matches search hints → `search`.
- * - Otherwise uses **`getDeploymentSiteFromEnv()`** (canonical for static builds).
+ * If `NEXT_PUBLIC_CMS_SITE_ID` is `abexis` or `search`, it **always** wins over host sniffing so
+ * imported `site: abexis` posts are not hidden when a preview hostname accidentally matches search hints.
  */
 export async function getResolvedPublicDeploymentSite(): Promise<PublicDeploymentSite> {
+  const envExplicit = process.env[ENV_CMS_SITE]?.trim();
+  if (envExplicit === "search" || envExplicit === "abexis") {
+    return envExplicit;
+  }
   try {
     const h = await headers();
     const host = h.get("x-forwarded-host") ?? h.get("host");

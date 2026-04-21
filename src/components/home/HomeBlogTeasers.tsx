@@ -17,7 +17,13 @@ export type HomeBlogTeaser = {
 
 function coverForCmsPost(post: PublishedPostWithId, fallbackIndex: number): string {
   const u = post.heroImageUrl?.trim();
-  if (u && /^https?:\/\//i.test(u)) return u;
+  if (u && /^https?:\/\//i.test(u)) {
+    /** Legacy scrape/CMS may store Hoststar as `http://`; Next/Image + browsers prefer https. */
+    if (u.startsWith("http://files.designer.hoststar.ch")) {
+      return `https://${u.slice("http://".length)}`;
+    }
+    return u;
+  }
   return getBlogListCoverByIndex(fallbackIndex);
 }
 

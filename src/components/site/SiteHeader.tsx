@@ -25,7 +25,9 @@ export function SiteHeader() {
             const active =
               item.href === "/"
                 ? pathname === "/"
-                : pathname === item.href || pathname.startsWith(`${item.href}/`);
+                : item.href === "/admin"
+                  ? pathname.startsWith("/admin")
+                  : pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
               <Link
                 key={item.href}

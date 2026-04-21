@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "posts": [
+    {
+      "slug": "beispiel-legacy-import",
+      "title": "Beispiel: Legacy-Import",
+      "publishedISO": "2024-05-02T12:00:00.000Z",
+      "tags": ["Strategie", "Transformation"],
+      "bodyHtml": "<p>Dieser Beitrag zeigt das <strong>JSON-Format</strong> für den Firestore-Import.</p><p><img src=\"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800\" alt=\"Arbeit\" loading=\"lazy\" /></p>",
+      "excerpt": "Kurzer manueller Teaser statt Auto-Excerpt.",
+      "heroImageUrl": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200",
+      "heroImageAlt": "Team an einem Tisch",
+      "categoryIds": [],
+      "seoTitle": null,
+      "seoDescription": null,
+      "url": "https://www.abexis.ch/blog/beispiel-legacy-import"
+    }
+  ]
+}

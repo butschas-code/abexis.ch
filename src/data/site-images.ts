@@ -27,31 +27,11 @@ export const serviceCardImages = {
 /** Breites Teaser-Bild unter der Blog-Liste (nicht HOME[8] / 68671b2e — dort früheres Blog-Teaser) */
 export const homeBlogTeaserImage = HOME[29];
 
-/**
- * Sechs «Kundenstatement»-Grafiken aus der Startseiten-Slideshow (Reihenfolge wie auf abexis.ch).
- * Entspricht den `responsiveslideshow`-Figuren auf der Live-Seite — Zitat und Signatur sind im Bild enthalten.
- */
-export const homeCustomerStatements = HOME.slice(9, 15);
-
 /** Team-Portraits (Reihenfolge wie auf der alten Startseite) */
 export const teamPortraitOrder = HOME.slice(15, 21);
 
-/**
- * Partner-Logos für «Partnerschaften»-Banner, in derselben Reihenfolge wie `footerPartners` in `pages.ts`.
- * Quelle: Homepage-Scrape (PNG-Reihe + Referenzlogos + ergänzende Assets).
- */
-export const partnershipBannerLogos = [
-  HOME[22],
-  HOME[23],
-  HOME[24],
-  HOME[25],
-  HOME[26],
-  HOME[32],
-  ...HOME.slice(9, 15),
-  HOME[27],
-  HOME[28],
-  HOME[29],
-] as const;
+/** Partner-Logos (Reihenfolge wie `footerPartners`): `HOME[21..35]` — **ohne** Kundenstatements `HOME[9..14]`. */
+export const partnershipBannerLogos = HOME.slice(21, 36);
 
 /** Grosse Hero-Fotos aus den Fokusthemen-Detailseiten (ohne Logo) */
 export const fokusPageHeroImages = {
@@ -65,6 +45,9 @@ export const fokusPageHeroImages = {
 
 /** Startseiten-Hero: markantes Bild aus «Digitale Transformation» */
 export const homeHeroImage = fokusPageHeroImages["digitale-transformation"];
+
+/** Kontaktseite — separates Hero-Motiv (nicht Startseiten-Hero). */
+export const kontaktPageHeroImage = fokusPageHeroImages.unternehmensstrategie;
 
 /** Project Fit Check – Visual aus der Originalseite */
 export const projectFitVisual = (scraped["https://www.abexis.ch/projectfitcheck"] as string[])[2];
