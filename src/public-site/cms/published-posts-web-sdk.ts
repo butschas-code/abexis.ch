@@ -4,6 +4,7 @@ import { COLLECTIONS } from "@/cms/firestore/collections";
 import { parseFirebaseWebEnv } from "@/firebase/env.schema";
 import { mapPostDocData } from "@/lib/cms/map-post";
 import type { PublishedPostWithId } from "@/public-site/cms/published-post";
+import type { PublicDeploymentSite } from "@/public-site/site";
 import { getResolvedPublicDeploymentSite, visiblePostSitesInClause } from "@/public-site/site";
 
 /**
@@ -32,11 +33,13 @@ function getServerWebFirestore() {
  * read published posts with the **Web SDK** as an anonymous client. Matches
  * `firestore.rules` (`posts`: read if published).
  */
-export async function listPublishedPostsViaWebSdk(fetchLimit: number): Promise<PublishedPostWithId[]> {
+export async function listPublishedPostsViaWebSdkForDeployment(
+  deployment: PublicDeploymentSite,
+  fetchLimit: number,
+): Promise<PublishedPostWithId[]> {
   const db = getServerWebFirestore();
   if (!db) return [];
 
-  const deployment = await getResolvedPublicDeploymentSite();
   const sites = visiblePostSitesInClause(deployment);
   /** Must respect `fetchLimit` (e.g. slug fallback asks for 200); do not cap at 50 or older posts 404. */
   const lim = Math.min(200, Math.max(1, fetchLimit));
@@ -72,11 +75,18 @@ export async function listPublishedPostsViaWebSdk(fetchLimit: number): Promise<P
   }
 }
 
-export async function getPublishedPostBySlugViaWebSdk(slug: string): Promise<PublishedPostWithId | null> {
+export async function listPublishedPostsViaWebSdk(fetchLimit: number): Promise<PublishedPostWithId[]> {
+  const deployment = await getResolvedPublicDeploymentSite();
+  return listPublishedPostsViaWebSdkForDeployment(deployment, fetchLimit);
+}
+
+export async function getPublishedPostBySlugViaWebSdkForDeployment(
+  deployment: PublicDeploymentSite,
+  slug: string,
+): Promise<PublishedPostWithId | null> {
   const db = getServerWebFirestore();
   if (!db) return null;
 
-  const deployment = await getResolvedPublicDeploymentSite();
   const allowed = new Set(visiblePostSitesInClause(deployment));
   const trimmed = slug.trim();
   if (!trimmed) return null;
@@ -99,11 +109,16 @@ export async function getPublishedPostBySlugViaWebSdk(slug: string): Promise<Pub
       console.warn("[cms] Web SDK slug+status query failed; falling back to published list scan.", err);
     }
     try {
-      const pool = await listPublishedPostsViaWebSdk(200);
+      const pool = await listPublishedPostsViaWebSdkForDeployment(deployment, 200);
       return pool.find((p) => p.slug === trimmed) ?? null;
     } catch {
       return null;
     }
   }
   return null;
+}
+
+export async function getPublishedPostBySlugViaWebSdk(slug: string): Promise<PublishedPostWithId | null> {
+  const deployment = await getResolvedPublicDeploymentSite();
+  return getPublishedPostBySlugViaWebSdkForDeployment(deployment, slug);
 }

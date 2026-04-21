@@ -17,10 +17,10 @@ import {
 type Props = { params: Promise<{ slug: string }> };
 
 /**
- * Article pages must not be stuck on a stale ISR shell (seen as intermittent 500s on Vercel when
- * prerender + live data diverge). Index can stay cached; detail is always rendered on the server.
+ * ISR + `unstable_cache` on post loaders: fast repeat visits without hammering Firestore every click.
+ * Content updates propagate within ~2 minutes (revalidate + cache TTL).
  */
-export const dynamic = "force-dynamic";
+export const revalidate = 120;
 
 export async function generateMetadata({ params }: Props) {
   try {

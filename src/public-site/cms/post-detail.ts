@@ -108,7 +108,8 @@ export async function loadRelatedPublishedPosts(
   max = 3,
 ): Promise<PublishedPostWithId[]> {
   try {
-    const pool = await getPublishedCmsPosts(80);
+    /** Small pool is enough for category overlap scoring; shares `getPublishedCmsPosts` data cache. */
+    const pool = await getPublishedCmsPosts(36);
     return selectRelatedPublishedPosts(current, pool, max);
   } catch (err) {
     console.error("[cms] loadRelatedPublishedPosts failed; returning empty.", err);

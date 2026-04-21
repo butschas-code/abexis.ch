@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminFirestore } from "@/firebase/server";
 import { listPublishedPostsFromDb } from "@/public-site/cms/get-published-posts";
+import { getResolvedPublicDeploymentSite } from "@/public-site/site";
 
 /**
  * Public read model: published posts for the **current deployment’s** site
@@ -21,7 +22,8 @@ export async function GET(req: Request) {
   const limit = Math.min(50, Math.max(1, parseInt(searchParams.get("limit") ?? "20", 10) || 20));
 
   try {
-    const items = await listPublishedPostsFromDb(db, limit);
+    const deployment = await getResolvedPublicDeploymentSite();
+    const items = await listPublishedPostsFromDb(db, deployment, limit);
     return NextResponse.json({ items });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unknown error";

@@ -22,10 +22,10 @@ import { fokusPageHeroImages, serviceCardImages } from "@/data/site-images";
 type ServiceSlug = keyof typeof serviceCardImages;
 
 /**
- * Home blog teasers read live Firestore (`getPublishedCmsPosts`). Avoid ISR here so removed or
- * unpublished posts disappear immediately on `/` (blog index already uses `force-dynamic`).
+ * Home teasers use cached `getPublishedCmsPosts` (see `get-published-posts.ts`). Short ISR keeps
+ * the shell fast while new posts show up within a couple of minutes.
  */
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export default function HomePage() {
   return (
