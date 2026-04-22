@@ -19,9 +19,10 @@ export function AboutTeamGrid() {
               src={p.image}
               alt=""
               fill
-              className="object-cover transition duration-500 ease-out group-hover:scale-[1.05]"
+              className="object-cover saturate-[0.78] contrast-[1.08] transition duration-500 ease-out group-hover:scale-[1.05]"
               sizes="(min-width: 1024px) 220px, (min-width: 640px) 33vw, 50vw"
             />
+
             <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[#26337c]/95 via-[#26337c]/55 to-[#45b3e2]/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] translate-y-2 p-3 pt-10 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
               <p className="text-[13px] font-semibold leading-tight tracking-[-0.01em] text-white drop-shadow-sm sm:text-[14px]">

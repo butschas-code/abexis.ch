@@ -40,16 +40,17 @@ export function InsightsFeatured({ primary, secondary = [], hrefFor, categoryLin
           href={hrefFor(primary)}
           className="group relative block overflow-hidden rounded-[32px] bg-[#0a0a0b] shadow-[0_32px_80px_-40px_rgba(20,28,64,0.75)] ring-1 ring-white/10"
         >
-          <div className="relative aspect-[16/11] w-full md:aspect-auto md:min-h-[320px] lg:min-h-[380px]">
+          <div className="relative isolate aspect-[16/11] w-full md:aspect-auto md:min-h-[320px] lg:min-h-[380px]">
             <Image
               src={hero}
               alt=""
               fill
-              className="object-cover opacity-[0.92] transition duration-[1.4s] group-hover:scale-[1.03] group-hover:opacity-100"
+              className="object-cover saturate-[0.78] contrast-[1.08] opacity-[0.92] transition duration-[1.4s] group-hover:scale-[1.03] group-hover:opacity-100"
               sizes="(min-width: 1024px) 58vw, 100vw"
               priority
               unoptimized={hero.startsWith("data:")}
             />
+            <div className="abexis-tint-overlay" />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050508] via-[#050508]/50 to-transparent md:via-[#050508]/25" />
             <div className="absolute inset-x-0 bottom-0 p-7 md:p-9 lg:p-10">
               {dateStr ? (
@@ -90,15 +91,16 @@ export function InsightsFeatured({ primary, secondary = [], hrefFor, categoryLin
                   href={hrefFor(post)}
                   className="group flex gap-4 rounded-2xl border border-black/[0.06] bg-white/80 p-3 pr-4 shadow-sm ring-1 ring-black/[0.03] transition hover:border-[var(--brand-500)]/25 hover:shadow-md"
                 >
-                  <div className="relative h-[104px] w-[120px] shrink-0 overflow-hidden rounded-xl bg-[#f2f3f7]">
+                  <div className="relative isolate h-[104px] w-[120px] shrink-0 overflow-hidden rounded-xl bg-[#f2f3f7]">
                     <Image
                       src={smImg}
                       alt=""
                       fill
-                      className="object-cover transition duration-700 group-hover:scale-105"
+                      className="object-cover saturate-[0.78] contrast-[1.08] transition duration-700 group-hover:scale-105"
                       sizes="120px"
                       unoptimized={smImg.startsWith("data:")}
                     />
+                    <div className="abexis-tint-overlay" />
                   </div>
                   <div className="flex min-w-0 flex-1 flex-col justify-center py-1">
                     {smDate ? (

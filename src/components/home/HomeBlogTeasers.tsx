@@ -94,14 +94,15 @@ export async function HomeBlogTeasers() {
               href={`/blog/${p.slug}`}
               className="group overflow-hidden rounded-[28px] bg-white shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] transition hover:-translate-y-0.5 hover:shadow-[var(--apple-shadow-lg)]"
             >
-              <div className="relative aspect-[16/9] w-full bg-[#f5f5f7]">
+              <div className="relative isolate aspect-[16/9] w-full overflow-hidden bg-[#f5f5f7]">
                 <Image
                   src={p.coverSrc}
                   alt=""
                   fill
-                  className="object-cover transition duration-700 group-hover:scale-[1.03]"
+                  className="object-cover saturate-[0.78] contrast-[1.08] transition duration-700 group-hover:scale-[1.03]"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
+                <div className="abexis-tint-overlay" />
               </div>
               <div className="px-6 pb-7 pt-5">
                 <time className="text-[11px] font-medium uppercase tracking-widest text-[#86868b]">

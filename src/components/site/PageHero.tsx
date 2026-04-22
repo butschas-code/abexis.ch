@@ -37,6 +37,7 @@ export function PageHero({ children, imageSrc, priority = false }: Props) {
             priority={priority}
             quality={90}
           />
+          <div className="abexis-tint-overlay" />
         </motion.div>
         <div
           className="absolute inset-0 bg-gradient-to-r from-[#26337c]/88 via-[#26337c]/50 to-[#45b3e2]/18 md:from-[#26337c]/82 md:via-[#1a1f38]/45 md:to-transparent"

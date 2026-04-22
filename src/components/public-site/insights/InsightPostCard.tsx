@@ -34,15 +34,16 @@ export function InsightPostCard({ post, href, categoryLine, authorName, sizes, d
         href={href}
         className="relative flex h-full flex-col overflow-hidden rounded-[27px] bg-white shadow-[0_1px_0_rgba(0,0,0,0.04),0_18px_44px_-28px_rgba(38,51,124,0.35)] ring-1 ring-black/[0.05] transition duration-500 hover:-translate-y-[3px] hover:shadow-[0_24px_56px_-24px_rgba(38,51,124,0.45)] hover:ring-[var(--brand-500)]/22"
       >
-        <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#f2f3f7]">
+        <div className="relative isolate aspect-[16/10] w-full overflow-hidden bg-[#f2f3f7]">
           <Image
             src={img}
             alt=""
             fill
-            className="object-cover transition duration-[1.2s] group-hover:scale-[1.04]"
+            className="object-cover saturate-[0.78] contrast-[1.08] transition duration-[1.2s] group-hover:scale-[1.04]"
             sizes={sizes ?? "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
             unoptimized={img.startsWith("data:")}
           />
+          <div className="abexis-tint-overlay" />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1d1d1f]/45 via-transparent to-transparent opacity-80" />
           {categoryLine ? (
             <span className="absolute bottom-4 left-5 max-w-[90%] rounded-full bg-white/92 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#1d1d1f] shadow-sm backdrop-blur-sm">

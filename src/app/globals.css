@@ -264,3 +264,27 @@ body {
   outline: 2px solid var(--apple-blue);
   outline-offset: 3px;
 }
+
+/* Abexis Bild-Tint (Zentralisierte Klasse) */
+.abexis-tint-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+  overflow: hidden;
+}
+.abexis-tint-overlay::before,
+.abexis-tint-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.abexis-tint-overlay::before {
+  background-color: rgba(33, 64, 163, 0.45);
+  mix-blend-mode: multiply;
+}
+.abexis-tint-overlay::after {
+  background-image: linear-gradient(to bottom right, rgba(168, 201, 255, 0.24) 0%, rgba(47, 78, 166, 0.2) 50%, rgba(26, 42, 96, 0.70) 100%);
+  mix-blend-mode: color;
+}

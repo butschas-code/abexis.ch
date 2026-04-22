@@ -5,6 +5,7 @@ import { fokusthemenMeta, getFokusthemaHtml, normalizeFokusSlug } from "@/data/p
 import { fokusPageHeroImages, homeHeroImage } from "@/data/site-images";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { FokusDigitaleTransformation } from "@/components/public-site/FokusDigitaleTransformation";
+import { FokusUnternehmensstrategie } from "@/components/public-site/FokusUnternehmensstrategie";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -38,9 +39,8 @@ export default async function FokusthemaPage({ params }: Props) {
   const html = getFokusthemaHtml(n);
   if (!html) notFound();
 
-  if (n === "digitale-transformation") {
-    return <FokusDigitaleTransformation />;
-  }
+  if (n === "digitale-transformation") return <FokusDigitaleTransformation />;
+  if (n === "unternehmensstrategie") return <FokusUnternehmensstrategie />;
 
   const meta = fokusthemenMeta.find((m) => m.slug === n);
   const heroKey = n as keyof typeof fokusPageHeroImages;

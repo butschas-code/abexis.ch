@@ -59,6 +59,7 @@ function LeistungenBentoCard({ item, imagePriority }: { item: BentoItem; imagePr
           className="object-cover transition duration-[1s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
           sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
         />
+        <div className="abexis-tint-overlay" />
         <div
           className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/[0.18] to-transparent opacity-0 transition group-hover:opacity-100"
           aria-hidden

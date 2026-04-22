@@ -91,8 +91,7 @@ export default function HomePage() {
                       className="object-cover saturate-[0.78] contrast-[1.08] transition duration-700 group-hover:scale-[1.04]"
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     />
-                    <div className="pointer-events-none absolute inset-0 bg-[#2140a3]/45 mix-blend-multiply" />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#a8c9ff]/24 via-[#2f4ea6]/20 to-[#1a2a60]/70 mix-blend-color" />
+                    <div className="abexis-tint-overlay" />
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/24 to-transparent opacity-0 transition group-hover:opacity-100" />
                   </div>
                   <div className="flex flex-1 flex-col px-6 pb-8 pt-6">
@@ -126,8 +125,7 @@ export default function HomePage() {
               className="object-cover saturate-[0.78] contrast-[1.08]"
               sizes="(min-width: 1024px) 45vw, 100vw"
             />
-            <div className="pointer-events-none absolute inset-0 bg-[#2140a3]/45 mix-blend-multiply" />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#a8c9ff]/24 via-[#2f4ea6]/20 to-[#1a2a60]/70 mix-blend-color" />
+            <div className="abexis-tint-overlay" />
           </div>
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Vorgehen</p>

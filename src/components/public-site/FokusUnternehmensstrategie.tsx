@@ -8,182 +8,129 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 // ─── Static data — module level, no re-allocation ────────────────────────────
 
-const meta = fokusthemenMeta.find((m) => m.slug === "digitale-transformation")!;
-const heroImage = fokusPageHeroImages["digitale-transformation"];
+const meta = fokusthemenMeta.find((m) => m.slug === "unternehmensstrategie")!;
+const heroImage = fokusPageHeroImages["unternehmensstrategie"];
 
-const handlungsfelder = [
+const prozessSchritte = [
   {
     num: "01",
-    title: "Kundenorientierung & Experience",
+    title: "Vorbereitungen & Analyse",
     items: [
-      "Digitale Touchpoints entlang der Customer Journey optimieren",
-      "Self-Service-Portale und personalisierte Erlebnisse aufbauen",
-      "Kundenfeedback systematisch in die Produktentwicklung einbeziehen",
+      "Umfassende interne Analyse: Stärken, Schwächen, finanzielle Situation",
+      "Externe Analyse: Marktchancen, Risiken, Trends und Kundennutzen",
+      "Wettbewerbsbedingungen verstehen",
+      "SWOT-Analyse: Interne und externe Faktoren kombinieren",
     ],
   },
   {
     num: "02",
-    title: "Digitale Strategien & Geschäftsmodelle",
+    title: "Vision & Mission festlegen",
     items: [
-      "Wettbewerbspositionierung im digitalen Umfeld schärfen",
-      "Neue Erlösquellen und Plattformmodelle entwickeln",
-      "Partnerschaften und digitale Ökosysteme strategisch aufbauen",
+      "Klare, inspirierende Unternehmensvision definieren",
+      "Langfristige Ziele und gewünschten Zustand beschreiben",
+      "Mission: Zweck und Verpflichtung gegenüber Stakeholdern",
     ],
   },
   {
     num: "03",
-    title: "Führung, Kultur & Organisation",
+    title: "Strategische Ziele ableiten",
     items: [
-      "Digital Leadership und agile Führungsmodelle einführen",
-      "Digitale Kompetenz und Innovationskultur stärken",
-      "Organisationsstrukturen an neue Arbeitsweisen anpassen",
+      "Konkrete, messbare und zeitgebundene Ziele aus Vision und Mission",
+      "Interessen verschiedener Stakeholder berücksichtigen",
     ],
   },
   {
     num: "04",
-    title: "Prozessoptimierung & Automatisierung",
+    title: "Strategische Optionen entwickeln",
     items: [
-      "End-to-End-Prozesse analysieren und neu gestalten",
-      "Automatisierungspotenziale identifizieren und realisieren",
-      "Datenbasierte Entscheidungsgrundlagen schaffen",
+      "Verschiedene strategische Optionen identifizieren",
+      "Bewertung nach Machbarkeit, Rentabilität und strategischer Passung",
     ],
   },
   {
     num: "05",
-    title: "Plattformen & Absatzkanäle",
+    title: "Beste Strategie auswählen",
     items: [
-      "Digitale Vertriebs- und Kommunikationskanäle aufbauen",
-      "Omnichannel-Strategie entwickeln und integrieren",
-      "Marktplätze und digitale Ökosysteme nutzen",
+      "Erkenntnisse aus Analyse und Bewertung integrieren",
+      "Am besten geeignete Strategie wählen",
+      "Klare Kommunikation an alle relevanten Stakeholder",
     ],
   },
   {
     num: "06",
-    title: "Technologien — KI, IoT, Industrie 4.0",
+    title: "Strategie implementieren",
     items: [
-      "Anwendungsfälle für KI und Machine Learning identifizieren",
-      "IoT- und Industrie-4.0-Lösungen in bestehende Anlagen integrieren",
-      "Technologieauswahl anhand strategischer Kriterien treffen",
+      "Konkrete Aktionspläne entwickeln",
+      "Klare Verantwortlichkeiten und Ressourcen zuweisen",
+      "Überwachungsmechanismen und Fortschrittskontrollen einrichten",
     ],
   },
   {
     num: "07",
-    title: "IT-Infrastruktur & Datenbasis",
+    title: "Monitoring & Anpassung",
     items: [
-      "Cloud-Migration strategisch planen und umsetzen",
-      "Datenarchitektur und Governance etablieren",
-      "Legacy-Systeme schrittweise durch skalierbare Lösungen ablösen",
+      "Kontinuierlichen Überwachungsprozess etablieren",
+      "Strategie bei Bedarf an veränderte Bedingungen anpassen",
     ],
   },
 ] as const;
 
-const prozessphasen = [
+const fallstricke = [
   {
-    num: "01",
-    title: "Vorbereitungsphase",
-    items: [
-      "Projekt definieren: Ziele, Scope und Prioritäten festlegen",
-      "Team zusammenstellen und Verantwortlichkeiten klären",
-      "Budget und Zeitplan realistisch planen",
-      "Relevante Stakeholder frühzeitig einbinden",
-    ],
+    title: "Fehlende Vision und Mission",
+    body: "Das Fehlen einer klaren Richtung führt zu Unsicherheit und beeinträchtigt die Motivation aller Beteiligten im Unternehmen.",
   },
   {
-    num: "02",
-    title: "Analysephase",
-    items: [
-      "Marktanalyse: Kunden, Konkurrenz, Technologietrends",
-      "Produkte- und Dienstleistungsportfolio kritisch prüfen",
-      "Ideen der Mitarbeiter aufgreifen, Machbarkeit beurteilen",
-      "Ist-Situation ermitteln und mit dem Zielbild abgleichen",
-    ],
+    title: "Mangelnde Stakeholder-Einbindung",
+    body: "Werden Schlüsselinteressengruppen nicht aktiv einbezogen, entstehen Widerstand und mangelnde Unterstützung.",
   },
   {
-    num: "03",
-    title: "Planungsphase",
-    items: [
-      "Vision und Strategie: Kernkompetenzen und Geschäftsmodell",
-      "Prozesse, Organisation und Unternehmenskultur neu gestalten",
-      "Ökosystem mit Kunden und Partnern definieren",
-      "Plan erstellen: Technologie wählen, messbare Schritte festlegen",
-    ],
+    title: "Unzureichende Analyse",
+    body: "Oberflächliche oder fehlerhafte Analysen führen zu falschen Schlussfolgerungen und gefährlichen strategischen Fehlentscheidungen.",
   },
   {
-    num: "04",
-    title: "Umsetzungsphase",
-    items: [
-      "Strategie umsetzen — z.B. mit agiler Methodik",
-      "Kontinuierliche Überprüfung und Monitoring einrichten",
-      "Allenfalls Justierungen vornehmen, Learnings integrieren",
-      "Ergebnisse messen, kommunizieren und konsolidieren",
-    ],
-  },
-] as const;
-
-const nutzen = [
-  {
-    num: "01",
-    title: "Kosten & Ertrag",
-    body: "Kosten reduzieren, Produktivität und Umsatz bzw. Gewinn erhöhen.",
+    title: "Schlechte Kommunikation",
+    body: "Mangelnde Transparenz über die Strategie erzeugt Informationslücken, Unsicherheiten und Fehlorientierung im Betrieb.",
   },
   {
-    num: "02",
-    title: "Datenqualität",
-    body: "Datenbasierte Erkenntnisse, höhere Datenqualität und weniger Fehler durch Automatisierung.",
+    title: "Widerstand gegen Veränderung",
+    body: "Mitarbeiter und Führungskräfte sträuben sich, wenn sie nicht ausreichend informiert, eingebunden und abgeholt werden.",
   },
   {
-    num: "03",
-    title: "Kundenerlebnis",
-    body: "Besseres Erlebnis bei Beschaffung und Kundenservice — höhere Kundenzufriedenheit.",
+    title: "Mangelnde Ressourcen",
+    body: "Unzureichende finanzielle, personelle oder technologische Ressourcen blockieren selbst die konzeptionell beste Strategie.",
   },
   {
-    num: "04",
-    title: "Transparenz",
-    body: "Transparentere Informationspolitik gegenüber Kunden und Lieferanten.",
+    title: "Starre, unflexible Strategien",
+    body: "In dynamischen Umgebungen scheitern Strategien, die nicht an veränderte interne und externe Rahmenbedingungen angepasst werden.",
   },
   {
-    num: "05",
-    title: "Neue Märkte",
-    body: "Neue Produkte und Leistungen erschliessen neue Kundenpotenziale.",
-  },
-  {
-    num: "06",
-    title: "Zusammenarbeit",
-    body: "Mehr Kollaboration und bessere Kommunikation durch eine gemeinsame Plattform.",
-  },
-  {
-    num: "07",
-    title: "Geschwindigkeit",
-    body: "Schnellere Durchlaufzeiten dank effizienter, automatisierter Prozesse.",
-  },
-  {
-    num: "08",
-    title: "Zukunftsfähigkeit",
-    body: "Investitionen in die Digitale Transformation sichern den Vorsprung gegenüber dem Wettbewerb.",
+    title: "Unklare Verantwortlichkeiten",
+    body: "Fehlende Klarheit über Zuständigkeiten führt zu Verwirrung, Doppelarbeit und Effizienzverlusten bei der Umsetzung.",
   },
 ] as const;
 
 const kredibilitaet = [
-  { value: "7", label: "Handlungsfelder" },
-  { value: "4", label: "Prozessphasen" },
-  { value: "8", label: "Nutzendimensionen" },
+  { value: "20+", label: "Jahre Senior-Erfahrung" },
+  { value: "5", label: "Berater im Team" },
+  { value: "6", label: "Fokusthemen" },
   { value: "KMU–Konzern", label: "" },
 ] as const;
 
 const guidePunkte = [
   {
-    label: "Strategie vor Technologie",
-    body: "Wir starten mit den Geschäftszielen — nicht mit der Technologie. Erst wenn klar ist, was erreicht werden soll, wählen wir die passenden Mittel.",
+    label: "Vielseitige Branchenexpertise",
+    body: "Wir kennen die spezifischen Herausforderungen verschiedener Branchen und bringen externe Erfahrung ein, die intern nicht vorhanden ist.",
     accent: "#26337c",
   },
   {
-    label: "Branchenübergreifende Erfahrung",
-    body: "Wir kennen die typischen Fallstricke aus verschiedenen Sektoren und bringen bewährte Transformationsmuster aus der Praxis mit.",
+    label: "Kundenzentrierter Ansatz",
+    body: "Wir verstehen Ihre spezifischen Bedürfnisse und entwickeln Strategien, die zu Ihrem Unternehmen passen — keine Standardrezepte.",
     accent: "#45b3e2",
   },
   {
-    label: "Begleitung bis zur Umsetzung",
-    body: "Wir bleiben nicht bei Konzepten: Wir unterstützen Sie bei der konkreten Implementierung und übernehmen Verantwortung für die Ergebnisse.",
+    label: "Ergebnisorientierter Fokus",
+    body: "Wir sichern nicht nur Wettbewerbsvorteile, sondern auch langfristigen Erfolg — mit konkreten, messbaren Zielen und Verantwortung für die Umsetzung.",
     accent: "#c9a96e",
   },
 ] as const;
@@ -199,29 +146,31 @@ function LCorner({ className = "" }: { className?: string }) {
   );
 }
 
-type Handlungsfeld = (typeof handlungsfelder)[number];
+type Step = (typeof prozessSchritte)[number];
 
-function SpineCard({ item }: { item: Handlungsfeld }) {
+function SpineCard({ step }: { step: Step }) {
   return (
     <div className="group relative h-full overflow-hidden rounded-2xl border border-black/[0.06] bg-white px-6 py-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#26337c]/15 hover:shadow-[0_16px_48px_rgba(38,51,124,0.10)]">
       <LCorner className="top-3 right-3 text-[#c9a96e]/0 transition-colors duration-300 group-hover:text-[#c9a96e]" />
+      {/* Ghost number watermark */}
       <span
         className="pointer-events-none absolute -bottom-2 right-3 select-none text-[5rem] font-semibold leading-none tabular-nums text-[#c9a96e]/[0.08] transition-opacity duration-300 group-hover:opacity-50"
         aria-hidden
       >
-        {item.num}
+        {step.num}
       </span>
       <h3 className="relative text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-        {item.title}
+        {step.title}
       </h3>
       <ul className="relative mt-3 flex flex-col gap-2">
-        {item.items.map((bullet) => (
-          <li key={bullet} className="flex items-start gap-2.5 text-[15px] leading-snug text-[#6e6e73]">
+        {step.items.map((item) => (
+          <li key={item} className="flex items-start gap-2.5 text-[15px] leading-snug text-[#6e6e73]">
             <span className="mt-[5px] h-[4px] w-[4px] shrink-0 rounded-full bg-[#45b3e2]" />
-            {bullet}
+            {item}
           </li>
         ))}
       </ul>
+      {/* Bottom accent on hover */}
       <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#26337c] to-[#45b3e2] transition-all duration-500 group-hover:w-full" />
     </div>
   );
@@ -229,7 +178,7 @@ function SpineCard({ item }: { item: Handlungsfeld }) {
 
 // ─── Page component ───────────────────────────────────────────────────────────
 
-export function FokusDigitaleTransformation() {
+export function FokusUnternehmensstrategie() {
   return (
     <InteriorPageRoot>
       <SchemaMarkup type="Service" data={meta} />
@@ -238,22 +187,22 @@ export function FokusDigitaleTransformation() {
         data={[
           { name: "Startseite", url: "/" },
           { name: "Leistungen", url: "/leistungen" },
-          { name: meta.title, url: "/fokusthemen/digitale-transformation" },
+          { name: meta.title, url: "/fokusthemen/unternehmensstrategie" },
         ]}
       />
 
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
-      <PageHero imageSrc={heroImage} priority>
+      <PageHero imageSrc={heroImage}>
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Digitale Transformation ist kein IT-Projekt — sie ist eine Führungsaufgabe.
+          Strategie entsteht dort, wo Perspektiven auseinandergehen.
         </h1>
         <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
-          Wenn Verwaltungsrat und Management die Digitalisierung verschieden interpretieren,
-          entstehen Fehlinvestitionen, Reibung und verpasste Chancen. Wir helfen Ihnen, aus
-          Technologie echten Unternehmenswert zu machen — strukturiert, strategisch, umsetzbar.
+          Wenn Verwaltungsrat und Führungsteam die Zukunft verschieden sehen, braucht es Methodik,
+          Struktur und eine externe Perspektive — keinen Kompromiss. Wir begleiten Sie vom ersten
+          Schritt bis zur gelebten Strategie.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Link
@@ -263,10 +212,10 @@ export function FokusDigitaleTransformation() {
             30-Minuten-Erstgespräch
           </Link>
           <Link
-            href="#handlungsfelder"
+            href="#prozess"
             className="inline-flex h-11 items-center gap-2 rounded-full border border-white/30 px-7 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:border-white/60 hover:bg-white/10"
           >
-            Handlungsfelder
+            Zum Prozess
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
               <path d="M7 2v10M2 7l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -274,7 +223,7 @@ export function FokusDigitaleTransformation() {
         </div>
       </PageHero>
 
-      {/* ── 2. SPLIT PANEL — Digitalisierung vs. Digitale Transformation ─── */}
+      {/* ── 2. SPLIT PANEL — Unternehmensstrategie vs. Eignerstrategie ─── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
           {/* Left half — navy: content tracks the 1068px centre column */}
@@ -286,12 +235,12 @@ export function FokusDigitaleTransformation() {
                 Ebene 1
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
-                Digitalisierung
+                Unternehmensstrategie
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-white/65">
-                Betrifft die taktische Ebene: einzelne Prozesse, Tools und Arbeitsabläufe werden
-                digitalisiert oder automatisiert. Wichtig, aber nicht hinreichend — sie verändert
-                das Geschäftsmodell nicht.
+                Betrifft die gesamte Organisation. Sie legt fest, wie das Unternehmen als Ganzes
+                geführt wird und welche strategischen Entscheidungen nötig sind, um nachhaltige
+                Wettbewerbsvorteile zu erzielen.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
@@ -306,12 +255,12 @@ export function FokusDigitaleTransformation() {
                 Ebene 2
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
-                Digitale Transformation
+                Eignerstrategie
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
-                Betrifft die strategische Ebene: Geschäftsmodelle, Kundenerlebnisse, Kultur und
-                Führung werden grundlegend neu gedacht. Sie schafft nachhaltige Wettbewerbsvorteile
-                und erfordert unternehmerische Entschlossenheit.
+                Konzentriert sich auf die Präferenzen und Ziele der Eigentümer: Renditeerwartungen,
+                Risikotoleranz und langfristige Vision. Sie muss mit der Unternehmensstrategie in
+                Einklang stehen.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
@@ -326,9 +275,9 @@ export function FokusDigitaleTransformation() {
                 Warum das<br className="hidden md:block" /> wichtig ist
               </p>
               <p className="border-l-[3px] border-[#c9a96e]/50 pl-6 text-[18px] font-medium leading-relaxed tracking-[-0.01em] text-[#1d1d1f]">
-                Wer nur digitalisiert, ohne zu transformieren, optimiert den Status quo — und
-                verpasst die eigentliche Chance. Entscheidend ist ein klares Bild der Ziele,
-                bevor die Strategie erarbeitet wird.
+                In vielen Fällen sollten beide Ebenen miteinander abgeglichen sein — andernfalls
+                entstehen strategische Reibungsverluste, die kaum sichtbar, aber ausgesprochen
+                kostspielig sind.
               </p>
             </div>
           </div>
@@ -351,28 +300,27 @@ export function FokusDigitaleTransformation() {
         </div>
       </div>
 
-      {/* ── 4. HANDLUNGSFELDER — Alternating spine timeline ──────────────── */}
-      <section id="handlungsfelder" className="bg-[#f5f5f7]">
+      {/* ── 4. PROCESS — Alternating spine timeline ──────────────────────── */}
+      <section id="prozess" className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
             <div className="flex items-baseline justify-between gap-8 border-b border-black/[0.07] pb-6">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Handlungsfelder
+                Strategieprozess
               </p>
-              <span className="text-[11px] text-[#86868b]">07 Dimensionen</span>
+              <span className="text-[11px] text-[#86868b]">07 Schritte</span>
             </div>
 
             <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-16">
               {/* Left: sticky anchor */}
               <div className="lg:sticky lg:top-28 lg:self-start">
                 <h2 className="text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Sieben Dimensionen, die eine Transformation ausmachen.
+                  Von der Analyse zur gelebten Strategie — in sieben Schritten.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Es muss nicht immer das volle Programm sein. Allenfalls möchten Sie nur einen
-                  Teilaspekt betrachten oder benötigen Unterstützung bei der Umsetzung eines
-                  bestimmten Handlungsfelds.
+                  Jeder Schritt baut auf dem vorherigen auf. Die Erarbeitung erfordert sorgfältige
+                  Planung, tiefe Analyse und die Fähigkeit zur Anpassung.
                 </p>
                 <Link
                   href="/kontakt"
@@ -390,6 +338,7 @@ export function FokusDigitaleTransformation() {
                 {/* ── Desktop: alternating two-column spine ── */}
                 <div className="hidden lg:block">
                   <div className="relative">
+                    {/* Continuous brass spine line */}
                     <div
                       className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px"
                       style={{
@@ -399,20 +348,28 @@ export function FokusDigitaleTransformation() {
                     />
 
                     <div className="space-y-8">
-                      {handlungsfelder.map((item, i) => {
+                      {prozessSchritte.map((step, i) => {
                         const isLeft = i % 2 === 0;
                         return (
-                          <div key={item.num} className="relative grid grid-cols-2">
+                          <div
+                            key={step.num}
+                            className="relative grid grid-cols-2"
+                          >
+                            {/* Spine node — centered on the line */}
                             <div className="absolute left-1/2 top-5 z-10 -translate-x-1/2">
                               <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c9a96e]/40 bg-white text-[11px] font-semibold tabular-nums text-[#26337c] shadow-sm">
-                                {item.num}
+                                {step.num}
                               </div>
                             </div>
+
+                            {/* Left cell */}
                             <div className="pr-10">
-                              {isLeft ? <SpineCard item={item} /> : null}
+                              {isLeft ? <SpineCard step={step} /> : null}
                             </div>
+
+                            {/* Right cell */}
                             <div className="pl-10">
-                              {!isLeft ? <SpineCard item={item} /> : null}
+                              {!isLeft ? <SpineCard step={step} /> : null}
                             </div>
                           </div>
                         );
@@ -423,8 +380,8 @@ export function FokusDigitaleTransformation() {
 
                 {/* ── Mobile: simple vertical list ── */}
                 <div className="flex flex-col gap-4 lg:hidden">
-                  {handlungsfelder.map((item) => (
-                    <SpineCard key={item.num} item={item} />
+                  {prozessSchritte.map((step) => (
+                    <SpineCard key={step.num} step={step} />
                   ))}
                 </div>
               </div>
@@ -448,130 +405,60 @@ export function FokusDigitaleTransformation() {
             Grundsatz
           </p>
           <blockquote className="mt-8 text-[clamp(1.375rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.22] tracking-[-0.025em] text-white text-balance">
-            &ldquo;Digitale Transformation bietet eine Grundlage, um ein Unternehmen zu erneuern
-            und qualifizierter für die Zukunft vorzubereiten — als strategische Initiative,
-            nicht als Nebenprojekt.&rdquo;
+            &ldquo;Die erfolgreiche Bewältigung erfordert eine ganzheitliche Herangehensweise,
+            klare Kommunikation, aktive Einbindung der Stakeholder und die Fähigkeit zur
+            Anpassung an sich ändernde Bedingungen.&rdquo;
           </blockquote>
           <div className="mt-10 flex items-center justify-center gap-5">
             <div className="h-px w-12 bg-[#c9a96e]/35" />
             <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-white/30">
-              Abexis Transformations-Prinzip
+              Abexis Strategie-Prinzip
             </span>
             <div className="h-px w-12 bg-[#c9a96e]/35" />
           </div>
         </div>
       </section>
 
-      {/* ── 6. PROZESSPHASEN — Dark navy phase grid ──────────────────────── */}
-      <section className="relative overflow-hidden bg-[#1a1f38]">
-        <div
-          className="pointer-events-none absolute inset-0"
-          aria-hidden
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 60% at 15% 50%, rgba(69,179,226,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 70% at 85% 30%, rgba(38,51,124,0.4) 0%, transparent 60%)",
-          }}
-        />
-
-        <MotionSection>
-          <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-28">
-            <div className="flex items-baseline gap-4 border-b border-white/[0.08] pb-6">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#45b3e2]/70">
-                Vorgehensmodell
+      {/* ── 6. PITFALLS — Editorial newspaper list ───────────────────────── */}
+      <MotionSection>
+        <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
+          <div className="grid gap-12 lg:grid-cols-[1fr_1.8fr] lg:gap-20 lg:items-start">
+            {/* Left anchor */}
+            <div className="lg:sticky lg:top-28">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+                Kritische Aspekte
               </p>
-              <span className="text-[11px] text-white/30">04 Phasen</span>
+              <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
+                Was eine Strategie scheitern lässt.
+              </h2>
+              <div className="mt-7 h-px w-full bg-black/[0.06]" />
+              <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
+                Die häufigsten Hindernisse sind keine Überraschungen. Sie sind bekannt — und
+                trotzdem werden sie in der Praxis immer wieder unterschätzt.
+              </p>
+              <div className="mt-8 h-px w-8 bg-[#c9a96e]/50" />
             </div>
 
-            <h2 className="mt-8 max-w-[28ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
-              Vom Kick-off zur lebenden Strategie — strukturiert, iterativ, messbar.
-            </h2>
-
-            <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
-              {prozessphasen.map((phase, i) => (
-                <div key={phase.num} className="relative flex flex-col bg-[#1a1f38]/60 px-6 py-8 backdrop-blur-sm">
-                  <p
-                    className="text-[3rem] font-semibold leading-none tracking-[-0.05em]"
-                    style={{ color: `rgba(201,169,110,${0.35 + i * 0.15})` }}
-                  >
-                    {phase.num}
+            {/* Right: card grid */}
+            <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2">
+              {fallstricke.map((f, i) => (
+                <div key={f.title} className="relative bg-white px-6 py-6">
+                  <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
+                  <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
+                    {String(i + 1).padStart(2, "0")}
                   </p>
-                  <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/40">
-                    {phase.title}
-                  </p>
-                  <ul className="mt-4 flex flex-col gap-2">
-                    {phase.items.map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-[13px] text-white/65">
-                        <span className="mt-[5px] h-[5px] w-[5px] shrink-0 rounded-full bg-[#45b3e2]/50" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-auto pt-8">
-                    <div className="h-px w-6 bg-[#c9a96e]/40" />
-                  </div>
+                  <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
+                    {f.title}
+                  </h3>
+                  <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{f.body}</p>
                 </div>
               ))}
             </div>
-
-            <p className="mt-8 max-w-[60ch] text-[15px] leading-relaxed text-white/50">
-              Der Ansatz ist flexibel: Je nach Ausgangslage können Sie mit einem einzelnen Teilaspekt
-              starten oder ein umfassendes Transformationsprogramm aufgleisen — immer mit klaren,
-              messbaren Schritten.
-            </p>
           </div>
-        </MotionSection>
-      </section>
+        </div>
+      </MotionSection>
 
-      {/* ── 7. NUTZEN — Sticky left + card grid ──────────────────────────── */}
-      <section className="bg-[#f5f5f7]">
-        <MotionSection>
-          <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
-            <div className="grid gap-12 lg:grid-cols-[1fr_1.8fr] lg:gap-20 lg:items-start">
-              {/* Left anchor */}
-              <div className="lg:sticky lg:top-28">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                  Nutzen
-                </p>
-                <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Was richtig umgesetzte Digitalisierung bringt.
-                </h2>
-                <div className="mt-7 h-px w-full bg-black/[0.06]" />
-                <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Eine erfolgreiche digitale Transformation erzeugt Mehrwert auf mehreren Ebenen —
-                  operativ, strategisch und kulturell.
-                </p>
-                <Link
-                  href="/kontakt"
-                  className="mt-8 inline-flex items-center gap-3 text-[14px] font-semibold text-[#26337c] transition-all hover:gap-4"
-                >
-                  Unverbindliches Gespräch
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-                    <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </Link>
-              </div>
-
-              {/* Right: 4x2 card grid */}
-              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2">
-                {nutzen.map((n) => (
-                  <div key={n.num} className="relative bg-white px-6 py-6">
-                    <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
-                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                      {n.num}
-                    </p>
-                    <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-                      {n.title}
-                    </h3>
-                    <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{n.body}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </MotionSection>
-      </section>
-
-      {/* ── 8. GUIDE — Unsere Rolle ──────────────────────────────────────── */}
+      {/* ── 7. GUIDE — Unsere Rolle ──────────────────────────────────────── */}
       <section className="bg-white">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
@@ -583,13 +470,13 @@ export function FokusDigitaleTransformation() {
                   Unsere Rolle
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f]">
-                  Der Unterschied zwischen Transformation und Technologieeinkauf.
+                  Die Perspektive, die intern fehlt — und den Unterschied macht.
                 </h2>
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
-                Viele Unternehmen kaufen Software und nennen es Transformation. Wir helfen Ihnen,
-                die richtigen Fragen zuerst zu stellen — und dann die richtigen Schritte in der
-                richtigen Reihenfolge zu gehen.
+                Sie wissen, dass Ihr Unternehmen eine klare Strategie braucht. Zwischen
+                Tagesgeschäft, Zeitdruck und unterschiedlichen Meinungen im Führungskreis bleibt
+                dafür selten der nötige Raum. Genau hier setzen wir an.
               </p>
             </div>
 
@@ -602,18 +489,18 @@ export function FokusDigitaleTransformation() {
                 {[
                   {
                     num: "01",
-                    title: "Fehlende interne Transformationsexpertise",
-                    body: "Know-how, Kapazität und Distanz zum Tagesgeschäft fehlen intern — die Voraussetzungen für einen strukturierten Prozess sind nicht vorhanden.",
+                    title: "Fehlende interne Voraussetzungen",
+                    body: "Zeit, Distanz zum Tagesgeschäft und methodische Erfahrung fehlen — die Voraussetzungen für einen soliden Strategieprozess sind intern nicht gegeben.",
                   },
                   {
                     num: "02",
-                    title: "Dringlichkeit durch Marktveränderung",
-                    body: "Neue Wettbewerber, technologische Disruption oder veränderte Kundenerwartungen erfordern rasches, gezieltes Handeln — ohne Orientierungsverlust.",
+                    title: "Divergierende Führungsperspektiven",
+                    body: "Verwaltungsrat und Geschäftsleitung sehen die Zukunft verschieden. Externe Moderation hilft, divergierende Sichtweisen in eine gemeinsame Richtung zu überführen.",
                   },
                   {
                     num: "03",
-                    title: "Hohe Investition, hohes Risiko",
-                    body: "Digitale Transformation bindet Kapital und Energie. Ein strukturierter Ansatz mit externem Blick minimiert das Risiko kostspieliger Fehlinvestitionen.",
+                    title: "Strategische Entscheidungen mit hohem Einsatz",
+                    body: "Manche Entscheidungen sind zu wichtig für Improvisation. Ein strukturierter Prozess mit externem Blick reduziert das Risiko kostspieliger Fehlentscheidungen.",
                   },
                 ].map((s) => (
                   <div key={s.num} className="relative bg-white px-7 py-8">
@@ -630,7 +517,7 @@ export function FokusDigitaleTransformation() {
               </div>
             </div>
 
-            {/* Three differentiators */}
+            {/* Three differentiators — dark phase grid */}
             <div className="mt-14 overflow-hidden rounded-2xl border border-white/[0.06]" style={{ background: "#1a2260" }}>
               <div className="border-b border-white/[0.06] px-7 py-5">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40">
@@ -654,7 +541,7 @@ export function FokusDigitaleTransformation() {
         </MotionSection>
       </section>
 
-      {/* ── 9. CTA — Specific 30-min offer ───────────────────────────────── */}
+      {/* ── 8. CTA — Specific 30-min offer ───────────────────────────────── */}
       <section className="relative overflow-hidden">
         <div
           className="absolute inset-0 -z-10"
@@ -677,13 +564,14 @@ export function FokusDigitaleTransformation() {
                 Nächster Schritt
               </p>
               <h2 className="mt-4 max-w-[30ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white text-balance">
-                Besser früher als spät mit der Digitalen Transformation beginnen.
+                Strategische Klarheit entsteht nicht von selbst — aber mit dem richtigen Partner schneller.
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
                 In einem kostenlosen 30-Minuten-Erstgespräch klären wir gemeinsam, wo Ihr
                 Unternehmen steht, was Sie erreichen wollen — und wie wir Sie dabei begleiten können.
               </p>
 
+              {/* Offer details */}
               <div className="mt-7 flex flex-wrap gap-4">
                 {["Kostenlos", "30 Minuten", "Unverbindlich"].map((tag) => (
                   <span
@@ -715,6 +603,7 @@ export function FokusDigitaleTransformation() {
             </div>
           </div>
 
+          {/* L-corner decorative rule */}
           <div className="mt-16 flex items-center gap-4 opacity-20">
             <div className="h-px flex-1 bg-white" />
             <div className="relative h-4 w-4">
