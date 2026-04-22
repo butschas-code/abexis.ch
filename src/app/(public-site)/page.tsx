@@ -22,6 +22,11 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 type ServiceSlug = keyof typeof serviceCardImages;
 
+/**
+ * Home teasers use cached `getPublishedCmsPosts` (see `get-published-posts.ts`). Short ISR keeps
+ * the shell fast while new posts show up within a couple of minutes.
+ */
+export const revalidate = 60;
 export default function HomePage() {
   return (
     <>
@@ -78,15 +83,17 @@ export default function HomePage() {
                   href={s.href}
                   className="group flex flex-col overflow-hidden rounded-[28px] bg-white shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--apple-shadow-lg)] hover:ring-brand-500/25"
                 >
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#f5f5f7]">
+                  <div className="relative isolate aspect-[16/10] w-full overflow-hidden bg-[#f5f5f7]">
                     <Image
                       src={img}
                       alt=""
                       fill
-                      className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                      className="object-cover saturate-[0.78] contrast-[1.08] transition duration-700 group-hover:scale-[1.04]"
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition group-hover:opacity-100" />
+                    <div className="pointer-events-none absolute inset-0 bg-[#2140a3]/45 mix-blend-multiply" />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#a8c9ff]/24 via-[#2f4ea6]/20 to-[#1a2a60]/70 mix-blend-color" />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/24 to-transparent opacity-0 transition group-hover:opacity-100" />
                   </div>
                   <div className="flex flex-1 flex-col px-6 pb-8 pt-6">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">{s.subtitle}</p>
@@ -116,9 +123,11 @@ export default function HomePage() {
               src={fokusPageHeroImages.prozessoptimierung}
               alt=""
               fill
-              className="object-cover"
+              className="object-cover saturate-[0.78] contrast-[1.08]"
               sizes="(min-width: 1024px) 45vw, 100vw"
             />
+            <div className="pointer-events-none absolute inset-0 bg-[#2140a3]/45 mix-blend-multiply" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#a8c9ff]/24 via-[#2f4ea6]/20 to-[#1a2a60]/70 mix-blend-color" />
           </div>
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Vorgehen</p>

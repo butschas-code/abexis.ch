@@ -1,8 +1,12 @@
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtmlLib from "sanitize-html";
 
 /**
  * Strict allowlist for blog HTML from the CMS editor and legacy imports.
  * Keep in sync with TipTap output (StarterKit + Link + Image).
+ *
+ * Uses `sanitize-html` (pure JS, no jsdom) so the bundle works in Vercel
+ * serverless runtime without hitting the ESM/CJS interop issue that
+ * `isomorphic-dompurify` → `jsdom` → `html-encoding-sniffer` triggers.
  */
 const ALLOWED_TAGS = [
   "p",
@@ -23,16 +27,39 @@ const ALLOWED_TAGS = [
   "span",
 ];
 
-const ALLOWED_ATTR = ["href", "target", "rel", "src", "alt", "title", "class"];
+const ALLOWED_ATTR: Record<string, string[]> = {
+  a: ["href", "title", "target", "rel"],
+  img: ["src", "alt", "title", "loading", "class"],
+  span: ["class"],
+  "*": ["class"],
+};
 
-const ALLOWED_URI_REGEXP =
-  /^(?:(?:https?|mailto):|[^a-z]|[a-z+.-]+(?:[^a-z+.-:]|$))/i;
+const ALLOWED_SCHEMES = ["http", "https", "mailto"];
+const ALLOWED_SCHEMES_BY_TAG: Record<string, string[]> = { img: ["http", "https", "data"] };
 
 export function sanitizeBlogHtml(html: string): string {
-  return DOMPurify.sanitize(html || "", {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
-    ALLOWED_URI_REGEXP,
-    ADD_ATTR: ["loading"],
-  });
+  const input = typeof html === "string" ? html : String(html ?? "");
+  try {
+    return sanitizeHtmlLib(input, {
+      allowedTags: ALLOWED_TAGS,
+      allowedAttributes: ALLOWED_ATTR,
+      allowedSchemes: ALLOWED_SCHEMES,
+      allowedSchemesByTag: ALLOWED_SCHEMES_BY_TAG,
+      allowProtocolRelative: true,
+      disallowedTagsMode: "discard",
+      transformTags: {
+        a: (tagName, attribs) => ({
+          tagName,
+          attribs: {
+            ...attribs,
+            /** External link hardening — safe default for CMS/legacy content. */
+            target: attribs.target ?? "_blank",
+            rel: attribs.rel ?? "noopener noreferrer",
+          },
+        }),
+      },
+    });
+  } catch {
+    return "";
+  }
 }

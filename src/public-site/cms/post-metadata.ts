@@ -6,9 +6,18 @@ import type { PublishedPostWithId } from "@/public-site/cms/published-post";
  * Relies on root `metadataBase` for relative path resolution.
  */
 export function buildCmsPostMetadata(post: PublishedPostWithId, path: string): Metadata {
-  const title = (post.seoTitle?.trim() || post.title).trim();
+  const title = (post.seoTitle?.trim() || post.title || "Insights").trim() || "Insights";
   const description = (post.seoDescription?.trim() || post.excerpt?.trim() || "").trim() || undefined;
-  const hero = post.heroImageUrl?.trim();
+  let hero: string | undefined;
+  try {
+    hero = post.heroImageUrl?.trim() || undefined;
+    if (hero) {
+      // Reject relative / invalid URLs so Next metadata + OG resolution never throws.
+      new URL(hero, "https://www.abexis.ch");
+    }
+  } catch {
+    hero = undefined;
+  }
 
   const md: Metadata = {
     title,

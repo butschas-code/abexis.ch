@@ -26,9 +26,10 @@ export function serializePostBody(html: string): string {
  * Reads stored `posts.body`: envelope JSON or legacy plain HTML string.
  */
 export function parsePostBody(raw: string): { html: string; envelope: PostBodyEnvelope | null } {
-  const t = raw?.trim() ?? "";
+  const s = typeof raw === "string" ? raw : String(raw ?? "");
+  const t = s.trim();
   if (!t.startsWith("{")) {
-    return { html: raw ?? "", envelope: null };
+    return { html: s, envelope: null };
   }
   try {
     const o = JSON.parse(t) as Partial<PostBodyEnvelope>;
@@ -38,7 +39,7 @@ export function parsePostBody(raw: string): { html: string; envelope: PostBodyEn
   } catch {
     /* fall through */
   }
-  return { html: raw ?? "", envelope: null };
+  return { html: s, envelope: null };
 }
 
 /** Normalizes legacy HTML to the canonical envelope before save. */

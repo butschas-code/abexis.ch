@@ -17,22 +17,31 @@ import {
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const dynamic = "force-dynamic";
+/**
+ * ISR + `unstable_cache` on post loaders: fast repeat visits without hammering Firestore every click.
+ * Content updates propagate within ~2 minutes (revalidate + cache TTL).
+ */
+export const revalidate = 120;
 
 export async function generateMetadata({ params }: Props) {
-  const { slug: raw } = await params;
-  const slug = normalizeBlogSlugParam(raw);
-  const cms = await getPublishedPostBySlug(slug);
-  if (cms) {
-    return buildCmsPostMetadata(cms, `/blog/${encodeURIComponent(slug)}`);
+  try {
+    const { slug: raw } = await params;
+    const slug = normalizeBlogSlugParam(raw);
+    const cms = await getPublishedPostBySlug(slug);
+    if (cms) {
+      return buildCmsPostMetadata(cms, `/blog/${encodeURIComponent(slug)}`);
+    }
+    const legacy = getBlogPostBySlug(slug);
+    if (!legacy) return { title: "Insights" };
+    return {
+      title: legacy.title,
+      description: undefined,
+      alternates: { canonical: `/blog/${encodeURIComponent(slug)}` },
+    };
+  } catch (err) {
+    console.error("[blog] generateMetadata failed.", err);
+    return { title: "Insights" };
   }
-  const legacy = getBlogPostBySlug(slug);
-  if (!legacy) return { title: "Insights" };
-  return {
-    title: legacy.title,
-    description: undefined,
-    alternates: { canonical: `/blog/${encodeURIComponent(slug)}` },
-  };
 }
 
 export default async function BlogPostPage({ params }: Props) {
@@ -40,16 +49,26 @@ export default async function BlogPostPage({ params }: Props) {
   const slug = normalizeBlogSlugParam(raw);
   if (!slug) notFound();
 
+  let cmsPayload:
+    | {
+        pageData: Awaited<ReturnType<typeof loadPublishedPostPageData>>;
+        related: Awaited<ReturnType<typeof loadRelatedPublishedPosts>>;
+      }
+    | null = null;
+
   /** CMS path may throw on transient Firebase/Admin issues (Vercel cold start, IAM, index missing):
    * never hard-500 when a legacy JSON fallback exists. */
   try {
     const pageData = await loadPublishedPostPageData(slug);
     if (pageData) {
       const related = await loadRelatedPublishedPosts(pageData.post, 3).catch(() => []);
-      return <CmsBlogPostView data={pageData} related={related} />;
+      cmsPayload = { pageData, related };
     }
   } catch (err) {
     console.error("[blog] CMS render failed; attempting legacy fallback.", err);
+  }
+  if (cmsPayload?.pageData) {
+    return <CmsBlogPostView data={cmsPayload.pageData} related={cmsPayload.related} />;
   }
 
   const post = getBlogPostBySlug(slug);
