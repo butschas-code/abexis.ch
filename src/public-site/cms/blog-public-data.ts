@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { COLLECTIONS } from "@/cms/firestore/collections";
 import { getAdminFirestore } from "@/firebase/server";
 import type { PublishedPostWithId } from "./published-post";
@@ -44,25 +45,34 @@ export function partitionFeaturedForGrid(
   return posts.filter((p) => !ids.has(p.id));
 }
 
+/** Cached author name lookup — returns plain record for cache serializability. */
+const _fetchAuthorNamesCached = unstable_cache(
+  async (ids: string[]): Promise<Record<string, string>> => {
+    const db = getAdminFirestore();
+    if (!db) return {};
+    try {
+      const snaps = await Promise.all(ids.map((id) => db.collection(COLLECTIONS.authors).doc(id).get()));
+      const out: Record<string, string> = {};
+      snaps.forEach((snap, i) => {
+        const name = snap.exists ? String(snap.data()?.name ?? "") : "";
+        if (name) out[ids[i]] = name;
+      });
+      return out;
+    } catch (err) {
+      console.error("[cms] Admin Firestore author name lookup failed; returning empty map.", err);
+      return {};
+    }
+  },
+  ["author-names"],
+  { revalidate: 300, tags: ["authors"] },
+);
+
 /** Resolve author display names for post teasers (best-effort). */
 export async function getAuthorNameMap(authorIds: string[]): Promise<Map<string, string>> {
-  const db = getAdminFirestore();
-  if (!db) return new Map();
   const ids = [...new Set(authorIds.filter((x) => x && x !== "_"))];
   if (ids.length === 0) return new Map();
-
-  try {
-    const snaps = await Promise.all(ids.map((id) => db.collection(COLLECTIONS.authors).doc(id).get()));
-    const out = new Map<string, string>();
-    snaps.forEach((snap, i) => {
-      const name = snap.exists ? String(snap.data()?.name ?? "") : "";
-      if (name) out.set(ids[i], name);
-    });
-    return out;
-  } catch (err) {
-    console.error("[cms] Admin Firestore author name lookup failed; returning empty map.", err);
-    return new Map();
-  }
+  const record = await _fetchAuthorNamesCached(ids);
+  return new Map(Object.entries(record));
 }
 
 export function buildCategoryLabelLookup(categories: PublicCategoryOption[]): Map<string, string> {

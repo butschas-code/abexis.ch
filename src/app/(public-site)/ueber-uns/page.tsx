@@ -3,8 +3,16 @@ import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { footerPartners, homeAboutTeaser, teamOrder, teamProfiles } from "@/data/pages";
+import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
-export const metadata = { title: "Über uns" };
+export const metadata = {
+  title: "Über uns",
+  description: "Erfahren Sie mehr über das Team hinter Abexis — Managementberatung mit Substanz.",
+  openGraph: {
+    title: "Über uns | Abexis",
+    description: "Begleitung mit Erfahrung und Substanz — Lernen Sie unser Team kennen.",
+  },
+};
 
 export default function UeberUnsPage() {
   return (
@@ -13,6 +21,13 @@ export default function UeberUnsPage() {
       title="Begleitung mit Erfahrung und Substanz"
       description={<p className="whitespace-pre-line">{homeAboutTeaser}</p>}
     >
+      <SchemaMarkup
+        type="BreadcrumbList"
+        data={[
+          { name: "Startseite", url: "/" },
+          { name: "Über uns", url: "/ueber-uns" },
+        ]}
+      />
       <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Team</h2>
       <div className="mt-6 grid items-stretch gap-6 md:grid-cols-2">
         {teamOrder.map((slug) => {

@@ -4,6 +4,7 @@ import { COLLECTIONS } from "@/cms/firestore/collections";
 import { parseFirebaseWebEnv } from "@/firebase/env.schema";
 import { mapPostDocData } from "@/lib/cms/map-post";
 import type { PublishedPostWithId } from "@/public-site/cms/published-post";
+import type { PublicDeploymentSite } from "@/public-site/site";
 import { getResolvedPublicDeploymentSite, visiblePostSitesInClause } from "@/public-site/site";
 
 /**
@@ -32,11 +33,11 @@ function getServerWebFirestore() {
  * read published posts with the **Web SDK** as an anonymous client. Matches
  * `firestore.rules` (`posts`: read if published).
  */
-export async function listPublishedPostsViaWebSdk(fetchLimit: number): Promise<PublishedPostWithId[]> {
+export async function listPublishedPostsViaWebSdk(fetchLimit: number, site?: PublicDeploymentSite): Promise<PublishedPostWithId[]> {
   const db = getServerWebFirestore();
   if (!db) return [];
 
-  const deployment = await getResolvedPublicDeploymentSite();
+  const deployment = site ?? await getResolvedPublicDeploymentSite();
   const sites = visiblePostSitesInClause(deployment);
   /** Must respect `fetchLimit` (e.g. slug fallback asks for 200); do not cap at 50 or older posts 404. */
   const lim = Math.min(200, Math.max(1, fetchLimit));
@@ -72,11 +73,11 @@ export async function listPublishedPostsViaWebSdk(fetchLimit: number): Promise<P
   }
 }
 
-export async function getPublishedPostBySlugViaWebSdk(slug: string): Promise<PublishedPostWithId | null> {
+export async function getPublishedPostBySlugViaWebSdk(slug: string, site?: PublicDeploymentSite): Promise<PublishedPostWithId | null> {
   const db = getServerWebFirestore();
   if (!db) return null;
 
-  const deployment = await getResolvedPublicDeploymentSite();
+  const deployment = site ?? await getResolvedPublicDeploymentSite();
   const allowed = new Set(visiblePostSitesInClause(deployment));
   const trimmed = slug.trim();
   if (!trimmed) return null;

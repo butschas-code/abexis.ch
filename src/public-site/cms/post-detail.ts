@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { COLLECTIONS } from "@/cms/firestore/collections";
 import { getPublishedCmsPosts, getPublishedPostBySlug } from "@/public-site/cms/get-published-posts";
 import type { PublishedPostWithId } from "@/public-site/cms/published-post";
@@ -13,19 +14,27 @@ export type PublishedPostPageData = {
   categories: PostDetailCategory[];
 };
 
+const _fetchAuthorDisplayNameCached = unstable_cache(
+  async (authorId: string): Promise<string | null> => {
+    const db = getAdminFirestore();
+    if (!db) return null;
+    try {
+      const snap = await db.collection(COLLECTIONS.authors).doc(authorId).get();
+      if (!snap.exists) return null;
+      const name = snap.data()?.name;
+      return typeof name === "string" && name.trim() ? name.trim() : null;
+    } catch (err) {
+      console.error("[cms] Admin Firestore author lookup failed; returning null.", err);
+      return null;
+    }
+  },
+  ["author-display-name"],
+  { revalidate: 300, tags: ["authors"] },
+);
+
 export async function getAuthorDisplayName(authorId: string | null | undefined): Promise<string | null> {
   if (!authorId || authorId === "_") return null;
-  const db = getAdminFirestore();
-  if (!db) return null;
-  try {
-    const snap = await db.collection(COLLECTIONS.authors).doc(authorId).get();
-    if (!snap.exists) return null;
-    const name = snap.data()?.name;
-    return typeof name === "string" && name.trim() ? name.trim() : null;
-  } catch (err) {
-    console.error("[cms] Admin Firestore author lookup failed; returning null.", err);
-    return null;
-  }
+  return _fetchAuthorDisplayNameCached(authorId);
 }
 
 /** Categories assigned to the post that also belong to this deployment’s taxonomy list. */
@@ -107,7 +116,7 @@ export async function loadRelatedPublishedPosts(
   max = 3,
 ): Promise<PublishedPostWithId[]> {
   try {
-    const pool = await getPublishedCmsPosts(80);
+    const pool = await getPublishedCmsPosts(20);
     return selectRelatedPublishedPosts(current, pool, max);
   } catch (err) {
     console.error("[cms] loadRelatedPublishedPosts failed; returning empty.", err);

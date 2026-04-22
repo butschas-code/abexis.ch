@@ -38,12 +38,10 @@ export const hinwilGoogleMapsEmbedSrc =
   "https://maps.google.com/maps?q=Abexis+GmbH%2C+Zihlstrasse+25%2C+8340+Hinwil%2C+Schweiz&z=16&ie=UTF8&iwloc=&output=embed";
 
 export const mainNav = [
-  { href: "/", label: "Startseite" },
   { href: "/leistungen", label: "Leistungen" },
   { href: "/blog", label: "Insights" },
   { href: "/ueber-uns", label: "Über uns" },
   { href: "/kontakt", label: "Kontakt" },
-  { href: "/admin", label: "Login" },
 ] as const;
 
 export const footerPartners = [

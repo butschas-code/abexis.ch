@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { homeHeroImage } from "@/data/site-images";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -20,6 +21,19 @@ export const metadata: Metadata = {
     siteName: "Abexis",
     locale: "de_CH",
     type: "website",
+    images: [
+      {
+        url: homeHeroImage,
+        width: 1200,
+        height: 630,
+        alt: "Abexis — Managementberatung",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Abexis — Managementberatung",
+    description: "Business Transformation, Strategie & Führungsberatung.",
   },
 };
 

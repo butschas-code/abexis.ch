@@ -5,6 +5,7 @@ import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { getBlogListCoverByIndex } from "@/data/site-images";
 import type { PublishedPostPageData, PublishedPostWithId } from "@/public-site/cms";
 import { RelatedInsights } from "./RelatedInsights";
+import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 type Props = {
   data: PublishedPostPageData;
@@ -71,6 +72,24 @@ export function CmsBlogPostView({ data, related }: Props) {
         </div>
       }
     >
+      <SchemaMarkup
+        type="Article"
+        data={{
+          title: post.title,
+          excerpt: post.excerpt,
+          image: heroImage,
+          publishedAt: post.publishedAt,
+          authorName: authorName,
+        }}
+      />
+      <SchemaMarkup
+        type="BreadcrumbList"
+        data={[
+          { name: "Startseite", url: "/" },
+          { name: "Insights", url: "/blog" },
+          { name: post.title, url: `/blog/${post.slug}` },
+        ]}
+      />
       <nav aria-label="Brotkrumen">
         <Link
           href="/blog"

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { siteConfig, teamOrder, teamProfiles, type TeamSlug } from "@/data/pages";
+import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 type Props = { params: Promise<{ profile: string }> };
 
@@ -17,7 +18,17 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { profile } = await params;
   if (!isTeamSlug(profile)) return {};
-  return { title: teamProfiles[profile].name };
+  const p = teamProfiles[profile];
+  return {
+    title: p.name,
+    description: `${p.name} — ${p.title} bei Abexis.`,
+    openGraph: {
+      title: `${p.name} | Abexis`,
+      description: p.title,
+      type: "profile",
+      images: [{ url: p.image }],
+    },
+  };
 }
 
 export default async function TeamProfilePage({ params }: Props) {
@@ -36,6 +47,15 @@ export default async function TeamProfilePage({ params }: Props) {
       contentClassName="pt-10 md:pt-12"
       heroImage={p.image}
     >
+      <SchemaMarkup type="Person" data={{ ...p, slug: profile }} />
+      <SchemaMarkup
+        type="BreadcrumbList"
+        data={[
+          { name: "Startseite", url: "/" },
+          { name: "Über uns", url: "/ueber-uns" },
+          { name: p.name, url: `/${profile}` },
+        ]}
+      />
       <div className="flex flex-col gap-8 border-b border-black/[0.06] pb-10 md:flex-row md:items-start md:gap-10">
         <div className="relative mx-auto h-44 w-44 shrink-0 overflow-hidden rounded-[28px] bg-[#f5f5f7] shadow-[var(--apple-shadow)] ring-1 ring-black/[0.06] md:mx-0">
           <Image src={p.image} alt={p.name} fill className="object-cover" sizes="176px" />

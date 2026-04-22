@@ -18,18 +18,14 @@ import { AboutTeamGrid } from "@/components/home/AboutTeamGrid";
 import { PartnershipsMarquee } from "@/components/home/PartnershipsMarquee";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { fokusPageHeroImages, serviceCardImages } from "@/data/site-images";
+import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 type ServiceSlug = keyof typeof serviceCardImages;
-
-/**
- * Home blog teasers read live Firestore (`getPublishedCmsPosts`). Avoid ISR here so removed or
- * unpublished posts disappear immediately on `/` (blog index already uses `force-dynamic`).
- */
-export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   return (
     <>
+      <SchemaMarkup type="WebSite" />
       <HomeHero>
         <div className="max-w-[36rem] md:max-w-[40rem]">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Abexis Consulting</p>

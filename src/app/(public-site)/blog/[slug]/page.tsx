@@ -4,6 +4,7 @@ import { BlogBody } from "@/components/content/BlogBody";
 import { CmsBlogPostView } from "@/components/public-site/insights/CmsBlogPostView";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
+import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { getAllBlogPosts, getBlogPostBySlug } from "@/data/pages";
 import { getBlogListCoverByIndex } from "@/data/site-images";
 import {
@@ -16,12 +17,7 @@ import {
 
 type Props = { params: Promise<{ slug: string }> };
 
-/** CMS-backed slugs must resolve on every request (no stale ISR / build-time param lock-in). */
 export const dynamic = "force-dynamic";
-
-export async function generateStaticParams() {
-  return getAllBlogPosts().map((p) => ({ slug: p.slug }));
-}
 
 export async function generateMetadata({ params }: Props) {
   const { slug: raw } = await params;
@@ -89,6 +85,22 @@ export default async function BlogPostPage({ params }: Props) {
         ) : undefined
       }
     >
+      <SchemaMarkup
+        type="Article"
+        data={{
+          title: post.title,
+          image: heroImage,
+          publishedAt: post.publishedISO,
+        }}
+      />
+      <SchemaMarkup
+        type="BreadcrumbList"
+        data={[
+          { name: "Startseite", url: "/" },
+          { name: "Insights", url: "/blog" },
+          { name: post.title, url: `/blog/${post.slug}` },
+        ]}
+      />
       <Link
         href="/blog"
         className="inline-flex text-[15px] font-medium text-brand-900 underline-offset-4 transition-colors hover:text-brand-500 hover:underline"

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { fokusthemenMeta, getAllBlogPosts, teamOrder } from "@/data/pages";
-import { getPublishedCmsPosts } from "@/public-site/cms";
+import { getPublishedCmsPosts, listPublicCategoriesForDeployment } from "@/public-site/cms";
 
 const base = "https://www.abexis.ch";
 
@@ -48,19 +48,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let cmsPosts: MetadataRoute.Sitemap = [];
   try {
-    const published = await getPublishedCmsPosts(500);
+    const published = await getPublishedCmsPosts(1000);
     cmsPosts = published.map((p) => ({
       url: `${base}/blog/${encodeURIComponent(p.slug)}`,
       lastModified: p.publishedAt ? new Date(p.publishedAt) : new Date(p.updatedAt),
       changeFrequency: "weekly" as const,
-      priority: 0.55,
+      priority: 0.6,
     }));
-  } catch {
-    /* Admin SDK may be unavailable at build time (TODO: ensure CI has credentials for full sitemap). */
+  } catch (err) {
+    console.error("[sitemap] Failed to fetch CMS posts", err);
+  }
+
+  let categories: MetadataRoute.Sitemap = [];
+  try {
+    const cats = await listPublicCategoriesForDeployment();
+    categories = cats.map((c) => ({
+      url: `${base}/blog?category=${encodeURIComponent(c.slug)}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.4,
+    }));
+  } catch (err) {
+    console.error("[sitemap] Failed to fetch categories", err);
   }
 
   const byUrl = new Map<string, MetadataRoute.Sitemap[number]>();
-  for (const row of [...legacyPosts, ...cmsPosts]) {
+  // Prioritize CMS posts over legacy if slugs match (unlikely but safe)
+  for (const row of [...legacyPosts, ...cmsPosts, ...categories]) {
     byUrl.set(row.url, row);
   }
 

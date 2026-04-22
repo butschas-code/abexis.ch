@@ -3,8 +3,18 @@ import { MotionSection } from "@/components/motion/MotionSection";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { homeEn } from "@/data/home-en";
+import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { homeHeroImage } from "@/data/site-images";
 
-export const metadata = { title: "Home (English)" };
+export const metadata = {
+  title: "Management Consulting",
+  description: "Abexis helps your company move forward strategically, exploit growth potential and establish effective structures.",
+  openGraph: {
+    title: "Abexis — Management Consulting",
+    description: "Transformation, Strategy & Leadership Advisory.",
+    images: [{ url: homeHeroImage }],
+  },
+};
 
 export default function EnglishHomePage() {
   return (
@@ -15,6 +25,13 @@ export default function EnglishHomePage() {
       wrapContentInMotion={false}
       contentClassName="pt-10 md:pt-14"
     >
+      <SchemaMarkup
+        type="BreadcrumbList"
+        data={[
+          { name: "Home", url: "/" },
+          { name: "English", url: "/en/home" },
+        ]}
+      />
       <ul className="space-y-3 border-l border-brand-900/25 pl-5">
         {homeEn.pillars.map((l) => (
           <li key={l} className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#6e6e73]">

@@ -5,8 +5,17 @@ import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { siteConfig } from "@/data/pages";
 import { kontaktPageHeroImage } from "@/data/site-images";
 import { getResolvedPublicDeploymentSite } from "@/public-site/site/resolve";
+import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
-export const metadata = { title: "Kontakt" };
+export const metadata = {
+  title: "Kontakt",
+  description: "Wir freuen uns auf Ihre Kontaktaufnahme — per Telefon, E-Mail oder Kontaktformular.",
+  openGraph: {
+    title: "Kontakt | Abexis",
+    description: "Wir freuen uns auf Ihre Kontaktaufnahme — Unverbindlicher Austausch oder konkrete Anfrage.",
+    images: [{ url: kontaktPageHeroImage }],
+  },
+};
 
 export default async function KontaktPage() {
   const deployment = await getResolvedPublicDeploymentSite();
@@ -24,6 +33,13 @@ export default async function KontaktPage() {
           </p>
         }
       >
+        <SchemaMarkup
+          type="BreadcrumbList"
+          data={[
+            { name: "Startseite", url: "/" },
+            { name: "Kontakt", url: "/kontakt" },
+          ]}
+        />
         <SearchBriefContactForm />
 
         <div className="mt-14 grid gap-8 lg:grid-cols-2 lg:items-stretch lg:gap-10">
@@ -80,6 +96,13 @@ export default async function KontaktPage() {
         <p>Gerne können Sie auch einen Termin für einen unverbindlichen Austausch vereinbaren.</p>
       }
     >
+      <SchemaMarkup
+        type="BreadcrumbList"
+        data={[
+          { name: "Startseite", url: "/" },
+          { name: "Kontakt", url: "/kontakt" },
+        ]}
+      />
       <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch lg:gap-10">
         <div className="rounded-[28px] bg-white p-8 shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] md:p-10">
           <dl className="space-y-8 text-[15px]">

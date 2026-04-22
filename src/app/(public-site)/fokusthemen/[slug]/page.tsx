@@ -3,6 +3,8 @@ import { SafeHtml } from "@/components/content/SafeHtml";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { fokusthemenMeta, getFokusthemaHtml, normalizeFokusSlug } from "@/data/pages";
 import { fokusPageHeroImages, homeHeroImage } from "@/data/site-images";
+import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { FokusDigitaleTransformation } from "@/components/public-site/FokusDigitaleTransformation";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -12,8 +14,22 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const meta = fokusthemenMeta.find((m) => m.slug === normalizeFokusSlug(slug));
-  return { title: meta?.title ?? "Fokusthema" };
+  const n = normalizeFokusSlug(slug);
+  const meta = fokusthemenMeta.find((m) => m.slug === n);
+  if (!meta) return {};
+
+  const heroKey = n as keyof typeof fokusPageHeroImages;
+  const heroImage = heroKey in fokusPageHeroImages ? fokusPageHeroImages[heroKey] : homeHeroImage;
+
+  return {
+    title: meta.title,
+    description: meta.excerpt,
+    openGraph: {
+      title: `${meta.title} | Abexis`,
+      description: meta.excerpt,
+      images: [{ url: heroImage }],
+    },
+  };
 }
 
 export default async function FokusthemaPage({ params }: Props) {
@@ -21,6 +37,10 @@ export default async function FokusthemaPage({ params }: Props) {
   const n = normalizeFokusSlug(slug);
   const html = getFokusthemaHtml(n);
   if (!html) notFound();
+
+  if (n === "digitale-transformation") {
+    return <FokusDigitaleTransformation />;
+  }
 
   const meta = fokusthemenMeta.find((m) => m.slug === n);
   const heroKey = n as keyof typeof fokusPageHeroImages;
@@ -36,6 +56,15 @@ export default async function FokusthemaPage({ params }: Props) {
       contentClassName="pt-10 md:pt-12"
       heroImage={heroImage}
     >
+      {meta && <SchemaMarkup type="Service" data={meta} />}
+      <SchemaMarkup
+        type="BreadcrumbList"
+        data={[
+          { name: "Startseite", url: "/" },
+          { name: "Leistungen", url: "/leistungen" },
+          { name: meta?.title ?? "Thema", url: `/fokusthemen/${slug}` },
+        ]}
+      />
       <SafeHtml html={html} />
     </InteriorPageLayout>
   );

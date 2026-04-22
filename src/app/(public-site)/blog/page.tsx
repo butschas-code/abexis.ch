@@ -16,9 +16,12 @@ import {
 export const metadata = {
   title: "Insights",
   description: "Perspektiven zu Strategie, Transformation und Führung — kuratiert von Abexis.",
+  openGraph: {
+    title: "Insights | Abexis",
+    description: "Perspektiven zu Strategie, Transformation und Führung.",
+    type: "website",
+  },
 };
-
-export const dynamic = "force-dynamic";
 
 export default async function BlogIndexPage() {
   const [posts, categories, deploymentSite] = await Promise.all([

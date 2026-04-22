@@ -3,14 +3,28 @@ import { MotionSection } from "@/components/motion/MotionSection";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PageHero } from "@/components/site/PageHero";
 import { fokusPageHeroImages } from "@/data/site-images";
+import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 export const metadata = {
   title: "Leistungen",
+  description: "Die Beratungsschwerpunkte von Abexis: Digitale Transformation, Strategie, Vertrieb & Marketing und mehr.",
+  openGraph: {
+    title: "Leistungen | Abexis",
+    description: "Beratung mit Substanz — Unsere Schwerpunkte im Detail.",
+    images: [{ url: fokusPageHeroImages["digitale-transformation"] }],
+  },
 };
 
 export default function LeistungenPage() {
   return (
     <InteriorPageRoot>
+      <SchemaMarkup
+        type="BreadcrumbList"
+        data={[
+          { name: "Startseite", url: "/" },
+          { name: "Leistungen", url: "/leistungen" },
+        ]}
+      />
       <PageHero imageSrc={fokusPageHeroImages["digitale-transformation"]}>
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Leistungen</p>
         <h1 className="mt-3 max-w-[22ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance md:max-w-[32ch] md:text-[56px] md:leading-[1.02]">
