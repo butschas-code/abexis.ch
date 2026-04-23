@@ -17,6 +17,8 @@
    * Image / hero overlay: dark grey (bottom left) → brand cyan (top right), many steps.
    * Use for .abexis-tint-overlay, .abexis-hero-image-overlay, and key CTAs.
    */
+  /** Opacity for gradient *on top of photos* (hero + cards). CTAs use full gradient, not this. */
+  --abexis-hero-on-image-opacity: 0.34;
   --abexis-hero-overlay: linear-gradient(
     to top right,
     #0e0e10 0%,
@@ -325,10 +327,10 @@ body {
   position: absolute;
   inset: 0;
   background: var(--abexis-hero-overlay);
-  opacity: 0.9;
+  opacity: var(--abexis-hero-on-image-opacity);
 }
 .abexis-tint-overlay--soft::after {
-  opacity: 0.72;
+  opacity: 0.26;
 }
 
 /**
@@ -341,6 +343,7 @@ body {
   pointer-events: none;
   border-radius: inherit;
   background: var(--abexis-hero-overlay);
+  opacity: var(--abexis-hero-on-image-opacity);
 }
 
 /** z. B. Ladegerüst / Platzhalter ohne absoluten Parent-Stack */

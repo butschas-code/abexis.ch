@@ -61,7 +61,7 @@ function LeistungenBentoCard({ item, imagePriority }: { item: BentoItem; imagePr
         />
         <div className="abexis-tint-overlay" />
         <div
-          className="abexis-hero-image-overlay opacity-0 transition-opacity duration-500 group-hover:opacity-[0.2]"
+          className="abexis-hero-image-overlay opacity-0 transition-opacity duration-500 group-hover:opacity-40"
           aria-hidden
         />
       </div>
