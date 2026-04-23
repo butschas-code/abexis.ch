@@ -8,7 +8,7 @@ import {
   getAuthorNameMap,
   getResolvedPublicDeploymentSite,
   listInsightsPublishedPosts,
-  listPublicCategoriesForDeployment,
+  listPublicCategoriesForInsights,
   partitionFeaturedForGrid,
   pickFeaturedPosts,
 } from "@/public-site/cms";
@@ -28,7 +28,7 @@ export const revalidate = 120;
 export default async function BlogIndexPage() {
   const [posts, categories, deploymentSite] = await Promise.all([
     listInsightsPublishedPosts({}),
-    listPublicCategoriesForDeployment(),
+    listPublicCategoriesForInsights(),
     /** Hostname hints (`NEXT_PUBLIC_SEARCH_SITE_HOST_HINTS`) + `NEXT_PUBLIC_CMS_SITE_ID` — drives Firestore filters. */
     getResolvedPublicDeploymentSite(),
   ]);
@@ -65,8 +65,8 @@ export default async function BlogIndexPage() {
             </span>
           )}
           <span className="mt-3 block">
-            Strategie, Transformation und Führung — kompakt aufbereitet. Nur veröffentlichte Beiträge für diese
-            Oberfläche (inkl. geteilte Inhalte).
+            Strategie, Transformation und Führung — kompakt aufbereitet. Hier finden Sie alle veröffentlichten
+            Beiträge aus abexis.ch und der Executive-Search-Oberfläche (sowie geteilte Inhalte).
           </span>
         </p>
       }
@@ -75,7 +75,7 @@ export default async function BlogIndexPage() {
         <div className="rounded-[28px] border border-dashed border-black/[0.1] bg-white/60 px-8 py-16 text-center">
           <p className="font-serif text-[22px] text-[#1d1d1f]">Noch keine Beiträge</p>
           <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-[#6e6e73]">
-            Sobald Inhalte im CMS veröffentlicht sind, erscheinen sie hier — gefiltert nach dieser Website.
+            Sobald Inhalte im CMS veröffentlicht sind, erscheinen sie hier.
           </p>
           <Link
             href="/kontakt"

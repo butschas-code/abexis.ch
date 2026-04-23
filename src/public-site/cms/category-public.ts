@@ -52,3 +52,12 @@ export async function listPublicCategoriesForDeployment(): Promise<PublicCategor
   const allowedSites = visibleCategorySiteKeysForDeployment(d);
   return _listCategoriesCached(allowedSites);
 }
+
+const UNIFIED_INSIGHTS_CATEGORY_SITES: CategorySiteKey[] = ["abexis", "search", "shared"];
+
+/**
+ * All category surfaces for `/blog` when listing unified posts (abexis + search + shared), so labels resolve for every post.
+ */
+export async function listPublicCategoriesForInsights(): Promise<PublicCategoryOption[]> {
+  return _listCategoriesCached(UNIFIED_INSIGHTS_CATEGORY_SITES);
+}

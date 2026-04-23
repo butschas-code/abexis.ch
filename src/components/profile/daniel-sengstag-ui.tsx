@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { animate, useInView, useReducedMotion } from "framer-motion";
 import type { SiteContent } from "@/data/daniel-sengstag/types";
@@ -439,20 +438,12 @@ export function DanielSengstagProfilePage({ copy, images }: { copy: SiteContent;
 
       <MotionSection className="border-t border-black/[0.06] bg-gradient-to-b from-[#f8faff] to-white py-14 md:py-18">
         <div className="mx-auto max-w-[1068px] px-4 sm:px-6">
-          <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
-            <div className="max-w-2xl">
-              <Eyebrow>{copy.abexis.kicker}</Eyebrow>
-              <h2 className="mt-3 text-[clamp(1.4rem,2.5vw,2rem)] font-semibold leading-tight tracking-[-0.02em] text-[#1d1d1f]">
-                {copy.abexis.title}
-              </h2>
-              <p className="mt-4 text-[15px] leading-relaxed text-[#6e6e73] sm:text-[16px]">{copy.abexis.body}</p>
-            </div>
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 self-start rounded-full border border-black/[0.1] bg-white px-5 py-3 text-[14px] font-medium text-brand-900 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-500/40 hover:shadow-md md:self-end"
-            >
-              {copy.abexis.linkLabel} <span aria-hidden>→</span>
-            </Link>
+          <div className="max-w-2xl">
+            <Eyebrow>{copy.abexis.kicker}</Eyebrow>
+            <h2 className="mt-3 text-[clamp(1.4rem,2.5vw,2rem)] font-semibold leading-tight tracking-[-0.02em] text-[#1d1d1f]">
+              {copy.abexis.title}
+            </h2>
+            <p className="mt-4 text-[15px] leading-relaxed text-[#6e6e73] sm:text-[16px]">{copy.abexis.body}</p>
           </div>
         </div>
       </MotionSection>

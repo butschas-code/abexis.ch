@@ -2,7 +2,7 @@ import { unstable_cache } from "next/cache";
 import { COLLECTIONS } from "@/cms/firestore/collections";
 import { getAdminFirestore } from "@/firebase/server";
 import type { PublishedPostWithId } from "./published-post";
-import { getPublishedCmsPosts } from "./get-published-posts";
+import { getPublishedCmsPostsAllSites } from "./get-published-posts";
 import type { PublicCategoryOption } from "./category-public";
 
 const DEFAULT_INSIGHTS_LIMIT = 96;
@@ -15,11 +15,12 @@ export type ListInsightsOptions = {
 };
 
 /**
- * Latest published posts for the current deployment, optionally filtered by category (in-memory filter).
+ * Latest published posts across abexis, search, and shared (`both`) surfaces — unified Insights index.
+ * Optionally filtered by category (in-memory filter).
  */
 export async function listInsightsPublishedPosts(options: ListInsightsOptions = {}): Promise<PublishedPostWithId[]> {
   const limit = Math.min(200, Math.max(12, options.fetchLimit ?? DEFAULT_INSIGHTS_LIMIT));
-  const rows = await getPublishedCmsPosts(limit);
+  const rows = await getPublishedCmsPostsAllSites(limit);
   const cat = options.categoryId?.trim();
   if (!cat) return rows;
   const filtered = rows.filter((p) => p.categoryIds.includes(cat));

@@ -64,7 +64,6 @@ export type SiteContent = {
     kicker: string;
     title: string;
     body: string;
-    linkLabel: string;
   };
   contact: {
     kicker: string;

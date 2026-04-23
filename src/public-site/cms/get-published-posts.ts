@@ -12,7 +12,7 @@ import {
   listPublishedPostsViaWebSdkForDeployment,
 } from "@/public-site/cms/published-posts-web-sdk";
 import type { PublicDeploymentSite } from "@/public-site/site";
-import { getResolvedPublicDeploymentSite, visiblePostSitesInClause } from "@/public-site/site";
+import { allInsightsPostSitesInClause, getResolvedPublicDeploymentSite, visiblePostSitesInClause } from "@/public-site/site";
 
 export type { PublishedPostWithId } from "@/public-site/cms/published-post";
 
@@ -57,6 +57,29 @@ export async function listPublishedPostsFromDb(
     .filter((p): p is PublishedPostWithId => p != null && p.status === "published");
 }
 
+/** Unified Insights: every published post regardless of `site` (abexis / search / both). */
+export async function listPublishedPostsFromDbAllSites(
+  db: Firestore,
+  limit = 20,
+): Promise<PublishedPostWithId[]> {
+  const sites = allInsightsPostSitesInClause();
+  const lim = Math.min(200, Math.max(1, limit));
+  const snap = await db
+    .collection(COLLECTIONS.posts)
+    .where("status", "==", "published")
+    .where("site", "in", sites)
+    .orderBy("publishedAt", "desc")
+    .limit(lim)
+    .get();
+
+  return snap.docs
+    .map((doc) => {
+      const post = mapPostDoc(doc.id, doc);
+      return post ? { id: doc.id, ...post } : null;
+    })
+    .filter((p): p is PublishedPostWithId => p != null && p.status === "published");
+}
+
 async function getPublishedCmsPostsUncached(
   deployment: PublicDeploymentSite,
   limit: number,
@@ -80,9 +103,37 @@ async function getPublishedCmsPostsUncached(
   return rows;
 }
 
+async function getPublishedCmsPostsAllSitesUncached(limit: number): Promise<PublishedPostWithId[]> {
+  let rows: PublishedPostWithId[] = [];
+  const db = getAdminFirestore();
+  const lim = Math.min(200, Math.max(1, limit));
+  if (db) {
+    try {
+      rows = await listPublishedPostsFromDbAllSites(db, lim);
+    } catch (err) {
+      console.error("[cms] Admin Firestore unified post list failed; falling back to Web SDK.", err);
+      const { listPublishedPostsViaWebSdkAllSites } = await import("@/public-site/cms/published-posts-web-sdk");
+      rows = await listPublishedPostsViaWebSdkAllSites(lim);
+    }
+  } else {
+    const { listPublishedPostsViaWebSdkAllSites } = await import("@/public-site/cms/published-posts-web-sdk");
+    rows = await listPublishedPostsViaWebSdkAllSites(lim);
+  }
+  if (rows.length === 0) {
+    rows = listLegacyPublishedPostsAsCms(lim);
+  }
+  return rows;
+}
+
 const getPublishedCmsPostsCached = unstable_cache(
   async (deployment: PublicDeploymentSite, limit: number) => getPublishedCmsPostsUncached(deployment, limit),
   ["published-cms-posts"],
+  { revalidate: CMS_POST_LIST_REVALIDATE, tags: ["published-posts"] },
+);
+
+const getPublishedCmsPostsAllSitesCached = unstable_cache(
+  async (limit: number) => getPublishedCmsPostsAllSitesUncached(limit),
+  ["published-cms-posts-all-sites"],
   { revalidate: CMS_POST_LIST_REVALIDATE, tags: ["published-posts"] },
 );
 
@@ -101,15 +152,24 @@ async function getPublishedCmsPostsImpl(limit = 20): Promise<PublishedPostWithId
  */
 export const getPublishedCmsPosts = cache(getPublishedCmsPostsImpl);
 
+/**
+ * All published posts for the unified Insights experience (abexis + search + both),
+ * used by `/blog` and sitemap. Cached separately from deployment-scoped {@link getPublishedCmsPosts}.
+ */
+export const getPublishedCmsPostsAllSites = cache(async (limit = 20) => {
+  const lim = Math.min(200, Math.max(1, limit));
+  return getPublishedCmsPostsAllSitesCached(lim);
+});
+
 async function fetchPublishedPostBySlugForDeployment(
   deployment: PublicDeploymentSite,
   normalized: string,
 ): Promise<PublishedPostWithId | null> {
   const db = getAdminFirestore();
+  const allowed = new Set(allInsightsPostSitesInClause());
 
   if (db) {
     try {
-      const allowed = new Set(visiblePostSitesInClause(deployment));
       const snap = await db.collection(COLLECTIONS.posts).where("slug", "==", normalized).limit(40).get();
       for (const doc of snap.docs) {
         const post = mapPostDoc(doc.id, doc);
@@ -147,7 +207,7 @@ async function getPublishedPostBySlugImpl(slug: string): Promise<PublishedPostWi
 }
 
 /**
- * Single published post visible on this deployment (abexis/search + `both`), by public slug.
+ * Single published post by public slug, including `site` abexis, search, or both (unified `/blog` surface).
  * Wrapped in `cache()` so `generateMetadata` + article body share one in-flight fetch per request,
  * and `unstable_cache` so repeat traffic is served from the data cache for a short TTL.
  */

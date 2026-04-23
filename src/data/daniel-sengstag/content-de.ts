@@ -283,7 +283,6 @@ export const danielSengstagContent: SiteContent = {
     kicker: "Abexis",
     title: "CEO und Inhaber",
     body: "Die Abexis GmbH steht für anspruchsvolle Begleitung in Business- und digitaler Transformation: Projektmanagement, Industrie 4.0, PLM, Vertriebsberatung und Change Management — dort, wo Technologie und Organisation zusammenkommen.",
-    linkLabel: "abexis.ch",
   },
   contact: {
     kicker: "Kontakt",

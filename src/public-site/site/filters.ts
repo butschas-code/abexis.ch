@@ -25,6 +25,11 @@ export function visibleCategorySiteKeysForDeployment(deployment: PublicDeploymen
   return ["abexis", "shared"];
 }
 
+/** All `posts.site` values — for unified Insights (`/blog`) listing and slug resolution across surfaces. */
+export function allInsightsPostSitesInClause(): Array<"abexis" | "search" | "both"> {
+  return ["abexis", "search", "both"];
+}
+
 /** Row-level check (e.g. after a broad read). */
 export function isPostVisibleOnDeployment(postSite: SiteKey, deployment: PublicDeploymentSite): boolean {
   return visiblePostSiteKeysForDeployment(deployment).includes(postSite);

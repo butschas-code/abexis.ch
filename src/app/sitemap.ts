@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { fokusthemenMeta, getAllBlogPosts, teamOrder } from "@/data/pages";
-import { getPublishedCmsPosts, listPublicCategoriesForDeployment } from "@/public-site/cms";
+import { getPublishedCmsPostsAllSites, listPublicCategoriesForInsights } from "@/public-site/cms";
 
 const base = "https://www.abexis.ch";
 
@@ -48,7 +48,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let cmsPosts: MetadataRoute.Sitemap = [];
   try {
-    const published = await getPublishedCmsPosts(1000);
+    const published = await getPublishedCmsPostsAllSites(1000);
     cmsPosts = published.map((p) => ({
       url: `${base}/blog/${encodeURIComponent(p.slug)}`,
       lastModified: p.publishedAt ? new Date(p.publishedAt) : new Date(p.updatedAt),
@@ -61,7 +61,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let categories: MetadataRoute.Sitemap = [];
   try {
-    const cats = await listPublicCategoriesForDeployment();
+    const cats = await listPublicCategoriesForInsights();
     categories = cats.map((c) => ({
       url: `${base}/blog?category=${encodeURIComponent(c.slug)}`,
       lastModified: new Date(),

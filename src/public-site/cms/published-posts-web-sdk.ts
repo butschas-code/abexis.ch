@@ -5,7 +5,7 @@ import { parseFirebaseWebEnv } from "@/firebase/env.schema";
 import { mapPostDocData } from "@/lib/cms/map-post";
 import type { PublishedPostWithId } from "@/public-site/cms/published-post";
 import type { PublicDeploymentSite } from "@/public-site/site";
-import { getResolvedPublicDeploymentSite, visiblePostSitesInClause } from "@/public-site/site";
+import { allInsightsPostSitesInClause, getResolvedPublicDeploymentSite, visiblePostSitesInClause } from "@/public-site/site";
 
 /**
  * Default web app for **server** Route Handlers / RSC (anonymous Firestore reads).
@@ -74,6 +74,38 @@ export async function listPublishedPostsViaWebSdkForDeployment(
   }
 }
 
+export async function listPublishedPostsViaWebSdkAllSites(fetchLimit: number): Promise<PublishedPostWithId[]> {
+  const db = getServerWebFirestore();
+  if (!db) return [];
+  const sites = allInsightsPostSitesInClause();
+  const lim = Math.min(200, Math.max(1, fetchLimit));
+
+  try {
+    const q = query(
+      collection(db, COLLECTIONS.posts),
+      where("status", "==", "published"),
+      where("site", "in", sites),
+      limit(Math.min(200, Math.max(lim, lim * 4))),
+    );
+
+    const snap = await getDocs(q);
+    const rows = snap.docs
+      .map((doc) => {
+        const post = mapPostDocData(doc.id, doc.data() as Record<string, unknown>);
+        return { id: doc.id, ...post };
+      })
+      .filter((p) => p.status === "published");
+    rows.sort((a, b) => {
+      const ta = a.publishedAt ? Date.parse(a.publishedAt) : 0;
+      const tb = b.publishedAt ? Date.parse(b.publishedAt) : 0;
+      return tb - ta;
+    });
+    return rows.slice(0, lim);
+  } catch {
+    return [];
+  }
+}
+
 export async function listPublishedPostsViaWebSdk(fetchLimit: number): Promise<PublishedPostWithId[]> {
   const deployment = await getResolvedPublicDeploymentSite();
   return listPublishedPostsViaWebSdkForDeployment(deployment, fetchLimit);
@@ -85,7 +117,7 @@ export async function getPublishedPostBySlugViaWebSdkForDeployment(
 ): Promise<PublishedPostWithId | null> {
   const db = getServerWebFirestore();
   if (!db) return null;
-  const allowed = new Set(visiblePostSitesInClause(deployment));
+  const allowed = new Set(allInsightsPostSitesInClause());
   const trimmed = slug.trim();
   if (!trimmed) return null;
 
@@ -107,7 +139,7 @@ export async function getPublishedPostBySlugViaWebSdkForDeployment(
       console.warn("[cms] Web SDK slug+status query failed; falling back to published list scan.", err);
     }
     try {
-      const pool = await listPublishedPostsViaWebSdkForDeployment(deployment, 200);
+      const pool = await listPublishedPostsViaWebSdkAllSites(200);
       return pool.find((p) => p.slug === trimmed) ?? null;
     } catch {
       return null;

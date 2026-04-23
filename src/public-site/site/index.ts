@@ -43,4 +43,5 @@ export {
   visibleCategorySiteKeysForDeployment,
   visiblePostSiteKeysForDeployment,
   visiblePostSitesInClause,
+  allInsightsPostSitesInClause,
 } from "./filters";

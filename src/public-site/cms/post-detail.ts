@@ -1,10 +1,10 @@
 import { unstable_cache } from "next/cache";
 import { COLLECTIONS } from "@/cms/firestore/collections";
-import { getPublishedCmsPosts, getPublishedPostBySlug } from "@/public-site/cms/get-published-posts";
+import { getPublishedCmsPostsAllSites, getPublishedPostBySlug } from "@/public-site/cms/get-published-posts";
 import type { PublishedPostWithId } from "@/public-site/cms/published-post";
 import { getAdminFirestore } from "@/firebase/server";
 import type { PublicCategoryOption } from "./category-public";
-import { listPublicCategoriesForDeployment } from "./category-public";
+import { listPublicCategoriesForInsights } from "./category-public";
 
 export type PostDetailCategory = { id: string; name: string; slug: string };
 
@@ -53,7 +53,7 @@ export function resolveCategoriesForPost(
 
 /**
  * Published post + author + category labels for the article page.
- * Returns `null` if slug is missing, unpublished, or not visible for this site.
+ * Returns `null` if slug is missing or not published in CMS.
  */
 export async function loadPublishedPostPageData(slug: string): Promise<PublishedPostPageData | null> {
   let post: PublishedPostWithId | null = null;
@@ -67,7 +67,7 @@ export async function loadPublishedPostPageData(slug: string): Promise<Published
 
   /** Best-effort enrichment; detail must render even when author/category lookups fail. */
   const [deploymentCategories, authorName] = await Promise.all([
-    listPublicCategoriesForDeployment().catch((err) => {
+    listPublicCategoriesForInsights().catch((err) => {
       console.error("[cms] loadPublishedPostPageData: category list failed.", err);
       return [] as PublicCategoryOption[];
     }),
@@ -87,7 +87,7 @@ export async function loadPublishedPostPageData(slug: string): Promise<Published
 }
 
 /**
- * Related posts: prefer shared categories, then newest. Same site visibility as `getPublishedCmsPosts` pool.
+ * Related posts: prefer shared categories, then newest. Pool matches unified Insights (all post `site` values).
  */
 export function selectRelatedPublishedPosts(
   current: PublishedPostWithId,
@@ -117,8 +117,8 @@ export async function loadRelatedPublishedPosts(
   max = 3,
 ): Promise<PublishedPostWithId[]> {
   try {
-    /** Small pool is enough for category overlap scoring; shares `getPublishedCmsPosts` data cache. */
-    const pool = await getPublishedCmsPosts(36);
+    /** Small pool is enough for category overlap scoring; shares `getPublishedCmsPostsAllSites` data cache. */
+    const pool = await getPublishedCmsPostsAllSites(36);
     return selectRelatedPublishedPosts(current, pool, max);
   } catch (err) {
     console.error("[cms] loadRelatedPublishedPosts failed; returning empty.", err);
