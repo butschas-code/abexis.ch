@@ -10,12 +10,17 @@ type Props = {
   imageSrc: string;
   /** LCP pages can set true for the hero image. */
   priority?: boolean;
+  /**
+   * Extra classes for the hero Image (after `object-cover`), e.g. `object-[center_28%]` to lift faces in portraits.
+   * Default: `object-center`.
+   */
+  imageObjectClassName?: string;
 };
 
 /**
  * Inner-page hero: full-bleed image + `abexis-hero-fullbleed-overlay` (diagonal scrim, readable type).
  */
-export function PageHero({ children, imageSrc, priority = false }: Props) {
+export function PageHero({ children, imageSrc, priority = false, imageObjectClassName = "object-center" }: Props) {
   const reduce = useReducedMotion();
 
   return (
@@ -31,7 +36,7 @@ export function PageHero({ children, imageSrc, priority = false }: Props) {
             src={imageSrc}
             alt=""
             fill
-            className="object-cover object-center"
+            className={`object-cover ${imageObjectClassName}`}
             sizes="100vw"
             priority={priority}
             quality={90}

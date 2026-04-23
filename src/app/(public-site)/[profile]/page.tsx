@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { MotionSection } from "@/components/motion/MotionSection";
-import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
+import { DanielSengstagProfilePage } from "@/components/profile/daniel-sengstag-ui";
+import { InteriorPageLayout, InteriorPageRoot } from "@/components/site/InteriorPageLayout";
+import { danielSengstagContent, danielSengstagImages } from "@/data/daniel-sengstag";
 import { siteConfig, teamOrder, teamProfiles, type TeamSlug } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
@@ -18,6 +20,18 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { profile } = await params;
   if (!isTeamSlug(profile)) return {};
+  if (profile === "danielsengstag") {
+    return {
+      title: danielSengstagContent.meta.title,
+      description: danielSengstagContent.meta.description,
+      openGraph: {
+        title: `${danielSengstagContent.meta.title} | Abexis`,
+        description: danielSengstagContent.meta.description,
+        type: "profile",
+        images: [{ url: danielSengstagImages.hero }],
+      },
+    };
+  }
   const p = teamProfiles[profile];
   return {
     title: p.name,
@@ -36,6 +50,23 @@ export default async function TeamProfilePage({ params }: Props) {
   if (!isTeamSlug(profile)) notFound();
   const p = teamProfiles[profile];
 
+  if (profile === "danielsengstag") {
+    return (
+      <InteriorPageRoot>
+        <SchemaMarkup type="Person" data={{ ...p, slug: profile }} />
+        <SchemaMarkup
+          type="BreadcrumbList"
+          data={[
+            { name: "Startseite", url: "/" },
+            { name: "Über uns", url: "/ueber-uns" },
+            { name: p.name, url: `/${profile}` },
+          ]}
+        />
+        <DanielSengstagProfilePage copy={danielSengstagContent} images={danielSengstagImages} />
+      </InteriorPageRoot>
+    );
+  }
+
   return (
     <InteriorPageLayout
       eyebrow="Team"
@@ -46,6 +77,7 @@ export default async function TeamProfilePage({ params }: Props) {
       wrapContentInMotion={false}
       contentClassName="pt-10 md:pt-12"
       heroImage={p.image}
+      heroImageObjectClassName="object-[center_28%]"
     >
       <SchemaMarkup type="Person" data={{ ...p, slug: profile }} />
       <SchemaMarkup

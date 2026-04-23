@@ -44,14 +44,33 @@ export type MainNavItem =
       href: string;
       label: string;
       children: readonly { href: string; label: string }[];
+      /** If false, the top-level label is not a link (dropdown only). Default true. */
+      parentIsLink?: boolean;
     };
 
 export const mainNav: MainNavItem[] = [
-  { href: "/leistungen", label: "Leistungen" },
+  {
+    href: "/leistungen",
+    label: "Leistungen",
+    parentIsLink: false,
+    children: [
+      { href: "/leistungen", label: "Überblick" },
+      { href: "/fokusthemen/digitale-transformation", label: "Digitale Transformation" },
+      { href: "/fokusthemen/unternehmensstrategie", label: "Unternehmensstrategie" },
+      { href: "/fokusthemen/vertriebmarketing", label: "Vertrieb & Marketing" },
+      { href: "/fokusthemen/veränderungsmanagement", label: "Veränderung" },
+      { href: "/fokusthemen/prozessoptimierung", label: "Optimierung" },
+      { href: "/fokusthemen/projektmanagement", label: "Projektmanagement" },
+    ],
+  },
   {
     href: "/executive-search",
     label: "Executive Search",
-    children: [{ href: "/executive-search/vakanzen", label: "Vakanzen" }],
+    parentIsLink: false,
+    children: [
+      { href: "/executive-search", label: "Überblick" },
+      { href: "/executive-search/vakanzen", label: "Vakanzen" },
+    ],
   },
   { href: "/blog", label: "Insights" },
   { href: "/ueber-uns", label: "Über uns" },

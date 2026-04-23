@@ -9,15 +9,21 @@ type Props = {
   children: ReactNode;
   className?: string;
   delay?: number;
+  id?: string;
 };
 
-export function MotionSection({ children, className, delay = 0 }: Props) {
+export function MotionSection({ children, className, delay = 0, id }: Props) {
   const reduce = useReducedMotion();
   if (reduce) {
-    return <section className={className}>{children}</section>;
+    return (
+      <section id={id} className={className}>
+        {children}
+      </section>
+    );
   }
   return (
     <motion.section
+      id={id}
       className={className}
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}

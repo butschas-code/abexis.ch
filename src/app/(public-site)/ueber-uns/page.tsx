@@ -53,13 +53,23 @@ export default function UeberUnsPage() {
                   <p className="mt-1 text-[13px] font-medium text-[#86868b]">{p.title}</p>
                 </div>
               </div>
-              <p className="mt-5 flex-1 whitespace-pre-line text-[15px] leading-relaxed text-[#6e6e73]">{p.body}</p>
-              <Link
-                href="/kontakt"
-                className="mt-6 inline-flex min-h-[44px] w-full items-center justify-center rounded-full bg-brand-900 px-6 text-[15px] font-medium text-white transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-lg hover:shadow-brand-900/25 hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:self-start"
-              >
-                Kontakt aufnehmen
-              </Link>
+              <p className="mt-5 line-clamp-3 text-[15px] leading-relaxed text-[#6e6e73]">
+                {p.body.replace(/\s+/g, " ").trim()}
+              </p>
+              <div className="mt-auto space-y-3 pt-4">
+                <Link
+                  href={`/${slug}`}
+                  className="inline-block text-[15px] font-medium text-brand-900 underline decoration-brand-500/50 underline-offset-4 transition-colors hover:text-brand-500 hover:decoration-brand-500"
+                >
+                  Mehr erfahren
+                </Link>
+                <Link
+                  href="/kontakt"
+                  className="flex min-h-[44px] w-full items-center justify-center rounded-full bg-brand-900 px-6 text-[15px] font-medium text-white transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-lg hover:shadow-brand-900/25 hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:self-start"
+                >
+                  Kontakt aufnehmen
+                </Link>
+              </div>
             </article>
           );
         })}

@@ -33,17 +33,30 @@ function subLinkClassName(active: boolean) {
   }`;
 }
 
+const triggerClass = (groupActive: boolean) =>
+  `rounded-full px-4 py-1.5 text-[14px] leading-tight tracking-[-0.01em] transition-all duration-200 ${
+    groupActive
+      ? "bg-brand-900 font-medium text-white"
+      : "text-[#6e6e73] hover:bg-black/[0.04] hover:text-[#1d1d1f]"
+  }`;
+
 function DesktopSubmenu({
   item,
   pathname,
   groupActive,
 }: {
-  item: { href: string; label: string; children: readonly { href: string; label: string }[] };
+  item: {
+    href: string;
+    label: string;
+    children: readonly { href: string; label: string }[];
+    parentIsLink?: boolean;
+  };
   pathname: string;
   groupActive: boolean;
 }) {
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const menuId = useId();
+  const parentIsLink = item.parentIsLink !== false;
   return (
     <div
       className="relative w-max max-w-full"
@@ -54,23 +67,32 @@ function DesktopSubmenu({
         setSubmenuOpen(false);
       }}
     >
-      <Link
-        href={item.href}
-        aria-haspopup="menu"
-        aria-expanded={submenuOpen}
-        aria-controls={menuId}
-        onFocus={() => setSubmenuOpen(true)}
-        className={`rounded-full px-4 py-1.5 text-[14px] leading-tight tracking-[-0.01em] transition-all duration-200 ${
-          groupActive
-            ? "bg-brand-900 font-medium text-white"
-            : "text-[#6e6e73] hover:bg-black/[0.04] hover:text-[#1d1d1f]"
-        }`}
-      >
-        {item.label}
-      </Link>
+      {parentIsLink ? (
+        <Link
+          href={item.href}
+          aria-haspopup="menu"
+          aria-expanded={submenuOpen}
+          aria-controls={menuId}
+          onFocus={() => setSubmenuOpen(true)}
+          className={triggerClass(groupActive)}
+        >
+          {item.label}
+        </Link>
+      ) : (
+        <button
+          type="button"
+          aria-haspopup="menu"
+          aria-expanded={submenuOpen}
+          aria-controls={menuId}
+          onFocus={() => setSubmenuOpen(true)}
+          className={triggerClass(groupActive)}
+        >
+          {item.label}
+        </button>
+      )}
       <div
         id={menuId}
-        className={`absolute left-0 right-0 top-full z-50 w-full min-w-0 pt-1 transition-[opacity,visibility] duration-150 ${
+        className={`absolute left-0 top-full z-50 min-w-[14rem] max-w-[min(100vw-2rem,22rem)] pt-1 transition-[opacity,visibility] duration-150 ${
           submenuOpen ? "visible opacity-100" : "invisible pointer-events-none opacity-0"
         }`}
         role="menu"
@@ -102,10 +124,14 @@ function DesktopSubmenu({
   );
 }
 
+function navSubPanelId(href: string) {
+  return `m-nav-sub-${href.replace(/^\//, "").replaceAll("/", "-")}`;
+}
+
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [execMobileOpen, setExecMobileOpen] = useState(false);
+  const [mobileSubOpenHref, setMobileSubOpenHref] = useState<string | null>(null);
   const reduce = useReducedMotion();
 
   return (
@@ -186,36 +212,49 @@ export function SiteHeader() {
                   {mainNav.map((item) => {
                     if ("children" in item && item.children) {
                       const gActive = isNavItemActive(item, pathname);
+                      const subOpen = mobileSubOpenHref === item.href;
+                      const subId = navSubPanelId(item.href);
+                      const parentIsLink = item.parentIsLink !== false;
                       return (
                         <div key={item.href} className="flex flex-col">
                           <div className="flex items-stretch gap-0">
-                            <Link
-                              href={item.href}
-                              className={`min-h-12 flex-1 rounded-xl px-3 py-3 text-left text-[#1d1d1f] transition-colors duration-200 hover:bg-black/[0.04] hover:text-brand-500 ${
-                                gActive ? "bg-black/[0.04] font-semibold" : ""
-                              }`}
-                              onClick={() => {
-                                setOpen(false);
-                                setExecMobileOpen(false);
-                              }}
-                            >
-                              {item.label}
-                            </Link>
+                            {parentIsLink ? (
+                              <Link
+                                href={item.href}
+                                className={`min-h-12 flex-1 rounded-xl px-3 py-3 text-left text-[#1d1d1f] transition-colors duration-200 hover:bg-black/[0.04] hover:text-brand-500 ${
+                                  gActive ? "bg-black/[0.04] font-semibold" : ""
+                                }`}
+                                onClick={() => {
+                                  setOpen(false);
+                                  setMobileSubOpenHref(null);
+                                }}
+                              >
+                                {item.label}
+                              </Link>
+                            ) : (
+                              <span
+                                className={`min-h-12 flex-1 rounded-xl px-3 py-3 text-left text-[#1d1d1f] ${
+                                  gActive ? "bg-black/[0.04] font-semibold" : ""
+                                }`}
+                              >
+                                {item.label}
+                              </span>
+                            )}
                             <button
                               type="button"
                               className="focus-ring shrink-0 rounded-xl px-3 py-2 text-[13px] font-semibold text-[#6e6e73] hover:bg-black/[0.04]"
-                              aria-expanded={execMobileOpen}
-                              aria-controls="exec-subnav"
-                              onClick={() => setExecMobileOpen((v) => !v)}
+                              aria-expanded={subOpen}
+                              aria-controls={subId}
+                              onClick={() => setMobileSubOpenHref((h) => (h === item.href ? null : item.href))}
                             >
-                              {execMobileOpen ? "−" : "+"}
+                              {subOpen ? "−" : "+"}
                             </button>
                           </div>
-                          {execMobileOpen ? (
-                            <div id="exec-subnav" className="ml-2 border-l border-black/[0.08] pl-2 pb-1">
+                          {subOpen ? (
+                            <div id={subId} className="ml-2 border-l border-black/[0.08] pl-2 pb-1">
                               {item.children.map((c) => {
                                 const a =
-                                  pathname === c.href || pathname.startsWith(`${c.href}/`);
+                                  pathname === c.href || (c.href !== "/" && pathname.startsWith(`${c.href}/`));
                                 return (
                                   <Link
                                     key={c.href}
@@ -223,7 +262,7 @@ export function SiteHeader() {
                                     className={subLinkClassName(a)}
                                     onClick={() => {
                                       setOpen(false);
-                                      setExecMobileOpen(false);
+                                      setMobileSubOpenHref(null);
                                     }}
                                   >
                                     {c.label}

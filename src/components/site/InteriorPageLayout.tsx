@@ -45,6 +45,8 @@ type LayoutProps = HeaderProps & {
   heroImage?: string;
   /** Pass true for index / LCP-critical heroes. */
   heroPriority?: boolean;
+  /** Pass-through to {@link PageHero} `imageObjectClassName` (e.g. portrait focal shift). */
+  heroImageObjectClassName?: string;
   contentMaxWidth?: InteriorMaxWidth;
   contentClassName?: string;
   wrapContentInMotion?: boolean;
@@ -59,6 +61,7 @@ export function InteriorPageLayout({
   maxWidth = "1068",
   heroImage = homeHeroImage,
   heroPriority = false,
+  heroImageObjectClassName,
   contentMaxWidth,
   contentClassName = "",
   wrapContentInMotion = true,
@@ -72,7 +75,7 @@ export function InteriorPageLayout({
   );
   return (
     <InteriorPageRoot>
-      <PageHero imageSrc={heroImage} priority={heroPriority}>
+      <PageHero imageSrc={heroImage} priority={heroPriority} imageObjectClassName={heroImageObjectClassName}>
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{eyebrow}</p>
         <h1 className="mt-3 max-w-[28ch] text-[clamp(1.875rem,6vw+0.65rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:max-w-[40ch] md:text-[56px] md:leading-[1.02]">
           {title}
