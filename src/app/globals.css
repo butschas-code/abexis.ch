@@ -13,6 +13,52 @@
   --brand-500: #45b3e2;
   --brand-900-hover: #324891;
   --brand-500-hover: #3aa3cf;
+  /**
+   * Image / hero overlay: dark grey (bottom left) → brand cyan (top right), many steps.
+   * Use for .abexis-tint-overlay, .abexis-hero-image-overlay, and key CTAs.
+   */
+  --abexis-hero-overlay: linear-gradient(
+    to top right,
+    #0e0e10 0%,
+    #101012 2.5%,
+    #121214 5%,
+    #141416 7.5%,
+    #16161a 10%,
+    #18181d 12.5%,
+    #1a1a20 15%,
+    #1c1c23 17.5%,
+    #1e1e27 20%,
+    #21212b 22.5%,
+    #24242f 25%,
+    #272735 27.5%,
+    #2a2a3b 30%,
+    #2d2d41 32.5%,
+    #303147 35%,
+    #33354d 37.5%,
+    #323a54 40%,
+    #2f3f5c 42.5%,
+    #2c4564 45%,
+    #294b6c 47.5%,
+    #265175 50%,
+    #24577e 52.5%,
+    #235e86 55%,
+    #21658f 57.5%,
+    #206d98 60%,
+    #1f74a0 62.5%,
+    #1e7da9 65%,
+    #1d86b2 67.5%,
+    #1d90bb 70%,
+    #1f9ac4 72.5%,
+    #22a5ce 75%,
+    #27b0d7 77.5%,
+    #2dbbdf 80%,
+    #34c2e2 82.5%,
+    #3ac7e3 85%,
+    #3fc9e3 87.5%,
+    #42c7e2 90%,
+    #44c4e2 92.5%,
+    #45b3e2 100%
+  );
   --brand-gradient: linear-gradient(115deg, var(--brand-900) 0%, #3550a4 42%, var(--brand-500) 100%);
   --brand-gradient-soft: linear-gradient(135deg, rgba(38, 51, 124, 0.14) 0%, rgba(69, 179, 226, 0.12) 100%);
   --apple-blue: var(--brand-900);
@@ -265,7 +311,7 @@ body {
   outline-offset: 3px;
 }
 
-/* Abexis Bild-Tint (Zentralisierte Klasse) */
+/* Abexis Bild-Tint: einheitlicher Verlauf (unten links dunkel → oben rechts #45b3e2) */
 .abexis-tint-overlay {
   position: absolute;
   inset: 0;
@@ -274,15 +320,30 @@ body {
   border-radius: inherit;
   overflow: hidden;
 }
-.abexis-tint-overlay::before,
 .abexis-tint-overlay::after {
   content: "";
   position: absolute;
   inset: 0;
+  background: var(--abexis-hero-overlay);
+  opacity: 0.9;
 }
-.abexis-tint-overlay::before {
-  background-color: rgba(0, 0, 0, 0.35);
+.abexis-tint-overlay--soft::after {
+  opacity: 0.72;
 }
-.abexis-tint-overlay::after {
-  background-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.55) 100%);
+
+/**
+ * Volle Fläche über Hero- oder Kartenbild (absolut positioniert, über dem Image-Stack).
+ */
+.abexis-hero-image-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: var(--abexis-hero-overlay);
+}
+
+/** z. B. Ladegerüst / Platzhalter ohne absoluten Parent-Stack */
+.abexis-hero-gradient-surface {
+  background: var(--abexis-hero-overlay);
 }

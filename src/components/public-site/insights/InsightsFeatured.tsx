@@ -51,7 +51,6 @@ export function InsightsFeatured({ primary, secondary = [], hrefFor, categoryLin
               unoptimized={hero.startsWith("data:")}
             />
             <div className="abexis-tint-overlay" />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050508] via-[#050508]/50 to-transparent md:via-[#050508]/25" />
             <div className="absolute inset-x-0 bottom-0 p-7 md:p-9 lg:p-10">
               {dateStr ? (
                 <time className="text-[11px] font-medium uppercase tracking-[0.2em] text-white/55">{dateStr}</time>

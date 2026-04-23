@@ -92,7 +92,10 @@ export default function HomePage() {
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     />
                     <div className="abexis-tint-overlay" />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/24 to-transparent opacity-0 transition group-hover:opacity-100" />
+                    <div
+                      className="abexis-hero-image-overlay opacity-0 transition-opacity duration-500 group-hover:opacity-[0.22]"
+                      aria-hidden
+                    />
                   </div>
                   <div className="flex flex-1 flex-col px-6 pb-8 pt-6">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">{s.subtitle}</p>
@@ -194,7 +197,7 @@ export default function HomePage() {
       </MotionSection>
 
       <MotionSection className="px-6 pt-16 pb-24 md:pt-28">
-        <div className="relative mx-auto max-w-[1068px] overflow-hidden rounded-[24px] bg-gradient-to-br from-brand-900 via-[#2d3d8a] to-brand-500 px-5 py-12 text-center text-white sm:rounded-[28px] sm:px-8 sm:py-14 md:rounded-[32px] md:px-16 md:py-20">
+        <div className="abexis-hero-gradient-surface relative mx-auto max-w-[1068px] overflow-hidden rounded-[24px] px-5 py-12 text-center text-white sm:rounded-[28px] sm:px-8 sm:py-14 md:rounded-[32px] md:px-16 md:py-20">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 opacity-50"

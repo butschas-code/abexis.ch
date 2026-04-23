@@ -553,11 +553,7 @@ export function FokusUnternehmensstrategie() {
 
       {/* ── 8. CTA — Specific 30-min offer ───────────────────────────────── */}
       <section className="relative overflow-hidden">
-        <div
-          className="absolute inset-0 -z-10"
-          aria-hidden
-          style={{ background: "linear-gradient(115deg, #26337c 0%, #3550a4 45%, #45b3e2 100%)" }}
-        />
+        <div className="abexis-hero-gradient-surface absolute inset-0 -z-10" aria-hidden />
         <div
           className="pointer-events-none absolute inset-0 -z-10"
           aria-hidden

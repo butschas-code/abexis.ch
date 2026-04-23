@@ -13,7 +13,7 @@ type Props = {
 };
 
 /**
- * Inner-page hero: same layout, motion, gradients and vignette as {@link HomeHero},
+ * Inner-page hero: same layout, motion, and `abexis-hero-image-overlay` treatment as {@link HomeHero},
  * with a configurable background image.
  */
 export function PageHero({ children, imageSrc, priority = false }: Props) {
@@ -37,20 +37,8 @@ export function PageHero({ children, imageSrc, priority = false }: Props) {
             priority={priority}
             quality={90}
           />
-          <div className="abexis-tint-overlay" />
         </motion.div>
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-[#26337c]/88 via-[#26337c]/50 to-[#45b3e2]/18 md:from-[#26337c]/82 md:via-[#1a1f38]/45 md:to-transparent"
-          aria-hidden
-        />
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-[#0a0c18]/88 via-black/28 to-[#26337c]/40"
-          aria-hidden
-        />
-        <div
-          className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_72%_18%,rgba(69,179,226,0.15)_0%,rgba(0,0,0,0.4)_100%)]"
-          aria-hidden
-        />
+        <div className="abexis-hero-image-overlay" aria-hidden />
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-[1068px] px-6">{children}</div>

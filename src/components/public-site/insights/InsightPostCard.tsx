@@ -44,7 +44,6 @@ export function InsightPostCard({ post, href, categoryLine, authorName, sizes, d
             unoptimized={img.startsWith("data:")}
           />
           <div className="abexis-tint-overlay" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1d1d1f]/45 via-transparent to-transparent opacity-80" />
           {categoryLine ? (
             <span className="absolute bottom-4 left-5 max-w-[90%] rounded-full bg-white/92 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#1d1d1f] shadow-sm backdrop-blur-sm">
               {categoryLine}
