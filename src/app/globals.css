@@ -281,10 +281,8 @@ body {
   inset: 0;
 }
 .abexis-tint-overlay::before {
-  background-color: rgba(33, 64, 163, 0.45);
-  mix-blend-mode: multiply;
+  background-color: rgba(0, 0, 0, 0.35);
 }
 .abexis-tint-overlay::after {
-  background-image: linear-gradient(to bottom right, rgba(168, 201, 255, 0.24) 0%, rgba(47, 78, 166, 0.2) 50%, rgba(26, 42, 96, 0.70) 100%);
-  mix-blend-mode: color;
+  background-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.55) 100%);
 }

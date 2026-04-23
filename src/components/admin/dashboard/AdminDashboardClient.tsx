@@ -29,27 +29,29 @@ function deferToNextPaint(): Promise<void> {
   });
 }
 
+type DashState = {
+  counts: AdminDashboardCounts | null;
+  postsBySite: AdminDashboardSitePostCounts | null;
+  recentPosts: CmsPostListItem[] | null;
+  recentSubmissions: SubmissionRow[] | null;
+  listError: string | null;
+  aggError: string | null;
+};
+const EMPTY_STATE: DashState = {
+  counts: null, postsBySite: null, recentPosts: null,
+  recentSubmissions: null, listError: null, aggError: null,
+};
+
 export function AdminDashboardClient() {
   const { roleReady, hasPermission } = useCmsAuth();
   const canManageSubmissions = hasPermission("manage_submissions");
-
-  const [counts, setCounts] = useState<AdminDashboardCounts | null>(null);
-  const [postsBySite, setPostsBySite] = useState<AdminDashboardSitePostCounts | null>(null);
-  const [recentPosts, setRecentPosts] = useState<CmsPostListItem[] | null>(null);
-  const [recentSubmissions, setRecentSubmissions] = useState<SubmissionRow[] | null>(null);
-  const [listError, setListError] = useState<string | null>(null);
-  const [aggError, setAggError] = useState<string | null>(null);
+  const [dash, setDash] = useState<DashState>(EMPTY_STATE);
+  const { counts, postsBySite, recentPosts, recentSubmissions, listError, aggError } = dash;
 
   useEffect(() => {
     if (!roleReady) return;
 
     let cancelled = false;
-    setListError(null);
-    setAggError(null);
-    setCounts(null);
-    setPostsBySite(null);
-    setRecentPosts(null);
-    setRecentSubmissions(null);
 
     const opts = {
       recentPostsLimit: 6,
@@ -63,27 +65,26 @@ export function AdminDashboardClient() {
     void (async () => {
       await deferToNextPaint();
       if (cancelled) return;
+      setDash(EMPTY_STATE);
 
       listP
         .then((lists) => {
           if (cancelled) return;
-          setRecentPosts(lists.recentPosts);
-          setRecentSubmissions(lists.recentSubmissions);
+          setDash((prev) => ({ ...prev, recentPosts: lists.recentPosts, recentSubmissions: lists.recentSubmissions }));
         })
         .catch(() => {
           if (cancelled) return;
-          setListError("Die Liste der letzten Beiträge konnte nicht geladen werden.");
+          setDash((prev) => ({ ...prev, listError: "Die Liste der letzten Beiträge konnte nicht geladen werden." }));
         });
 
       aggP
         .then((agg) => {
           if (cancelled) return;
-          setCounts(agg.counts);
-          setPostsBySite(agg.postsBySite);
+          setDash((prev) => ({ ...prev, counts: agg.counts, postsBySite: agg.postsBySite }));
         })
         .catch(() => {
           if (cancelled) return;
-          setAggError("Die Kennzahlen konnten nicht geladen werden.");
+          setDash((prev) => ({ ...prev, aggError: "Die Kennzahlen konnten nicht geladen werden." }));
         });
     })();
 

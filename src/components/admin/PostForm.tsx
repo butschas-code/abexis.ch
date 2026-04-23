@@ -128,6 +128,11 @@ export function PostForm({ mode, postId }: { mode: Mode; postId: string }) {
   const [input, setInput] = useState<PostUpsertInput>(() => emptyInput(postId));
   const [publishSchedule, setPublishSchedule] = useState("");
   const [heroPreviewBroken, setHeroPreviewBroken] = useState(false);
+  const [prevHeroUrl, setPrevHeroUrl] = useState(input.heroImageUrl);
+  if (prevHeroUrl !== input.heroImageUrl) {
+    setPrevHeroUrl(input.heroImageUrl);
+    setHeroPreviewBroken(false);
+  }
   const [autosaveEnabled, setAutosaveEnabled] = useState(false);
   const slugTouched = useRef(false);
   const successTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -181,11 +186,7 @@ export function PostForm({ mode, postId }: { mode: Mode; postId: string }) {
     };
   }, [mode, postId]);
 
-  useEffect(() => {
-    setHeroPreviewBroken(false);
-  }, [input.heroImageUrl]);
-
-  const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
+const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
   const bodyHtml = useMemo(() => parsePostBody(input.body).html, [input.body]);
 
   /** Optional autosave: Entwurf sichern ohne Navigation. */

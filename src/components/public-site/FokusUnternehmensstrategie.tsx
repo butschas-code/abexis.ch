@@ -5,6 +5,7 @@ import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { fokusPageHeroImages } from "@/data/site-images";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { MobileExpandProvider, MobileCollapsibleCard } from "@/components/public-site/MobileExpandable";
 
 // ─── Static data — module level, no re-allocation ────────────────────────────
 
@@ -181,6 +182,7 @@ function SpineCard({ step }: { step: Step }) {
 export function FokusUnternehmensstrategie() {
   return (
     <InteriorPageRoot>
+      <MobileExpandProvider>
       <SchemaMarkup type="Service" data={meta} />
       <SchemaMarkup
         type="BreadcrumbList"
@@ -226,44 +228,44 @@ export function FokusUnternehmensstrategie() {
       {/* ── 2. SPLIT PANEL — Unternehmensstrategie vs. Eignerstrategie ─── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half — navy: content tracks the 1068px centre column */}
-          <div className="relative bg-[#1a2260]">
+          {/* Left half — warm linen: content tracks the 1068px centre column */}
+          <div className="relative bg-[#faf8f2]">
             <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
-              <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
-              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
-              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
+              <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
+              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                 Ebene 1
               </h2>
-              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
+              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
                 Unternehmensstrategie
               </h3>
-              <p className="mt-5 text-[16px] leading-relaxed text-white/65">
+              <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
                 Betrifft die gesamte Organisation. Sie legt fest, wie das Unternehmen als Ganzes
                 geführt wird und welche strategischen Entscheidungen nötig sind, um nachhaltige
                 Wettbewerbsvorteile zu erzielen.
               </p>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
 
-          {/* Right half — warm linen: content tracks the 1068px centre column */}
-          <div className="relative bg-[#faf8f2]">
+          {/* Right half — navy: content tracks the 1068px centre column */}
+          <div className="relative bg-[#1a2260]">
             <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
-              <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
-              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
-              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+              <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
+              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
                 Ebene 2
               </h2>
-              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
+              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
                 Eignerstrategie
               </h3>
-              <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
+              <p className="mt-5 text-[16px] leading-relaxed text-white/65">
                 Konzentriert sich auf die Präferenzen und Ziele der Eigentümer: Renditeerwartungen,
                 Risikotoleranz und langfristige Vision. Sie muss mit der Unternehmensstrategie in
                 Einklang stehen.
               </p>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
           </div>
         </div>
 
@@ -381,7 +383,9 @@ export function FokusUnternehmensstrategie() {
                 {/* ── Mobile: simple vertical list ── */}
                 <div className="flex flex-col gap-4 lg:hidden">
                   {prozessSchritte.map((step) => (
-                    <SpineCard key={step.num} step={step} />
+                    <MobileCollapsibleCard key={step.num}>
+                      <SpineCard step={step} />
+                    </MobileCollapsibleCard>
                   ))}
                 </div>
               </div>
@@ -442,16 +446,18 @@ export function FokusUnternehmensstrategie() {
             {/* Right: card grid */}
             <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2">
               {fallstricke.map((f, i) => (
-                <div key={f.title} className="relative bg-white px-6 py-6">
-                  <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
-                  <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                    {String(i + 1).padStart(2, "0")}
-                  </p>
-                  <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-                    {f.title}
-                  </h3>
-                  <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{f.body}</p>
-                </div>
+                <MobileCollapsibleCard key={f.title}>
+                  <div className="relative bg-white px-6 py-6">
+                    <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
+                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
+                      {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
+                      {f.title}
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{f.body}</p>
+                  </div>
+                </MobileCollapsibleCard>
               ))}
             </div>
           </div>
@@ -503,16 +509,18 @@ export function FokusUnternehmensstrategie() {
                     body: "Manche Entscheidungen sind zu wichtig für Improvisation. Ein strukturierter Prozess mit externem Blick reduziert das Risiko kostspieliger Fehlentscheidungen.",
                   },
                 ].map((s) => (
-                  <div key={s.num} className="relative bg-white px-7 py-8">
-                    <LCorner className="top-4 right-4 text-[#c9a96e]/30" />
-                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                      {s.num}
-                    </p>
-                    <h3 className="mt-4 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-                      {s.title}
-                    </h3>
-                    <p className="mt-3 text-[15px] leading-relaxed text-[#6e6e73]">{s.body}</p>
-                  </div>
+                  <MobileCollapsibleCard key={s.num} collapsedClass="max-h-[168px]">
+                    <div className="relative bg-white px-7 py-8">
+                      <LCorner className="top-4 right-4 text-[#c9a96e]/30" />
+                      <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
+                        {s.num}
+                      </p>
+                      <h3 className="mt-4 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
+                        {s.title}
+                      </h3>
+                      <p className="mt-3 text-[15px] leading-relaxed text-[#6e6e73]">{s.body}</p>
+                    </div>
+                  </MobileCollapsibleCard>
                 ))}
               </div>
             </div>
@@ -526,13 +534,15 @@ export function FokusUnternehmensstrategie() {
               </div>
               <div className="grid gap-px bg-white/[0.04] sm:grid-cols-3">
                 {guidePunkte.map((vp) => (
-                  <div key={vp.label} className="relative flex flex-col bg-[#1a2260] px-6 py-8">
-                    <div className="h-[3px] w-8 rounded-full" style={{ background: vp.accent }} />
-                    <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/40">
-                      {vp.label}
-                    </p>
-                    <p className="mt-3 text-[15px] leading-relaxed text-white/65">{vp.body}</p>
-                  </div>
+                  <MobileCollapsibleCard key={vp.label} fadeFrom="#1a2260" darkArrow>
+                    <div className="relative flex flex-col bg-[#1a2260] px-6 py-8">
+                      <div className="h-[3px] w-8 rounded-full" style={{ background: vp.accent }} />
+                      <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/40">
+                        {vp.label}
+                      </p>
+                      <p className="mt-3 text-[15px] leading-relaxed text-white/65">{vp.body}</p>
+                    </div>
+                  </MobileCollapsibleCard>
                 ))}
               </div>
             </div>
@@ -613,6 +623,7 @@ export function FokusUnternehmensstrategie() {
           </div>
         </div>
       </section>
+      </MobileExpandProvider>
     </InteriorPageRoot>
   );
 }
