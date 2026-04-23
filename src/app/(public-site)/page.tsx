@@ -93,7 +93,7 @@ export default function HomePage() {
                     />
                     <div className="abexis-tint-overlay" />
                     <div
-                      className="abexis-hero-image-overlay opacity-0 transition-opacity duration-500 group-hover:opacity-45"
+                      className="abexis-hero-image-overlay opacity-0 transition-opacity duration-500 group-hover:opacity-30"
                       aria-hidden
                     />
                   </div>

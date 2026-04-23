@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/executive-search/expertise",
+        destination: "/executive-search",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     qualities: [75, 90],
     remotePatterns: [
@@ -12,6 +21,16 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "files.designer.hoststar.ch",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "basekit-product.s3-eu-west-1.amazonaws.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "storage.googleapis.com",
         pathname: "/**",
       },
       {

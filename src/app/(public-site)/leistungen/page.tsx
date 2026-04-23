@@ -7,10 +7,12 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 export const metadata = {
   title: "Leistungen",
-  description: "Die Beratungsschwerpunkte von Abexis: Digitale Transformation, Strategie, Vertrieb & Marketing und mehr.",
+  description:
+    "Abexis: substanzielle Beratung in Führungs- und Personalthemen — präzise, diskret, konsequent. Schwerpunkte: Digitale Transformation, Strategie, Vertrieb & Marketing u. a.",
   openGraph: {
     title: "Leistungen | Abexis",
-    description: "Beratung mit Substanz — Unsere Schwerpunkte im Detail.",
+    description:
+      "Wenn Entscheidungen Tragweite haben, braucht es mehr als Standardlösungen. Beratung mit Substanz — unsere Schwerpunkte im Überblick.",
     images: [{ url: fokusPageHeroImages["digitale-transformation"] }],
   },
 };
@@ -26,13 +28,13 @@ export default function LeistungenPage() {
         ]}
       />
       <PageHero imageSrc={fokusPageHeroImages["digitale-transformation"]}>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Leistungen</p>
-        <h1 className="mt-3 max-w-[22ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance md:max-w-[32ch] md:text-[56px] md:leading-[1.02]">
+        <h1 className="max-w-[22ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance md:max-w-[32ch] md:text-[56px] md:leading-[1.02]">
           Beratung mit Substanz
         </h1>
-        <p className="mt-6 max-w-xl text-[19px] font-normal leading-relaxed text-white/88 md:text-[21px]">
-          Die folgenden Schwerpunkte entsprechen den bisherigen «Fokusthemen» auf abexis.ch — inhaltlich vollständig
-          auf den jeweiligen Themenseiten dokumentiert.
+        <p className="mt-6 max-w-2xl text-[19px] font-normal leading-relaxed text-white/88 md:text-[21px]">
+          Wenn Entscheidungen Tragweite haben, braucht es mehr als Standardlösungen. Abexis steht für substanzielle
+          Beratung in zentralen Führungs- und Personalthemen — präzise in der Analyse, diskret in der Begleitung und
+          konsequent in der Umsetzung.
         </p>
       </PageHero>
 

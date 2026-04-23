@@ -30,22 +30,35 @@ export const siteConfig = {
   bookingUrlEn: "https://calendly.com/abexis-sengstag/",
   linkedin: "https://www.linkedin.com/company/abexis-gmbh",
   xing: "https://www.xing.com/pages/abexis-gmbh",
-  searchSite: "https://abexis-search.ch",
+  /** Executive Search lives on the same site under `/executive-search`. */
+  searchSite: "https://abexis.ch/executive-search",
 } as const;
 
 /** Google Maps Einbettung für {@link siteConfig.footerAddressHinwil} (`output=embed`, kein API-Key). */
 export const hinwilGoogleMapsEmbedSrc =
   "https://maps.google.com/maps?q=Abexis+GmbH%2C+Zihlstrasse+25%2C+8340+Hinwil%2C+Schweiz&z=16&ie=UTF8&iwloc=&output=embed";
 
-export const mainNav = [
+export type MainNavItem =
+  | { href: string; label: string }
+  | {
+      href: string;
+      label: string;
+      children: readonly { href: string; label: string }[];
+    };
+
+export const mainNav: MainNavItem[] = [
   { href: "/leistungen", label: "Leistungen" },
+  {
+    href: "/executive-search",
+    label: "Executive Search",
+    children: [{ href: "/executive-search/vakanzen", label: "Vakanzen" }],
+  },
   { href: "/blog", label: "Insights" },
   { href: "/ueber-uns", label: "Über uns" },
   { href: "/kontakt", label: "Kontakt" },
-] as const;
+];
 
 export const footerPartners = [
-  { label: "Abexis Search", href: "https://abexis-search.ch/" },
   { label: "Swiss Institute of Directors", href: "https://boardfoundation.org/en/institution/swiss-institute-of-directors/" },
   { label: "Sustainable Leaders", href: "https://www.sustainableleaders.ch/de/" },
   { label: "Digital Winterthur", href: "https://www.digital-winterthur.ch/" },
@@ -88,7 +101,14 @@ export const homeWelcomeSection = {
 export const homeAboutTeaser =
   "Wir begleiten Sie auf Ihrem Weg zum Erfolg und übernehmen gemeinsam mit Ihnen Verantwortung. Unsere Kompetenzen in den Themen Strategie, Vertrieb & Marketing, Digitalisierung, Change Management und Unternehmensführung sind der Schlüssel zum Erfolg Ihres Unternehmens. Auch stehen wir Unternehmern und Führungspersonen als Sparringspartner zur Verfügung. In einem offenen Dialog diskutieren wir mit unserem Gegenüber aktuelle Herausforderungen des Unternehmens.";
 
-export type TeamSlug = "danielsengstag" | "christophwainig" | "katrinyuan" | "sergegarazi" | "williamdemaeyer";
+export type TeamSlug =
+  | "danielsengstag"
+  | "christophwainig"
+  | "katrinyuan"
+  | "sergegarazi"
+  | "williamdemaeyer"
+  | "sachamoeller"
+  | "renatesengstag";
 
 export const teamOrder: TeamSlug[] = [
   "danielsengstag",
@@ -96,6 +116,8 @@ export const teamOrder: TeamSlug[] = [
   "katrinyuan",
   "sergegarazi",
   "williamdemaeyer",
+  "sachamoeller",
+  "renatesengstag",
 ];
 
 export const teamProfiles: Record<
@@ -213,6 +235,24 @@ Erfahrung & Projekte (Auszug):
     phone: "+41 79 828 24 40",
     email: "contact@abexis.ch",
     links: [{ label: "LinkedIn", href: "https://www.linkedin.com/in/william-de-maeyer-47060a17/" }],
+  },
+  sachamoeller: {
+    name: "Sacha Moeller",
+    title: "Partner",
+    image: "https://files.designer.hoststar.ch/6b/a6/6ba66ce4-e338-42a5-9363-9bde653084c3.JPG",
+    body: `Sacha Moeller ist Partner bei Abexis SEARCH und verfügt über mehr als 20 Jahre Führungserfahrung in der Finanzindustrie und im Family Office, unter anderem in leitenden Funktionen bei UBS. Seine Expertise umfasst Business-, Risk- und Change-Management sowie komplexe Transformations- und Digitalisierungsprojekte. Er verbindet analytische Kompetenz mit empathischer Führung und fördert werteorientierte Kulturen. Bei Abexis SEARCH begleitet er Mandate in Finance, Risk, IT-Transformation und Human Capital – mit Fokus auf Wirkung und nachhaltigen Mehrwert.`,
+    phone: "+41 78 604 87 65",
+    email: "sacha.moeller@abexis.ch",
+    links: [{ label: "LinkedIn", href: "https://www.linkedin.com/in/sacha-moeller/" }],
+  },
+  renatesengstag: {
+    name: "Renate Sengstag",
+    title: "Miteigentümerin",
+    image: "https://files.designer.hoststar.ch/d9/de/d9de5400-785e-47ca-b6c6-fd49b25ba2f8.jpg",
+    body: `Renate Sengstag ist Miteigentümerin und bringt über 20 Jahre Erfahrung im Executive Management mit, unter anderem in der direkten Zusammenarbeit mit Geschäftsleitungen und CEOs international tätiger Unternehmen. Sie verfügt über exzellente Organisationsfähigkeiten, ein feines Gespür für Menschen sowie höchste Diskretion im Umgang mit sensiblen Informationen. Bei Abexis SEARCH leitet sie das Backoffice, koordiniert den operativen Ablauf und unterstützt Mandatsprozesse in administrativer Hinsicht. Ihre strukturierte Arbeitsweise sorgt für Stabilität und Effizienz im Tagesgeschäft.`,
+    phone: "+41 79 417 77 58",
+    email: "contact@abexis.ch",
+    links: [{ label: "LinkedIn", href: "https://www.linkedin.com/in/renate-sengstag-64a540254/" }],
   },
 };
 

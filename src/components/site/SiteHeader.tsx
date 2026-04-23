@@ -3,14 +3,109 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { mainNav } from "@/data/pages";
+import { type MainNavItem, mainNav } from "@/data/pages";
 import { logoUrl } from "@/data/site-images";
+
+function isExternalNavHref(href: string) {
+  return href.startsWith("http://") || href.startsWith("https://");
+}
+
+function isNavItemActive(item: MainNavItem, pathname: string): boolean {
+  if ("children" in item && item.children) {
+    for (const c of item.children) {
+      if (pathname === c.href || (c.href !== "/" && pathname.startsWith(`${c.href}/`))) {
+        return true;
+      }
+    }
+    return pathname === item.href || (item.href !== "/" && pathname.startsWith(`${item.href}/`));
+  }
+  if (isExternalNavHref(item.href)) {
+    return false;
+  }
+  return pathname === item.href || (item.href !== "/" && pathname.startsWith(`${item.href}/`));
+}
+
+function subLinkClassName(active: boolean) {
+  return `block w-full rounded-xl px-3 py-2.5 text-left text-[15px] leading-tight ${
+    active ? "bg-black/[0.06] font-medium text-[#1d1d1f]" : "text-[#6e6e73] hover:bg-black/[0.04] hover:text-[#1d1d1f]"
+  }`;
+}
+
+function DesktopSubmenu({
+  item,
+  pathname,
+  groupActive,
+}: {
+  item: { href: string; label: string; children: readonly { href: string; label: string }[] };
+  pathname: string;
+  groupActive: boolean;
+}) {
+  const [submenuOpen, setSubmenuOpen] = useState(false);
+  const menuId = useId();
+  return (
+    <div
+      className="relative w-max max-w-full"
+      onMouseEnter={() => setSubmenuOpen(true)}
+      onMouseLeave={() => setSubmenuOpen(false)}
+      onBlur={(e) => {
+        if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
+        setSubmenuOpen(false);
+      }}
+    >
+      <Link
+        href={item.href}
+        aria-haspopup="menu"
+        aria-expanded={submenuOpen}
+        aria-controls={menuId}
+        onFocus={() => setSubmenuOpen(true)}
+        className={`rounded-full px-4 py-1.5 text-[14px] leading-tight tracking-[-0.01em] transition-all duration-200 ${
+          groupActive
+            ? "bg-brand-900 font-medium text-white"
+            : "text-[#6e6e73] hover:bg-black/[0.04] hover:text-[#1d1d1f]"
+        }`}
+      >
+        {item.label}
+      </Link>
+      <div
+        id={menuId}
+        className={`absolute left-0 right-0 top-full z-50 w-full min-w-0 pt-1 transition-[opacity,visibility] duration-150 ${
+          submenuOpen ? "visible opacity-100" : "invisible pointer-events-none opacity-0"
+        }`}
+        role="menu"
+        aria-label={`${item.label} Untermenü`}
+        aria-hidden={!submenuOpen}
+      >
+        <div className="rounded-2xl border border-black/[0.08] bg-white py-1 shadow-[0_12px_40px_rgba(0,0,0,0.12)]">
+          {item.children.map((c) => {
+            const subActive = pathname === c.href || (c.href !== "/" && pathname.startsWith(`${c.href}/`));
+            return (
+              <Link
+                key={c.href}
+                href={c.href}
+                className={`block px-2 py-2 text-[14px] leading-tight ${
+                  subActive
+                    ? "bg-brand-900/10 font-medium text-brand-900"
+                    : "text-[#1d1d1f] hover:bg-black/[0.04]"
+                }`}
+                role="menuitem"
+                onClick={() => setSubmenuOpen(false)}
+              >
+                {c.label}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [execMobileOpen, setExecMobileOpen] = useState(false);
   const reduce = useReducedMotion();
 
   return (
@@ -32,17 +127,30 @@ export function SiteHeader() {
 
             <nav className="hidden flex-1 items-center justify-center gap-0.5 md:flex" aria-label="Hauptnavigation">
               {mainNav.map((item) => {
-                const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`rounded-full px-4 py-1.5 text-[14px] leading-tight tracking-[-0.01em] transition-all duration-200 ${
-                      active
-                        ? "bg-brand-900 font-medium text-white"
-                        : "text-[#6e6e73] hover:bg-black/[0.04] hover:text-[#1d1d1f]"
-                    }`}
-                  >
+                const groupActive = isNavItemActive(item, pathname);
+                if ("children" in item && item.children) {
+                  return (
+                    <DesktopSubmenu
+                      key={item.href}
+                      item={item}
+                      pathname={pathname}
+                      groupActive={groupActive}
+                    />
+                  );
+                }
+                const external = isExternalNavHref(item.href);
+                const baseActive = isNavItemActive(item, pathname);
+                const className = `rounded-full px-4 py-1.5 text-[14px] leading-tight tracking-[-0.01em] transition-all duration-200 ${
+                  baseActive
+                    ? "bg-brand-900 font-medium text-white"
+                    : "text-[#6e6e73] hover:bg-black/[0.04] hover:text-[#1d1d1f]"
+                }`;
+                return external ? (
+                  <a key={item.href} href={item.href} className={className} rel="noopener noreferrer">
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link key={item.href} href={item.href} className={className}>
                     {item.label}
                   </Link>
                 );
@@ -75,16 +183,82 @@ export function SiteHeader() {
                 className="pointer-events-auto mx-auto mt-2 w-full max-w-[1068px] overflow-hidden rounded-2xl border border-black/[0.07] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.08)] md:hidden"
               >
                 <nav className="flex flex-col p-3 text-[18px] font-medium" aria-label="Hauptnavigation mobil">
-                  {mainNav.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="rounded-xl px-3 py-3 text-[#1d1d1f] transition-colors duration-200 hover:bg-black/[0.04] hover:text-brand-500"
-                      onClick={() => setOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
+                  {mainNav.map((item) => {
+                    if ("children" in item && item.children) {
+                      const gActive = isNavItemActive(item, pathname);
+                      return (
+                        <div key={item.href} className="flex flex-col">
+                          <div className="flex items-stretch gap-0">
+                            <Link
+                              href={item.href}
+                              className={`min-h-12 flex-1 rounded-xl px-3 py-3 text-left text-[#1d1d1f] transition-colors duration-200 hover:bg-black/[0.04] hover:text-brand-500 ${
+                                gActive ? "bg-black/[0.04] font-semibold" : ""
+                              }`}
+                              onClick={() => {
+                                setOpen(false);
+                                setExecMobileOpen(false);
+                              }}
+                            >
+                              {item.label}
+                            </Link>
+                            <button
+                              type="button"
+                              className="focus-ring shrink-0 rounded-xl px-3 py-2 text-[13px] font-semibold text-[#6e6e73] hover:bg-black/[0.04]"
+                              aria-expanded={execMobileOpen}
+                              aria-controls="exec-subnav"
+                              onClick={() => setExecMobileOpen((v) => !v)}
+                            >
+                              {execMobileOpen ? "−" : "+"}
+                            </button>
+                          </div>
+                          {execMobileOpen ? (
+                            <div id="exec-subnav" className="ml-2 border-l border-black/[0.08] pl-2 pb-1">
+                              {item.children.map((c) => {
+                                const a =
+                                  pathname === c.href || pathname.startsWith(`${c.href}/`);
+                                return (
+                                  <Link
+                                    key={c.href}
+                                    href={c.href}
+                                    className={subLinkClassName(a)}
+                                    onClick={() => {
+                                      setOpen(false);
+                                      setExecMobileOpen(false);
+                                    }}
+                                  >
+                                    {c.label}
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          ) : null}
+                        </div>
+                      );
+                    }
+                    const external = isExternalNavHref(item.href);
+                    const className =
+                      "rounded-xl px-3 py-3 text-[#1d1d1f] transition-colors duration-200 hover:bg-black/[0.04] hover:text-brand-500";
+                    return external ? (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        className={className}
+                        rel="noopener noreferrer"
+                        onClick={() => setOpen(false)}
+                      >
+                        {item.label}
+                      </a>
+                    ) : (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={className}
+                        onClick={() => setOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  })}
                   <div className="my-2 border-t border-black/[0.06]" />
                   <Link
                     href="/termin"

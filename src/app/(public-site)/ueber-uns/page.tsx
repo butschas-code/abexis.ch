@@ -72,17 +72,29 @@ export default function UeberUnsPage() {
           Auch sind wir Mitglied verschiedener Verbände und Fachvereine:
         </p>
         <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-3 text-[15px]">
-          {footerPartners.map((p) => (
-            <li key={p.href}>
-              <a
-                href={p.href}
-                className="font-medium text-brand-900 underline-offset-4 transition-colors hover:text-brand-500 hover:underline"
-                rel="noopener noreferrer"
-              >
-                {p.label}
-              </a>
-            </li>
-          ))}
+          {footerPartners.map((p) => {
+            const external = p.href.startsWith("http://") || p.href.startsWith("https://");
+            return (
+              <li key={p.href}>
+                {external ? (
+                  <a
+                    href={p.href}
+                    className="font-medium text-brand-900 underline-offset-4 transition-colors hover:text-brand-500 hover:underline"
+                    rel="noopener noreferrer"
+                  >
+                    {p.label}
+                  </a>
+                ) : (
+                  <Link
+                    href={p.href}
+                    className="font-medium text-brand-900 underline-offset-4 transition-colors hover:text-brand-500 hover:underline"
+                  >
+                    {p.label}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </MotionSection>
     </InteriorPageLayout>

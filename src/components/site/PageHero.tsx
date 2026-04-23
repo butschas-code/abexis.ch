@@ -13,8 +13,7 @@ type Props = {
 };
 
 /**
- * Inner-page hero: same layout, motion, and `abexis-hero-image-overlay` treatment as {@link HomeHero},
- * with a configurable background image.
+ * Inner-page hero: full-bleed image + `abexis-hero-fullbleed-overlay` (diagonal scrim, readable type).
  */
 export function PageHero({ children, imageSrc, priority = false }: Props) {
   const reduce = useReducedMotion();
@@ -38,7 +37,7 @@ export function PageHero({ children, imageSrc, priority = false }: Props) {
             quality={90}
           />
         </motion.div>
-        <div className="abexis-hero-image-overlay" aria-hidden />
+        <div className="abexis-hero-fullbleed-overlay" aria-hidden />
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-[1068px] px-6">{children}</div>

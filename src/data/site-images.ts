@@ -30,8 +30,8 @@ export const homeBlogTeaserImage = HOME[29];
 /** Team-Portraits (Reihenfolge wie auf der alten Startseite) */
 export const teamPortraitOrder = HOME.slice(15, 21);
 
-/** Partner-Logos (Reihenfolge wie `footerPartners`): `HOME[21..35]` — **ohne** Kundenstatements `HOME[9..14]`. */
-export const partnershipBannerLogos = HOME.slice(21, 36);
+/** Partner-Logos (Reihenfolge wie `footerPartners`): `HOME[22..36]` (nach Entfernen des lokalen Executive-Search-Links in der Liste). */
+export const partnershipBannerLogos = HOME.slice(22, 37);
 
 /** Grosse Hero-Fotos aus den Fokusthemen-Detailseiten (ohne Logo) */
 export const fokusPageHeroImages = {

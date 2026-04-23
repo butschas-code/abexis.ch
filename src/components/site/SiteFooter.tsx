@@ -84,32 +84,31 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 border-t border-white/15 pt-8">
-          <p className="leading-relaxed">
-            Auch verfügbar:{" "}
-            <a
-              href="https://abexis-search.ch"
-              className="font-medium text-white underline-offset-2 hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
-              rel="noopener noreferrer"
-            >
-              Executive Search (Abexis Search)
-            </a>
-          </p>
-        </div>
-
-        <div className="mt-10">
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white">Netzwerk</p>
           <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
-            {footerPartners.map((p) => (
-              <li key={p.href}>
-                <a
-                  href={p.href}
-                  className="text-white underline-offset-2 hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
-                  rel="noopener noreferrer"
-                >
-                  {p.label}
-                </a>
-              </li>
-            ))}
+            {footerPartners.map((p) => {
+              const external = p.href.startsWith("http://") || p.href.startsWith("https://");
+              return (
+                <li key={p.href}>
+                  {external ? (
+                    <a
+                      href={p.href}
+                      className="text-white underline-offset-2 hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+                      rel="noopener noreferrer"
+                    >
+                      {p.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={p.href}
+                      className="text-white underline-offset-2 hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+                    >
+                      {p.label}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
 

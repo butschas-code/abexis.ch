@@ -23,13 +23,12 @@ export function AboutTeamGrid() {
               sizes="(min-width: 1024px) 220px, (min-width: 640px) 33vw, 50vw"
             />
 
-            <div className="abexis-hero-image-overlay z-[1] opacity-0 transition-opacity duration-300 group-hover:opacity-55 group-focus-visible:opacity-55" />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] translate-y-2 p-3 pt-10 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
-              <p className="text-[13px] font-semibold leading-tight tracking-[-0.01em] text-white drop-shadow-sm sm:text-[14px]">
+              <p className="text-[13px] font-semibold leading-tight tracking-[-0.01em] text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.9),0_2px_12px_rgba(0,0,0,0.65)] sm:text-[14px]">
                 {p.name}
               </p>
               {p.title ? (
-                <p className="mt-1 line-clamp-4 text-[10px] font-medium leading-snug text-white/90 sm:text-[11px]">
+                <p className="mt-1 line-clamp-4 text-[10px] font-medium leading-snug text-white/95 [text-shadow:0_1px_2px_rgba(0,0,0,0.85),0_2px_10px_rgba(0,0,0,0.55)] sm:text-[11px]">
                   {p.title}
                 </p>
               ) : null}
