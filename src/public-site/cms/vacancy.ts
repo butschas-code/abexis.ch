@@ -1,9 +1,28 @@
 import { unstable_cache } from "next/cache";
 import { cache } from "react";
+import { getApp, getApps, initializeApp } from "firebase/app";
+import { collection, getDocs, getFirestore, limit, query, where } from "firebase/firestore";
 import { COLLECTIONS } from "@/cms/firestore/collections";
 import { getAdminFirestore } from "@/firebase/server";
+import { parseFirebaseWebEnv } from "@/firebase/env.schema";
 import type { Vacancy, VacancyFile } from "@/cms/types/vacancy";
 import type { PostStatus } from "@/cms/types/enums";
+
+function getServerWebFirestore() {
+  const parsed = parseFirebaseWebEnv();
+  if (!parsed.ok) return null;
+  if (getApps().length > 0) {
+    return getFirestore(getApp());
+  }
+  try {
+    return getFirestore(initializeApp(parsed.config));
+  } catch {
+    if (getApps().length > 0) {
+      return getFirestore(getApp());
+    }
+    return null;
+  }
+}
 
 export type PublishedVacancy = Vacancy & { id: string };
 
@@ -53,14 +72,35 @@ function mapVacancyDoc(id: string, d: Record<string, unknown>): PublishedVacancy
 
 async function listPublishedVacanciesUncached(lim: number): Promise<PublishedVacancy[]> {
   const db = getAdminFirestore();
-  if (!db) return [];
+  if (db) {
+    try {
+      // Single equality filter only — no composite index needed. Sort in memory.
+      const snap = await db
+        .collection(COLLECTIONS.vacancies)
+        .where("status", "==", "published")
+        .limit(lim)
+        .get();
+      const rows = snap.docs.map((doc) => mapVacancyDoc(doc.id, doc.data() as Record<string, unknown>));
+      rows.sort((a, b) => {
+        const ta = a.publishedAt ?? a.createdAt;
+        const tb = b.publishedAt ?? b.createdAt;
+        return tb < ta ? -1 : ta < tb ? 1 : 0;
+      });
+      return rows;
+    } catch (error) {
+      console.warn("[CMS] Admin Firestore vacancies failed; falling back to Web SDK.", error instanceof Error ? error.message : "Unknown error");
+    }
+  }
+
+  const webDb = getServerWebFirestore();
+  if (!webDb) return [];
   try {
-    // Single equality filter only — no composite index needed. Sort in memory.
-    const snap = await db
-      .collection(COLLECTIONS.vacancies)
-      .where("status", "==", "published")
-      .limit(lim)
-      .get();
+    const q = query(
+      collection(webDb, COLLECTIONS.vacancies),
+      where("status", "==", "published"),
+      limit(lim)
+    );
+    const snap = await getDocs(q);
     const rows = snap.docs.map((doc) => mapVacancyDoc(doc.id, doc.data() as Record<string, unknown>));
     rows.sort((a, b) => {
       const ta = a.publishedAt ?? a.createdAt;
@@ -69,7 +109,7 @@ async function listPublishedVacanciesUncached(lim: number): Promise<PublishedVac
     });
     return rows;
   } catch (error) {
-    console.warn("[CMS] Failed to list published vacancies (credentials might be missing during build):", error instanceof Error ? error.message : "Unknown error");
+    console.warn("[CMS] Web SDK vacancies query failed:", error instanceof Error ? error.message : "Unknown error");
     return [];
   }
 }
@@ -86,21 +126,40 @@ export const listPublishedVacancies = cache(async (limit = 20): Promise<Publishe
 
 async function getVacancyBySlugUncached(slug: string): Promise<PublishedVacancy | null> {
   const db = getAdminFirestore();
-  if (!db) return null;
+  if (db) {
+    try {
+      // Single equality filter — no composite index needed. Check status in code.
+      const snap = await db
+        .collection(COLLECTIONS.vacancies)
+        .where("slug", "==", slug)
+        .limit(5)
+        .get();
+      for (const doc of snap.docs) {
+        const v = mapVacancyDoc(doc.id, doc.data() as Record<string, unknown>);
+        if (v.status === "published") return v;
+      }
+      return null;
+    } catch (error) {
+      console.warn(`[CMS] Admin Firestore vacancy by slug "${slug}" failed; falling back to Web SDK.`, error instanceof Error ? error.message : "Unknown error");
+    }
+  }
+
+  const webDb = getServerWebFirestore();
+  if (!webDb) return null;
   try {
-    // Single equality filter — no composite index needed. Check status in code.
-    const snap = await db
-      .collection(COLLECTIONS.vacancies)
-      .where("slug", "==", slug)
-      .limit(5)
-      .get();
+    const q = query(
+      collection(webDb, COLLECTIONS.vacancies),
+      where("slug", "==", slug),
+      limit(5)
+    );
+    const snap = await getDocs(q);
     for (const doc of snap.docs) {
       const v = mapVacancyDoc(doc.id, doc.data() as Record<string, unknown>);
       if (v.status === "published") return v;
     }
     return null;
   } catch (error) {
-    console.warn(`[CMS] Failed to get vacancy by slug "${slug}":`, error instanceof Error ? error.message : "Unknown error");
+    console.warn(`[CMS] Web SDK vacancy by slug "${slug}" failed:`, error instanceof Error ? error.message : "Unknown error");
     return null;
   }
 }

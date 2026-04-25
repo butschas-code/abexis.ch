@@ -1,0 +1,51 @@
+[debug] [2026-04-25T19:26:57.915Z] ----------------------------------------------------------------------
+[debug] [2026-04-25T19:26:57.921Z] Command:       /Users/peter/.nvm/versions/node/v22.19.0/bin/node /Users/peter/.nvm/versions/node/v22.19.0/bin/firebase deploy --only firestore:rules
+[debug] [2026-04-25T19:26:57.921Z] CLI Version:   15.11.0
+[debug] [2026-04-25T19:26:57.921Z] Platform:      darwin
+[debug] [2026-04-25T19:26:57.921Z] Node Version:  v22.19.0
+[debug] [2026-04-25T19:26:57.922Z] Time:          Sat Apr 25 2026 21:26:57 GMT+0200 (Central European Summer Time)
+[debug] [2026-04-25T19:26:57.922Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-04-25T19:26:58.933Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-25T19:26:58.934Z] > authorizing via signed-in user (petergallaroundemail@gmail.com)
+[debug] [2026-04-25T19:26:58.934Z] [iam] checking project abexis-cms for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]
+[debug] [2026-04-25T19:26:58.935Z] Checked if tokens are valid: false, expires at: 1777144870800
+[debug] [2026-04-25T19:26:58.935Z] Checked if tokens are valid: false, expires at: 1777144870800
+[debug] [2026-04-25T19:26:58.935Z] > refreshing access token with scopes: []
+[debug] [2026-04-25T19:26:58.936Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-04-25T19:26:58.936Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-04-25T19:26:59.263Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-04-25T19:26:59.263Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-04-25T19:26:59.276Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/abexis-cms:testIamPermissions [none]
+[debug] [2026-04-25T19:26:59.276Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/abexis-cms:testIamPermissions  x-goog-user-project=abexis-cms
+[debug] [2026-04-25T19:26:59.276Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/abexis-cms:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[debug] [2026-04-25T19:27:00.207Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/abexis-cms:testIamPermissions 200
+[debug] [2026-04-25T19:27:00.207Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/abexis-cms:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[info] 
+[info] === Deploying to 'abexis-cms'...
+[info] 
+[info] i  deploying firestore 
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[debug] [2026-04-25T19:27:00.211Z] Checked if tokens are valid: true, expires at: 1777148818263
+[debug] [2026-04-25T19:27:00.211Z] Checked if tokens are valid: true, expires at: 1777148818263
+[debug] [2026-04-25T19:27:00.211Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/abexis-cms/databases/(default) [none]
+[debug] [2026-04-25T19:27:00.404Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/abexis-cms/databases/(default) 200
+[debug] [2026-04-25T19:27:00.404Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/abexis-cms/databases/(default) {"name":"projects/abexis-cms/databases/(default)","uid":"234e28e1-ee21-48cc-b803-ff699a66c9c9","createTime":"2026-04-21T07:23:28.129064Z","updateTime":"2026-04-21T07:23:28.129064Z","locationId":"eur3","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2026-04-25T18:27:00.424129Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"e","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","databaseEdition":"STANDARD","freeTier":true,"realtimeUpdatesMode":"REALTIME_UPDATES_MODE_ENABLED","etag":"IKW9z+zdiZQDMIeoiYW1/pMD"}
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2026-04-25T19:27:00.406Z] Checked if tokens are valid: true, expires at: 1777148818263
+[debug] [2026-04-25T19:27:00.406Z] Checked if tokens are valid: true, expires at: 1777148818263
+[debug] [2026-04-25T19:27:00.406Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/abexis-cms:test [none]
+[debug] [2026-04-25T19:27:00.406Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/abexis-cms:test [omitted]
+[debug] [2026-04-25T19:27:00.807Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/abexis-cms:test 200
+[debug] [2026-04-25T19:27:00.807Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/abexis-cms:test {}
+[info] ✔  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2026-04-25T19:27:00.808Z] Checked if tokens are valid: true, expires at: 1777148818263
+[debug] [2026-04-25T19:27:00.808Z] Checked if tokens are valid: true, expires at: 1777148818263
+[debug] [2026-04-25T19:27:00.809Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/abexis-cms/releases pageSize=10&pageToken=
+[debug] [2026-04-25T19:27:01.106Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/abexis-cms/releases 200
+[debug] [2026-04-25T19:27:01.106Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/abexis-cms/releases {"releases":[{"name":"projects/abexis-cms/releases/cloud.firestore","rulesetName":"projects/abexis-cms/rulesets/23b63c9d-81b1-4c32-8c23-2f1129911b24","createTime":"2026-04-21T07:23:31.242980Z","updateTime":"2026-04-25T18:59:50.950322Z"},{"name":"projects/abexis-cms/releases/firebase.storage/abexis-cms.firebasestorage.app","rulesetName":"projects/abexis-cms/rulesets/5b08c4d5-7134-486e-ad10-f6fa668ccb75","createTime":"2026-04-25T07:55:15.854617Z","updateTime":"2026-04-25T08:09:25.042215Z"}]}
+[debug] [2026-04-25T19:27:01.135Z] Checked if tokens are valid: true, expires at: 1777148818263
+[debug] [2026-04-25T19:27:01.135Z] Checked if tokens are valid: true, expires at: 1777148818263
+[debug] [2026-04-25T19:27:01.135Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/abexis-cms/rulesets/23b63c9d-81b1-4c32-8c23-2f1129911b24 [none]
