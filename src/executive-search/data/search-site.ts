@@ -26,7 +26,7 @@ export const site = {
   bookingUrl:
     "https://outlook.office.com/bookwithme/user/e725b81719d74d9fad11b791fafc6f6d@abexis.ch?anonymous&ep=plink",
   /** Legacy logo asset (Hoststar CDN) */
-  logoUrl: "https://files.designer.hoststar.ch/b5/d1/b5d116da-151c-434e-bf74-a7e296e5a9e0.JPG",
+  logoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fb5d116da-151c-434e-bf74-a7e296e5a9e0.JPG?alt=media",
   seoDefaults: {
     title: "Abexis Search",
     description:
@@ -167,7 +167,7 @@ export const organization = {
       phone: "+41 79 349 04 54",
       email: "daniel.sengstag@abexis.ch",
       linkedIn: "https://www.linkedin.com/in/danielsengstag/",
-      photoUrl: "https://files.designer.hoststar.ch/93/38/9338eeab-feb5-462b-ad73-6de0c7df9d65.jpg",
+      photoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F9338eeab-feb5-462b-ad73-6de0c7df9d65.jpg?alt=media",
     },
     {
       name: "Renate Sengstag",
@@ -178,7 +178,7 @@ export const organization = {
       phone: "+41 79 417 77 58",
       email: "contact@abexis.ch",
       linkedIn: "https://www.linkedin.com/in/renate-sengstag-64a540254/",
-      photoUrl: "https://files.designer.hoststar.ch/d9/de/d9de5400-785e-47ca-b6c6-fd49b25ba2f8.jpg",
+      photoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fd9de5400-785e-47ca-b6c6-fd49b25ba2f8.jpg?alt=media",
     },
     {
       name: "Sacha Moeller",
@@ -189,7 +189,7 @@ export const organization = {
       phone: "+41 78 604 87 65",
       email: "sacha.moeller@abexis.ch",
       linkedIn: "https://www.linkedin.com/in/sacha-moeller/",
-      photoUrl: "https://files.designer.hoststar.ch/6b/a6/6ba66ce4-e338-42a5-9363-9bde653084c3.JPG",
+      photoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F6ba66ce4-e338-42a5-9363-9bde653084c3.JPG?alt=media",
     },
     {
       name: "Wird bald bekannt gegeben",
@@ -198,7 +198,7 @@ export const organization = {
       phone: "",
       email: "",
       linkedIn: "",
-      photoUrl: "https://files.designer.hoststar.ch/85/20/8520c46b-8b22-4ed3-935b-f1418979f85e.jpg",
+      photoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F8520c46b-8b22-4ed3-935b-f1418979f85e.jpg?alt=media",
     },
   ],
   partnersHeading: "Partnerschaften und Verbände",
@@ -208,32 +208,32 @@ export const organization = {
   ],
   /** Logo strip as published on legacy Unternehmen page (links + Hoststar assets). */
   partnerLogos: [
-    { href: "https://abexis.ch/", logoUrl: "https://files.designer.hoststar.ch/d5/32/d5329da5-b14a-4e9a-9f91-5a61e79d1ab9.png" },
-    { href: "https://avzo.ch/", logoUrl: "https://files.designer.hoststar.ch/75/c3/75c3aead-c3e6-494f-ae21-6943aaac9727.jpg" },
-    { href: "https://swissmbas.com/", logoUrl: "https://files.designer.hoststar.ch/53/5c/535c231a-2828-4250-920f-6e038a9dd3e4.jpg" },
-    { href: "https://boardfoundation.org/de/", logoUrl: "https://files.designer.hoststar.ch/84/aa/84aaedab-3687-4156-84cb-2829378c5a2a.png" },
+    { href: "https://abexis.ch/", logoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fd5329da5-b14a-4e9a-9f91-5a61e79d1ab9.png?alt=media" },
+    { href: "https://avzo.ch/", logoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F75c3aead-c3e6-494f-ae21-6943aaac9727.jpg?alt=media" },
+    { href: "https://swissmbas.com/", logoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F535c231a-2828-4250-920f-6e038a9dd3e4.jpg?alt=media" },
+    { href: "https://boardfoundation.org/de/", logoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F84aaedab-3687-4156-84cb-2829378c5a2a.png?alt=media" },
     {
       href: "https://www.ausbildung-weiterbildung.ch/",
-      logoUrl: "https://files.designer.hoststar.ch/6c/0c/6c0c4075-7d01-408f-991f-9ce87dae43ff.jpg",
+      logoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F6c0c4075-7d01-408f-991f-9ce87dae43ff.jpg?alt=media",
     },
-    { href: "https://www.ufz.ch/", logoUrl: "https://files.designer.hoststar.ch/79/57/7957308c-ae46-48ae-91b3-5496541f38ef.jpg" },
+    { href: "https://www.ufz.ch/", logoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F7957308c-ae46-48ae-91b3-5496541f38ef.jpg?alt=media" },
     {
       href: "https://www.digital-winterthur.ch/",
-      logoUrl: "https://files.designer.hoststar.ch/d8/c2/d8c2a5c5-22b8-47a5-901c-6609ec3afc98.png",
+      logoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fd8c2a5c5-22b8-47a5-901c-6609ec3afc98.png?alt=media",
     },
-    { href: "https://www.swissict.ch/", logoUrl: "https://files.designer.hoststar.ch/85/53/8553e772-bfe9-48b7-927c-2cc22b5eee97.jpg" },
-    { href: "https://svc.swiss/de", logoUrl: "https://files.designer.hoststar.ch/11/16/11160c10-f01d-4876-953c-2ecab10f4177.jpg" },
+    { href: "https://www.swissict.ch/", logoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F8553e772-bfe9-48b7-927c-2cc22b5eee97.jpg?alt=media" },
+    { href: "https://svc.swiss/de", logoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F11160c10-f01d-4876-953c-2ecab10f4177.jpg?alt=media" },
     {
       href: "https://www.sustainableleaders.ch/de/",
-      logoUrl: "https://files.designer.hoststar.ch/6c/7c/6c7c409f-efcc-48d9-afea-2f3b8f3fc5ee.png",
+      logoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F6c7c409f-efcc-48d9-afea-2f3b8f3fc5ee.png?alt=media",
     },
     {
       href: "https://www.futureinstitute.ch/",
-      logoUrl: "https://files.designer.hoststar.ch/c3/dd/c3dd9085-52bd-4a2c-a8b8-e89659ba8093.png",
+      logoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fc3dd9085-52bd-4a2c-a8b8-e89659ba8093.png?alt=media",
     },
     {
       href: "https://www.zuerioberland.ch/",
-      logoUrl: "https://files.designer.hoststar.ch/ce/fc/cefc61ab-d52c-4e1f-b674-5101917a25ff.jpg",
+      logoUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fcefc61ab-d52c-4e1f-b674-5101917a25ff.jpg?alt=media",
     },
   ],
 } as const;
@@ -286,7 +286,7 @@ export const vacancies = {
     "Ein wertschätzendes Arbeitsumfeld sowie zahlreiche attraktive Benefits runden das Angebot ab.",
   ],
   pdfLabel: "Abexis SEARCH - Account Manager I&D.pdf",
-  pdfUrl: "https://files.designer.hoststar.ch/9e/d8/9ed818b8-6df9-4549-a501-eb744e1546ed.pdf",
+  pdfUrl: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F9ed818b8-6df9-4549-a501-eb744e1546ed.pdf?alt=media",
   apply:
     "Interesse geweckt? Dann sende uns Deine aussagekräftigen Unterlagen an contact@abexis.ch Oder nimm mit uns unverbindlich Kontakt auf. Per Email an contact@abexis.ch oder Telefon +41 43 535 84 34",
 } as const;

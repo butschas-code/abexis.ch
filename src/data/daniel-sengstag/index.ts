@@ -6,7 +6,7 @@ export { danielSengstagContent } from "./content-de";
 
 export const danielSengstagImages = {
   /** Full-bleed editorial hero */
-  hero: "https://files.designer.hoststar.ch/56/36/5636ffb9-2636-451c-8223-8c7c3e7fc0a3.jpeg",
+  hero: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F5636ffb9-2636-451c-8223-8c7c3e7fc0a3.jpeg?alt=media",
   /** Profile column image */
-  editorial: "https://files.designer.hoststar.ch/af/40/af4050bf-87e6-40e3-a083-4c7c42a6db9a.jpeg",
+  editorial: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Faf4050bf-87e6-40e3-a083-4c7c42a6db9a.jpeg?alt=media",
 } as const;

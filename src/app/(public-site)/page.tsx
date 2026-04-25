@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { HomeBlogTeasers } from "@/components/home/HomeBlogTeasers";
+import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { HomeHero } from "@/components/home/HomeHero";
 import { WelcomeSection } from "@/components/home/WelcomeSection";
 import { SituationsSection } from "@/components/home/SituationsSection";
@@ -9,6 +10,7 @@ import { StaggerLines } from "@/components/motion/StaggerLines";
 import { BrandGrad } from "@/components/ui/BrandGrad";
 import {
   homeAboutTeaser,
+  homeDifferentiators,
   homeIntroLines,
   homeLeadParagraph,
   homeServiceTeasers,
@@ -165,7 +167,34 @@ export default function HomePage() {
         </div>
       </MotionSection>
 
+      <MotionSection className="apple-animated-gradient py-20 md:py-28">
+        <div className="mx-auto max-w-[1068px] px-6">
+          <div className="overflow-hidden rounded-[32px] border border-black/[0.05] bg-[#1a2260] shadow-[var(--apple-shadow-lg)]">
+            <div className="border-b border-white/[0.08] px-8 py-6">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
+                Was uns auszeichnet
+              </p>
+            </div>
+            <div className="grid gap-px bg-white/[0.06] sm:grid-cols-3">
+              {homeDifferentiators.map((vp) => (
+                <div key={vp.label} className="relative flex flex-col bg-[#1a2260] px-8 py-10 transition-colors duration-300 hover:bg-[#1f2970]">
+                  <div className="h-[3px] w-10 rounded-full" style={{ background: vp.accent }} />
+                  <p className="mt-5 text-[12px] font-bold uppercase tracking-[0.16em] text-white/50">
+                    {vp.label}
+                  </p>
+                  <p className="mt-4 text-[16px] leading-relaxed text-white/75">
+                    {vp.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </MotionSection>
+
       <HomeBlogTeasers />
+
+      <HomeVacancyTeasers />
 
       <MotionSection className="border-y border-black/[0.06] bg-white py-20 md:py-28">
         <div className="mx-auto max-w-[1068px] px-6">

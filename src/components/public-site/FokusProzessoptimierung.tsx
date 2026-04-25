@@ -8,71 +8,72 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 // ─── Static data — module level, no re-allocation ────────────────────────────
 
-const meta = fokusthemenMeta.find((m) => m.slug === "digitale-transformation")!;
-const heroImage = fokusPageHeroImages["digitale-transformation"];
+const meta = fokusthemenMeta.find((m) => m.slug === "prozessoptimierung")!;
+const heroImage = fokusPageHeroImages["prozessoptimierung"];
+const contentImage = "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fb738bd96-1957-43aa-8025-8980b84673c6.jpg?alt=media";
 
 const handlungsfelder = [
   {
     num: "01",
-    title: "Kundenorientierung & Experience",
+    title: "Prozessanalyse & Diagnose",
     items: [
-      "Digitale Touchpoints entlang der Customer Journey optimieren",
-      "Self-Service-Portale und personalisierte Erlebnisse aufbauen",
-      "Kundenfeedback systematisch in die Produktentwicklung einbeziehen",
+      "Bestehende Prozesse erfassen, visualisieren und bewerten",
+      "Ineffizienzen, Redundanzen und Medienbrüche aufdecken",
+      "Priorisierung nach Kosten, Risiko und Optimierungspotenzial",
     ],
   },
   {
     num: "02",
-    title: "Digitale Strategien & Geschäftsmodelle",
+    title: "Lean & Wertstromdesign",
     items: [
-      "Wettbewerbspositionierung im digitalen Umfeld schärfen",
-      "Neue Erlösquellen und Plattformmodelle entwickeln",
-      "Partnerschaften und digitale Ökosysteme strategisch aufbauen",
+      "Wertstrom-Analyse: wertschöpfende vs. nicht-wertschöpfende Aktivitäten",
+      "Verschwendung systematisch identifizieren und eliminieren",
+      "Flussoptimierung und Durchlaufzeiten verkürzen",
     ],
   },
   {
     num: "03",
-    title: "Führung, Kultur & Organisation",
+    title: "Prozessautomatisierung",
     items: [
-      "Digital Leadership und agile Führungsmodelle einführen",
-      "Digitale Kompetenz und Innovationskultur stärken",
-      "Organisationsstrukturen an neue Arbeitsweisen anpassen",
+      "Automatisierungspotenziale realistisch bewerten",
+      "RPA, Workflow-Systeme und KI-gestützte Lösungen prüfen",
+      "Implementierung schrittweise und risikoarm gestalten",
     ],
   },
   {
     num: "04",
-    title: "Prozessoptimierung & Automatisierung",
+    title: "Kostenoptimierung",
     items: [
-      "End-to-End-Prozesse analysieren und neu gestalten",
-      "Automatisierungspotenziale identifizieren und realisieren",
-      "Datenbasierte Entscheidungsgrundlagen schaffen",
+      "Kostentreiber in Prozessen transparent machen",
+      "Einsparpotenziale quantifizieren und priorisieren",
+      "Massnahmen ohne Qualitätsverlust umsetzen",
     ],
   },
   {
     num: "05",
-    title: "Plattformen & Absatzkanäle",
+    title: "Prozessdesign & Standardisierung",
     items: [
-      "Digitale Vertriebs- und Kommunikationskanäle aufbauen",
-      "Omnichannel-Strategie entwickeln und integrieren",
-      "Marktplätze und digitale Ökosysteme nutzen",
+      "Soll-Prozesse gemeinsam mit Fachbereichen entwickeln",
+      "Standards, Vorlagen und Prozessdokumentation etablieren",
+      "Einheitliche Vorgehensweisen über Einheiten hinweg sicherstellen",
     ],
   },
   {
     num: "06",
-    title: "Technologien — KI, IoT, Industrie 4.0",
+    title: "Schnittstellen & Integration",
     items: [
-      "Anwendungsfälle für KI und Machine Learning identifizieren",
-      "IoT- und Industrie-4.0-Lösungen in bestehende Anlagen integrieren",
-      "Technologieauswahl anhand strategischer Kriterien treffen",
+      "Übergabepunkte zwischen Abteilungen und Systemen klären",
+      "Reibungsverluste an Schnittstellen gezielt reduzieren",
+      "End-to-End-Sicht über Bereichsgrenzen hinweg etablieren",
     ],
   },
   {
     num: "07",
-    title: "IT-Infrastruktur & Datenbasis",
+    title: "Prozess-Monitoring & KVP",
     items: [
-      "Cloud-Migration strategisch planen und umsetzen",
-      "Datenarchitektur und Governance etablieren",
-      "Legacy-Systeme schrittweise durch skalierbare Lösungen ablösen",
+      "Kennzahlen zur Prozesskontrolle definieren und einführen",
+      "Kontinuierlichen Verbesserungsprozess (KVP) verankern",
+      "Prozessverantwortung klar zuweisen und leben",
     ],
   },
 ] as const;
@@ -80,42 +81,41 @@ const handlungsfelder = [
 const prozessphasen = [
   {
     num: "01",
-    title: "Vorbereitungsphase",
+    title: "Analyse & Aufnahme",
     items: [
-      "Projekt definieren: Ziele, Scope und Prioritäten festlegen",
-      "Team zusammenstellen und Verantwortlichkeiten klären",
-      "Budget und Zeitplan realistisch planen",
-      "Relevante Stakeholder frühzeitig einbinden",
+      "Prozesslandschaft erfassen und priorisieren",
+      "Schnittstellen, Systeme und Verantwortlichkeiten klären",
+      "Einsparpotenziale und Schmerzpunkte identifizieren",
+      "Handlungsfelder gemeinsam bewerten",
     ],
   },
   {
     num: "02",
-    title: "Analysephase",
+    title: "Konzept & Design",
     items: [
-      "Marktanalyse: Kunden, Konkurrenz, Technologietrends",
-      "Produkte- und Dienstleistungsportfolio kritisch prüfen",
-      "Ideen der Mitarbeiter aufgreifen, Machbarkeit beurteilen",
-      "Ist-Situation ermitteln und mit dem Zielbild abgleichen",
+      "Soll-Prozesse entwickeln und modellieren",
+      "Automatisierungsoptionen prüfen und einplanen",
+      "Business Case für Massnahmen aufstellen",
+      "Umsetzungsroadmap priorisieren",
     ],
   },
   {
     num: "03",
-    title: "Planungsphase",
+    title: "Implementierung",
     items: [
-      "Vision und Strategie: Kernkompetenzen und Geschäftsmodell",
-      "Prozesse, Organisation und Unternehmenskultur neu gestalten",
-      "Ökosystem mit Kunden und Partnern definieren",
-      "Plan erstellen: Technologie wählen, messbare Schritte festlegen",
+      "Prozessänderungen schrittweise einführen",
+      "Betroffene befähigen und Akzeptanz sicherstellen",
+      "Systeme, Tools und Dokumentation aufschalten",
+      "Pilotläufe durchführen und nachschärfen",
     ],
   },
   {
     num: "04",
-    title: "Umsetzungsphase",
+    title: "Messen & Verstetigen",
     items: [
-      "Strategie umsetzen — z.B. mit agiler Methodik",
-      "Kontinuierliche Überprüfung und Monitoring einrichten",
-      "Allenfalls Justierungen vornehmen, Learnings integrieren",
-      "Ergebnisse messen, kommunizieren und konsolidieren",
+      "Ergebnisse messen und mit Zielbild abgleichen",
+      "KVP-Strukturen einrichten und übergeben",
+      "Prozessverantwortung intern verankern",
     ],
   },
 ] as const;
@@ -123,47 +123,45 @@ const prozessphasen = [
 const nutzen = [
   {
     num: "01",
-    title: "Kosten & Ertrag",
-    body: "Kosten reduzieren, Produktivität und Umsatz bzw. Gewinn erhöhen.",
+    title: "Kostensenkung",
+    body: "Schlanke Prozesse reduzieren Aufwände, vermeiden Doppelarbeit und senken operative Kosten nachhaltig.",
   },
   {
     num: "02",
-    title: "Datenqualität",
-    body: "Datenbasierte Erkenntnisse, höhere Datenqualität und weniger Fehler durch Automatisierung.",
+    title: "Höhere Qualität",
+    body: "Standardisierte, klar definierte Prozesse minimieren Fehler und erhöhen die Verlässlichkeit der Ergebnisse.",
   },
   {
     num: "03",
-    title: "Kundenerlebnis",
-    body: "Besseres Erlebnis bei Beschaffung und Kundenservice — höhere Kundenzufriedenheit.",
+    title: "Schnelligkeit",
+    body: "Kürzere Durchlaufzeiten und weniger Wartezeiten erhöhen die Reaktionsfähigkeit gegenüber Kunden und Märkten.",
   },
   {
     num: "04",
     title: "Transparenz",
-    body: "Transparentere Informationspolitik gegenüber Kunden und Lieferanten.",
+    body: "Sichtbare Prozesse und klare Verantwortlichkeiten machen Steuerung einfacher und Entscheidungen fundierter.",
   },
   {
     num: "05",
-    title: "Neue Märkte",
-    body: "Neue Produkte und Leistungen erschliessen neue Kundenpotenziale.",
+    title: "Skalierbarkeit",
+    body: "Optimierte und automatisierte Prozesse wachsen mit — ohne proportional mehr Personal zu erfordern.",
   },
   {
     num: "06",
-    title: "Zusammenarbeit",
-    body: "Mehr Kollaboration und bessere Kommunikation durch eine gemeinsame Plattform.",
+    title: "Mitarbeiterzufriedenheit",
+    body: "Weniger Reibung, klarere Abläufe und sinnvolle Automatisierung entlasten Teams von repetitiven Aufgaben.",
   },
   {
     num: "07",
-    title: "Geschwindigkeit",
-    body: "Schnellere Durchlaufzeiten dank effizienter, automatisierter Prozesse.",
+    title: "Compliance & Sicherheit",
+    body: "Dokumentierte, kontrollierte Prozesse erleichtern das Einhalten von Vorschriften und Auditanforderungen.",
   },
   {
     num: "08",
-    title: "Zukunftsfähigkeit",
-    body: "Investitionen in die Digitale Transformation sichern den Vorsprung gegenüber dem Wettbewerb.",
+    title: "Wettbewerbsfähigkeit",
+    body: "Operative Exzellenz ist ein nachhaltiger Vorteil — besonders wenn Margen sinken und Geschwindigkeit zählt.",
   },
 ] as const;
-
-
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -206,7 +204,7 @@ function SpineCard({ item }: { item: Handlungsfeld }) {
 
 // ─── Page component ───────────────────────────────────────────────────────────
 
-export function FokusDigitaleTransformation() {
+export function FokusProzessoptimierung() {
   return (
     <InteriorPageRoot>
       <SchemaMarkup type="Service" data={meta} />
@@ -215,7 +213,7 @@ export function FokusDigitaleTransformation() {
         data={[
           { name: "Startseite", url: "/" },
           { name: "Leistungen", url: "/leistungen" },
-          { name: meta.title, url: "/fokusthemen/digitale-transformation" },
+          { name: meta.title, url: "/fokusthemen/prozessoptimierung" },
         ]}
       />
 
@@ -225,12 +223,12 @@ export function FokusDigitaleTransformation() {
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Digitale Transformation ist kein IT-Projekt — sie ist eine Führungsaufgabe.
+          Wenn Prozesse wachsen, aber nicht atmen — zahlt das Unternehmen dafür.
         </h1>
         <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
-          Wenn Verwaltungsrat und Management die Digitalisierung verschieden interpretieren,
-          entstehen Fehlinvestitionen, Reibung und verpasste Chancen. Wir helfen Ihnen, aus
-          Technologie echten Unternehmenswert zu machen — strukturiert, strategisch, umsetzbar.
+          Gewachsene Strukturen, ungeklärte Schnittstellen und manuelle Umwege kosten täglich
+          Zeit, Geld und Motivation. Wir helfen Ihnen, Prozesse zu durchleuchten, zu
+          straffen und dort zu automatisieren, wo es echten Mehrwert bringt.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Link
@@ -251,66 +249,64 @@ export function FokusDigitaleTransformation() {
         </div>
       </PageHero>
 
-      {/* ── 2. SPLIT PANEL — Digitalisierung vs. Digitale Transformation ─── */}
+      {/* ── 2. SPLIT PANEL — Optimierung vs. Automatisierung ─────────────── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half — navy: content tracks the 1068px centre column */}
-          <div className="relative bg-[#1a2260]">
-            <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
-              <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
-              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
-              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
-                Ebene 1
-              </h2>
-              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
-                Digitalisierung
-              </h3>
-              <p className="mt-5 text-[16px] leading-relaxed text-white/65">
-                Betrifft die taktische Ebene: einzelne Prozesse, Tools und Arbeitsabläufe werden
-                digitalisiert oder automatisiert. Wichtig, aber nicht hinreichend — sie verändert
-                das Geschäftsmodell nicht.
-              </p>
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
-          </div>
-
-          {/* Right half — warm linen: content tracks the 1068px centre column */}
+          {/* Left half — warm linen */}
           <div className="relative bg-[#faf8f2]">
-            <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
+            <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
               <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Ebene 2
+                Ansatz 1
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
-                Digitale Transformation
+                Prozessoptimierung
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
-                Betrifft die strategische Ebene: Geschäftsmodelle, Kundenerlebnisse, Kultur und
-                Führung werden grundlegend neu gedacht. Sie schafft nachhaltige Wettbewerbsvorteile
-                und erfordert unternehmerische Entschlossenheit.
+                Analysiert bestehende Abläufe und entfernt, was keinen Wert schafft: Wartezeiten,
+                Doppelarbeit, Medienbrüche, ungeklärte Zuständigkeiten. Das Ziel ist ein
+                schlanker, transparenter Prozess — mit oder ohne Technologie.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
-        </div>
 
+          {/* Right half — navy */}
+          <div className="relative bg-[#1a2260]">
+            <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
+              <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
+              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
+                Ansatz 2
+              </h2>
+              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
+                Prozessautomatisierung
+              </h3>
+              <p className="mt-5 text-[16px] leading-relaxed text-white/65">
+                Nutzt Technologie, um repetitive, regelbasierte Aufgaben maschinell auszuführen.
+                Wirksam — aber nur dort, wo der Prozess bereits sauber ist. Automatisierung
+                eines schlechten Prozesses erzeugt nur schnellere Fehler.
+              </p>
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
+          </div>
+        </div>
       </MotionSection>
 
-
+      {/* ── 3. HANDLUNGSFELDER ───────────────────────────────────────────── */}
       <section id="handlungsfelder" className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
             <div className="grid gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-16">
-              {/* Left: sticky anchor */}
               <div className="lg:sticky lg:top-28 lg:self-start">
                 <h2 className="text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Sieben Dimensionen der Digitalen Transformation.
+                  Sieben Hebel für operative Exzellenz.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Die Digitalisierung betrifft alle Bereiche Ihres Unternehmens. Wir begleiten Sie
-                  dabei, diese Dimensionen ganzheitlich zu betrachten und gezielt zu entwickeln.
+                  Prozessoptimierung wirkt auf mehreren Ebenen. Wir helfen Ihnen, die richtigen
+                  Ansatzpunkte zu finden — und konsequent umzusetzen.
                 </p>
                 <Link
                   href="/kontakt"
@@ -318,20 +314,12 @@ export function FokusDigitaleTransformation() {
                 >
                   Beratungsgespräch anfragen
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-                    <path
-                      d="M3 8h10M8 3l5 5-5 5"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
+                    <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </Link>
               </div>
 
-              {/* Right: alternating spine — desktop / simple list — mobile */}
               <div>
-                {/* ── Desktop: alternating two-column spine ── */}
                 <div className="hidden lg:block">
                   <div className="relative">
                     <div
@@ -341,7 +329,6 @@ export function FokusDigitaleTransformation() {
                           "linear-gradient(to bottom, rgba(201,169,110,0.05), rgba(201,169,110,0.25) 8%, rgba(201,169,110,0.25) 92%, rgba(201,169,110,0.05))",
                       }}
                     />
-
                     <div className="space-y-8">
                       {handlungsfelder.map((item, i) => {
                         const isLeft = i % 2 === 0;
@@ -352,20 +339,14 @@ export function FokusDigitaleTransformation() {
                                 {item.num}
                               </div>
                             </div>
-                            <div className="pr-10">
-                              {isLeft ? <SpineCard item={item} /> : null}
-                            </div>
-                            <div className="pl-10">
-                              {!isLeft ? <SpineCard item={item} /> : null}
-                            </div>
+                            <div className="pr-10">{isLeft ? <SpineCard item={item} /> : null}</div>
+                            <div className="pl-10">{!isLeft ? <SpineCard item={item} /> : null}</div>
                           </div>
                         );
                       })}
                     </div>
                   </div>
                 </div>
-
-                {/* ── Mobile: simple vertical list ── */}
                 <div className="flex flex-col gap-4 lg:hidden">
                   {handlungsfelder.map((item) => (
                     <SpineCard key={item.num} item={item} />
@@ -377,7 +358,42 @@ export function FokusDigitaleTransformation() {
         </MotionSection>
       </section>
 
-      {/* ── 5. PULL QUOTE ────────────────────────────────────────────────── */}
+      {/* ── BPMN DIAGRAM — Beispiel Prozessvisualisierung ────────────────── */}
+      <section className="bg-white">
+        <MotionSection>
+          <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
+            <div className="grid gap-8 border-b border-black/[0.06] pb-10 md:grid-cols-[1fr_1fr] md:gap-16 md:items-end">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+                  Methodik
+                </p>
+                <h2 className="mt-4 text-[clamp(1.5rem,3vw+0.5rem,2.125rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f]">
+                  Prozesse sichtbar machen — als Grundlage jeder Verbesserung.
+                </h2>
+              </div>
+              <p className="text-[16px] leading-relaxed text-[#6e6e73] md:pb-1">
+                Was nicht visualisiert ist, kann nicht verbessert werden. Wir erfassen Prozesse
+                in strukturierten Modellen — von einfachen Ablaufdiagrammen bis zu detaillierten
+                BPMN-Darstellungen mit Swimlanes und Entscheidungspunkten.
+              </p>
+            </div>
+
+            <div className="mt-10 overflow-hidden rounded-2xl border border-black/[0.07] bg-[#f5f5f7] p-6 md:p-10">
+              <img
+                src={contentImage}
+                alt="Beispiel BPMN-Prozessdiagramm mit Swimlanes"
+                className="mx-auto w-full max-w-[880px] object-contain"
+                loading="lazy"
+              />
+              <p className="mt-5 text-center text-[12px] text-[#86868b]">
+                Beispiel: BPMN-Prozessmodell mit Swimlanes — Rollen, Entscheidungen und Übergaben auf einen Blick
+              </p>
+            </div>
+          </div>
+        </MotionSection>
+      </section>
+
+      {/* ── 4. PULL QUOTE ────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
         <div
           className="pointer-events-none absolute inset-0"
@@ -392,21 +408,21 @@ export function FokusDigitaleTransformation() {
             Grundsatz
           </p>
           <blockquote className="mt-8 text-[clamp(1.375rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.22] tracking-[-0.025em] text-white text-balance">
-            &ldquo;Digitale Transformation bietet eine Grundlage, um ein Unternehmen zu erneuern
-            und qualifizierter für die Zukunft vorzubereiten — als strategische Initiative,
-            nicht als Nebenprojekt.&rdquo;
+            &ldquo;Operative Exzellenz entsteht nicht durch Technologie allein — sie entsteht
+            durch das konsequente Hinterfragen jedes Schritts, der keinen Wert schafft.
+            Erst der saubere Prozess, dann die Automatisierung.&rdquo;
           </blockquote>
           <div className="mt-10 flex items-center justify-center gap-5">
             <div className="h-px w-12 bg-[#c9a96e]/35" />
             <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-white/30">
-              Abexis Transformations-Prinzip
+              Abexis Operations-Prinzip
             </span>
             <div className="h-px w-12 bg-[#c9a96e]/35" />
           </div>
         </div>
       </section>
 
-      {/* ── 6. PROZESSPHASEN — Dark navy phase grid ──────────────────────── */}
+      {/* ── 5. PROZESSPHASEN ─────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
         <div
           className="pointer-events-none absolute inset-0"
@@ -416,7 +432,6 @@ export function FokusDigitaleTransformation() {
               "radial-gradient(ellipse 70% 60% at 15% 50%, rgba(69,179,226,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 70% at 85% 30%, rgba(38,51,124,0.4) 0%, transparent 60%)",
           }}
         />
-
         <MotionSection>
           <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-28">
             <div className="flex items-baseline gap-4 border-b border-white/[0.08] pb-6">
@@ -425,11 +440,9 @@ export function FokusDigitaleTransformation() {
               </p>
               <span className="text-[11px] text-white/30">04 Phasen</span>
             </div>
-
             <h2 className="mt-8 max-w-[28ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
-              Vom Kick-off zur lebenden Strategie — strukturiert, iterativ, messbar.
+              Von der Prozessaufnahme zur messbaren Verbesserung — strukturiert und nachhaltig.
             </h2>
-
             <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
               {prozessphasen.map((phase, i) => (
                 <div key={phase.num} className="relative flex flex-col bg-[#1a1f38]/60 px-6 py-8 backdrop-blur-sm">
@@ -456,33 +469,31 @@ export function FokusDigitaleTransformation() {
                 </div>
               ))}
             </div>
-
             <p className="mt-8 max-w-[60ch] text-[15px] leading-relaxed text-white/50">
-              Der Ansatz ist flexibel: Je nach Ausgangslage können Sie mit einem einzelnen Teilaspekt
-              starten oder ein umfassendes Transformationsprogramm aufgleisen — immer mit klaren,
-              messbaren Schritten.
+              Wir arbeiten pragmatisch: Scope und Tiefe richten sich nach Ihrer Ausgangslage.
+              Ob punktuelle Optimierung eines kritischen Prozesses oder systematisches
+              Programm — der Ansatz bleibt faktenbasiert, umsetzungsorientiert und messbar.
             </p>
           </div>
         </MotionSection>
       </section>
 
-      {/* ── 7. NUTZEN — Sticky left + card grid ──────────────────────────── */}
+      {/* ── 6. NUTZEN ────────────────────────────────────────────────────── */}
       <section className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
             <div className="grid gap-12 lg:grid-cols-[1fr_1.8fr] lg:gap-20 lg:items-start">
-              {/* Left anchor */}
               <div className="lg:sticky lg:top-28">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                   Nutzen
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Was richtig umgesetzte Digitalisierung bringt.
+                  Was schlanke Prozesse einem Unternehmen bringen.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Eine erfolgreiche digitale Transformation erzeugt Mehrwert auf mehreren Ebenen —
-                  operativ, strategisch und kulturell.
+                  Prozessoptimierung ist keine Sparübung — sie ist eine Investition in
+                  Geschwindigkeit, Qualität und die Fähigkeit zu skalieren.
                 </p>
                 <Link
                   href="/kontakt"
@@ -494,8 +505,6 @@ export function FokusDigitaleTransformation() {
                   </svg>
                 </Link>
               </div>
-
-              {/* Right: 4x2 card grid */}
               <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2">
                 {nutzen.map((n) => (
                   <div key={n.num} className="relative bg-white px-6 py-6">
@@ -515,29 +524,25 @@ export function FokusDigitaleTransformation() {
         </MotionSection>
       </section>
 
-      {/* ── 8. GUIDE — Unsere Rolle ──────────────────────────────────────── */}
+      {/* ── 7. UNSERE ROLLE ──────────────────────────────────────────────── */}
       <section className="bg-white">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
-
-            {/* Header — two-column */}
             <div className="grid gap-8 border-b border-black/[0.06] pb-12 md:grid-cols-[1fr_1fr] md:gap-20 md:items-end">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                   Unsere Rolle
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f]">
-                  Der Unterschied zwischen Transformation und Technologieeinkauf.
+                  Der externe Blick, der Vertrautes in Frage stellt.
                 </h2>
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
-                Viele Unternehmen kaufen Software und nennen es Transformation. Wir helfen Ihnen,
-                die richtigen Fragen zuerst zu stellen — und dann die richtigen Schritte in der
-                richtigen Reihenfolge zu gehen.
+                Wer täglich in einem Prozess arbeitet, sieht ihn kaum noch. Wir bringen die
+                Distanz, die Methodik und die Erfahrung aus verschiedensten Branchen mit — und
+                stellen die Fragen, die intern niemand mehr stellt.
               </p>
             </div>
-
-            {/* Three situations — when companies call Abexis */}
             <div className="mt-12">
               <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                 Typische Ausgangssituationen
@@ -546,18 +551,18 @@ export function FokusDigitaleTransformation() {
                 {[
                   {
                     num: "01",
-                    title: "Fehlende interne Transformationsexpertise",
-                    body: "Know-how, Kapazität und Distanz zum Tagesgeschäft fehlen intern — die Voraussetzungen für einen strukturierten Prozess sind nicht vorhanden.",
+                    title: "Wachstum hat Prozesse überholt",
+                    body: "Was in kleineren Strukturen funktionierte, erzeugt heute Reibung, Fehler und Verzögerungen. Die Prozesse müssen mit dem Unternehmen mitwachsen.",
                   },
                   {
                     num: "02",
-                    title: "Dringlichkeit durch Marktveränderung",
-                    body: "Neue Wettbewerber, technologische Disruption oder veränderte Kundenerwartungen erfordern rasches, gezieltes Handeln — ohne Orientierungsverlust.",
+                    title: "Kostendruck erfordert Effizienz",
+                    body: "Sinkende Margen oder steigender Wettbewerb zwingen dazu, operativen Aufwand zu reduzieren — ohne Qualität und Lieferfähigkeit zu gefährden.",
                   },
                   {
                     num: "03",
-                    title: "Hohe Investition, hohes Risiko",
-                    body: "Digitale Transformation bindet Kapital und Energie. Ein strukturierter Ansatz mit externem Blick minimiert das Risiko kostspieliger Fehlinvestitionen.",
+                    title: "Automatisierung will geplant sein",
+                    body: "Die Technologie ist vorhanden, aber unklar ist, welche Prozesse sich wirklich eignen und wo der Business Case überzeugend ist.",
                   },
                 ].map((s) => (
                   <div key={s.num} className="relative bg-white px-7 py-8">
@@ -573,13 +578,11 @@ export function FokusDigitaleTransformation() {
                 ))}
               </div>
             </div>
-
-
           </div>
         </MotionSection>
       </section>
 
-      {/* ── 9. CTA — Specific 30-min offer ───────────────────────────────── */}
+      {/* ── 8. CTA ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden">
         <div
           className="absolute inset-0 -z-10"
@@ -594,7 +597,6 @@ export function FokusDigitaleTransformation() {
               "radial-gradient(ellipse 60% 80% at 15% 100%, rgba(201,169,110,0.14) 0%, transparent 50%), radial-gradient(ellipse 50% 60% at 90% 10%, rgba(255,255,255,0.07) 0%, transparent 45%)",
           }}
         />
-
         <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
           <div className="grid gap-10 md:grid-cols-[1fr_auto] md:items-center">
             <div>
@@ -602,13 +604,12 @@ export function FokusDigitaleTransformation() {
                 Nächster Schritt
               </p>
               <h2 className="mt-4 max-w-[30ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white text-balance">
-                Besser früher als spät mit der Digitalen Transformation beginnen.
+                Operative Exzellenz ist kein Zustand — sie ist eine Entscheidung.
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
-                In einem kostenlosen 30-Minuten-Erstgespräch klären wir gemeinsam, wo Ihr
-                Unternehmen steht, was Sie erreichen wollen — und wie wir Sie dabei begleiten können.
+                In einem kostenlosen 30-Minuten-Erstgespräch klären wir, wo in Ihren Prozessen
+                die grössten Hebel liegen — und wie ein gezieltes Optimierungsprogramm aussehen könnte.
               </p>
-
               <div className="mt-7 flex flex-wrap gap-4">
                 {["Kostenlos", "30 Minuten", "Unverbindlich"].map((tag) => (
                   <span
@@ -621,7 +622,6 @@ export function FokusDigitaleTransformation() {
                 ))}
               </div>
             </div>
-
             <div className="flex flex-col gap-3 md:shrink-0">
               <Link
                 href="/kontakt"
@@ -639,7 +639,6 @@ export function FokusDigitaleTransformation() {
               </Link>
             </div>
           </div>
-
           <div className="mt-16 flex items-center gap-4 opacity-20">
             <div className="h-px flex-1 bg-white" />
             <div className="relative h-4 w-4">

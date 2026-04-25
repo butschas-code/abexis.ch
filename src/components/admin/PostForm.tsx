@@ -36,6 +36,7 @@ import {
   adminSectionLabel,
 } from "@/components/admin/admin-ui";
 import { AdminLoading } from "@/components/admin/AdminLoading";
+import { AdminFileUpload } from "./AdminFileUpload";
 
 const PostBodyEditor = dynamic(
   () => import("@/components/admin/PostBodyEditor").then((m) => ({ default: m.PostBodyEditor })),
@@ -509,6 +510,7 @@ const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
                   });
                 }}
                 disabled={disabledForm}
+                uploadPath={`cms/posts/${input.id}/body`}
               />
               {fieldErrors.body ? <p className="text-xs text-red-600">{fieldErrors.body}</p> : null}
             </div>
@@ -663,31 +665,43 @@ const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
           <div className={`space-y-4 ${adminPanel} p-6`}>
             <h2 className={adminSectionLabel}>Titelbild</h2>
             <p className="text-xs text-[var(--apple-text-secondary)]">
-              Geben Sie eine öffentlich erreichbare Bild-URL ein (https). Kein Upload in Firebase Storage.
+              Laden Sie ein Bild hoch oder geben Sie eine öffentlich erreichbare URL ein.
             </p>
-            <label className="block space-y-2">
-              <span className="text-[14px] font-medium text-[var(--apple-text)]">Titelbild URL</span>
-              <input
-                className={`${adminInput} ${fieldErrors.heroImageUrl ? adminInputError : ""}`}
-                type="url"
-                inputMode="url"
-                placeholder="https://…"
-                value={input.heroImageUrl ?? ""}
-                onChange={(e) => {
-                  const v = e.target.value;
-                  setInput((s) => ({ ...s, heroImageUrl: v === "" ? null : v }));
+            <div className="space-y-4">
+              <label className="block space-y-2">
+                <span className="text-[14px] font-medium text-[var(--apple-text)]">Titelbild URL</span>
+                <input
+                  className={`${adminInput} ${fieldErrors.heroImageUrl ? adminInputError : ""}`}
+                  type="url"
+                  inputMode="url"
+                  placeholder="https://…"
+                  value={input.heroImageUrl ?? ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setInput((s) => ({ ...s, heroImageUrl: v === "" ? null : v }));
+                  }}
+                  disabled={disabledForm}
+                  autoComplete="off"
+                  aria-invalid={!!fieldErrors.heroImageUrl}
+                  aria-describedby={fieldErrors.heroImageUrl ? "err-hero-url" : undefined}
+                />
+                {fieldErrors.heroImageUrl ? (
+                  <p id="err-hero-url" className="text-xs text-red-600">
+                    {fieldErrors.heroImageUrl}
+                  </p>
+                ) : null}
+              </label>
+
+              <AdminFileUpload
+                path={`cms/heroes/${input.id}`}
+                label="Bild hochladen"
+                accept="image/*"
+                onUploadSuccess={(url) => {
+                  setInput((s) => ({ ...s, heroImageUrl: url }));
+                  showSuccess("Bild hochgeladen.");
                 }}
-                disabled={disabledForm}
-                autoComplete="off"
-                aria-invalid={!!fieldErrors.heroImageUrl}
-                aria-describedby={fieldErrors.heroImageUrl ? "err-hero-url" : undefined}
               />
-              {fieldErrors.heroImageUrl ? (
-                <p id="err-hero-url" className="text-xs text-red-600">
-                  {fieldErrors.heroImageUrl}
-                </p>
-              ) : null}
-            </label>
+            </div>
             <label className="block space-y-2">
               <span className="text-[14px] font-medium text-[var(--apple-text)]">Alternativtext</span>
               <input

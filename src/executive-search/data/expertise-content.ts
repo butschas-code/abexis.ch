@@ -2,19 +2,19 @@
 
 /** Original page imagery (Hoststar / legacy BaseKit), see https://abexis-search.ch/expertise */
 const IMG = {
-  hero: "https://files.designer.hoststar.ch/a0/56/a05683af-f767-4db4-b511-993653fd686c.jpg",
-  it: "https://files.designer.hoststar.ch/a0/56/a05683af-f767-4db4-b511-993653fd686c.jpg",
-  industrie: "https://files.designer.hoststar.ch/1b/5d/1b5d0ac2-fa65-4ce8-9270-4d2b3cd6b9f5.png",
-  finanzen: "https://files.designer.hoststar.ch/40/80/40809267-3f10-4b8f-bd09-6106ef88446f.jpg",
+  hero: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fa05683af-f767-4db4-b511-993653fd686c.jpg?alt=media",
+  it: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fa05683af-f767-4db4-b511-993653fd686c.jpg?alt=media",
+  industrie: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F1b5d0ac2-fa65-4ce8-9270-4d2b3cd6b9f5.png?alt=media",
+  finanzen: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F40809267-3f10-4b8f-bd09-6106ef88446f.jpg?alt=media",
   /** Legacy BaseKit placeholder used on the published expertise page */
   oeffentlich:
-    "https://basekit-product.s3-eu-west-1.amazonaws.com/Image%20Sets/localBusiness/default/default_image-4.jpg",
-  briefing: "https://files.designer.hoststar.ch/e2/f8/e2f858d8-02d7-41c5-84d2-d88cbc649fc4.png",
-  research: "https://files.designer.hoststar.ch/35/5c/355c10e6-c2b2-4afe-85e7-bbbbab0b85c9.png",
-  direktansprache: "https://files.designer.hoststar.ch/60/fb/60fbdaad-b5ee-4071-ba66-bd30ad7f32a0.png",
-  praesentation: "https://files.designer.hoststar.ch/7d/3b/7d3b6996-3660-42d2-b1df-fcd05b02efa4.png",
-  interviews: "https://files.designer.hoststar.ch/d5/b6/d5b68620-6619-4833-a381-337787fc52f9.png",
-  coaching: "https://files.designer.hoststar.ch/4b/8d/4b8db16d-d119-46ea-8c55-e024eeae6452.png",
+    "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fdefault_image-4.jpg?alt=media",
+  briefing: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fe2f858d8-02d7-41c5-84d2-d88cbc649fc4.png?alt=media",
+  research: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F355c10e6-c2b2-4afe-85e7-bbbbab0b85c9.png?alt=media",
+  direktansprache: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F60fbdaad-b5ee-4071-ba66-bd30ad7f32a0.png?alt=media",
+  praesentation: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F7d3b6996-3660-42d2-b1df-fcd05b02efa4.png?alt=media",
+  interviews: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fd5b68620-6619-4833-a381-337787fc52f9.png?alt=media",
+  coaching: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F4b8db16d-d119-46ea-8c55-e024eeae6452.png?alt=media",
 } as const;
 
 export type ExpertiseSector = {

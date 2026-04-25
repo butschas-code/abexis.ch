@@ -11,6 +11,8 @@ export const COLLECTIONS = {
   users: "users",
   /** CMS library uploads + registered hero/body/submission assets (metadata + Storage path). */
   media: "media",
+  /** Executive Search job postings — each doc is one vacancy/mandate. */
+  vacancies: "vacancies",
 } as const;
 
 export type CmsCollectionId = (typeof COLLECTIONS)[keyof typeof COLLECTIONS];

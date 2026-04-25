@@ -6,6 +6,10 @@ import { fokusPageHeroImages, homeHeroImage } from "@/data/site-images";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { FokusDigitaleTransformation } from "@/components/public-site/FokusDigitaleTransformation";
 import { FokusUnternehmensstrategie } from "@/components/public-site/FokusUnternehmensstrategie";
+import { FokusVertriebMarketing } from "@/components/public-site/FokusVertriebMarketing";
+import { FokusVeraenderungsmanagement } from "@/components/public-site/FokusVeraenderungsmanagement";
+import { FokusProzessoptimierung } from "@/components/public-site/FokusProzessoptimierung";
+import { FokusProjektmanagement } from "@/components/public-site/FokusProjektmanagement";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -41,6 +45,10 @@ export default async function FokusthemaPage({ params }: Props) {
 
   if (n === "digitale-transformation") return <FokusDigitaleTransformation />;
   if (n === "unternehmensstrategie") return <FokusUnternehmensstrategie />;
+  if (n === "vertriebmarketing") return <FokusVertriebMarketing />;
+  if (n === "veränderungsmanagement") return <FokusVeraenderungsmanagement />;
+  if (n === "prozessoptimierung") return <FokusProzessoptimierung />;
+  if (n === "projektmanagement") return <FokusProjektmanagement />;
 
   const meta = fokusthemenMeta.find((m) => m.slug === n);
   const heroKey = n as keyof typeof fokusPageHeroImages;

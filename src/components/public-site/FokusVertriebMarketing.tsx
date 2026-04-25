@@ -8,71 +8,72 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 // ─── Static data — module level, no re-allocation ────────────────────────────
 
-const meta = fokusthemenMeta.find((m) => m.slug === "digitale-transformation")!;
-const heroImage = fokusPageHeroImages["digitale-transformation"];
+const meta = fokusthemenMeta.find((m) => m.slug === "vertriebmarketing")!;
+const heroImage = fokusPageHeroImages["vertriebmarketing"];
+const contentImage = "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F5e9dd04f-ea8b-4c80-9830-7579ef4024df.png?alt=media";
 
 const handlungsfelder = [
   {
     num: "01",
-    title: "Kundenorientierung & Experience",
+    title: "Vertriebsstrategie & Go-to-Market",
     items: [
-      "Digitale Touchpoints entlang der Customer Journey optimieren",
-      "Self-Service-Portale und personalisierte Erlebnisse aufbauen",
-      "Kundenfeedback systematisch in die Produktentwicklung einbeziehen",
+      "Marktpotenziale identifizieren und Prioritäten setzen",
+      "Go-to-Market-Modell entwickeln und schärfen",
+      "Wettbewerbspositionierung klar definieren",
     ],
   },
   {
     num: "02",
-    title: "Digitale Strategien & Geschäftsmodelle",
+    title: "Vertriebsstruktur & Organisation",
     items: [
-      "Wettbewerbspositionierung im digitalen Umfeld schärfen",
-      "Neue Erlösquellen und Plattformmodelle entwickeln",
-      "Partnerschaften und digitale Ökosysteme strategisch aufbauen",
+      "Rollen, Verantwortlichkeiten und Gebiete klar zuweisen",
+      "Innen- und Aussendienst effektiv verzahnen",
+      "Channel-Management und Partnerstrukturen aufbauen",
     ],
   },
   {
     num: "03",
-    title: "Führung, Kultur & Organisation",
+    title: "Kundensegmentierung & Targeting",
     items: [
-      "Digital Leadership und agile Führungsmodelle einführen",
-      "Digitale Kompetenz und Innovationskultur stärken",
-      "Organisationsstrukturen an neue Arbeitsweisen anpassen",
+      "Ideale Kundenprofile definieren und priorisieren",
+      "Segmente nach Potenzial, Fit und Aufwand bewerten",
+      "Akquisefokus auf gewinnbare Märkte ausrichten",
     ],
   },
   {
     num: "04",
-    title: "Prozessoptimierung & Automatisierung",
+    title: "Positionierung & Messaging",
     items: [
-      "End-to-End-Prozesse analysieren und neu gestalten",
-      "Automatisierungspotenziale identifizieren und realisieren",
-      "Datenbasierte Entscheidungsgrundlagen schaffen",
+      "Klares Wertversprechen für jedes Segment formulieren",
+      "Differenzierung gegenüber dem Wettbewerb schärfen",
+      "Konsistente Kommunikation über alle Kanäle sicherstellen",
     ],
   },
   {
     num: "05",
-    title: "Plattformen & Absatzkanäle",
+    title: "Sales Enablement & Prozesse",
     items: [
-      "Digitale Vertriebs- und Kommunikationskanäle aufbauen",
-      "Omnichannel-Strategie entwickeln und integrieren",
-      "Marktplätze und digitale Ökosysteme nutzen",
+      "Vertriebsprozesse standardisieren und dokumentieren",
+      "Unterlagen, Tools und Argumentation für das Team aufbauen",
+      "Onboarding und Weiterentwicklung strukturieren",
     ],
   },
   {
     num: "06",
-    title: "Technologien — KI, IoT, Industrie 4.0",
+    title: "Performance-Steuerung & KPIs",
     items: [
-      "Anwendungsfälle für KI und Machine Learning identifizieren",
-      "IoT- und Industrie-4.0-Lösungen in bestehende Anlagen integrieren",
-      "Technologieauswahl anhand strategischer Kriterien treffen",
+      "Relevante Kennzahlen entlang des Funnels definieren",
+      "Reporting und Forecasting verlässlich gestalten",
+      "Führungsrhythmus mit datenbasierten Reviews etablieren",
     ],
   },
   {
     num: "07",
-    title: "IT-Infrastruktur & Datenbasis",
+    title: "Digitaler Vertrieb & Kanäle",
     items: [
-      "Cloud-Migration strategisch planen und umsetzen",
-      "Datenarchitektur und Governance etablieren",
-      "Legacy-Systeme schrittweise durch skalierbare Lösungen ablösen",
+      "Digitale Akquise- und Nurturing-Kanäle aufbauen",
+      "CRM als strategisches Steuerungsinstrument nutzen",
+      "Marketing Automation sinnvoll einsetzen",
     ],
   },
 ] as const;
@@ -80,42 +81,41 @@ const handlungsfelder = [
 const prozessphasen = [
   {
     num: "01",
-    title: "Vorbereitungsphase",
+    title: "Analyse & Diagnose",
     items: [
-      "Projekt definieren: Ziele, Scope und Prioritäten festlegen",
-      "Team zusammenstellen und Verantwortlichkeiten klären",
-      "Budget und Zeitplan realistisch planen",
-      "Relevante Stakeholder frühzeitig einbinden",
+      "Ist-Situation im Vertrieb und Marketing erfassen",
+      "Pipeline-Qualität, Conversion-Raten und Deckungsbeiträge analysieren",
+      "Engpässe, Reibungsverluste und Blindflugbereiche identifizieren",
+      "Kundenperspektive und Wettbewerbsumfeld einbeziehen",
     ],
   },
   {
     num: "02",
-    title: "Analysephase",
+    title: "Strategie & Konzept",
     items: [
-      "Marktanalyse: Kunden, Konkurrenz, Technologietrends",
-      "Produkte- und Dienstleistungsportfolio kritisch prüfen",
-      "Ideen der Mitarbeiter aufgreifen, Machbarkeit beurteilen",
-      "Ist-Situation ermitteln und mit dem Zielbild abgleichen",
+      "Zielkunden, Wertversprechen und Positionierung festlegen",
+      "Go-to-Market-Modell und Kanalstrategie definieren",
+      "Organisationsstruktur und Rollen klären",
+      "Messbare Ziele und Meilensteine vereinbaren",
     ],
   },
   {
     num: "03",
-    title: "Planungsphase",
+    title: "Implementierung",
     items: [
-      "Vision und Strategie: Kernkompetenzen und Geschäftsmodell",
-      "Prozesse, Organisation und Unternehmenskultur neu gestalten",
-      "Ökosystem mit Kunden und Partnern definieren",
-      "Plan erstellen: Technologie wählen, messbare Schritte festlegen",
+      "Prozesse, Tools und Unterlagen aufbauen",
+      "Team befähigen und Führungsrhythmus einführen",
+      "Pilotprojekte starten und erste Erkenntnisse gewinnen",
+      "Marketing- und Vertriebsaktivitäten koordiniert aufgleisen",
     ],
   },
   {
     num: "04",
-    title: "Umsetzungsphase",
+    title: "Performance & Optimierung",
     items: [
-      "Strategie umsetzen — z.B. mit agiler Methodik",
-      "Kontinuierliche Überprüfung und Monitoring einrichten",
-      "Allenfalls Justierungen vornehmen, Learnings integrieren",
-      "Ergebnisse messen, kommunizieren und konsolidieren",
+      "KPIs kontinuierlich messen und interpretieren",
+      "Learnings systematisch in den Prozess zurückspielen",
+      "Skalierung vorbereiten und Wachstumshebel aktivieren",
     ],
   },
 ] as const;
@@ -123,47 +123,45 @@ const prozessphasen = [
 const nutzen = [
   {
     num: "01",
-    title: "Kosten & Ertrag",
-    body: "Kosten reduzieren, Produktivität und Umsatz bzw. Gewinn erhöhen.",
+    title: "Umsatzwachstum",
+    body: "Klare Strategie, besseres Targeting und strukturierte Prozesse führen zu mehr abgeschlossenen Geschäften.",
   },
   {
     num: "02",
-    title: "Datenqualität",
-    body: "Datenbasierte Erkenntnisse, höhere Datenqualität und weniger Fehler durch Automatisierung.",
+    title: "Effizienz",
+    body: "Weniger Streuverlust — das Team fokussiert sich auf die richtigen Kunden mit dem richtigen Angebot.",
   },
   {
     num: "03",
-    title: "Kundenerlebnis",
-    body: "Besseres Erlebnis bei Beschaffung und Kundenservice — höhere Kundenzufriedenheit.",
+    title: "Kundenbindung",
+    body: "Konsistente Kommunikation und echtes Verständnis der Kundenbedürfnisse stärken Loyalität und Weiterempfehlungen.",
   },
   {
     num: "04",
-    title: "Transparenz",
-    body: "Transparentere Informationspolitik gegenüber Kunden und Lieferanten.",
+    title: "Marktposition",
+    body: "Eine differenzierte Positionierung macht Sie im Wettbewerb sichtbarer und verhandlungsstärker.",
   },
   {
     num: "05",
-    title: "Neue Märkte",
-    body: "Neue Produkte und Leistungen erschliessen neue Kundenpotenziale.",
+    title: "Planungssicherheit",
+    body: "Verlässliche Pipeline-Daten und Forecasts schaffen Grundlagen für sichere Ressourcen- und Investitionsentscheide.",
   },
   {
     num: "06",
-    title: "Zusammenarbeit",
-    body: "Mehr Kollaboration und bessere Kommunikation durch eine gemeinsame Plattform.",
+    title: "Skalierbarkeit",
+    body: "Dokumentierte Prozesse und klare Strukturen ermöglichen Wachstum, ohne dass Qualität und Konsistenz leiden.",
   },
   {
     num: "07",
-    title: "Geschwindigkeit",
-    body: "Schnellere Durchlaufzeiten dank effizienter, automatisierter Prozesse.",
+    title: "Teamperformance",
+    body: "Klare Rollen, gute Werkzeuge und regelmässiges Coaching steigern Motivation und Abschlussquoten.",
   },
   {
     num: "08",
-    title: "Zukunftsfähigkeit",
-    body: "Investitionen in die Digitale Transformation sichern den Vorsprung gegenüber dem Wettbewerb.",
+    title: "Alignment",
+    body: "Marketing und Vertrieb ziehen am selben Strick — gemeinsame Ziele, gemeinsame Sprache, gemeinsame Wirkung.",
   },
 ] as const;
-
-
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -206,7 +204,7 @@ function SpineCard({ item }: { item: Handlungsfeld }) {
 
 // ─── Page component ───────────────────────────────────────────────────────────
 
-export function FokusDigitaleTransformation() {
+export function FokusVertriebMarketing() {
   return (
     <InteriorPageRoot>
       <SchemaMarkup type="Service" data={meta} />
@@ -215,7 +213,7 @@ export function FokusDigitaleTransformation() {
         data={[
           { name: "Startseite", url: "/" },
           { name: "Leistungen", url: "/leistungen" },
-          { name: meta.title, url: "/fokusthemen/digitale-transformation" },
+          { name: meta.title, url: "/fokusthemen/vertriebmarketing" },
         ]}
       />
 
@@ -225,12 +223,12 @@ export function FokusDigitaleTransformation() {
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Digitale Transformation ist kein IT-Projekt — sie ist eine Führungsaufgabe.
+          Vertrieb ohne Strategie ist teures Rauschen.
         </h1>
         <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
-          Wenn Verwaltungsrat und Management die Digitalisierung verschieden interpretieren,
-          entstehen Fehlinvestitionen, Reibung und verpasste Chancen. Wir helfen Ihnen, aus
-          Technologie echten Unternehmenswert zu machen — strukturiert, strategisch, umsetzbar.
+          Wenn Vertrieb und Marketing gegeneinander arbeiten, Zielkunden unklar sind und Prozesse
+          vom Zufall abhängen, entgehen Ihnen Umsatz und Marktanteile. Wir helfen Ihnen, Struktur,
+          Fokus und Wirkung in Ihre Go-to-Market-Aktivitäten zu bringen.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Link
@@ -251,53 +249,52 @@ export function FokusDigitaleTransformation() {
         </div>
       </PageHero>
 
-      {/* ── 2. SPLIT PANEL — Digitalisierung vs. Digitale Transformation ─── */}
+      {/* ── 2. SPLIT PANEL — Vertrieb vs. Marketing ──────────────────────── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half — navy: content tracks the 1068px centre column */}
-          <div className="relative bg-[#1a2260]">
-            <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
-              <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
-              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
-              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
-                Ebene 1
-              </h2>
-              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
-                Digitalisierung
-              </h3>
-              <p className="mt-5 text-[16px] leading-relaxed text-white/65">
-                Betrifft die taktische Ebene: einzelne Prozesse, Tools und Arbeitsabläufe werden
-                digitalisiert oder automatisiert. Wichtig, aber nicht hinreichend — sie verändert
-                das Geschäftsmodell nicht.
-              </p>
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
-          </div>
-
-          {/* Right half — warm linen: content tracks the 1068px centre column */}
+          {/* Left half — warm linen */}
           <div className="relative bg-[#faf8f2]">
-            <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
+            <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
               <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Ebene 2
+                Funktion 1
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
-                Digitale Transformation
+                Vertrieb
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
-                Betrifft die strategische Ebene: Geschäftsmodelle, Kundenerlebnisse, Kultur und
-                Führung werden grundlegend neu gedacht. Sie schafft nachhaltige Wettbewerbsvorteile
-                und erfordert unternehmerische Entschlossenheit.
+                Vertrieb schafft direkte Kundenbeziehungen, qualifiziert Interessenten und
+                schliesst Geschäfte ab. Seine Wirkung hängt entscheidend davon ab, wie klar
+                Zielsegmente definiert, Prozesse strukturiert und Ressourcen eingesetzt sind.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
-        </div>
 
+          {/* Right half — navy */}
+          <div className="relative bg-[#1a2260]">
+            <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
+              <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
+              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
+                Funktion 2
+              </h2>
+              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
+                Marketing
+              </h3>
+              <p className="mt-5 text-[16px] leading-relaxed text-white/65">
+                Marketing schafft Sichtbarkeit, Vertrauen und Nachfrage. Es positioniert das
+                Unternehmen, qualifiziert Interessenten vor und gibt dem Vertrieb die Grundlage,
+                auf der erfolgreiche Gespräche erst möglich werden.
+              </p>
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
+          </div>
+        </div>
       </MotionSection>
 
-
+      {/* ── 3. HANDLUNGSFELDER — Alternating spine ───────────────────────── */}
       <section id="handlungsfelder" className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
@@ -305,12 +302,12 @@ export function FokusDigitaleTransformation() {
               {/* Left: sticky anchor */}
               <div className="lg:sticky lg:top-28 lg:self-start">
                 <h2 className="text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Sieben Dimensionen der Digitalen Transformation.
+                  Sieben Hebel für wirksames Wachstum.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Die Digitalisierung betrifft alle Bereiche Ihres Unternehmens. Wir begleiten Sie
-                  dabei, diese Dimensionen ganzheitlich zu betrachten und gezielt zu entwickeln.
+                  Vertrieb und Marketing wirken auf mehreren Ebenen. Wir helfen Ihnen, die
+                  richtigen Prioritäten zu setzen — und konsequent umzusetzen.
                 </p>
                 <Link
                   href="/kontakt"
@@ -377,7 +374,57 @@ export function FokusDigitaleTransformation() {
         </MotionSection>
       </section>
 
-      {/* ── 5. PULL QUOTE ────────────────────────────────────────────────── */}
+      {/* ── DESIGN THINKING — Problemraum / Lösungsraum ─────────────────── */}
+      <section className="bg-white">
+        <MotionSection>
+          <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
+            <div className="grid gap-8 border-b border-black/[0.06] pb-10 md:grid-cols-[1fr_1fr] md:gap-16 md:items-end">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+                  Denkrahmen
+                </p>
+                <h2 className="mt-4 text-[clamp(1.5rem,3vw+0.5rem,2.125rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f]">
+                  Vom Problem zur Lösung — methodisch und kundenorientiert.
+                </h2>
+              </div>
+              <p className="text-[16px] leading-relaxed text-[#6e6e73] md:pb-1">
+                Bevor Massnahmen definiert werden, stehen Verstehen und Beobachten. Wir arbeiten
+                im Problemraum, bevor wir in den Lösungsraum wechseln — das verhindert teure
+                Antworten auf die falschen Fragen.
+              </p>
+            </div>
+
+            <div className="mt-10 overflow-hidden rounded-2xl border border-black/[0.05] bg-[#f5f5f7] p-8 md:p-12">
+              <img
+                src={contentImage}
+                alt="Design Thinking Prozess: Problemraum und Lösungsraum"
+                className="mx-auto w-full max-w-[860px] object-contain"
+                loading="lazy"
+              />
+            </div>
+
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                { phase: "Problemraum", label: "Verstehen & Beobachten", body: "Kundenbedürfnisse, Marktdynamik und Vertriebsrealität tiefgreifend erfassen, bevor Lösungen entworfen werden." },
+                { phase: "Synthese", label: "Muster erkennen", body: "Erkenntnisse verdichten, Hypothesen formulieren und die eigentlichen Hebel von den Symptomen trennen." },
+                { phase: "Lösungsraum", label: "Entwickeln & Testen", body: "Ideen strukturiert entwickeln, priorisieren und in der Praxis validieren — iterativ statt auf einmal." },
+              ].map((item) => (
+                <div key={item.phase} className="rounded-xl border border-black/[0.06] bg-white px-5 py-5">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#45b3e2]">
+                    {item.phase}
+                  </p>
+                  <h3 className="mt-2 text-[15px] font-semibold leading-snug tracking-[-0.01em] text-[#1d1d1f]">
+                    {item.label}
+                  </h3>
+                  <p className="mt-2 text-[14px] leading-relaxed text-[#6e6e73]">{item.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </MotionSection>
+      </section>
+
+      {/* ── 4. PULL QUOTE ────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
         <div
           className="pointer-events-none absolute inset-0"
@@ -392,21 +439,21 @@ export function FokusDigitaleTransformation() {
             Grundsatz
           </p>
           <blockquote className="mt-8 text-[clamp(1.375rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.22] tracking-[-0.025em] text-white text-balance">
-            &ldquo;Digitale Transformation bietet eine Grundlage, um ein Unternehmen zu erneuern
-            und qualifizierter für die Zukunft vorzubereiten — als strategische Initiative,
-            nicht als Nebenprojekt.&rdquo;
+            &ldquo;Vertrieb und Marketing sind keine getrennten Welten — sie sind zwei Seiten
+            desselben Wachstumshebels. Wer sie ausrichtet, wächst. Wer sie entkoppelt, kämpft
+            mit sich selbst.&rdquo;
           </blockquote>
           <div className="mt-10 flex items-center justify-center gap-5">
             <div className="h-px w-12 bg-[#c9a96e]/35" />
             <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-white/30">
-              Abexis Transformations-Prinzip
+              Abexis Go-to-Market-Prinzip
             </span>
             <div className="h-px w-12 bg-[#c9a96e]/35" />
           </div>
         </div>
       </section>
 
-      {/* ── 6. PROZESSPHASEN — Dark navy phase grid ──────────────────────── */}
+      {/* ── 5. PROZESSPHASEN — Dark navy phase grid ──────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
         <div
           className="pointer-events-none absolute inset-0"
@@ -427,7 +474,7 @@ export function FokusDigitaleTransformation() {
             </div>
 
             <h2 className="mt-8 max-w-[28ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
-              Vom Kick-off zur lebenden Strategie — strukturiert, iterativ, messbar.
+              Von der Diagnose zur performanten Vertriebsorganisation — strukturiert und messbar.
             </h2>
 
             <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
@@ -458,15 +505,15 @@ export function FokusDigitaleTransformation() {
             </div>
 
             <p className="mt-8 max-w-[60ch] text-[15px] leading-relaxed text-white/50">
-              Der Ansatz ist flexibel: Je nach Ausgangslage können Sie mit einem einzelnen Teilaspekt
-              starten oder ein umfassendes Transformationsprogramm aufgleisen — immer mit klaren,
-              messbaren Schritten.
+              Jedes Engagement beginnt mit einer ehrlichen Bestandsaufnahme. Je nach Ausgangslage
+              arbeiten wir gezielt an einzelnen Hebeln oder begleiten Sie durch einen umfassenden
+              Go-to-Market-Aufbau — immer mit klaren Zielen und messbaren Ergebnissen.
             </p>
           </div>
         </MotionSection>
       </section>
 
-      {/* ── 7. NUTZEN — Sticky left + card grid ──────────────────────────── */}
+      {/* ── 6. NUTZEN — Sticky left + card grid ──────────────────────────── */}
       <section className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
@@ -477,12 +524,12 @@ export function FokusDigitaleTransformation() {
                   Nutzen
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Was richtig umgesetzte Digitalisierung bringt.
+                  Was professioneller Vertrieb und Marketing bringen.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Eine erfolgreiche digitale Transformation erzeugt Mehrwert auf mehreren Ebenen —
-                  operativ, strategisch und kulturell.
+                  Die Wirkung zeigt sich nicht nur im Umsatz — sondern in der Art, wie ein
+                  Unternehmen am Markt auftritt, wächst und seine Kunden bindet.
                 </p>
                 <Link
                   href="/kontakt"
@@ -515,7 +562,7 @@ export function FokusDigitaleTransformation() {
         </MotionSection>
       </section>
 
-      {/* ── 8. GUIDE — Unsere Rolle ──────────────────────────────────────── */}
+      {/* ── 7. GUIDE — Unsere Rolle ──────────────────────────────────────── */}
       <section className="bg-white">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
@@ -527,17 +574,17 @@ export function FokusDigitaleTransformation() {
                   Unsere Rolle
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f]">
-                  Der Unterschied zwischen Transformation und Technologieeinkauf.
+                  Der Unterschied zwischen Aktivität und Wachstum.
                 </h2>
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
-                Viele Unternehmen kaufen Software und nennen es Transformation. Wir helfen Ihnen,
-                die richtigen Fragen zuerst zu stellen — und dann die richtigen Schritte in der
-                richtigen Reihenfolge zu gehen.
+                Viele Unternehmen haben aktive Vertriebsteams und laufende Marketingmassnahmen —
+                aber das Wachstum bleibt aus. Wir helfen Ihnen herauszufinden, wo die eigentlichen
+                Hebel liegen, und begleiten Sie beim Umsetzen.
               </p>
             </div>
 
-            {/* Three situations — when companies call Abexis */}
+            {/* Three situations */}
             <div className="mt-12">
               <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                 Typische Ausgangssituationen
@@ -546,18 +593,18 @@ export function FokusDigitaleTransformation() {
                 {[
                   {
                     num: "01",
-                    title: "Fehlende interne Transformationsexpertise",
-                    body: "Know-how, Kapazität und Distanz zum Tagesgeschäft fehlen intern — die Voraussetzungen für einen strukturierten Prozess sind nicht vorhanden.",
+                    title: "Stagnation trotz Aktivität",
+                    body: "Das Team ist beschäftigt, aber der Umsatz wächst nicht. Ziele werden verfehlt, ohne dass klar ist warum — Diagnose und Neuausrichtung sind gefragt.",
                   },
                   {
                     num: "02",
-                    title: "Dringlichkeit durch Marktveränderung",
-                    body: "Neue Wettbewerber, technologische Disruption oder veränderte Kundenerwartungen erfordern rasches, gezieltes Handeln — ohne Orientierungsverlust.",
+                    title: "Vertrieb und Marketing im Silo",
+                    body: "Beide Funktionen arbeiten mit unterschiedlichen Zielen, Sprachen und Messgrössen. Das kostet Wirkung — und Energie, die im Markt fehlt.",
                   },
                   {
                     num: "03",
-                    title: "Hohe Investition, hohes Risiko",
-                    body: "Digitale Transformation bindet Kapital und Energie. Ein strukturierter Ansatz mit externem Blick minimiert das Risiko kostspieliger Fehlinvestitionen.",
+                    title: "Wachstum ohne Fundament",
+                    body: "Schnelles Wachstum hat Strukturen überholt: Prozesse, Rollen und Steuerung halten nicht Schritt. Jetzt braucht es Stabilisierung und skalierbare Grundlagen.",
                   },
                 ].map((s) => (
                   <div key={s.num} className="relative bg-white px-7 py-8">
@@ -574,12 +621,11 @@ export function FokusDigitaleTransformation() {
               </div>
             </div>
 
-
           </div>
         </MotionSection>
       </section>
 
-      {/* ── 9. CTA — Specific 30-min offer ───────────────────────────────── */}
+      {/* ── 8. CTA ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden">
         <div
           className="absolute inset-0 -z-10"
@@ -602,11 +648,11 @@ export function FokusDigitaleTransformation() {
                 Nächster Schritt
               </p>
               <h2 className="mt-4 max-w-[30ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white text-balance">
-                Besser früher als spät mit der Digitalen Transformation beginnen.
+                Mehr Wirkung im Markt beginnt mit dem richtigen Gespräch.
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
                 In einem kostenlosen 30-Minuten-Erstgespräch klären wir gemeinsam, wo Ihr
-                Unternehmen steht, was Sie erreichen wollen — und wie wir Sie dabei begleiten können.
+                Vertrieb und Marketing heute stehen — und wo die grössten Hebel liegen.
               </p>
 
               <div className="mt-7 flex flex-wrap gap-4">

@@ -117,6 +117,24 @@ export const homeWelcomeSection = {
   ],
 } as const;
 
+export const homeDifferentiators = [
+  {
+    label: "Strategie vor Technologie",
+    body: "Wir starten mit den Geschäftszielen — nicht mit der Technologie. Erst wenn klar ist, was erreicht werden soll, wählen wir die passenden Mittel.",
+    accent: "#26337c",
+  },
+  {
+    label: "Branchenübergreifend",
+    body: "Wir kennen die typischen Fallstricke aus verschiedenen Sektoren und bringen bewährte Lösungsmuster aus der Praxis direkt mit ein.",
+    accent: "#45b3e2",
+  },
+  {
+    label: "Fokus auf Umsetzung",
+    body: "Wir bleiben nicht bei theoretischen Konzepten stehen, sondern begleiten die Implementierung und übernehmen Verantwortung für Resultate.",
+    accent: "#c9a96e",
+  },
+] as const;
+
 export const homeAboutTeaser =
   "Wir begleiten Sie auf Ihrem Weg zum Erfolg und übernehmen gemeinsam mit Ihnen Verantwortung. Unsere Kompetenzen in den Themen Strategie, Vertrieb & Marketing, Digitalisierung, Change Management und Unternehmensführung sind der Schlüssel zum Erfolg Ihres Unternehmens. Auch stehen wir Unternehmern und Führungspersonen als Sparringspartner zur Verfügung. In einem offenen Dialog diskutieren wir mit unserem Gegenüber aktuelle Herausforderungen des Unternehmens.";
 
@@ -147,7 +165,7 @@ export const teamProfiles: Record<
     name: "Daniel Sengstag",
     title:
       "Troubleshooter für Business Units und Projekte, Digitale Transformation, Projektleitung, Interim Manager, Change Agent",
-    image: "https://files.designer.hoststar.ch/4f/9e/4f9e368c-3919-4b65-8c73-ad8c8f493d75.jpg",
+    image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F4f9e368c-3919-4b65-8c73-ad8c8f493d75.jpg?alt=media",
     body: `Daniel Sengstag hat nicht nur mehr als 20 Jahre Erfahrung in der Unternehmens- und Bereichsleitung in multinationalen wie auch kleineren Unternehmen, sondern bringt auch eine breite Erfahrung im Bereich der Technik mit, die er in verschiedenen Industrien, auch in der Software- und IT-Branche gesammelt hat.
 
 Mit seinem ingenieurwissenschaftlichen und IT-Hintergrund kann er seinen technischen mit seinem betriebswirtschaftlichen Erfahrungsschatz kombinieren, um die unterschiedlichen Situationen in Unternehmen schnell und ganzheitlich zu verstehen.
@@ -169,7 +187,7 @@ Weitergehende Information zu Daniel Sengstag finden Sie unter: https://sengstag.
     name: "Christoph Wainig",
     title:
       "Experte für Unternehmenswachstum, Vertriebsoptimierung, Business Development, Change Management und Coaching",
-    image: "https://files.designer.hoststar.ch/7c/5e/7c5eb14e-4f16-428a-a581-c4cb4ee8185d.jpg",
+    image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F7c5eb14e-4f16-428a-a581-c4cb4ee8185d.jpg?alt=media",
     body: `Christoph Wainig ist ein leidenschaftlicher Vertriebsleiter mit nachgewiesenen Fähigkeiten, Wachstumspotenziale zu analysieren, Geschäftsmodelle weiterzuentwickeln und funktionsübergreifende Teams effektiv durch Change Management zu führen. Er leitet multinational Vertriebsteams strategisch und lösungsorientiert, mit einem klaren Fokus auf die Umsetzung von Wachstumsstrategien, insbesondere auf Quick Wins. Darüber hinaus engagiert er sich intensiv in der Personalentwicklung, um nachhaltigen Erfolg sicherzustellen.
 
 Seine Erfahrung sammelte er bei Unternehmen wie Adobe, Pegasystems, Kingston Technology, DELL Computer, in den Rollen Vertriebsleitung, Global Account Management, Business Development, strategische Allianzen, Channel Management, sowie auch als Managing Director mit über 100 TeleSales-Fachpersonen. Zusätzlich baute er eine eigene Unternehmensberatung Rainmaker Consulting auf.
@@ -193,7 +211,7 @@ Expertise:
     name: "Katrin J. Yuan",
     title:
       "Expertin für AI Transformation, kulturelle Transformation, New Work, Digital Leadership, Data Management und Taxonomie, Executive Coaching",
-    image: "https://files.designer.hoststar.ch/b7/ce/b7ce050b-82b4-4acb-905f-bda7e0b119c5.jpg",
+    image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fb7ce050b-82b4-4acb-905f-bda7e0b119c5.jpg?alt=media",
     body: `Katrin J. Yuan ist eine preisgekrönte Führungskraft mit Erfahrung in den Bereichen Technologie, Strategie und Digitaler Transformation in internationalen Unternehmen, im Mittelstand und Startups. Katrin hat einen Master of Business Administration mit Schwerpunkt IT und Finanzen und spricht sechs Sprachen. Sie ist Aufsichtsrätin und Beirätin von mehreren KI-, IoT- und IT-Mandaten, hält Vorträge an renommierten Universitäten und ist Jury Mitglied für Digital Shapers.
 
 Mit ihrem Hintergrund Leitung von acht Abteilungen im obersten Management ist Katrin eine einflussreiche Führungspersönlichkeit, Gründerin, Investorin und Keynote Speaker auf einflussreichen Branchenkonferenzen wie für Vodafone Enterprise, St. Gallen Symposium und Richmondsevents. Sie gehört zu den Top 120 Female DACH Leaders.
@@ -207,7 +225,7 @@ Ihre Expertise erstreckt sich auf die Beratung von AI und Mensch, New Work, Data
     name: "Serge Garazi",
     title:
       "Senior Projekt- & Operations-Manager in Business und Informatik, Digitale Transformation, CRM, Compliance, Banking",
-    image: "https://files.designer.hoststar.ch/cd/d4/cdd4878d-fb8f-4d27-94c2-1aaa97bb1697.jpg",
+    image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fcdd4878d-fb8f-4d27-94c2-1aaa97bb1697.jpg?alt=media",
     body: `Serge ist ein Senior Projekt- & Operations-Manager in Business und Informatik, mit besonderem Fokus auf Digitale Transformation, Customer-Relationship Management (CRM), Compliance, Banking.
 
 Auf Projektseite verfügt er über Erfahrung in
@@ -239,7 +257,7 @@ Ausbildung:
     name: "William De Maeyer",
     title:
       "Senior Solution Architect & Projektleiter in Bereich PLM, MES bzw. sehr anspruchsvollen technischen Software-Lösungen / -projekten, im Maschinenbau, in MedTech, Fertigung, Transport, Luft- & Raumfahrt und Verteidigung.",
-    image: "https://files.designer.hoststar.ch/0b/4b/0b4b171f-3d10-4947-af9f-4bea14040a25.jpg",
+    image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F0b4b171f-3d10-4947-af9f-4bea14040a25.jpg?alt=media",
     body: `William De Maeyer ist Gründer von Valcore Sagl und seit über 30 Jahren in der PLM-Branche tätig. Er verfügt über umfassende Erfahrung in der Leitung und Umsetzung komplexer Projekte in verschiedenen Industrien, darunter Luft- und Raumfahrt, Verteidigung, Maschinenbau, Transport und Fertigung.
 
 Seine Laufbahn ist eng mit der Implementierung und Integration von Siemens PLM Software-Lösungen, insbesondere Teamcenter, verbunden. William hat in zahlreichen Projekten Organisationen in unterschiedlichen Regionen und Strukturen erfolgreich bei der digitalen Transformation unterstützt.
@@ -258,7 +276,7 @@ Erfahrung & Projekte (Auszug):
   sachamoeller: {
     name: "Sacha Moeller",
     title: "Partner",
-    image: "https://files.designer.hoststar.ch/6b/a6/6ba66ce4-e338-42a5-9363-9bde653084c3.JPG",
+    image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F6ba66ce4-e338-42a5-9363-9bde653084c3.JPG?alt=media",
     body: `Sacha Moeller ist Partner bei Abexis SEARCH und verfügt über mehr als 20 Jahre Führungserfahrung in der Finanzindustrie und im Family Office, unter anderem in leitenden Funktionen bei UBS. Seine Expertise umfasst Business-, Risk- und Change-Management sowie komplexe Transformations- und Digitalisierungsprojekte. Er verbindet analytische Kompetenz mit empathischer Führung und fördert werteorientierte Kulturen. Bei Abexis SEARCH begleitet er Mandate in Finance, Risk, IT-Transformation und Human Capital – mit Fokus auf Wirkung und nachhaltigen Mehrwert.`,
     phone: "+41 78 604 87 65",
     email: "sacha.moeller@abexis.ch",
@@ -267,7 +285,7 @@ Erfahrung & Projekte (Auszug):
   renatesengstag: {
     name: "Renate Sengstag",
     title: "Miteigentümerin",
-    image: "https://files.designer.hoststar.ch/d9/de/d9de5400-785e-47ca-b6c6-fd49b25ba2f8.jpg",
+    image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fd9de5400-785e-47ca-b6c6-fd49b25ba2f8.jpg?alt=media",
     body: `Renate Sengstag ist Miteigentümerin und bringt über 20 Jahre Erfahrung im Executive Management mit, unter anderem in der direkten Zusammenarbeit mit Geschäftsleitungen und CEOs international tätiger Unternehmen. Sie verfügt über exzellente Organisationsfähigkeiten, ein feines Gespür für Menschen sowie höchste Diskretion im Umgang mit sensiblen Informationen. Bei Abexis SEARCH leitet sie das Backoffice, koordiniert den operativen Ablauf und unterstützt Mandatsprozesse in administrativer Hinsicht. Ihre strukturierte Arbeitsweise sorgt für Stabilität und Effizienz im Tagesgeschäft.`,
     phone: "+41 79 417 77 58",
     email: "contact@abexis.ch",

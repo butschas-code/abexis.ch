@@ -4,7 +4,17 @@ export type PostStatus = (typeof CMS_POST_STATUSES)[number];
 export type CmsPostStatus = PostStatus;
 
 /** Inbound lead / form record — `submissions.status`. */
-export const CMS_SUBMISSION_STATUSES = ["new", "reviewed", "archived", "spam"] as const;
+export const CMS_SUBMISSION_STATUSES = [
+  "new",
+  "reviewed",
+  "archived",
+  "spam",
+  "screening",
+  "interview",
+  "offer",
+  "hired",
+  "rejected",
+] as const;
 export type CmsSubmissionStatus = (typeof CMS_SUBMISSION_STATUSES)[number];
 
 /** High-level submission channel — `submissions.type`. */

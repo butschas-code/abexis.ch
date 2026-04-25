@@ -1,6 +1,6 @@
 /** Editorial photography for homepage sections (Unsplash, executive / Swiss business tone). */
 export const homeImagery = {
-  intro: "https://files.designer.hoststar.ch/e4/4d/e44da72a-1261-48e6-aa49-17b2d7ae5cd5.jpg",
+  intro: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fe44da72a-1261-48e6-aa49-17b2d7ae5cd5.jpg?alt=media",
   /** Self-hosted — avoids remote 404s / ad blockers on pillar cards */
   pillarCustomer: "/images/home-pillars/customer.jpg",
   pillarNetwork: "/images/home-pillars/network.jpg",

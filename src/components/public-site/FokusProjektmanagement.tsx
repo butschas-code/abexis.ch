@@ -8,110 +8,159 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 // ─── Static data — module level, no re-allocation ────────────────────────────
 
-const meta = fokusthemenMeta.find((m) => m.slug === "unternehmensstrategie")!;
-const heroImage = fokusPageHeroImages["unternehmensstrategie"];
-const contentImage = "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fe006b913-0cb3-4631-9d9d-7304bc2bab8e.jpg?alt=media";
+const meta = fokusthemenMeta.find((m) => m.slug === "projektmanagement")!;
+const heroImage = fokusPageHeroImages["projektmanagement"];
 
-const prozessSchritte = [
+const handlungsfelder = [
   {
     num: "01",
-    title: "Vorbereitungen & Analyse",
+    title: "Projektsetup & Governance",
     items: [
-      "Umfassende interne Analyse: Stärken, Schwächen, finanzielle Situation",
-      "Externe Analyse: Marktchancen, Risiken, Trends und Kundennutzen",
-      "Wettbewerbsbedingungen verstehen",
-      "SWOT-Analyse: Interne und externe Faktoren kombinieren",
+      "Klaren Projektauftrag, Scope und Erfolgskriterien definieren",
+      "Governance-Struktur und Entscheidungswege etablieren",
+      "Rollenmodell, Verantwortlichkeiten und Befugnisse klären",
     ],
   },
   {
     num: "02",
-    title: "Vision & Mission festlegen",
+    title: "Planung & Strukturierung",
     items: [
-      "Klare, inspirierende Unternehmensvision definieren",
-      "Langfristige Ziele und gewünschten Zustand beschreiben",
-      "Mission: Zweck und Verpflichtung gegenüber Stakeholdern",
+      "Realistischen Projektplan mit Meilensteinen erarbeiten",
+      "Abhängigkeiten, kritischen Pfad und Puffer einplanen",
+      "Ressourcenbedarf frühzeitig sichern und abstimmen",
     ],
   },
   {
     num: "03",
-    title: "Strategische Ziele ableiten",
+    title: "Stakeholder-Management",
     items: [
-      "Konkrete, messbare und zeitgebundene Ziele aus Vision und Mission",
-      "Interessen verschiedener Stakeholder berücksichtigen",
+      "Projektbeteiligte und Betroffene systematisch kartieren",
+      "Kommunikation und Einbindung je Stakeholdergruppe gestalten",
+      "Erwartungen aktiv managen — nicht nur erfüllen",
     ],
   },
   {
     num: "04",
-    title: "Strategische Optionen entwickeln",
+    title: "Risikomanagement",
     items: [
-      "Verschiedene strategische Optionen identifizieren",
-      "Bewertung nach Machbarkeit, Rentabilität und strategischer Passung",
+      "Risiken frühzeitig identifizieren, bewerten und priorisieren",
+      "Massnahmen und Eskalationswege definieren",
+      "Risikostatus regelmässig überprüfen und kommunizieren",
     ],
   },
   {
     num: "05",
-    title: "Beste Strategie auswählen",
+    title: "Steuerung & Reporting",
     items: [
-      "Erkenntnisse aus Analyse und Bewertung integrieren",
-      "Am besten geeignete Strategie wählen",
-      "Klare Kommunikation an alle relevanten Stakeholder",
+      "Projektfortschritt regelmässig messen und transparent machen",
+      "Abweichungen früh erkennen und aktiv gegensteuern",
+      "Entscheidungsgrundlagen klar und verdichtet aufbereiten",
     ],
   },
   {
     num: "06",
-    title: "Strategie implementieren",
+    title: "Projektassessments",
     items: [
-      "Konkrete Aktionspläne entwickeln",
-      "Klare Verantwortlichkeiten und Ressourcen zuweisen",
-      "Überwachungsmechanismen und Fortschrittskontrollen einrichten",
+      "Unabhängige Bewertung von laufenden oder gestoppten Projekten",
+      "Ursachenanalyse bei Verzögerungen, Kostenüberschreitungen oder Qualitätsproblemen",
+      "Handlungsempfehlungen für Neuausrichtung oder Abbruch",
     ],
   },
   {
     num: "07",
-    title: "Monitoring & Anpassung",
+    title: "Methodik & Agilität",
     items: [
-      "Kontinuierlichen Überwachungsprozess etablieren",
-      "Strategie bei Bedarf an veränderte Bedingungen anpassen",
+      "Klassische und agile Methoden situativ einsetzen (HERMES, PRINCE2, Scrum)",
+      "Hybride Vorgehensmodelle für komplexe Projekte entwickeln",
+      "Methodenwissen ins Team transferieren und verankern",
     ],
   },
 ] as const;
 
-const fallstricke = [
+const prozessphasen = [
   {
-    title: "Fehlende Vision und Mission",
-    body: "Das Fehlen einer klaren Richtung führt zu Unsicherheit und beeinträchtigt die Motivation aller Beteiligten im Unternehmen.",
+    num: "01",
+    title: "Initialisierung",
+    items: [
+      "Projektauftrag und Ziele klären",
+      "Stakeholder identifizieren und einbinden",
+      "Ressourcen, Budget und Zeitrahmen abstimmen",
+      "Governance und Kommunikationsstruktur aufsetzen",
+    ],
   },
   {
-    title: "Mangelnde Stakeholder-Einbindung",
-    body: "Werden Schlüsselinteressengruppen nicht aktiv einbezogen, entstehen Widerstand und mangelnde Unterstützung.",
+    num: "02",
+    title: "Planung",
+    items: [
+      "Detailplanung: Scope, Zeit, Kosten und Qualität",
+      "Risiken identifizieren und Massnahmen planen",
+      "Verantwortlichkeiten und Lieferpakete zuweisen",
+      "Basisplan verabschieden und kommunizieren",
+    ],
   },
   {
-    title: "Unzureichende Analyse",
-    body: "Oberflächliche oder fehlerhafte Analysen führen zu falschen Schlussfolgerungen und gefährlichen strategischen Fehlentscheidungen.",
+    num: "03",
+    title: "Durchführung & Steuerung",
+    items: [
+      "Umsetzung koordinieren und Fortschritt überwachen",
+      "Abweichungen erkennen und korrigierend eingreifen",
+      "Stakeholder regelmässig informieren",
+      "Änderungen strukturiert steuern (Change Control)",
+    ],
   },
   {
-    title: "Schlechte Kommunikation",
-    body: "Mangelnde Transparenz über die Strategie erzeugt Informationslücken, Unsicherheiten und Fehlorientierung im Betrieb.",
-  },
-  {
-    title: "Widerstand gegen Veränderung",
-    body: "Mitarbeiter und Führungskräfte sträuben sich, wenn sie nicht ausreichend informiert, eingebunden und abgeholt werden.",
-  },
-  {
-    title: "Mangelnde Ressourcen",
-    body: "Unzureichende finanzielle, personelle oder technologische Ressourcen blockieren selbst die konzeptionell beste Strategie.",
-  },
-  {
-    title: "Starre, unflexible Strategien",
-    body: "In dynamischen Umgebungen scheitern Strategien, die nicht an veränderte interne und externe Rahmenbedingungen angepasst werden.",
-  },
-  {
-    title: "Unklare Verantwortlichkeiten",
-    body: "Fehlende Klarheit über Zuständigkeiten führt zu Verwirrung, Doppelarbeit und Effizienzverlusten bei der Umsetzung.",
+    num: "04",
+    title: "Abschluss & Transfer",
+    items: [
+      "Projektergebnisse abnehmen und übergeben",
+      "Lessons Learned dokumentieren und teilen",
+      "Projektorganisation geordnet auflösen",
+    ],
   },
 ] as const;
 
-
+const nutzen = [
+  {
+    num: "01",
+    title: "Zielerreichung",
+    body: "Projekte, die professionell geführt werden, erreichen ihre Ziele — im Zeit- und Kostenrahmen.",
+  },
+  {
+    num: "02",
+    title: "Kostenkontrolle",
+    body: "Frühzeitiges Erkennen von Abweichungen verhindert kostspielige Eskalationen und Nacharbeiten.",
+  },
+  {
+    num: "03",
+    title: "Transparenz",
+    body: "Klares Reporting schafft Vertrauen bei Auftraggebern und Stakeholdern — und ermöglicht fundierte Entscheidungen.",
+  },
+  {
+    num: "04",
+    title: "Risikobeherrschung",
+    body: "Strukturiertes Risikomanagement reduziert Überraschungen und hält den Handlungsspielraum offen.",
+  },
+  {
+    num: "05",
+    title: "Teamperformance",
+    body: "Klare Rollen, gute Koordination und regelmässiges Feedback steigern Motivation und Lieferqualität.",
+  },
+  {
+    num: "06",
+    title: "Ressourceneffizienz",
+    body: "Geplante und gesteuerte Projekte nutzen Ressourcen gezielter — ohne unnötige Leerlaufzeiten oder Engpässe.",
+  },
+  {
+    num: "07",
+    title: "Organisationales Lernen",
+    body: "Lessons Learned aus jedem Projekt stärken die interne Kompetenz für künftige Vorhaben.",
+  },
+  {
+    num: "08",
+    title: "Stakeholder-Vertrauen",
+    body: "Professionelle Projektführung stärkt die Glaubwürdigkeit der Organisation — intern wie extern.",
+  },
+] as const;
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -124,31 +173,29 @@ function LCorner({ className = "" }: { className?: string }) {
   );
 }
 
-type Step = (typeof prozessSchritte)[number];
+type Handlungsfeld = (typeof handlungsfelder)[number];
 
-function SpineCard({ step }: { step: Step }) {
+function SpineCard({ item }: { item: Handlungsfeld }) {
   return (
     <div className="group relative h-full overflow-hidden rounded-2xl border border-black/[0.06] bg-white px-6 py-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#26337c]/15 hover:shadow-[0_16px_48px_rgba(38,51,124,0.10)]">
       <LCorner className="top-3 right-3 text-[#c9a96e]/0 transition-colors duration-300 group-hover:text-[#c9a96e]" />
-      {/* Ghost number watermark */}
       <span
         className="pointer-events-none absolute -bottom-2 right-3 select-none text-[5rem] font-semibold leading-none tabular-nums text-[#c9a96e]/[0.08] transition-opacity duration-300 group-hover:opacity-50"
         aria-hidden
       >
-        {step.num}
+        {item.num}
       </span>
       <h3 className="relative text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-        {step.title}
+        {item.title}
       </h3>
       <ul className="relative mt-3 flex flex-col gap-2">
-        {step.items.map((item) => (
-          <li key={item} className="flex items-start gap-2.5 text-[15px] leading-snug text-[#6e6e73]">
+        {item.items.map((bullet) => (
+          <li key={bullet} className="flex items-start gap-2.5 text-[15px] leading-snug text-[#6e6e73]">
             <span className="mt-[5px] h-[4px] w-[4px] shrink-0 rounded-full bg-[#45b3e2]" />
-            {item}
+            {bullet}
           </li>
         ))}
       </ul>
-      {/* Bottom accent on hover */}
       <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#26337c] to-[#45b3e2] transition-all duration-500 group-hover:w-full" />
     </div>
   );
@@ -156,7 +203,7 @@ function SpineCard({ step }: { step: Step }) {
 
 // ─── Page component ───────────────────────────────────────────────────────────
 
-export function FokusUnternehmensstrategie() {
+export function FokusProjektmanagement() {
   return (
     <InteriorPageRoot>
       <SchemaMarkup type="Service" data={meta} />
@@ -165,22 +212,22 @@ export function FokusUnternehmensstrategie() {
         data={[
           { name: "Startseite", url: "/" },
           { name: "Leistungen", url: "/leistungen" },
-          { name: meta.title, url: "/fokusthemen/unternehmensstrategie" },
+          { name: meta.title, url: "/fokusthemen/projektmanagement" },
         ]}
       />
 
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
-      <PageHero imageSrc={heroImage}>
+      <PageHero imageSrc={heroImage} priority>
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Strategie entsteht dort, wo Perspektiven auseinandergehen.
+          Projekte scheitern selten an der Idee — sie scheitern an der Führung.
         </h1>
         <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
-          Wenn Verwaltungsrat und Führungsteam die Zukunft verschieden sehen, braucht es Methodik,
-          Struktur und eine externe Perspektive — keinen Kompromiss. Wir begleiten Sie vom ersten
-          Schritt bis zur gelebten Strategie.
+          Unklare Ziele, fehlende Ressourcen, schwache Governance und zu späte Eskalation
+          kosten Unternehmen täglich Zeit und Geld. Wir bringen Fachkompetenz, Methodik und
+          Erfahrung mit — damit Ihre Projekte liefern, was sie versprechen.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Link
@@ -190,10 +237,10 @@ export function FokusUnternehmensstrategie() {
             30-Minuten-Erstgespräch
           </Link>
           <Link
-            href="#prozess"
+            href="#handlungsfelder"
             className="inline-flex h-11 items-center gap-2 rounded-full border border-white/30 px-7 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:border-white/60 hover:bg-white/10"
           >
-            Zum Prozess
+            Handlungsfelder
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
               <path d="M7 2v10M2 7l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -201,67 +248,64 @@ export function FokusUnternehmensstrategie() {
         </div>
       </PageHero>
 
-      {/* ── 2. SPLIT PANEL — Unternehmensstrategie vs. Eignerstrategie ─── */}
+      {/* ── 2. SPLIT PANEL — Projektleitung vs. Projektassessment ────────── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half — warm linen: content tracks the 1068px centre column */}
+          {/* Left half — warm linen */}
           <div className="relative bg-[#faf8f2]">
             <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
               <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Ebene 1
+                Leistung 1
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
-                Unternehmensstrategie
+                Projektleitung & Unterstützung
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
-                Betrifft die gesamte Organisation. Sie legt fest, wie das Unternehmen als Ganzes
-                geführt wird und welche strategischen Entscheidungen nötig sind, um nachhaltige
-                Wettbewerbsvorteile zu erzielen.
+                Wir übernehmen die Leitung von Projekten, in denen interne Ressourcen oder
+                Methodenkompetenz fehlen — oder unterstützen bestehende Projektteams gezielt
+                dort, wo Verstärkung am meisten bewirkt.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
 
-          {/* Right half — navy: content tracks the 1068px centre column */}
+          {/* Right half — navy */}
           <div className="relative bg-[#1a2260]">
             <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
               <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
-                Ebene 2
+                Leistung 2
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
-                Eignerstrategie
+                Projektassessments
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-white/65">
-                Konzentriert sich auf die Präferenzen und Ziele der Eigentümer: Renditeerwartungen,
-                Risikotoleranz und langfristige Vision. Sie muss mit der Unternehmensstrategie in
-                Einklang stehen.
+                Unabhängige Bewertung von laufenden, ins Stocken geratenen oder abgeschlossenen
+                Projekten. Wir analysieren Ursachen, benennen Schwachstellen klar und liefern
+                konkrete Empfehlungen für die Neuausrichtung.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
           </div>
         </div>
-
       </MotionSection>
 
-
-      {/* ── 4. PROCESS — Alternating spine timeline ──────────────────────── */}
-      <section id="prozess" className="bg-[#f5f5f7]">
+      {/* ── 3. HANDLUNGSFELDER ───────────────────────────────────────────── */}
+      <section id="handlungsfelder" className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
             <div className="grid gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-16">
-              {/* Left: sticky anchor */}
               <div className="lg:sticky lg:top-28 lg:self-start">
                 <h2 className="text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Von der Analyse zur gelebten Strategie — in sieben Schritten.
+                  Sieben Dimensionen professioneller Projektführung.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Jeder Schritt baut auf dem vorherigen auf. Die Erarbeitung erfordert sorgfältige
-                  Planung, tiefe Analyse und die Fähigkeit zur Anpassung.
+                  Erfolgreiches Projektmanagement ist kein Zufall. Es entsteht durch das
+                  konsequente Zusammenspiel von Struktur, Methodik und Führungsstärke.
                 </p>
                 <Link
                   href="/kontakt"
@@ -269,23 +313,14 @@ export function FokusUnternehmensstrategie() {
                 >
                   Beratungsgespräch anfragen
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-                    <path
-                      d="M3 8h10M8 3l5 5-5 5"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
+                    <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </Link>
               </div>
 
-              {/* Right: alternating spine — desktop / simple list — mobile */}
               <div>
-                {/* ── Desktop: alternating two-column spine ── */}
                 <div className="hidden lg:block">
                   <div className="relative">
-                    {/* Continuous brass spine line */}
                     <div
                       className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px"
                       style={{
@@ -293,42 +328,27 @@ export function FokusUnternehmensstrategie() {
                           "linear-gradient(to bottom, rgba(201,169,110,0.05), rgba(201,169,110,0.25) 8%, rgba(201,169,110,0.25) 92%, rgba(201,169,110,0.05))",
                       }}
                     />
-
                     <div className="space-y-8">
-                      {prozessSchritte.map((step, i) => {
+                      {handlungsfelder.map((item, i) => {
                         const isLeft = i % 2 === 0;
                         return (
-                          <div
-                            key={step.num}
-                            className="relative grid grid-cols-2"
-                          >
-                            {/* Spine node — centered on the line */}
+                          <div key={item.num} className="relative grid grid-cols-2">
                             <div className="absolute left-1/2 top-5 z-10 -translate-x-1/2">
                               <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c9a96e]/40 bg-white text-[11px] font-semibold tabular-nums text-[#26337c] shadow-sm">
-                                {step.num}
+                                {item.num}
                               </div>
                             </div>
-
-                            {/* Left cell */}
-                            <div className="pr-10">
-                              {isLeft ? <SpineCard step={step} /> : null}
-                            </div>
-
-                            {/* Right cell */}
-                            <div className="pl-10">
-                              {!isLeft ? <SpineCard step={step} /> : null}
-                            </div>
+                            <div className="pr-10">{isLeft ? <SpineCard item={item} /> : null}</div>
+                            <div className="pl-10">{!isLeft ? <SpineCard item={item} /> : null}</div>
                           </div>
                         );
                       })}
                     </div>
                   </div>
                 </div>
-
-                {/* ── Mobile: simple vertical list ── */}
                 <div className="flex flex-col gap-4 lg:hidden">
-                  {prozessSchritte.map((step) => (
-                    <SpineCard key={step.num} step={step} />
+                  {handlungsfelder.map((item) => (
+                    <SpineCard key={item.num} item={item} />
                   ))}
                 </div>
               </div>
@@ -337,25 +357,7 @@ export function FokusUnternehmensstrategie() {
         </MotionSection>
       </section>
 
-      {/* ── IMAGE BREAK ──────────────────────────────────────────────────── */}
-      <div className="relative h-[380px] overflow-hidden md:h-[480px]">
-        <img
-          src={contentImage}
-          alt="Strategieprozess in der Praxis"
-          className="absolute inset-0 h-full w-full object-cover"
-          loading="lazy"
-        />
-        <div
-          className="absolute inset-0"
-          aria-hidden
-          style={{
-            background:
-              "linear-gradient(to top, rgba(26,31,56,0.55) 0%, transparent 55%), linear-gradient(to bottom, rgba(26,31,56,0.2) 0%, transparent 30%)",
-          }}
-        />
-      </div>
-
-      {/* ── 5. PULL QUOTE ────────────────────────────────────────────────── */}
+      {/* ── 4. PULL QUOTE ────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
         <div
           className="pointer-events-none absolute inset-0"
@@ -370,82 +372,141 @@ export function FokusUnternehmensstrategie() {
             Grundsatz
           </p>
           <blockquote className="mt-8 text-[clamp(1.375rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.22] tracking-[-0.025em] text-white text-balance">
-            &ldquo;Die erfolgreiche Bewältigung erfordert eine ganzheitliche Herangehensweise,
-            klare Kommunikation, aktive Einbindung der Stakeholder und die Fähigkeit zur
-            Anpassung an sich ändernde Bedingungen.&rdquo;
+            &ldquo;Strategie ist wertlos ohne Umsetzung. Umsetzung ist riskant ohne Struktur.
+            Professionelles Projektmanagement ist das Bindeglied zwischen guter Absicht
+            und messbarem Ergebnis.&rdquo;
           </blockquote>
           <div className="mt-10 flex items-center justify-center gap-5">
             <div className="h-px w-12 bg-[#c9a96e]/35" />
             <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-white/30">
-              Abexis Strategie-Prinzip
+              Abexis Umsetzungs-Prinzip
             </span>
             <div className="h-px w-12 bg-[#c9a96e]/35" />
           </div>
         </div>
       </section>
 
-      {/* ── 6. PITFALLS — Editorial newspaper list ───────────────────────── */}
-      <MotionSection>
-        <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.8fr] lg:gap-20 lg:items-start">
-            {/* Left anchor */}
-            <div className="lg:sticky lg:top-28">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Kritische Aspekte
+      {/* ── 5. PROZESSPHASEN ─────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-[#1a1f38]">
+        <div
+          className="pointer-events-none absolute inset-0"
+          aria-hidden
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 60% at 15% 50%, rgba(69,179,226,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 70% at 85% 30%, rgba(38,51,124,0.4) 0%, transparent 60%)",
+          }}
+        />
+        <MotionSection>
+          <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-28">
+            <div className="flex items-baseline gap-4 border-b border-white/[0.08] pb-6">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#45b3e2]/70">
+                Vorgehensmodell
               </p>
-              <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                Was eine Strategie scheitern lässt.
-              </h2>
-              <div className="mt-7 h-px w-full bg-black/[0.06]" />
-              <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                Die häufigsten Hindernisse sind keine Überraschungen. Sie sind bekannt — und
-                trotzdem werden sie in der Praxis immer wieder unterschätzt.
-              </p>
-              <div className="mt-8 h-px w-8 bg-[#c9a96e]/50" />
+              <span className="text-[11px] text-white/30">04 Phasen</span>
             </div>
-
-            {/* Right: card grid */}
-            <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2">
-              {fallstricke.map((f, i) => (
-                <div key={f.title} className="relative bg-white px-6 py-6">
-                  <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
-                  <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                    {String(i + 1).padStart(2, "0")}
+            <h2 className="mt-8 max-w-[28ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
+              Vom Projektauftrag zur geordneten Übergabe — strukturiert, transparent, lieferfähig.
+            </h2>
+            <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
+              {prozessphasen.map((phase, i) => (
+                <div key={phase.num} className="relative flex flex-col bg-[#1a1f38]/60 px-6 py-8 backdrop-blur-sm">
+                  <p
+                    className="text-[3rem] font-semibold leading-none tracking-[-0.05em]"
+                    style={{ color: `rgba(201,169,110,${0.35 + i * 0.15})` }}
+                  >
+                    {phase.num}
                   </p>
-                  <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-                    {f.title}
-                  </h3>
-                  <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{f.body}</p>
+                  <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/40">
+                    {phase.title}
+                  </p>
+                  <ul className="mt-4 flex flex-col gap-2">
+                    {phase.items.map((item) => (
+                      <li key={item} className="flex items-start gap-2 text-[13px] text-white/65">
+                        <span className="mt-[5px] h-[5px] w-[5px] shrink-0 rounded-full bg-[#45b3e2]/50" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-auto pt-8">
+                    <div className="h-px w-6 bg-[#c9a96e]/40" />
+                  </div>
                 </div>
               ))}
             </div>
+            <p className="mt-8 max-w-[60ch] text-[15px] leading-relaxed text-white/50">
+              Wir passen Methodik und Intensität an Ihr Projekt an — ob klassisch, agil oder
+              hybrid. Entscheidend ist nicht die Methode, sondern dass die richtigen Dinge
+              zur richtigen Zeit getan werden.
+            </p>
           </div>
-        </div>
-      </MotionSection>
+        </MotionSection>
+      </section>
 
-      {/* ── 7. GUIDE — Unsere Rolle ──────────────────────────────────────── */}
+      {/* ── 6. NUTZEN ────────────────────────────────────────────────────── */}
+      <section className="bg-[#f5f5f7]">
+        <MotionSection>
+          <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
+            <div className="grid gap-12 lg:grid-cols-[1fr_1.8fr] lg:gap-20 lg:items-start">
+              <div className="lg:sticky lg:top-28">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+                  Nutzen
+                </p>
+                <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
+                  Was professionelles Projektmanagement bewirkt.
+                </h2>
+                <div className="mt-7 h-px w-full bg-black/[0.06]" />
+                <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
+                  Der Unterschied zwischen einem gelieferten und einem gescheiterten Projekt
+                  liegt fast immer in der Führung — nicht in der Komplexität des Themas.
+                </p>
+                <Link
+                  href="/kontakt"
+                  className="mt-8 inline-flex items-center gap-3 text-[14px] font-semibold text-[#26337c] transition-all hover:gap-4"
+                >
+                  Unverbindliches Gespräch
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+                    <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </Link>
+              </div>
+              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2">
+                {nutzen.map((n) => (
+                  <div key={n.num} className="relative bg-white px-6 py-6">
+                    <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
+                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
+                      {n.num}
+                    </p>
+                    <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
+                      {n.title}
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{n.body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </MotionSection>
+      </section>
+
+      {/* ── 7. UNSERE ROLLE ──────────────────────────────────────────────── */}
       <section className="bg-white">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
-
-            {/* Header — two-column */}
             <div className="grid gap-8 border-b border-black/[0.06] pb-12 md:grid-cols-[1fr_1fr] md:gap-20 md:items-end">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                   Unsere Rolle
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f]">
-                  Die Perspektive, die intern fehlt — und den Unterschied macht.
+                  Erfahrung, die in kritischen Momenten den Unterschied macht.
                 </h2>
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
-                Sie wissen, dass Ihr Unternehmen eine klare Strategie braucht. Zwischen
-                Tagesgeschäft, Zeitdruck und unterschiedlichen Meinungen im Führungskreis bleibt
-                dafür selten der nötige Raum. Genau hier setzen wir an.
+                Unsere Berater haben Projekte in verschiedensten Branchen, Technologien und
+                Unternehmensstrukturen geleitet. Wir bringen nicht nur Methodik — sondern
+                das Urteilsvermögen, das aus hunderten realer Projektsituationen entsteht.
               </p>
             </div>
-
-            {/* Three situations — when companies call Abexis */}
             <div className="mt-12">
               <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                 Typische Ausgangssituationen
@@ -454,18 +515,18 @@ export function FokusUnternehmensstrategie() {
                 {[
                   {
                     num: "01",
-                    title: "Fehlende interne Voraussetzungen",
-                    body: "Zeit, Distanz zum Tagesgeschäft und methodische Erfahrung fehlen — die Voraussetzungen für einen soliden Strategieprozess sind intern nicht gegeben.",
+                    title: "Ressourcenengpass intern",
+                    body: "Das Projekt ist strategisch wichtig, aber die internen Kapazitäten für eine professionelle Leitung fehlen. Wir übernehmen die Führung — nahtlos und umsetzungsorientiert.",
                   },
                   {
                     num: "02",
-                    title: "Divergierende Führungsperspektiven",
-                    body: "Verwaltungsrat und Geschäftsleitung sehen die Zukunft verschieden. Externe Moderation hilft, divergierende Sichtweisen in eine gemeinsame Richtung zu überführen.",
+                    title: "Projekt in Schieflage",
+                    body: "Ein laufendes Projekt ist ins Stocken geraten: Termine, Budget oder Qualität stimmen nicht mehr. Wir analysieren, benennen die Ursachen und leiten die Trendwende ein.",
                   },
                   {
                     num: "03",
-                    title: "Strategische Entscheidungen mit hohem Einsatz",
-                    body: "Manche Entscheidungen sind zu wichtig für Improvisation. Ein strukturierter Prozess mit externem Blick reduziert das Risiko kostspieliger Fehlentscheidungen.",
+                    title: "Unabhängige Beurteilung gefordert",
+                    body: "VR, Steuerungsausschuss oder Auftraggeber benötigen eine externe Einschätzung zum Projektstatus — ehrlich, fundiert und ohne interne Befangenheit.",
                   },
                 ].map((s) => (
                   <div key={s.num} className="relative bg-white px-7 py-8">
@@ -481,13 +542,11 @@ export function FokusUnternehmensstrategie() {
                 ))}
               </div>
             </div>
-
-
           </div>
         </MotionSection>
       </section>
 
-      {/* ── 8. CTA — Specific 30-min offer ───────────────────────────────── */}
+      {/* ── 8. CTA ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden">
         <div
           className="absolute inset-0 -z-10"
@@ -502,7 +561,6 @@ export function FokusUnternehmensstrategie() {
               "radial-gradient(ellipse 60% 80% at 15% 100%, rgba(201,169,110,0.14) 0%, transparent 50%), radial-gradient(ellipse 50% 60% at 90% 10%, rgba(255,255,255,0.07) 0%, transparent 45%)",
           }}
         />
-
         <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
           <div className="grid gap-10 md:grid-cols-[1fr_auto] md:items-center">
             <div>
@@ -510,14 +568,13 @@ export function FokusUnternehmensstrategie() {
                 Nächster Schritt
               </p>
               <h2 className="mt-4 max-w-[30ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white text-balance">
-                Strategische Klarheit entsteht nicht von selbst — aber mit dem richtigen Partner schneller.
+                Ihr nächstes Projekt verdient eine solide Grundlage.
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
-                In einem kostenlosen 30-Minuten-Erstgespräch klären wir gemeinsam, wo Ihr
-                Unternehmen steht, was Sie erreichen wollen — und wie wir Sie dabei begleiten können.
+                In einem kostenlosen 30-Minuten-Erstgespräch besprechen wir Ihr Vorhaben — ob
+                Unterstützung bei der Umsetzung, eine unabhängige Beurteilung oder eine
+                vollständige Projektleitung gefragt ist.
               </p>
-
-              {/* Offer details */}
               <div className="mt-7 flex flex-wrap gap-4">
                 {["Kostenlos", "30 Minuten", "Unverbindlich"].map((tag) => (
                   <span
@@ -530,7 +587,6 @@ export function FokusUnternehmensstrategie() {
                 ))}
               </div>
             </div>
-
             <div className="flex flex-col gap-3 md:shrink-0">
               <Link
                 href="/kontakt"
@@ -548,8 +604,6 @@ export function FokusUnternehmensstrategie() {
               </Link>
             </div>
           </div>
-
-          {/* L-corner decorative rule */}
           <div className="mt-16 flex items-center gap-4 opacity-20">
             <div className="h-px flex-1 bg-white" />
             <div className="relative h-4 w-4">

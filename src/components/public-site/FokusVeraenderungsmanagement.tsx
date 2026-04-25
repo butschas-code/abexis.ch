@@ -8,71 +8,72 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 // ─── Static data — module level, no re-allocation ────────────────────────────
 
-const meta = fokusthemenMeta.find((m) => m.slug === "digitale-transformation")!;
-const heroImage = fokusPageHeroImages["digitale-transformation"];
+const meta = fokusthemenMeta.find((m) => m.slug === "veränderungsmanagement")!;
+const heroImage = fokusPageHeroImages["veränderungsmanagement"];
+const contentImage = "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F3f6bff6e-7e5a-4da7-92ad-f900954f953f.jpeg?alt=media";
 
 const handlungsfelder = [
   {
     num: "01",
-    title: "Kundenorientierung & Experience",
+    title: "Change Readiness & Diagnose",
     items: [
-      "Digitale Touchpoints entlang der Customer Journey optimieren",
-      "Self-Service-Portale und personalisierte Erlebnisse aufbauen",
-      "Kundenfeedback systematisch in die Produktentwicklung einbeziehen",
+      "Veränderungsbereitschaft in der Organisation messen",
+      "Risiken, Widerstände und Enabler frühzeitig identifizieren",
+      "Ausgangslage und Zielbild klar gegenüberstellen",
     ],
   },
   {
     num: "02",
-    title: "Digitale Strategien & Geschäftsmodelle",
+    title: "Führung & Sponsorship",
     items: [
-      "Wettbewerbspositionierung im digitalen Umfeld schärfen",
-      "Neue Erlösquellen und Plattformmodelle entwickeln",
-      "Partnerschaften und digitale Ökosysteme strategisch aufbauen",
+      "Führungskräfte als sichtbare Treiber des Wandels befähigen",
+      "Aktives Sponsorship auf Ebene Geschäftsleitung sicherstellen",
+      "Kohärenz zwischen Aussage und Verhalten der Führung herstellen",
     ],
   },
   {
     num: "03",
-    title: "Führung, Kultur & Organisation",
+    title: "Stakeholder-Management",
     items: [
-      "Digital Leadership und agile Führungsmodelle einführen",
-      "Digitale Kompetenz und Innovationskultur stärken",
-      "Organisationsstrukturen an neue Arbeitsweisen anpassen",
+      "Einfluss- und Interessensgruppen systematisch kartieren",
+      "Gezielte Einbindungsstrategien je Stakeholdergruppe entwickeln",
+      "Kritische Akteure frühzeitig zu Mitgestaltenden machen",
     ],
   },
   {
     num: "04",
-    title: "Prozessoptimierung & Automatisierung",
+    title: "Kommunikation & Transparenz",
     items: [
-      "End-to-End-Prozesse analysieren und neu gestalten",
-      "Automatisierungspotenziale identifizieren und realisieren",
-      "Datenbasierte Entscheidungsgrundlagen schaffen",
+      "Botschaften klar, konsistent und zielgruppengerecht gestalten",
+      "Kommunikationsrhythmus und Kanäle strukturiert aufbauen",
+      "Unsicherheiten direkt ansprechen statt ignorieren",
     ],
   },
   {
     num: "05",
-    title: "Plattformen & Absatzkanäle",
+    title: "Mitarbeiterbeteiligung & Co-creation",
     items: [
-      "Digitale Vertriebs- und Kommunikationskanäle aufbauen",
-      "Omnichannel-Strategie entwickeln und integrieren",
-      "Marktplätze und digitale Ökosysteme nutzen",
+      "Betroffene zu Beteiligten machen — auf allen Ebenen",
+      "Rückmeldeschlaufen und Feedbackformate etablieren",
+      "Lösungen gemeinsam entwickeln statt verordnen",
     ],
   },
   {
     num: "06",
-    title: "Technologien — KI, IoT, Industrie 4.0",
+    title: "Kompetenzaufbau & Training",
     items: [
-      "Anwendungsfälle für KI und Machine Learning identifizieren",
-      "IoT- und Industrie-4.0-Lösungen in bestehende Anlagen integrieren",
-      "Technologieauswahl anhand strategischer Kriterien treffen",
+      "Neue Fähigkeiten und Verhaltensweisen gezielt aufbauen",
+      "Führungskräfte im Umgang mit Widerstand schulen",
+      "Lernformate an den Wandelprozess anpassen",
     ],
   },
   {
     num: "07",
-    title: "IT-Infrastruktur & Datenbasis",
+    title: "Verankerung & Nachhaltigkeit",
     items: [
-      "Cloud-Migration strategisch planen und umsetzen",
-      "Datenarchitektur und Governance etablieren",
-      "Legacy-Systeme schrittweise durch skalierbare Lösungen ablösen",
+      "Neue Arbeitsweisen in Strukturen und Prozessen verankern",
+      "Erfolge sichtbar machen und feiern",
+      "Rückfallmuster erkennen und frühzeitig gegensteuern",
     ],
   },
 ] as const;
@@ -80,42 +81,41 @@ const handlungsfelder = [
 const prozessphasen = [
   {
     num: "01",
-    title: "Vorbereitungsphase",
+    title: "Diagnose & Vorbereitung",
     items: [
-      "Projekt definieren: Ziele, Scope und Prioritäten festlegen",
-      "Team zusammenstellen und Verantwortlichkeiten klären",
-      "Budget und Zeitplan realistisch planen",
-      "Relevante Stakeholder frühzeitig einbinden",
+      "Ausgangslage, Zielbild und Veränderungstiefe bestimmen",
+      "Stakeholder und Risiken kartieren",
+      "Change-Koalition und Sponsorship sicherstellen",
+      "Rahmenbedingungen und Ressourcen klären",
     ],
   },
   {
     num: "02",
-    title: "Analysephase",
+    title: "Planung & Design",
     items: [
-      "Marktanalyse: Kunden, Konkurrenz, Technologietrends",
-      "Produkte- und Dienstleistungsportfolio kritisch prüfen",
-      "Ideen der Mitarbeiter aufgreifen, Machbarkeit beurteilen",
-      "Ist-Situation ermitteln und mit dem Zielbild abgleichen",
+      "Change-Strategie und Roadmap entwickeln",
+      "Kommunikations- und Beteiligungskonzept erarbeiten",
+      "Führungskräfte und Multiplikatoren vorbereiten",
+      "Quick Wins identifizieren und einplanen",
     ],
   },
   {
     num: "03",
-    title: "Planungsphase",
+    title: "Implementierung & Begleitung",
     items: [
-      "Vision und Strategie: Kernkompetenzen und Geschäftsmodell",
-      "Prozesse, Organisation und Unternehmenskultur neu gestalten",
-      "Ökosystem mit Kunden und Partnern definieren",
-      "Plan erstellen: Technologie wählen, messbare Schritte festlegen",
+      "Massnahmen rollieren und Fortschritt messen",
+      "Widerstand erkennen und konstruktiv bearbeiten",
+      "Kommunikation kontinuierlich aufrechterhalten",
+      "Lernschlaufen einbauen und Anpassungen vornehmen",
     ],
   },
   {
     num: "04",
-    title: "Umsetzungsphase",
+    title: "Verankerung & Transfer",
     items: [
-      "Strategie umsetzen — z.B. mit agiler Methodik",
-      "Kontinuierliche Überprüfung und Monitoring einrichten",
-      "Allenfalls Justierungen vornehmen, Learnings integrieren",
-      "Ergebnisse messen, kommunizieren und konsolidieren",
+      "Neues Verhalten in Prozessen und Strukturen festigen",
+      "Wirkung messen und dokumentieren",
+      "Interne Change-Kompetenz nachhaltig aufbauen",
     ],
   },
 ] as const;
@@ -123,47 +123,45 @@ const prozessphasen = [
 const nutzen = [
   {
     num: "01",
-    title: "Kosten & Ertrag",
-    body: "Kosten reduzieren, Produktivität und Umsatz bzw. Gewinn erhöhen.",
+    title: "Höhere Akzeptanz",
+    body: "Wenn Menschen den Wandel mitgestalten, tragen sie ihn mit — statt ihn zu bremsen.",
   },
   {
     num: "02",
-    title: "Datenqualität",
-    body: "Datenbasierte Erkenntnisse, höhere Datenqualität und weniger Fehler durch Automatisierung.",
+    title: "Geringeres Risiko",
+    body: "Strukturiertes Vorgehen reduziert die Wahrscheinlichkeit kostspieliger Rückschläge und Projektverzögerungen.",
   },
   {
     num: "03",
-    title: "Kundenerlebnis",
-    body: "Besseres Erlebnis bei Beschaffung und Kundenservice — höhere Kundenzufriedenheit.",
+    title: "Schnellere Umsetzung",
+    body: "Klare Kommunikation und aktive Führung vermeiden Orientierungslosigkeit und Lähmung.",
   },
   {
     num: "04",
-    title: "Transparenz",
-    body: "Transparentere Informationspolitik gegenüber Kunden und Lieferanten.",
+    title: "Kulturwandel",
+    body: "Veränderungen, die tief verankert sind, verändern auch Haltungen und Arbeitsweisen dauerhaft.",
   },
   {
     num: "05",
-    title: "Neue Märkte",
-    body: "Neue Produkte und Leistungen erschliessen neue Kundenpotenziale.",
+    title: "Mitarbeiterbindung",
+    body: "Wer in Veränderungen einbezogen wird, fühlt sich gehört — das stärkt Motivation und Loyalität.",
   },
   {
     num: "06",
-    title: "Zusammenarbeit",
-    body: "Mehr Kollaboration und bessere Kommunikation durch eine gemeinsame Plattform.",
+    title: "Führungskompetenz",
+    body: "Führungskräfte, die Wandel aktiv gestalten, wachsen in ihrer Wirksamkeit und Glaubwürdigkeit.",
   },
   {
     num: "07",
-    title: "Geschwindigkeit",
-    body: "Schnellere Durchlaufzeiten dank effizienter, automatisierter Prozesse.",
+    title: "Projekterfolg",
+    body: "Transformationen mit professionellem Change Management erreichen ihre Ziele häufiger, schneller und nachhaltiger.",
   },
   {
     num: "08",
-    title: "Zukunftsfähigkeit",
-    body: "Investitionen in die Digitale Transformation sichern den Vorsprung gegenüber dem Wettbewerb.",
+    title: "Organisationale Resilienz",
+    body: "Unternehmen, die Wandel meistern, werden besser darin — und sind für künftige Veränderungen gewappnet.",
   },
 ] as const;
-
-
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -206,7 +204,7 @@ function SpineCard({ item }: { item: Handlungsfeld }) {
 
 // ─── Page component ───────────────────────────────────────────────────────────
 
-export function FokusDigitaleTransformation() {
+export function FokusVeraenderungsmanagement() {
   return (
     <InteriorPageRoot>
       <SchemaMarkup type="Service" data={meta} />
@@ -215,7 +213,7 @@ export function FokusDigitaleTransformation() {
         data={[
           { name: "Startseite", url: "/" },
           { name: "Leistungen", url: "/leistungen" },
-          { name: meta.title, url: "/fokusthemen/digitale-transformation" },
+          { name: meta.title, url: "/fokusthemen/veränderungsmanagement" },
         ]}
       />
 
@@ -225,12 +223,12 @@ export function FokusDigitaleTransformation() {
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Digitale Transformation ist kein IT-Projekt — sie ist eine Führungsaufgabe.
+          Veränderung scheitert nicht an der Strategie — sie scheitert an den Menschen.
         </h1>
         <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
-          Wenn Verwaltungsrat und Management die Digitalisierung verschieden interpretieren,
-          entstehen Fehlinvestitionen, Reibung und verpasste Chancen. Wir helfen Ihnen, aus
-          Technologie echten Unternehmenswert zu machen — strukturiert, strategisch, umsetzbar.
+          Wenn Wandel von oben verordnet statt gemeinsam gestaltet wird, entsteht Widerstand,
+          Unsicherheit und Lähmung. Wir begleiten Organisationen dabei, Veränderungen so zu
+          führen, dass Menschen mitgehen — und Ergebnisse nachhaltig verankert bleiben.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Link
@@ -251,53 +249,51 @@ export function FokusDigitaleTransformation() {
         </div>
       </PageHero>
 
-      {/* ── 2. SPLIT PANEL — Digitalisierung vs. Digitale Transformation ─── */}
+      {/* ── 2. SPLIT PANEL — Veränderungsmanagement vs. Projektmanagement ── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half — navy: content tracks the 1068px centre column */}
+          {/* Left half — navy */}
           <div className="relative bg-[#1a2260]">
             <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
               <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
-                Ebene 1
+                Dimension 1
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
-                Digitalisierung
+                Projektmanagement
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-white/65">
-                Betrifft die taktische Ebene: einzelne Prozesse, Tools und Arbeitsabläufe werden
-                digitalisiert oder automatisiert. Wichtig, aber nicht hinreichend — sie verändert
-                das Geschäftsmodell nicht.
+                Steuert Scope, Zeit, Budget und Qualität. Es sorgt dafür, dass die richtigen Dinge
+                in der richtigen Reihenfolge umgesetzt werden — technisch korrekt und termingerecht.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
           </div>
 
-          {/* Right half — warm linen: content tracks the 1068px centre column */}
+          {/* Right half — warm linen */}
           <div className="relative bg-[#faf8f2]">
             <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
               <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Ebene 2
+                Dimension 2
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
-                Digitale Transformation
+                Veränderungsmanagement
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
-                Betrifft die strategische Ebene: Geschäftsmodelle, Kundenerlebnisse, Kultur und
-                Führung werden grundlegend neu gedacht. Sie schafft nachhaltige Wettbewerbsvorteile
-                und erfordert unternehmerische Entschlossenheit.
+                Sorgt dafür, dass Menschen die Veränderung verstehen, akzeptieren und mittragen.
+                Ohne diese menschliche Dimension scheitern selbst technisch perfekte Projekte —
+                im Widerstand, in der Ablehnung oder im stillen Boykott.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
         </div>
-
       </MotionSection>
 
-
+      {/* ── 3. HANDLUNGSFELDER — Alternating spine ───────────────────────── */}
       <section id="handlungsfelder" className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
@@ -305,12 +301,12 @@ export function FokusDigitaleTransformation() {
               {/* Left: sticky anchor */}
               <div className="lg:sticky lg:top-28 lg:self-start">
                 <h2 className="text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Sieben Dimensionen der Digitalen Transformation.
+                  Sieben Dimensionen wirksamen Wandels.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Die Digitalisierung betrifft alle Bereiche Ihres Unternehmens. Wir begleiten Sie
-                  dabei, diese Dimensionen ganzheitlich zu betrachten und gezielt zu entwickeln.
+                  Veränderung gelingt, wenn alle relevanten Dimensionen gleichzeitig adressiert
+                  werden — technisch, organisatorisch und menschlich.
                 </p>
                 <Link
                   href="/kontakt"
@@ -377,7 +373,25 @@ export function FokusDigitaleTransformation() {
         </MotionSection>
       </section>
 
-      {/* ── 5. PULL QUOTE ────────────────────────────────────────────────── */}
+      {/* ── IMAGE BREAK ──────────────────────────────────────────────────── */}
+      <div className="relative h-[380px] overflow-hidden md:h-[480px]">
+        <img
+          src={contentImage}
+          alt="Change Management in der Praxis"
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="lazy"
+        />
+        <div
+          className="absolute inset-0"
+          aria-hidden
+          style={{
+            background:
+              "linear-gradient(to top, rgba(26,31,56,0.55) 0%, transparent 55%), linear-gradient(to bottom, rgba(26,31,56,0.2) 0%, transparent 30%)",
+          }}
+        />
+      </div>
+
+      {/* ── 4. PULL QUOTE ────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
         <div
           className="pointer-events-none absolute inset-0"
@@ -392,21 +406,21 @@ export function FokusDigitaleTransformation() {
             Grundsatz
           </p>
           <blockquote className="mt-8 text-[clamp(1.375rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.22] tracking-[-0.025em] text-white text-balance">
-            &ldquo;Digitale Transformation bietet eine Grundlage, um ein Unternehmen zu erneuern
-            und qualifizierter für die Zukunft vorzubereiten — als strategische Initiative,
-            nicht als Nebenprojekt.&rdquo;
+            &ldquo;Organisatorischer Wandel ist kein Ereignis — er ist ein Prozess. Wer ihn
+            iterativ gestaltet, Menschen einbezieht und Unsicherheiten direkt adressiert,
+            verändert nicht nur Strukturen, sondern Haltungen.&rdquo;
           </blockquote>
           <div className="mt-10 flex items-center justify-center gap-5">
             <div className="h-px w-12 bg-[#c9a96e]/35" />
             <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-white/30">
-              Abexis Transformations-Prinzip
+              Abexis Change-Prinzip
             </span>
             <div className="h-px w-12 bg-[#c9a96e]/35" />
           </div>
         </div>
       </section>
 
-      {/* ── 6. PROZESSPHASEN — Dark navy phase grid ──────────────────────── */}
+      {/* ── 5. PROZESSPHASEN — Dark navy phase grid ──────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
         <div
           className="pointer-events-none absolute inset-0"
@@ -427,7 +441,7 @@ export function FokusDigitaleTransformation() {
             </div>
 
             <h2 className="mt-8 max-w-[28ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
-              Vom Kick-off zur lebenden Strategie — strukturiert, iterativ, messbar.
+              Von der Diagnose zur verankerten Veränderung — iterativ, messbar, nachhaltig.
             </h2>
 
             <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
@@ -458,15 +472,15 @@ export function FokusDigitaleTransformation() {
             </div>
 
             <p className="mt-8 max-w-[60ch] text-[15px] leading-relaxed text-white/50">
-              Der Ansatz ist flexibel: Je nach Ausgangslage können Sie mit einem einzelnen Teilaspekt
-              starten oder ein umfassendes Transformationsprogramm aufgleisen — immer mit klaren,
-              messbaren Schritten.
+              Unser Ansatz ist bewusst iterativ: Zwischen den Phasen gibt es Schlaufen, nicht nur
+              Pfeile. Erkenntnisse aus der Umsetzung fliessen zurück in Planung und Kommunikation —
+              damit die Veränderung lebendig bleibt statt zu erstarren.
             </p>
           </div>
         </MotionSection>
       </section>
 
-      {/* ── 7. NUTZEN — Sticky left + card grid ──────────────────────────── */}
+      {/* ── 6. NUTZEN — Sticky left + card grid ──────────────────────────── */}
       <section className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
@@ -477,12 +491,13 @@ export function FokusDigitaleTransformation() {
                   Nutzen
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Was richtig umgesetzte Digitalisierung bringt.
+                  Was professionelles Change Management bewirkt.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Eine erfolgreiche digitale Transformation erzeugt Mehrwert auf mehreren Ebenen —
-                  operativ, strategisch und kulturell.
+                  Der Unterschied liegt nicht darin, ob Veränderung stattfindet — sondern wie
+                  sie gestaltet wird. Struktur, Einbezug und Führung entscheiden über Erfolg
+                  oder Scheitern.
                 </p>
                 <Link
                   href="/kontakt"
@@ -515,7 +530,7 @@ export function FokusDigitaleTransformation() {
         </MotionSection>
       </section>
 
-      {/* ── 8. GUIDE — Unsere Rolle ──────────────────────────────────────── */}
+      {/* ── 7. GUIDE — Unsere Rolle ──────────────────────────────────────── */}
       <section className="bg-white">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
@@ -527,17 +542,17 @@ export function FokusDigitaleTransformation() {
                   Unsere Rolle
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f]">
-                  Der Unterschied zwischen Transformation und Technologieeinkauf.
+                  Der Unterschied zwischen verordnetem und getragenem Wandel.
                 </h2>
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
-                Viele Unternehmen kaufen Software und nennen es Transformation. Wir helfen Ihnen,
-                die richtigen Fragen zuerst zu stellen — und dann die richtigen Schritte in der
-                richtigen Reihenfolge zu gehen.
+                Veränderungen scheitern selten an der Idee — sie scheitern an der Umsetzung.
+                Wir bringen Methodik, externe Perspektive und die Erfahrung aus vielen
+                Transformationen mit, damit Ihr Wandel gelingt.
               </p>
             </div>
 
-            {/* Three situations — when companies call Abexis */}
+            {/* Three situations */}
             <div className="mt-12">
               <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                 Typische Ausgangssituationen
@@ -546,18 +561,18 @@ export function FokusDigitaleTransformation() {
                 {[
                   {
                     num: "01",
-                    title: "Fehlende interne Transformationsexpertise",
-                    body: "Know-how, Kapazität und Distanz zum Tagesgeschäft fehlen intern — die Voraussetzungen für einen strukturierten Prozess sind nicht vorhanden.",
+                    title: "Transformation droht zu scheitern",
+                    body: "Ein laufendes Projekt stösst auf Widerstand, Verzögerungen oder schwindende Unterstützung. Es braucht jetzt eine ehrliche Diagnose und gezielte Gegenmassnahmen.",
                   },
                   {
                     num: "02",
-                    title: "Dringlichkeit durch Marktveränderung",
-                    body: "Neue Wettbewerber, technologische Disruption oder veränderte Kundenerwartungen erfordern rasches, gezieltes Handeln — ohne Orientierungsverlust.",
+                    title: "Fehlende interne Change-Kompetenz",
+                    body: "Das Unternehmen steht vor einer grösseren Veränderung — aber intern fehlen Erfahrung, Methodik und Kapazität, um sie professionell zu begleiten.",
                   },
                   {
                     num: "03",
-                    title: "Hohe Investition, hohes Risiko",
-                    body: "Digitale Transformation bindet Kapital und Energie. Ein strukturierter Ansatz mit externem Blick minimiert das Risiko kostspieliger Fehlinvestitionen.",
+                    title: "Komplexe Stakeholder-Landschaft",
+                    body: "Verschiedene Interessensgruppen ziehen in unterschiedliche Richtungen. Eine neutrale, externe Begleitung schafft die nötige Glaubwürdigkeit, um alle ins Boot zu holen.",
                   },
                 ].map((s) => (
                   <div key={s.num} className="relative bg-white px-7 py-8">
@@ -574,12 +589,11 @@ export function FokusDigitaleTransformation() {
               </div>
             </div>
 
-
           </div>
         </MotionSection>
       </section>
 
-      {/* ── 9. CTA — Specific 30-min offer ───────────────────────────────── */}
+      {/* ── 8. CTA ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden">
         <div
           className="absolute inset-0 -z-10"
@@ -602,11 +616,12 @@ export function FokusDigitaleTransformation() {
                 Nächster Schritt
               </p>
               <h2 className="mt-4 max-w-[30ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white text-balance">
-                Besser früher als spät mit der Digitalen Transformation beginnen.
+                Veränderung gelingt — wenn sie gut begleitet wird.
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
-                In einem kostenlosen 30-Minuten-Erstgespräch klären wir gemeinsam, wo Ihr
-                Unternehmen steht, was Sie erreichen wollen — und wie wir Sie dabei begleiten können.
+                In einem kostenlosen 30-Minuten-Erstgespräch klären wir gemeinsam, wo Ihre
+                Organisation steht, welche Veränderung ansteht — und wie wir Sie dabei
+                begleiten können.
               </p>
 
               <div className="mt-7 flex flex-wrap gap-4">

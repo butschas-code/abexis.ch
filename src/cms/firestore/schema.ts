@@ -72,6 +72,24 @@ export const SUBMISSION_DOCUMENT_FIELDS = {
   userAgent: "userAgent",
 } as const;
 
+export const VACANCY_DOCUMENT_FIELDS = {
+  title: "title",
+  slug: "slug",
+  excerpt: "excerpt",
+  sector: "sector",
+  location: "location",
+  employmentType: "employmentType",
+  hook: "hook",
+  body: "body",
+  files: "files",
+  apply: "apply",
+  site: "site",
+  status: "status",
+  publishedAt: "publishedAt",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+} as const;
+
 export const USER_DOCUMENT_FIELDS = {
   uid: "uid",
   email: "email",

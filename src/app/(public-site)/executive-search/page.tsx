@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { ParallaxBlock } from "@/components/executive-search/ParallaxBlock";
 import { ExecutiveSearchClosingSection } from "@/components/executive-search/ExecutiveSearchClosingSection";
@@ -32,6 +33,8 @@ const BLOCK3 =
 
 const DESCRIPTION =
   "Executive Search, Personalvermittlung: Führungspositionen diskret und präzise besetzen. Beratungsintensiver Suchprozess, Branchenfokussierung, Abexis SEARCH.";
+
+export const revalidate = 120;
 
 export const metadata: Metadata = {
   title: "Executive Search",
@@ -112,6 +115,8 @@ export default function ExecutiveSearchPage() {
           <p className="max-w-3xl text-[17px] leading-relaxed text-[#6e6e73]">{BLOCK3}</p>
         </SectionShell>
       </MotionSection>
+
+      <HomeVacancyTeasers />
 
       <ExecutiveSearchClosingSection />
     </InteriorPageRoot>
