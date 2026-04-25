@@ -5,6 +5,7 @@ export * from "./category";
 export * from "./submission";
 export * from "./app-user";
 export * from "./site-settings";
+export * from "./vacancy";
 
 import { postCreateInputSchema, postUpdateInputSchema, postUpsertInputSchema } from "./post";
 import { authorCreateInputSchema, authorUpdateInputSchema } from "./author";
@@ -15,6 +16,7 @@ import {
   siteSettingsReplaceInputSchema,
   siteSettingsUpdateInputSchema,
 } from "./site-settings";
+import { vacancyCreateInputSchema, vacancyUpdateInputSchema, vacancyUpsertInputSchema } from "./vacancy";
 
 export const parsePostCreate = (data: unknown) => postCreateInputSchema.safeParse(data);
 export const parsePostUpsert = (data: unknown) => postUpsertInputSchema.safeParse(data);
@@ -34,3 +36,7 @@ export const parseAppUserUpdate = (data: unknown) => appUserUpdateInputSchema.sa
 
 export const parseSiteSettingsReplace = (data: unknown) => siteSettingsReplaceInputSchema.safeParse(data);
 export const parseSiteSettingsUpdate = (data: unknown) => siteSettingsUpdateInputSchema.safeParse(data);
+
+export const parseVacancyCreate = (data: unknown) => vacancyCreateInputSchema.safeParse(data);
+export const parseVacancyUpsert = (data: unknown) => vacancyUpsertInputSchema.safeParse(data);
+export const parseVacancyUpdate = (data: unknown) => vacancyUpdateInputSchema.safeParse(data);

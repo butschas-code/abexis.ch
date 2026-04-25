@@ -1,4 +1,5 @@
 import { appUserCreateInputSchema, appUserOutputSchema, appUserUpdateInputSchema } from "../schema/app-user";
+import { vacancyCreateInputSchema, vacancyOutputSchema, vacancyUpdateInputSchema, vacancyUpsertInputSchema } from "../schema/vacancy";
 import { authorCreateInputSchema, authorOutputSchema, authorUpdateInputSchema } from "../schema/author";
 import { categoryCreateInputSchema, categoryOutputSchema, categoryUpdateInputSchema } from "../schema/category";
 import { postCreateInputSchema, postOutputSchema, postUpdateInputSchema, postUpsertInputSchema } from "../schema/post";
@@ -33,3 +34,8 @@ export type AppUserOutput = import("zod").infer<typeof appUserOutputSchema>;
 export type SiteSettingsReplaceInput = import("zod").infer<typeof siteSettingsReplaceInputSchema>;
 export type SiteSettingsUpdateInput = import("zod").infer<typeof siteSettingsUpdateInputSchema>;
 export type SiteSettingsOutput = import("zod").infer<typeof siteSettingsOutputSchema>;
+
+export type VacancyCreateInput = import("zod").infer<typeof vacancyCreateInputSchema>;
+export type VacancyUpsertInput = import("zod").infer<typeof vacancyUpsertInputSchema>;
+export type VacancyUpdateInput = import("zod").infer<typeof vacancyUpdateInputSchema>;
+export type VacancyOutput = import("zod").infer<typeof vacancyOutputSchema>;

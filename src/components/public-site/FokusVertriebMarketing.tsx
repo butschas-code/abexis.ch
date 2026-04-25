@@ -8,109 +8,159 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 // ─── Static data — module level, no re-allocation ────────────────────────────
 
-const meta = fokusthemenMeta.find((m) => m.slug === "unternehmensstrategie")!;
-const heroImage = fokusPageHeroImages["unternehmensstrategie"];
+const meta = fokusthemenMeta.find((m) => m.slug === "vertriebmarketing")!;
+const heroImage = fokusPageHeroImages["vertriebmarketing"];
 
-const prozessSchritte = [
+const handlungsfelder = [
   {
     num: "01",
-    title: "Vorbereitungen & Analyse",
+    title: "Vertriebsstrategie & Go-to-Market",
     items: [
-      "Umfassende interne Analyse: Stärken, Schwächen, finanzielle Situation",
-      "Externe Analyse: Marktchancen, Risiken, Trends und Kundennutzen",
-      "Wettbewerbsbedingungen verstehen",
-      "SWOT-Analyse: Interne und externe Faktoren kombinieren",
+      "Marktpotenziale identifizieren und Prioritäten setzen",
+      "Go-to-Market-Modell entwickeln und schärfen",
+      "Wettbewerbspositionierung klar definieren",
     ],
   },
   {
     num: "02",
-    title: "Vision & Mission festlegen",
+    title: "Vertriebsstruktur & Organisation",
     items: [
-      "Klare, inspirierende Unternehmensvision definieren",
-      "Langfristige Ziele und gewünschten Zustand beschreiben",
-      "Mission: Zweck und Verpflichtung gegenüber Stakeholdern",
+      "Rollen, Verantwortlichkeiten und Gebiete klar zuweisen",
+      "Innen- und Aussendienst effektiv verzahnen",
+      "Channel-Management und Partnerstrukturen aufbauen",
     ],
   },
   {
     num: "03",
-    title: "Strategische Ziele ableiten",
+    title: "Kundensegmentierung & Targeting",
     items: [
-      "Konkrete, messbare und zeitgebundene Ziele aus Vision und Mission",
-      "Interessen verschiedener Stakeholder berücksichtigen",
+      "Ideale Kundenprofile definieren und priorisieren",
+      "Segmente nach Potenzial, Fit und Aufwand bewerten",
+      "Akquisefokus auf gewinnbare Märkte ausrichten",
     ],
   },
   {
     num: "04",
-    title: "Strategische Optionen entwickeln",
+    title: "Positionierung & Messaging",
     items: [
-      "Verschiedene strategische Optionen identifizieren",
-      "Bewertung nach Machbarkeit, Rentabilität und strategischer Passung",
+      "Klares Wertversprechen für jedes Segment formulieren",
+      "Differenzierung gegenüber dem Wettbewerb schärfen",
+      "Konsistente Kommunikation über alle Kanäle sicherstellen",
     ],
   },
   {
     num: "05",
-    title: "Beste Strategie auswählen",
+    title: "Sales Enablement & Prozesse",
     items: [
-      "Erkenntnisse aus Analyse und Bewertung integrieren",
-      "Am besten geeignete Strategie wählen",
-      "Klare Kommunikation an alle relevanten Stakeholder",
+      "Vertriebsprozesse standardisieren und dokumentieren",
+      "Unterlagen, Tools und Argumentation für das Team aufbauen",
+      "Onboarding und Weiterentwicklung strukturieren",
     ],
   },
   {
     num: "06",
-    title: "Strategie implementieren",
+    title: "Performance-Steuerung & KPIs",
     items: [
-      "Konkrete Aktionspläne entwickeln",
-      "Klare Verantwortlichkeiten und Ressourcen zuweisen",
-      "Überwachungsmechanismen und Fortschrittskontrollen einrichten",
+      "Relevante Kennzahlen entlang des Funnels definieren",
+      "Reporting und Forecasting verlässlich gestalten",
+      "Führungsrhythmus mit datenbasierten Reviews etablieren",
     ],
   },
   {
     num: "07",
-    title: "Monitoring & Anpassung",
+    title: "Digitaler Vertrieb & Kanäle",
     items: [
-      "Kontinuierlichen Überwachungsprozess etablieren",
-      "Strategie bei Bedarf an veränderte Bedingungen anpassen",
+      "Digitale Akquise- und Nurturing-Kanäle aufbauen",
+      "CRM als strategisches Steuerungsinstrument nutzen",
+      "Marketing Automation sinnvoll einsetzen",
     ],
   },
 ] as const;
 
-const fallstricke = [
+const prozessphasen = [
   {
-    title: "Fehlende Vision und Mission",
-    body: "Das Fehlen einer klaren Richtung führt zu Unsicherheit und beeinträchtigt die Motivation aller Beteiligten im Unternehmen.",
+    num: "01",
+    title: "Analyse & Diagnose",
+    items: [
+      "Ist-Situation im Vertrieb und Marketing erfassen",
+      "Pipeline-Qualität, Conversion-Raten und Deckungsbeiträge analysieren",
+      "Engpässe, Reibungsverluste und Blindflugbereiche identifizieren",
+      "Kundenperspektive und Wettbewerbsumfeld einbeziehen",
+    ],
   },
   {
-    title: "Mangelnde Stakeholder-Einbindung",
-    body: "Werden Schlüsselinteressengruppen nicht aktiv einbezogen, entstehen Widerstand und mangelnde Unterstützung.",
+    num: "02",
+    title: "Strategie & Konzept",
+    items: [
+      "Zielkunden, Wertversprechen und Positionierung festlegen",
+      "Go-to-Market-Modell und Kanalstrategie definieren",
+      "Organisationsstruktur und Rollen klären",
+      "Messbare Ziele und Meilensteine vereinbaren",
+    ],
   },
   {
-    title: "Unzureichende Analyse",
-    body: "Oberflächliche oder fehlerhafte Analysen führen zu falschen Schlussfolgerungen und gefährlichen strategischen Fehlentscheidungen.",
+    num: "03",
+    title: "Implementierung",
+    items: [
+      "Prozesse, Tools und Unterlagen aufbauen",
+      "Team befähigen und Führungsrhythmus einführen",
+      "Pilotprojekte starten und erste Erkenntnisse gewinnen",
+      "Marketing- und Vertriebsaktivitäten koordiniert aufgleisen",
+    ],
   },
   {
-    title: "Schlechte Kommunikation",
-    body: "Mangelnde Transparenz über die Strategie erzeugt Informationslücken, Unsicherheiten und Fehlorientierung im Betrieb.",
-  },
-  {
-    title: "Widerstand gegen Veränderung",
-    body: "Mitarbeiter und Führungskräfte sträuben sich, wenn sie nicht ausreichend informiert, eingebunden und abgeholt werden.",
-  },
-  {
-    title: "Mangelnde Ressourcen",
-    body: "Unzureichende finanzielle, personelle oder technologische Ressourcen blockieren selbst die konzeptionell beste Strategie.",
-  },
-  {
-    title: "Starre, unflexible Strategien",
-    body: "In dynamischen Umgebungen scheitern Strategien, die nicht an veränderte interne und externe Rahmenbedingungen angepasst werden.",
-  },
-  {
-    title: "Unklare Verantwortlichkeiten",
-    body: "Fehlende Klarheit über Zuständigkeiten führt zu Verwirrung, Doppelarbeit und Effizienzverlusten bei der Umsetzung.",
+    num: "04",
+    title: "Performance & Optimierung",
+    items: [
+      "KPIs kontinuierlich messen und interpretieren",
+      "Learnings systematisch in den Prozess zurückspielen",
+      "Skalierung vorbereiten und Wachstumshebel aktivieren",
+    ],
   },
 ] as const;
 
-
+const nutzen = [
+  {
+    num: "01",
+    title: "Umsatzwachstum",
+    body: "Klare Strategie, besseres Targeting und strukturierte Prozesse führen zu mehr abgeschlossenen Geschäften.",
+  },
+  {
+    num: "02",
+    title: "Effizienz",
+    body: "Weniger Streuverlust — das Team fokussiert sich auf die richtigen Kunden mit dem richtigen Angebot.",
+  },
+  {
+    num: "03",
+    title: "Kundenbindung",
+    body: "Konsistente Kommunikation und echtes Verständnis der Kundenbedürfnisse stärken Loyalität und Weiterempfehlungen.",
+  },
+  {
+    num: "04",
+    title: "Marktposition",
+    body: "Eine differenzierte Positionierung macht Sie im Wettbewerb sichtbarer und verhandlungsstärker.",
+  },
+  {
+    num: "05",
+    title: "Planungssicherheit",
+    body: "Verlässliche Pipeline-Daten und Forecasts schaffen Grundlagen für sichere Ressourcen- und Investitionsentscheide.",
+  },
+  {
+    num: "06",
+    title: "Skalierbarkeit",
+    body: "Dokumentierte Prozesse und klare Strukturen ermöglichen Wachstum, ohne dass Qualität und Konsistenz leiden.",
+  },
+  {
+    num: "07",
+    title: "Teamperformance",
+    body: "Klare Rollen, gute Werkzeuge und regelmässiges Coaching steigern Motivation und Abschlussquoten.",
+  },
+  {
+    num: "08",
+    title: "Alignment",
+    body: "Marketing und Vertrieb ziehen am selben Strick — gemeinsame Ziele, gemeinsame Sprache, gemeinsame Wirkung.",
+  },
+] as const;
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -123,31 +173,29 @@ function LCorner({ className = "" }: { className?: string }) {
   );
 }
 
-type Step = (typeof prozessSchritte)[number];
+type Handlungsfeld = (typeof handlungsfelder)[number];
 
-function SpineCard({ step }: { step: Step }) {
+function SpineCard({ item }: { item: Handlungsfeld }) {
   return (
     <div className="group relative h-full overflow-hidden rounded-2xl border border-black/[0.06] bg-white px-6 py-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#26337c]/15 hover:shadow-[0_16px_48px_rgba(38,51,124,0.10)]">
       <LCorner className="top-3 right-3 text-[#c9a96e]/0 transition-colors duration-300 group-hover:text-[#c9a96e]" />
-      {/* Ghost number watermark */}
       <span
         className="pointer-events-none absolute -bottom-2 right-3 select-none text-[5rem] font-semibold leading-none tabular-nums text-[#c9a96e]/[0.08] transition-opacity duration-300 group-hover:opacity-50"
         aria-hidden
       >
-        {step.num}
+        {item.num}
       </span>
       <h3 className="relative text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-        {step.title}
+        {item.title}
       </h3>
       <ul className="relative mt-3 flex flex-col gap-2">
-        {step.items.map((item) => (
-          <li key={item} className="flex items-start gap-2.5 text-[15px] leading-snug text-[#6e6e73]">
+        {item.items.map((bullet) => (
+          <li key={bullet} className="flex items-start gap-2.5 text-[15px] leading-snug text-[#6e6e73]">
             <span className="mt-[5px] h-[4px] w-[4px] shrink-0 rounded-full bg-[#45b3e2]" />
-            {item}
+            {bullet}
           </li>
         ))}
       </ul>
-      {/* Bottom accent on hover */}
       <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#26337c] to-[#45b3e2] transition-all duration-500 group-hover:w-full" />
     </div>
   );
@@ -155,7 +203,7 @@ function SpineCard({ step }: { step: Step }) {
 
 // ─── Page component ───────────────────────────────────────────────────────────
 
-export function FokusUnternehmensstrategie() {
+export function FokusVertriebMarketing() {
   return (
     <InteriorPageRoot>
       <SchemaMarkup type="Service" data={meta} />
@@ -164,22 +212,22 @@ export function FokusUnternehmensstrategie() {
         data={[
           { name: "Startseite", url: "/" },
           { name: "Leistungen", url: "/leistungen" },
-          { name: meta.title, url: "/fokusthemen/unternehmensstrategie" },
+          { name: meta.title, url: "/fokusthemen/vertriebmarketing" },
         ]}
       />
 
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
-      <PageHero imageSrc={heroImage}>
+      <PageHero imageSrc={heroImage} priority>
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Strategie entsteht dort, wo Perspektiven auseinandergehen.
+          Vertrieb ohne Strategie ist teures Rauschen.
         </h1>
         <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
-          Wenn Verwaltungsrat und Führungsteam die Zukunft verschieden sehen, braucht es Methodik,
-          Struktur und eine externe Perspektive — keinen Kompromiss. Wir begleiten Sie vom ersten
-          Schritt bis zur gelebten Strategie.
+          Wenn Vertrieb und Marketing gegeneinander arbeiten, Zielkunden unklar sind und Prozesse
+          vom Zufall abhängen, entgehen Ihnen Umsatz und Marktanteile. Wir helfen Ihnen, Struktur,
+          Fokus und Wirkung in Ihre Go-to-Market-Aktivitäten zu bringen.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Link
@@ -189,10 +237,10 @@ export function FokusUnternehmensstrategie() {
             30-Minuten-Erstgespräch
           </Link>
           <Link
-            href="#prozess"
+            href="#handlungsfelder"
             className="inline-flex h-11 items-center gap-2 rounded-full border border-white/30 px-7 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:border-white/60 hover:bg-white/10"
           >
-            Zum Prozess
+            Handlungsfelder
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
               <path d="M7 2v10M2 7l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -200,67 +248,65 @@ export function FokusUnternehmensstrategie() {
         </div>
       </PageHero>
 
-      {/* ── 2. SPLIT PANEL — Unternehmensstrategie vs. Eignerstrategie ─── */}
+      {/* ── 2. SPLIT PANEL — Vertrieb vs. Marketing ──────────────────────── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half — warm linen: content tracks the 1068px centre column */}
+          {/* Left half — warm linen */}
           <div className="relative bg-[#faf8f2]">
             <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
               <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Ebene 1
+                Funktion 1
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
-                Unternehmensstrategie
+                Vertrieb
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
-                Betrifft die gesamte Organisation. Sie legt fest, wie das Unternehmen als Ganzes
-                geführt wird und welche strategischen Entscheidungen nötig sind, um nachhaltige
-                Wettbewerbsvorteile zu erzielen.
+                Vertrieb schafft direkte Kundenbeziehungen, qualifiziert Interessenten und
+                schliesst Geschäfte ab. Seine Wirkung hängt entscheidend davon ab, wie klar
+                Zielsegmente definiert, Prozesse strukturiert und Ressourcen eingesetzt sind.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
 
-          {/* Right half — navy: content tracks the 1068px centre column */}
+          {/* Right half — navy */}
           <div className="relative bg-[#1a2260]">
             <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
               <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
-                Ebene 2
+                Funktion 2
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
-                Eignerstrategie
+                Marketing
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-white/65">
-                Konzentriert sich auf die Präferenzen und Ziele der Eigentümer: Renditeerwartungen,
-                Risikotoleranz und langfristige Vision. Sie muss mit der Unternehmensstrategie in
-                Einklang stehen.
+                Marketing schafft Sichtbarkeit, Vertrauen und Nachfrage. Es positioniert das
+                Unternehmen, qualifiziert Interessenten vor und gibt dem Vertrieb die Grundlage,
+                auf der erfolgreiche Gespräche erst möglich werden.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
           </div>
         </div>
-
       </MotionSection>
 
-
-      {/* ── 4. PROCESS — Alternating spine timeline ──────────────────────── */}
-      <section id="prozess" className="bg-[#f5f5f7]">
+      {/* ── 3. HANDLUNGSFELDER — Alternating spine ───────────────────────── */}
+      <section id="handlungsfelder" className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
             <div className="grid gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-16">
               {/* Left: sticky anchor */}
               <div className="lg:sticky lg:top-28 lg:self-start">
                 <h2 className="text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Von der Analyse zur gelebten Strategie — in sieben Schritten.
+                  Sieben Hebel für wirksames Wachstum.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Jeder Schritt baut auf dem vorherigen auf. Die Erarbeitung erfordert sorgfältige
-                  Planung, tiefe Analyse und die Fähigkeit zur Anpassung.
+                  Vertrieb und Marketing wirken auf mehreren Ebenen. Wir helfen Ihnen, die
+                  richtigen Prioritäten zu setzen — und konsequent umzusetzen.
                 </p>
                 <Link
                   href="/kontakt"
@@ -284,7 +330,6 @@ export function FokusUnternehmensstrategie() {
                 {/* ── Desktop: alternating two-column spine ── */}
                 <div className="hidden lg:block">
                   <div className="relative">
-                    {/* Continuous brass spine line */}
                     <div
                       className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px"
                       style={{
@@ -294,28 +339,20 @@ export function FokusUnternehmensstrategie() {
                     />
 
                     <div className="space-y-8">
-                      {prozessSchritte.map((step, i) => {
+                      {handlungsfelder.map((item, i) => {
                         const isLeft = i % 2 === 0;
                         return (
-                          <div
-                            key={step.num}
-                            className="relative grid grid-cols-2"
-                          >
-                            {/* Spine node — centered on the line */}
+                          <div key={item.num} className="relative grid grid-cols-2">
                             <div className="absolute left-1/2 top-5 z-10 -translate-x-1/2">
                               <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c9a96e]/40 bg-white text-[11px] font-semibold tabular-nums text-[#26337c] shadow-sm">
-                                {step.num}
+                                {item.num}
                               </div>
                             </div>
-
-                            {/* Left cell */}
                             <div className="pr-10">
-                              {isLeft ? <SpineCard step={step} /> : null}
+                              {isLeft ? <SpineCard item={item} /> : null}
                             </div>
-
-                            {/* Right cell */}
                             <div className="pl-10">
-                              {!isLeft ? <SpineCard step={step} /> : null}
+                              {!isLeft ? <SpineCard item={item} /> : null}
                             </div>
                           </div>
                         );
@@ -326,8 +363,8 @@ export function FokusUnternehmensstrategie() {
 
                 {/* ── Mobile: simple vertical list ── */}
                 <div className="flex flex-col gap-4 lg:hidden">
-                  {prozessSchritte.map((step) => (
-                    <SpineCard key={step.num} step={step} />
+                  {handlungsfelder.map((item) => (
+                    <SpineCard key={item.num} item={item} />
                   ))}
                 </div>
               </div>
@@ -336,7 +373,7 @@ export function FokusUnternehmensstrategie() {
         </MotionSection>
       </section>
 
-      {/* ── 5. PULL QUOTE ────────────────────────────────────────────────── */}
+      {/* ── 4. PULL QUOTE ────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
         <div
           className="pointer-events-none absolute inset-0"
@@ -351,58 +388,128 @@ export function FokusUnternehmensstrategie() {
             Grundsatz
           </p>
           <blockquote className="mt-8 text-[clamp(1.375rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.22] tracking-[-0.025em] text-white text-balance">
-            &ldquo;Die erfolgreiche Bewältigung erfordert eine ganzheitliche Herangehensweise,
-            klare Kommunikation, aktive Einbindung der Stakeholder und die Fähigkeit zur
-            Anpassung an sich ändernde Bedingungen.&rdquo;
+            &ldquo;Vertrieb und Marketing sind keine getrennten Welten — sie sind zwei Seiten
+            desselben Wachstumshebels. Wer sie ausrichtet, wächst. Wer sie entkoppelt, kämpft
+            mit sich selbst.&rdquo;
           </blockquote>
           <div className="mt-10 flex items-center justify-center gap-5">
             <div className="h-px w-12 bg-[#c9a96e]/35" />
             <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-white/30">
-              Abexis Strategie-Prinzip
+              Abexis Go-to-Market-Prinzip
             </span>
             <div className="h-px w-12 bg-[#c9a96e]/35" />
           </div>
         </div>
       </section>
 
-      {/* ── 6. PITFALLS — Editorial newspaper list ───────────────────────── */}
-      <MotionSection>
-        <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.8fr] lg:gap-20 lg:items-start">
-            {/* Left anchor */}
-            <div className="lg:sticky lg:top-28">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Kritische Aspekte
+      {/* ── 5. PROZESSPHASEN — Dark navy phase grid ──────────────────────── */}
+      <section className="relative overflow-hidden bg-[#1a1f38]">
+        <div
+          className="pointer-events-none absolute inset-0"
+          aria-hidden
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 60% at 15% 50%, rgba(69,179,226,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 70% at 85% 30%, rgba(38,51,124,0.4) 0%, transparent 60%)",
+          }}
+        />
+
+        <MotionSection>
+          <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-28">
+            <div className="flex items-baseline gap-4 border-b border-white/[0.08] pb-6">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#45b3e2]/70">
+                Vorgehensmodell
               </p>
-              <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                Was eine Strategie scheitern lässt.
-              </h2>
-              <div className="mt-7 h-px w-full bg-black/[0.06]" />
-              <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                Die häufigsten Hindernisse sind keine Überraschungen. Sie sind bekannt — und
-                trotzdem werden sie in der Praxis immer wieder unterschätzt.
-              </p>
-              <div className="mt-8 h-px w-8 bg-[#c9a96e]/50" />
+              <span className="text-[11px] text-white/30">04 Phasen</span>
             </div>
 
-            {/* Right: card grid */}
-            <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2">
-              {fallstricke.map((f, i) => (
-                <div key={f.title} className="relative bg-white px-6 py-6">
-                  <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
-                  <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                    {String(i + 1).padStart(2, "0")}
+            <h2 className="mt-8 max-w-[28ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
+              Von der Diagnose zur performanten Vertriebsorganisation — strukturiert und messbar.
+            </h2>
+
+            <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
+              {prozessphasen.map((phase, i) => (
+                <div key={phase.num} className="relative flex flex-col bg-[#1a1f38]/60 px-6 py-8 backdrop-blur-sm">
+                  <p
+                    className="text-[3rem] font-semibold leading-none tracking-[-0.05em]"
+                    style={{ color: `rgba(201,169,110,${0.35 + i * 0.15})` }}
+                  >
+                    {phase.num}
                   </p>
-                  <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-                    {f.title}
-                  </h3>
-                  <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{f.body}</p>
+                  <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/40">
+                    {phase.title}
+                  </p>
+                  <ul className="mt-4 flex flex-col gap-2">
+                    {phase.items.map((item) => (
+                      <li key={item} className="flex items-start gap-2 text-[13px] text-white/65">
+                        <span className="mt-[5px] h-[5px] w-[5px] shrink-0 rounded-full bg-[#45b3e2]/50" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-auto pt-8">
+                    <div className="h-px w-6 bg-[#c9a96e]/40" />
+                  </div>
                 </div>
               ))}
             </div>
+
+            <p className="mt-8 max-w-[60ch] text-[15px] leading-relaxed text-white/50">
+              Jedes Engagement beginnt mit einer ehrlichen Bestandsaufnahme. Je nach Ausgangslage
+              arbeiten wir gezielt an einzelnen Hebeln oder begleiten Sie durch einen umfassenden
+              Go-to-Market-Aufbau — immer mit klaren Zielen und messbaren Ergebnissen.
+            </p>
           </div>
-        </div>
-      </MotionSection>
+        </MotionSection>
+      </section>
+
+      {/* ── 6. NUTZEN — Sticky left + card grid ──────────────────────────── */}
+      <section className="bg-[#f5f5f7]">
+        <MotionSection>
+          <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
+            <div className="grid gap-12 lg:grid-cols-[1fr_1.8fr] lg:gap-20 lg:items-start">
+              {/* Left anchor */}
+              <div className="lg:sticky lg:top-28">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+                  Nutzen
+                </p>
+                <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
+                  Was professioneller Vertrieb und Marketing bringen.
+                </h2>
+                <div className="mt-7 h-px w-full bg-black/[0.06]" />
+                <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
+                  Die Wirkung zeigt sich nicht nur im Umsatz — sondern in der Art, wie ein
+                  Unternehmen am Markt auftritt, wächst und seine Kunden bindet.
+                </p>
+                <Link
+                  href="/kontakt"
+                  className="mt-8 inline-flex items-center gap-3 text-[14px] font-semibold text-[#26337c] transition-all hover:gap-4"
+                >
+                  Unverbindliches Gespräch
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+                    <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </Link>
+              </div>
+
+              {/* Right: 4x2 card grid */}
+              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2">
+                {nutzen.map((n) => (
+                  <div key={n.num} className="relative bg-white px-6 py-6">
+                    <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
+                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
+                      {n.num}
+                    </p>
+                    <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
+                      {n.title}
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{n.body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </MotionSection>
+      </section>
 
       {/* ── 7. GUIDE — Unsere Rolle ──────────────────────────────────────── */}
       <section className="bg-white">
@@ -416,17 +523,17 @@ export function FokusUnternehmensstrategie() {
                   Unsere Rolle
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f]">
-                  Die Perspektive, die intern fehlt — und den Unterschied macht.
+                  Der Unterschied zwischen Aktivität und Wachstum.
                 </h2>
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
-                Sie wissen, dass Ihr Unternehmen eine klare Strategie braucht. Zwischen
-                Tagesgeschäft, Zeitdruck und unterschiedlichen Meinungen im Führungskreis bleibt
-                dafür selten der nötige Raum. Genau hier setzen wir an.
+                Viele Unternehmen haben aktive Vertriebsteams und laufende Marketingmassnahmen —
+                aber das Wachstum bleibt aus. Wir helfen Ihnen herauszufinden, wo die eigentlichen
+                Hebel liegen, und begleiten Sie beim Umsetzen.
               </p>
             </div>
 
-            {/* Three situations — when companies call Abexis */}
+            {/* Three situations */}
             <div className="mt-12">
               <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                 Typische Ausgangssituationen
@@ -435,18 +542,18 @@ export function FokusUnternehmensstrategie() {
                 {[
                   {
                     num: "01",
-                    title: "Fehlende interne Voraussetzungen",
-                    body: "Zeit, Distanz zum Tagesgeschäft und methodische Erfahrung fehlen — die Voraussetzungen für einen soliden Strategieprozess sind intern nicht gegeben.",
+                    title: "Stagnation trotz Aktivität",
+                    body: "Das Team ist beschäftigt, aber der Umsatz wächst nicht. Ziele werden verfehlt, ohne dass klar ist warum — Diagnose und Neuausrichtung sind gefragt.",
                   },
                   {
                     num: "02",
-                    title: "Divergierende Führungsperspektiven",
-                    body: "Verwaltungsrat und Geschäftsleitung sehen die Zukunft verschieden. Externe Moderation hilft, divergierende Sichtweisen in eine gemeinsame Richtung zu überführen.",
+                    title: "Vertrieb und Marketing im Silo",
+                    body: "Beide Funktionen arbeiten mit unterschiedlichen Zielen, Sprachen und Messgrössen. Das kostet Wirkung — und Energie, die im Markt fehlt.",
                   },
                   {
                     num: "03",
-                    title: "Strategische Entscheidungen mit hohem Einsatz",
-                    body: "Manche Entscheidungen sind zu wichtig für Improvisation. Ein strukturierter Prozess mit externem Blick reduziert das Risiko kostspieliger Fehlentscheidungen.",
+                    title: "Wachstum ohne Fundament",
+                    body: "Schnelles Wachstum hat Strukturen überholt: Prozesse, Rollen und Steuerung halten nicht Schritt. Jetzt braucht es Stabilisierung und skalierbare Grundlagen.",
                   },
                 ].map((s) => (
                   <div key={s.num} className="relative bg-white px-7 py-8">
@@ -463,12 +570,11 @@ export function FokusUnternehmensstrategie() {
               </div>
             </div>
 
-
           </div>
         </MotionSection>
       </section>
 
-      {/* ── 8. CTA — Specific 30-min offer ───────────────────────────────── */}
+      {/* ── 8. CTA ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden">
         <div
           className="absolute inset-0 -z-10"
@@ -491,14 +597,13 @@ export function FokusUnternehmensstrategie() {
                 Nächster Schritt
               </p>
               <h2 className="mt-4 max-w-[30ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white text-balance">
-                Strategische Klarheit entsteht nicht von selbst — aber mit dem richtigen Partner schneller.
+                Mehr Wirkung im Markt beginnt mit dem richtigen Gespräch.
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
                 In einem kostenlosen 30-Minuten-Erstgespräch klären wir gemeinsam, wo Ihr
-                Unternehmen steht, was Sie erreichen wollen — und wie wir Sie dabei begleiten können.
+                Vertrieb und Marketing heute stehen — und wo die grössten Hebel liegen.
               </p>
 
-              {/* Offer details */}
               <div className="mt-7 flex flex-wrap gap-4">
                 {["Kostenlos", "30 Minuten", "Unverbindlich"].map((tag) => (
                   <span
@@ -530,7 +635,6 @@ export function FokusUnternehmensstrategie() {
             </div>
           </div>
 
-          {/* L-corner decorative rule */}
           <div className="mt-16 flex items-center gap-4 opacity-20">
             <div className="h-px flex-1 bg-white" />
             <div className="relative h-4 w-4">

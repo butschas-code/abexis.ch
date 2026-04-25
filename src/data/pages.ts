@@ -117,6 +117,24 @@ export const homeWelcomeSection = {
   ],
 } as const;
 
+export const homeDifferentiators = [
+  {
+    label: "Strategie vor Technologie",
+    body: "Wir starten mit den Geschäftszielen — nicht mit der Technologie. Erst wenn klar ist, was erreicht werden soll, wählen wir die passenden Mittel.",
+    accent: "#26337c",
+  },
+  {
+    label: "Branchenübergreifend",
+    body: "Wir kennen die typischen Fallstricke aus verschiedenen Sektoren und bringen bewährte Lösungsmuster aus der Praxis direkt mit ein.",
+    accent: "#45b3e2",
+  },
+  {
+    label: "Fokus auf Umsetzung",
+    body: "Wir bleiben nicht bei theoretischen Konzepten stehen, sondern begleiten die Implementierung und übernehmen Verantwortung für Resultate.",
+    accent: "#c9a96e",
+  },
+] as const;
+
 export const homeAboutTeaser =
   "Wir begleiten Sie auf Ihrem Weg zum Erfolg und übernehmen gemeinsam mit Ihnen Verantwortung. Unsere Kompetenzen in den Themen Strategie, Vertrieb & Marketing, Digitalisierung, Change Management und Unternehmensführung sind der Schlüssel zum Erfolg Ihres Unternehmens. Auch stehen wir Unternehmern und Führungspersonen als Sparringspartner zur Verfügung. In einem offenen Dialog diskutieren wir mit unserem Gegenüber aktuelle Herausforderungen des Unternehmens.";
 

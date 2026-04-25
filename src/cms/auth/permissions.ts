@@ -17,6 +17,8 @@ export const CMS_PERMISSIONS = [
   "manage_submissions",
   /** Site settings, SEO blocks, legal/contact config — admin only. */
   "manage_site_settings",
+  /** Executive Search vacancy/mandate postings. */
+  "manage_vacancies",
 ] as const;
 
 export type CmsPermission = (typeof CMS_PERMISSIONS)[number];
@@ -31,6 +33,7 @@ const EDITOR_PERMISSIONS: ReadonlySet<CmsPermission> = new Set([
   "manage_media",
   "manage_categories",
   "manage_authors",
+  "manage_vacancies",
 ]);
 
 /** @deprecated Prefer {@link roleHasPermission} with a concrete permission. Kept for existing imports. */

@@ -18,4 +18,7 @@ export const CMS_PATHS = {
   adminAuthorEdit: (id: string) => `/admin/authors/${id}` as const,
   adminSettings: "/admin/settings",
   adminPostEdit: (id: string) => `/admin/posts/${id}` as const,
+  adminVacancies: "/admin/vacancies",
+  adminVacancyNew: "/admin/vacancies/new",
+  adminVacancyEdit: (id: string) => `/admin/vacancies/${id}` as const,
 } as const;

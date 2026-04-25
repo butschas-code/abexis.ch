@@ -5,7 +5,6 @@ import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { fokusPageHeroImages } from "@/data/site-images";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
-import { MobileExpandProvider, MobileCollapsibleCard } from "@/components/public-site/MobileExpandable";
 
 // ─── Static data — module level, no re-allocation ────────────────────────────
 
@@ -164,30 +163,7 @@ const nutzen = [
   },
 ] as const;
 
-const kredibilitaet = [
-  { value: "7", label: "Handlungsfelder" },
-  { value: "4", label: "Prozessphasen" },
-  { value: "8", label: "Nutzendimensionen" },
-  { value: "KMU–Konzern", label: "" },
-] as const;
 
-const guidePunkte = [
-  {
-    label: "Strategie vor Technologie",
-    body: "Wir starten mit den Geschäftszielen — nicht mit der Technologie. Erst wenn klar ist, was erreicht werden soll, wählen wir die passenden Mittel.",
-    accent: "#26337c",
-  },
-  {
-    label: "Branchenübergreifende Erfahrung",
-    body: "Wir kennen die typischen Fallstricke aus verschiedenen Sektoren und bringen bewährte Transformationsmuster aus der Praxis mit.",
-    accent: "#45b3e2",
-  },
-  {
-    label: "Begleitung bis zur Umsetzung",
-    body: "Wir bleiben nicht bei Konzepten: Wir unterstützen Sie bei der konkreten Implementierung und übernehmen Verantwortung für die Ergebnisse.",
-    accent: "#c9a96e",
-  },
-] as const;
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -233,7 +209,6 @@ function SpineCard({ item }: { item: Handlungsfeld }) {
 export function FokusDigitaleTransformation() {
   return (
     <InteriorPageRoot>
-      <MobileExpandProvider>
       <SchemaMarkup type="Service" data={meta} />
       <SchemaMarkup
         type="BreadcrumbList"
@@ -279,102 +254,63 @@ export function FokusDigitaleTransformation() {
       {/* ── 2. SPLIT PANEL — Digitalisierung vs. Digitale Transformation ─── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half — warm linen: content tracks the 1068px centre column */}
-          <div className="relative bg-[#faf8f2]">
+          {/* Left half — navy: content tracks the 1068px centre column */}
+          <div className="relative bg-[#1a2260]">
             <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
-              <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
-              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
-              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+              <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
+              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
                 Ebene 1
               </h2>
-              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
+              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
                 Digitalisierung
               </h3>
-              <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
+              <p className="mt-5 text-[16px] leading-relaxed text-white/65">
                 Betrifft die taktische Ebene: einzelne Prozesse, Tools und Arbeitsabläufe werden
                 digitalisiert oder automatisiert. Wichtig, aber nicht hinreichend — sie verändert
                 das Geschäftsmodell nicht.
               </p>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
           </div>
 
-          {/* Right half — navy: content tracks the 1068px centre column */}
-          <div className="relative bg-[#1a2260]">
+          {/* Right half — warm linen: content tracks the 1068px centre column */}
+          <div className="relative bg-[#faf8f2]">
             <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
-              <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
-              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
-              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
+              <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
+              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                 Ebene 2
               </h2>
-              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
+              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
                 Digitale Transformation
               </h3>
-              <p className="mt-5 text-[16px] leading-relaxed text-white/65">
+              <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
                 Betrifft die strategische Ebene: Geschäftsmodelle, Kundenerlebnisse, Kultur und
                 Führung werden grundlegend neu gedacht. Sie schafft nachhaltige Wettbewerbsvorteile
                 und erfordert unternehmerische Entschlossenheit.
               </p>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
         </div>
 
-        {/* Bridge — below the split */}
-        <div className="border-b border-black/[0.06] bg-white">
-          <div className="mx-auto max-w-[1068px] px-6 py-10 md:py-14">
-            <div className="grid gap-6 md:grid-cols-[auto_1fr] md:gap-14 md:items-center">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b] md:w-32 md:shrink-0">
-                Warum das<br className="hidden md:block" /> wichtig ist
-              </p>
-              <p className="border-l-[3px] border-[#c9a96e]/50 pl-6 text-[18px] font-medium leading-relaxed tracking-[-0.01em] text-[#1d1d1f]">
-                Wer nur digitalisiert, ohne zu transformieren, optimiert den Status quo — und
-                verpasst die eigentliche Chance. Entscheidend ist ein klares Bild der Ziele,
-                bevor die Strategie erarbeitet wird.
-              </p>
-            </div>
-          </div>
-        </div>
       </MotionSection>
 
-      {/* ── 3. CREDIBILITY STRIP ─────────────────────────────────────────── */}
-      <div className="border-b border-black/[0.05] bg-[#f5f5f7]">
-        <div className="mx-auto max-w-[1068px] px-6 py-7">
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-            {kredibilitaet.map(({ value, label }) => (
-              <div key={value} className="flex items-center gap-3">
-                <p className="text-[1.625rem] font-semibold tabular-nums leading-none tracking-[-0.035em] text-[#26337c]">
-                  {value}
-                </p>
-                {label && <p className="text-[12px] leading-snug text-[#6e6e73]">{label}</p>}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
-      {/* ── 4. HANDLUNGSFELDER — Alternating spine timeline ──────────────── */}
       <section id="handlungsfelder" className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
-            <div className="flex items-baseline justify-between gap-8 border-b border-black/[0.07] pb-6">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Handlungsfelder
-              </p>
-              <span className="text-[11px] text-[#86868b]">07 Dimensionen</span>
-            </div>
-
-            <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-16">
+            <div className="grid gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-16">
               {/* Left: sticky anchor */}
               <div className="lg:sticky lg:top-28 lg:self-start">
                 <h2 className="text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Sieben Dimensionen, die eine Transformation ausmachen.
+                  Sieben Dimensionen der Digitalen Transformation.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Es muss nicht immer das volle Programm sein. Allenfalls möchten Sie nur einen
-                  Teilaspekt betrachten oder benötigen Unterstützung bei der Umsetzung eines
-                  bestimmten Handlungsfelds.
+                  Die Digitalisierung betrifft alle Bereiche Ihres Unternehmens. Wir begleiten Sie
+                  dabei, diese Dimensionen ganzheitlich zu betrachten und gezielt zu entwickeln.
                 </p>
                 <Link
                   href="/kontakt"
@@ -382,7 +318,13 @@ export function FokusDigitaleTransformation() {
                 >
                   Beratungsgespräch anfragen
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-                    <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M3 8h10M8 3l5 5-5 5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </Link>
               </div>
@@ -426,9 +368,7 @@ export function FokusDigitaleTransformation() {
                 {/* ── Mobile: simple vertical list ── */}
                 <div className="flex flex-col gap-4 lg:hidden">
                   {handlungsfelder.map((item) => (
-                    <MobileCollapsibleCard key={item.num}>
-                      <SpineCard item={item} />
-                    </MobileCollapsibleCard>
+                    <SpineCard key={item.num} item={item} />
                   ))}
                 </div>
               </div>
@@ -492,30 +432,28 @@ export function FokusDigitaleTransformation() {
 
             <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
               {prozessphasen.map((phase, i) => (
-                <MobileCollapsibleCard key={phase.num} collapsedClass="max-h-[160px]" fadeFrom="#1a1f38" darkArrow>
-                  <div className="relative flex flex-col bg-[#1a1f38]/60 px-6 py-8 backdrop-blur-sm">
-                    <p
-                      className="text-[3rem] font-semibold leading-none tracking-[-0.05em]"
-                      style={{ color: `rgba(201,169,110,${0.35 + i * 0.15})` }}
-                    >
-                      {phase.num}
-                    </p>
-                    <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/40">
-                      {phase.title}
-                    </p>
-                    <ul className="mt-4 flex flex-col gap-2">
-                      {phase.items.map((item) => (
-                        <li key={item} className="flex items-start gap-2 text-[13px] text-white/65">
-                          <span className="mt-[5px] h-[5px] w-[5px] shrink-0 rounded-full bg-[#45b3e2]/50" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="mt-auto pt-8">
-                      <div className="h-px w-6 bg-[#c9a96e]/40" />
-                    </div>
+                <div key={phase.num} className="relative flex flex-col bg-[#1a1f38]/60 px-6 py-8 backdrop-blur-sm">
+                  <p
+                    className="text-[3rem] font-semibold leading-none tracking-[-0.05em]"
+                    style={{ color: `rgba(201,169,110,${0.35 + i * 0.15})` }}
+                  >
+                    {phase.num}
+                  </p>
+                  <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/40">
+                    {phase.title}
+                  </p>
+                  <ul className="mt-4 flex flex-col gap-2">
+                    {phase.items.map((item) => (
+                      <li key={item} className="flex items-start gap-2 text-[13px] text-white/65">
+                        <span className="mt-[5px] h-[5px] w-[5px] shrink-0 rounded-full bg-[#45b3e2]/50" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-auto pt-8">
+                    <div className="h-px w-6 bg-[#c9a96e]/40" />
                   </div>
-                </MobileCollapsibleCard>
+                </div>
               ))}
             </div>
 
@@ -560,18 +498,16 @@ export function FokusDigitaleTransformation() {
               {/* Right: 4x2 card grid */}
               <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2">
                 {nutzen.map((n) => (
-                  <MobileCollapsibleCard key={n.num}>
-                    <div className="relative bg-white px-6 py-6">
-                      <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
-                      <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                        {n.num}
-                      </p>
-                      <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-                        {n.title}
-                      </h3>
-                      <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{n.body}</p>
-                    </div>
-                  </MobileCollapsibleCard>
+                  <div key={n.num} className="relative bg-white px-6 py-6">
+                    <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
+                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
+                      {n.num}
+                    </p>
+                    <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
+                      {n.title}
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{n.body}</p>
+                  </div>
                 ))}
               </div>
             </div>
@@ -624,43 +560,20 @@ export function FokusDigitaleTransformation() {
                     body: "Digitale Transformation bindet Kapital und Energie. Ein strukturierter Ansatz mit externem Blick minimiert das Risiko kostspieliger Fehlinvestitionen.",
                   },
                 ].map((s) => (
-                  <MobileCollapsibleCard key={s.num} collapsedClass="max-h-[168px]">
-                    <div className="relative bg-white px-7 py-8">
-                      <LCorner className="top-4 right-4 text-[#c9a96e]/30" />
-                      <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                        {s.num}
-                      </p>
-                      <h3 className="mt-4 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-                        {s.title}
-                      </h3>
-                      <p className="mt-3 text-[15px] leading-relaxed text-[#6e6e73]">{s.body}</p>
-                    </div>
-                  </MobileCollapsibleCard>
+                  <div key={s.num} className="relative bg-white px-7 py-8">
+                    <LCorner className="top-4 right-4 text-[#c9a96e]/30" />
+                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
+                      {s.num}
+                    </p>
+                    <h3 className="mt-4 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
+                      {s.title}
+                    </h3>
+                    <p className="mt-3 text-[15px] leading-relaxed text-[#6e6e73]">{s.body}</p>
+                  </div>
                 ))}
               </div>
             </div>
 
-            {/* Three differentiators */}
-            <div className="mt-14 overflow-hidden rounded-2xl border border-white/[0.06]" style={{ background: "#1a2260" }}>
-              <div className="border-b border-white/[0.06] px-7 py-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40">
-                  Was uns auszeichnet
-                </p>
-              </div>
-              <div className="grid gap-px bg-white/[0.04] sm:grid-cols-3">
-                {guidePunkte.map((vp) => (
-                  <MobileCollapsibleCard key={vp.label} fadeFrom="#1a2260" darkArrow>
-                    <div className="relative flex flex-col bg-[#1a2260] px-6 py-8">
-                      <div className="h-[3px] w-8 rounded-full" style={{ background: vp.accent }} />
-                      <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/40">
-                        {vp.label}
-                      </p>
-                      <p className="mt-3 text-[15px] leading-relaxed text-white/65">{vp.body}</p>
-                    </div>
-                  </MobileCollapsibleCard>
-                ))}
-              </div>
-            </div>
 
           </div>
         </MotionSection>
@@ -668,7 +581,11 @@ export function FokusDigitaleTransformation() {
 
       {/* ── 9. CTA — Specific 30-min offer ───────────────────────────────── */}
       <section className="relative overflow-hidden">
-        <div className="abexis-hero-gradient-surface absolute inset-0 -z-10" aria-hidden />
+        <div
+          className="absolute inset-0 -z-10"
+          aria-hidden
+          style={{ background: "linear-gradient(115deg, #26337c 0%, #3550a4 45%, #45b3e2 100%)" }}
+        />
         <div
           className="pointer-events-none absolute inset-0 -z-10"
           aria-hidden
@@ -732,7 +649,6 @@ export function FokusDigitaleTransformation() {
           </div>
         </div>
       </section>
-      </MobileExpandProvider>
     </InteriorPageRoot>
   );
 }
