@@ -54,19 +54,24 @@ function mapVacancyDoc(id: string, d: Record<string, unknown>): PublishedVacancy
 async function listPublishedVacanciesUncached(lim: number): Promise<PublishedVacancy[]> {
   const db = getAdminFirestore();
   if (!db) return [];
-  // Single equality filter only — no composite index needed. Sort in memory.
-  const snap = await db
-    .collection(COLLECTIONS.vacancies)
-    .where("status", "==", "published")
-    .limit(lim)
-    .get();
-  const rows = snap.docs.map((doc) => mapVacancyDoc(doc.id, doc.data() as Record<string, unknown>));
-  rows.sort((a, b) => {
-    const ta = a.publishedAt ?? a.createdAt;
-    const tb = b.publishedAt ?? b.createdAt;
-    return tb < ta ? -1 : ta < tb ? 1 : 0;
-  });
-  return rows;
+  try {
+    // Single equality filter only — no composite index needed. Sort in memory.
+    const snap = await db
+      .collection(COLLECTIONS.vacancies)
+      .where("status", "==", "published")
+      .limit(lim)
+      .get();
+    const rows = snap.docs.map((doc) => mapVacancyDoc(doc.id, doc.data() as Record<string, unknown>));
+    rows.sort((a, b) => {
+      const ta = a.publishedAt ?? a.createdAt;
+      const tb = b.publishedAt ?? b.createdAt;
+      return tb < ta ? -1 : ta < tb ? 1 : 0;
+    });
+    return rows;
+  } catch (error) {
+    console.warn("[CMS] Failed to list published vacancies (credentials might be missing during build):", error instanceof Error ? error.message : "Unknown error");
+    return [];
+  }
 }
 
 const listPublishedVacanciesCached = unstable_cache(
@@ -82,17 +87,22 @@ export const listPublishedVacancies = cache(async (limit = 20): Promise<Publishe
 async function getVacancyBySlugUncached(slug: string): Promise<PublishedVacancy | null> {
   const db = getAdminFirestore();
   if (!db) return null;
-  // Single equality filter — no composite index needed. Check status in code.
-  const snap = await db
-    .collection(COLLECTIONS.vacancies)
-    .where("slug", "==", slug)
-    .limit(5)
-    .get();
-  for (const doc of snap.docs) {
-    const v = mapVacancyDoc(doc.id, doc.data() as Record<string, unknown>);
-    if (v.status === "published") return v;
+  try {
+    // Single equality filter — no composite index needed. Check status in code.
+    const snap = await db
+      .collection(COLLECTIONS.vacancies)
+      .where("slug", "==", slug)
+      .limit(5)
+      .get();
+    for (const doc of snap.docs) {
+      const v = mapVacancyDoc(doc.id, doc.data() as Record<string, unknown>);
+      if (v.status === "published") return v;
+    }
+    return null;
+  } catch (error) {
+    console.warn(`[CMS] Failed to get vacancy by slug "${slug}":`, error instanceof Error ? error.message : "Unknown error");
+    return null;
   }
-  return null;
 }
 
 const getVacancyBySlugCached = unstable_cache(
