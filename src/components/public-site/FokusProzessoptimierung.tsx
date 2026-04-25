@@ -8,72 +8,72 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 // ─── Static data — module level, no re-allocation ────────────────────────────
 
-const meta = fokusthemenMeta.find((m) => m.slug === "vertriebmarketing")!;
-const heroImage = fokusPageHeroImages["vertriebmarketing"];
-const contentImage = "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F5e9dd04f-ea8b-4c80-9830-7579ef4024df.png?alt=media";
+const meta = fokusthemenMeta.find((m) => m.slug === "prozessoptimierung")!;
+const heroImage = fokusPageHeroImages["prozessoptimierung"];
+const contentImage = "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fb738bd96-1957-43aa-8025-8980b84673c6.jpg?alt=media";
 
 const handlungsfelder = [
   {
     num: "01",
-    title: "Vertriebsstrategie & Go-to-Market",
+    title: "Prozessanalyse & Diagnose",
     items: [
-      "Marktpotenziale identifizieren und Prioritäten setzen",
-      "Go-to-Market-Modell entwickeln und schärfen",
-      "Wettbewerbspositionierung klar definieren",
+      "Bestehende Prozesse erfassen, visualisieren und bewerten",
+      "Ineffizienzen, Redundanzen und Medienbrüche aufdecken",
+      "Priorisierung nach Kosten, Risiko und Optimierungspotenzial",
     ],
   },
   {
     num: "02",
-    title: "Vertriebsstruktur & Organisation",
+    title: "Lean & Wertstromdesign",
     items: [
-      "Rollen, Verantwortlichkeiten und Gebiete klar zuweisen",
-      "Innen- und Aussendienst effektiv verzahnen",
-      "Channel-Management und Partnerstrukturen aufbauen",
+      "Wertstrom-Analyse: wertschöpfende vs. nicht-wertschöpfende Aktivitäten",
+      "Verschwendung systematisch identifizieren und eliminieren",
+      "Flussoptimierung und Durchlaufzeiten verkürzen",
     ],
   },
   {
     num: "03",
-    title: "Kundensegmentierung & Targeting",
+    title: "Prozessautomatisierung",
     items: [
-      "Ideale Kundenprofile definieren und priorisieren",
-      "Segmente nach Potenzial, Fit und Aufwand bewerten",
-      "Akquisefokus auf gewinnbare Märkte ausrichten",
+      "Automatisierungspotenziale realistisch bewerten",
+      "RPA, Workflow-Systeme und KI-gestützte Lösungen prüfen",
+      "Implementierung schrittweise und risikoarm gestalten",
     ],
   },
   {
     num: "04",
-    title: "Positionierung & Messaging",
+    title: "Kostenoptimierung",
     items: [
-      "Klares Wertversprechen für jedes Segment formulieren",
-      "Differenzierung gegenüber dem Wettbewerb schärfen",
-      "Konsistente Kommunikation über alle Kanäle sicherstellen",
+      "Kostentreiber in Prozessen transparent machen",
+      "Einsparpotenziale quantifizieren und priorisieren",
+      "Massnahmen ohne Qualitätsverlust umsetzen",
     ],
   },
   {
     num: "05",
-    title: "Sales Enablement & Prozesse",
+    title: "Prozessdesign & Standardisierung",
     items: [
-      "Vertriebsprozesse standardisieren und dokumentieren",
-      "Unterlagen, Tools und Argumentation für das Team aufbauen",
-      "Onboarding und Weiterentwicklung strukturieren",
+      "Soll-Prozesse gemeinsam mit Fachbereichen entwickeln",
+      "Standards, Vorlagen und Prozessdokumentation etablieren",
+      "Einheitliche Vorgehensweisen über Einheiten hinweg sicherstellen",
     ],
   },
   {
     num: "06",
-    title: "Performance-Steuerung & KPIs",
+    title: "Schnittstellen & Integration",
     items: [
-      "Relevante Kennzahlen entlang des Funnels definieren",
-      "Reporting und Forecasting verlässlich gestalten",
-      "Führungsrhythmus mit datenbasierten Reviews etablieren",
+      "Übergabepunkte zwischen Abteilungen und Systemen klären",
+      "Reibungsverluste an Schnittstellen gezielt reduzieren",
+      "End-to-End-Sicht über Bereichsgrenzen hinweg etablieren",
     ],
   },
   {
     num: "07",
-    title: "Digitaler Vertrieb & Kanäle",
+    title: "Prozess-Monitoring & KVP",
     items: [
-      "Digitale Akquise- und Nurturing-Kanäle aufbauen",
-      "CRM als strategisches Steuerungsinstrument nutzen",
-      "Marketing Automation sinnvoll einsetzen",
+      "Kennzahlen zur Prozesskontrolle definieren und einführen",
+      "Kontinuierlichen Verbesserungsprozess (KVP) verankern",
+      "Prozessverantwortung klar zuweisen und leben",
     ],
   },
 ] as const;
@@ -81,41 +81,41 @@ const handlungsfelder = [
 const prozessphasen = [
   {
     num: "01",
-    title: "Analyse & Diagnose",
+    title: "Analyse & Aufnahme",
     items: [
-      "Ist-Situation im Vertrieb und Marketing erfassen",
-      "Pipeline-Qualität, Conversion-Raten und Deckungsbeiträge analysieren",
-      "Engpässe, Reibungsverluste und Blindflugbereiche identifizieren",
-      "Kundenperspektive und Wettbewerbsumfeld einbeziehen",
+      "Prozesslandschaft erfassen und priorisieren",
+      "Schnittstellen, Systeme und Verantwortlichkeiten klären",
+      "Einsparpotenziale und Schmerzpunkte identifizieren",
+      "Handlungsfelder gemeinsam bewerten",
     ],
   },
   {
     num: "02",
-    title: "Strategie & Konzept",
+    title: "Konzept & Design",
     items: [
-      "Zielkunden, Wertversprechen und Positionierung festlegen",
-      "Go-to-Market-Modell und Kanalstrategie definieren",
-      "Organisationsstruktur und Rollen klären",
-      "Messbare Ziele und Meilensteine vereinbaren",
+      "Soll-Prozesse entwickeln und modellieren",
+      "Automatisierungsoptionen prüfen und einplanen",
+      "Business Case für Massnahmen aufstellen",
+      "Umsetzungsroadmap priorisieren",
     ],
   },
   {
     num: "03",
     title: "Implementierung",
     items: [
-      "Prozesse, Tools und Unterlagen aufbauen",
-      "Team befähigen und Führungsrhythmus einführen",
-      "Pilotprojekte starten und erste Erkenntnisse gewinnen",
-      "Marketing- und Vertriebsaktivitäten koordiniert aufgleisen",
+      "Prozessänderungen schrittweise einführen",
+      "Betroffene befähigen und Akzeptanz sicherstellen",
+      "Systeme, Tools und Dokumentation aufschalten",
+      "Pilotläufe durchführen und nachschärfen",
     ],
   },
   {
     num: "04",
-    title: "Performance & Optimierung",
+    title: "Messen & Verstetigen",
     items: [
-      "KPIs kontinuierlich messen und interpretieren",
-      "Learnings systematisch in den Prozess zurückspielen",
-      "Skalierung vorbereiten und Wachstumshebel aktivieren",
+      "Ergebnisse messen und mit Zielbild abgleichen",
+      "KVP-Strukturen einrichten und übergeben",
+      "Prozessverantwortung intern verankern",
     ],
   },
 ] as const;
@@ -123,43 +123,43 @@ const prozessphasen = [
 const nutzen = [
   {
     num: "01",
-    title: "Umsatzwachstum",
-    body: "Klare Strategie, besseres Targeting und strukturierte Prozesse führen zu mehr abgeschlossenen Geschäften.",
+    title: "Kostensenkung",
+    body: "Schlanke Prozesse reduzieren Aufwände, vermeiden Doppelarbeit und senken operative Kosten nachhaltig.",
   },
   {
     num: "02",
-    title: "Effizienz",
-    body: "Weniger Streuverlust — das Team fokussiert sich auf die richtigen Kunden mit dem richtigen Angebot.",
+    title: "Höhere Qualität",
+    body: "Standardisierte, klar definierte Prozesse minimieren Fehler und erhöhen die Verlässlichkeit der Ergebnisse.",
   },
   {
     num: "03",
-    title: "Kundenbindung",
-    body: "Konsistente Kommunikation und echtes Verständnis der Kundenbedürfnisse stärken Loyalität und Weiterempfehlungen.",
+    title: "Schnelligkeit",
+    body: "Kürzere Durchlaufzeiten und weniger Wartezeiten erhöhen die Reaktionsfähigkeit gegenüber Kunden und Märkten.",
   },
   {
     num: "04",
-    title: "Marktposition",
-    body: "Eine differenzierte Positionierung macht Sie im Wettbewerb sichtbarer und verhandlungsstärker.",
+    title: "Transparenz",
+    body: "Sichtbare Prozesse und klare Verantwortlichkeiten machen Steuerung einfacher und Entscheidungen fundierter.",
   },
   {
     num: "05",
-    title: "Planungssicherheit",
-    body: "Verlässliche Pipeline-Daten und Forecasts schaffen Grundlagen für sichere Ressourcen- und Investitionsentscheide.",
+    title: "Skalierbarkeit",
+    body: "Optimierte und automatisierte Prozesse wachsen mit — ohne proportional mehr Personal zu erfordern.",
   },
   {
     num: "06",
-    title: "Skalierbarkeit",
-    body: "Dokumentierte Prozesse und klare Strukturen ermöglichen Wachstum, ohne dass Qualität und Konsistenz leiden.",
+    title: "Mitarbeiterzufriedenheit",
+    body: "Weniger Reibung, klarere Abläufe und sinnvolle Automatisierung entlasten Teams von repetitiven Aufgaben.",
   },
   {
     num: "07",
-    title: "Teamperformance",
-    body: "Klare Rollen, gute Werkzeuge und regelmässiges Coaching steigern Motivation und Abschlussquoten.",
+    title: "Compliance & Sicherheit",
+    body: "Dokumentierte, kontrollierte Prozesse erleichtern das Einhalten von Vorschriften und Auditanforderungen.",
   },
   {
     num: "08",
-    title: "Alignment",
-    body: "Marketing und Vertrieb ziehen am selben Strick — gemeinsame Ziele, gemeinsame Sprache, gemeinsame Wirkung.",
+    title: "Wettbewerbsfähigkeit",
+    body: "Operative Exzellenz ist ein nachhaltiger Vorteil — besonders wenn Margen sinken und Geschwindigkeit zählt.",
   },
 ] as const;
 
@@ -204,7 +204,7 @@ function SpineCard({ item }: { item: Handlungsfeld }) {
 
 // ─── Page component ───────────────────────────────────────────────────────────
 
-export function FokusVertriebMarketing() {
+export function FokusProzessoptimierung() {
   return (
     <InteriorPageRoot>
       <SchemaMarkup type="Service" data={meta} />
@@ -213,7 +213,7 @@ export function FokusVertriebMarketing() {
         data={[
           { name: "Startseite", url: "/" },
           { name: "Leistungen", url: "/leistungen" },
-          { name: meta.title, url: "/fokusthemen/vertriebmarketing" },
+          { name: meta.title, url: "/fokusthemen/prozessoptimierung" },
         ]}
       />
 
@@ -223,12 +223,12 @@ export function FokusVertriebMarketing() {
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Vertrieb ohne Strategie ist teures Rauschen.
+          Wenn Prozesse wachsen, aber nicht atmen — zahlt das Unternehmen dafür.
         </h1>
         <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
-          Wenn Vertrieb und Marketing gegeneinander arbeiten, Zielkunden unklar sind und Prozesse
-          vom Zufall abhängen, entgehen Ihnen Umsatz und Marktanteile. Wir helfen Ihnen, Struktur,
-          Fokus und Wirkung in Ihre Go-to-Market-Aktivitäten zu bringen.
+          Gewachsene Strukturen, ungeklärte Schnittstellen und manuelle Umwege kosten täglich
+          Zeit, Geld und Motivation. Wir helfen Ihnen, Prozesse zu durchleuchten, zu
+          straffen und dort zu automatisieren, wo es echten Mehrwert bringt.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Link
@@ -249,7 +249,7 @@ export function FokusVertriebMarketing() {
         </div>
       </PageHero>
 
-      {/* ── 2. SPLIT PANEL — Vertrieb vs. Marketing ──────────────────────── */}
+      {/* ── 2. SPLIT PANEL — Optimierung vs. Automatisierung ─────────────── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
           {/* Left half — warm linen */}
@@ -258,15 +258,15 @@ export function FokusVertriebMarketing() {
               <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
               <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Funktion 1
+                Ansatz 1
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
-                Vertrieb
+                Prozessoptimierung
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
-                Vertrieb schafft direkte Kundenbeziehungen, qualifiziert Interessenten und
-                schliesst Geschäfte ab. Seine Wirkung hängt entscheidend davon ab, wie klar
-                Zielsegmente definiert, Prozesse strukturiert und Ressourcen eingesetzt sind.
+                Analysiert bestehende Abläufe und entfernt, was keinen Wert schafft: Wartezeiten,
+                Doppelarbeit, Medienbrüche, ungeklärte Zuständigkeiten. Das Ziel ist ein
+                schlanker, transparenter Prozess — mit oder ohne Technologie.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
@@ -278,15 +278,15 @@ export function FokusVertriebMarketing() {
               <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
               <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
-                Funktion 2
+                Ansatz 2
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
-                Marketing
+                Prozessautomatisierung
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-white/65">
-                Marketing schafft Sichtbarkeit, Vertrauen und Nachfrage. Es positioniert das
-                Unternehmen, qualifiziert Interessenten vor und gibt dem Vertrieb die Grundlage,
-                auf der erfolgreiche Gespräche erst möglich werden.
+                Nutzt Technologie, um repetitive, regelbasierte Aufgaben maschinell auszuführen.
+                Wirksam — aber nur dort, wo der Prozess bereits sauber ist. Automatisierung
+                eines schlechten Prozesses erzeugt nur schnellere Fehler.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
@@ -294,20 +294,19 @@ export function FokusVertriebMarketing() {
         </div>
       </MotionSection>
 
-      {/* ── 3. HANDLUNGSFELDER — Alternating spine ───────────────────────── */}
+      {/* ── 3. HANDLUNGSFELDER ───────────────────────────────────────────── */}
       <section id="handlungsfelder" className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
             <div className="grid gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-16">
-              {/* Left: sticky anchor */}
               <div className="lg:sticky lg:top-28 lg:self-start">
                 <h2 className="text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Sieben Hebel für wirksames Wachstum.
+                  Sieben Hebel für operative Exzellenz.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Vertrieb und Marketing wirken auf mehreren Ebenen. Wir helfen Ihnen, die
-                  richtigen Prioritäten zu setzen — und konsequent umzusetzen.
+                  Prozessoptimierung wirkt auf mehreren Ebenen. Wir helfen Ihnen, die richtigen
+                  Ansatzpunkte zu finden — und konsequent umzusetzen.
                 </p>
                 <Link
                   href="/kontakt"
@@ -315,20 +314,12 @@ export function FokusVertriebMarketing() {
                 >
                   Beratungsgespräch anfragen
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-                    <path
-                      d="M3 8h10M8 3l5 5-5 5"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
+                    <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </Link>
               </div>
 
-              {/* Right: alternating spine — desktop / simple list — mobile */}
               <div>
-                {/* ── Desktop: alternating two-column spine ── */}
                 <div className="hidden lg:block">
                   <div className="relative">
                     <div
@@ -338,7 +329,6 @@ export function FokusVertriebMarketing() {
                           "linear-gradient(to bottom, rgba(201,169,110,0.05), rgba(201,169,110,0.25) 8%, rgba(201,169,110,0.25) 92%, rgba(201,169,110,0.05))",
                       }}
                     />
-
                     <div className="space-y-8">
                       {handlungsfelder.map((item, i) => {
                         const isLeft = i % 2 === 0;
@@ -349,20 +339,14 @@ export function FokusVertriebMarketing() {
                                 {item.num}
                               </div>
                             </div>
-                            <div className="pr-10">
-                              {isLeft ? <SpineCard item={item} /> : null}
-                            </div>
-                            <div className="pl-10">
-                              {!isLeft ? <SpineCard item={item} /> : null}
-                            </div>
+                            <div className="pr-10">{isLeft ? <SpineCard item={item} /> : null}</div>
+                            <div className="pl-10">{!isLeft ? <SpineCard item={item} /> : null}</div>
                           </div>
                         );
                       })}
                     </div>
                   </div>
                 </div>
-
-                {/* ── Mobile: simple vertical list ── */}
                 <div className="flex flex-col gap-4 lg:hidden">
                   {handlungsfelder.map((item) => (
                     <SpineCard key={item.num} item={item} />
@@ -374,51 +358,36 @@ export function FokusVertriebMarketing() {
         </MotionSection>
       </section>
 
-      {/* ── DESIGN THINKING — Problemraum / Lösungsraum ─────────────────── */}
+      {/* ── BPMN DIAGRAM — Beispiel Prozessvisualisierung ────────────────── */}
       <section className="bg-white">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
             <div className="grid gap-8 border-b border-black/[0.06] pb-10 md:grid-cols-[1fr_1fr] md:gap-16 md:items-end">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                  Denkrahmen
+                  Methodik
                 </p>
                 <h2 className="mt-4 text-[clamp(1.5rem,3vw+0.5rem,2.125rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f]">
-                  Vom Problem zur Lösung — methodisch und kundenorientiert.
+                  Prozesse sichtbar machen — als Grundlage jeder Verbesserung.
                 </h2>
               </div>
               <p className="text-[16px] leading-relaxed text-[#6e6e73] md:pb-1">
-                Bevor Massnahmen definiert werden, stehen Verstehen und Beobachten. Wir arbeiten
-                im Problemraum, bevor wir in den Lösungsraum wechseln — das verhindert teure
-                Antworten auf die falschen Fragen.
+                Was nicht visualisiert ist, kann nicht verbessert werden. Wir erfassen Prozesse
+                in strukturierten Modellen — von einfachen Ablaufdiagrammen bis zu detaillierten
+                BPMN-Darstellungen mit Swimlanes und Entscheidungspunkten.
               </p>
             </div>
 
-            <div className="mt-10 overflow-hidden rounded-2xl border border-black/[0.05] bg-[#f5f5f7] p-8 md:p-12">
+            <div className="mt-10 overflow-hidden rounded-2xl border border-black/[0.07] bg-[#f5f5f7] p-6 md:p-10">
               <img
                 src={contentImage}
-                alt="Design Thinking Prozess: Problemraum und Lösungsraum"
-                className="mx-auto w-full max-w-[860px] object-contain"
+                alt="Beispiel BPMN-Prozessdiagramm mit Swimlanes"
+                className="mx-auto w-full max-w-[880px] object-contain"
                 loading="lazy"
               />
-            </div>
-
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                { phase: "Problemraum", label: "Verstehen & Beobachten", body: "Kundenbedürfnisse, Marktdynamik und Vertriebsrealität tiefgreifend erfassen, bevor Lösungen entworfen werden." },
-                { phase: "Synthese", label: "Muster erkennen", body: "Erkenntnisse verdichten, Hypothesen formulieren und die eigentlichen Hebel von den Symptomen trennen." },
-                { phase: "Lösungsraum", label: "Entwickeln & Testen", body: "Ideen strukturiert entwickeln, priorisieren und in der Praxis validieren — iterativ statt auf einmal." },
-              ].map((item) => (
-                <div key={item.phase} className="rounded-xl border border-black/[0.06] bg-white px-5 py-5">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#45b3e2]">
-                    {item.phase}
-                  </p>
-                  <h3 className="mt-2 text-[15px] font-semibold leading-snug tracking-[-0.01em] text-[#1d1d1f]">
-                    {item.label}
-                  </h3>
-                  <p className="mt-2 text-[14px] leading-relaxed text-[#6e6e73]">{item.body}</p>
-                </div>
-              ))}
+              <p className="mt-5 text-center text-[12px] text-[#86868b]">
+                Beispiel: BPMN-Prozessmodell mit Swimlanes — Rollen, Entscheidungen und Übergaben auf einen Blick
+              </p>
             </div>
           </div>
         </MotionSection>
@@ -439,21 +408,21 @@ export function FokusVertriebMarketing() {
             Grundsatz
           </p>
           <blockquote className="mt-8 text-[clamp(1.375rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.22] tracking-[-0.025em] text-white text-balance">
-            &ldquo;Vertrieb und Marketing sind keine getrennten Welten — sie sind zwei Seiten
-            desselben Wachstumshebels. Wer sie ausrichtet, wächst. Wer sie entkoppelt, kämpft
-            mit sich selbst.&rdquo;
+            &ldquo;Operative Exzellenz entsteht nicht durch Technologie allein — sie entsteht
+            durch das konsequente Hinterfragen jedes Schritts, der keinen Wert schafft.
+            Erst der saubere Prozess, dann die Automatisierung.&rdquo;
           </blockquote>
           <div className="mt-10 flex items-center justify-center gap-5">
             <div className="h-px w-12 bg-[#c9a96e]/35" />
             <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-white/30">
-              Abexis Go-to-Market-Prinzip
+              Abexis Operations-Prinzip
             </span>
             <div className="h-px w-12 bg-[#c9a96e]/35" />
           </div>
         </div>
       </section>
 
-      {/* ── 5. PROZESSPHASEN — Dark navy phase grid ──────────────────────── */}
+      {/* ── 5. PROZESSPHASEN ─────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
         <div
           className="pointer-events-none absolute inset-0"
@@ -463,7 +432,6 @@ export function FokusVertriebMarketing() {
               "radial-gradient(ellipse 70% 60% at 15% 50%, rgba(69,179,226,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 70% at 85% 30%, rgba(38,51,124,0.4) 0%, transparent 60%)",
           }}
         />
-
         <MotionSection>
           <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-28">
             <div className="flex items-baseline gap-4 border-b border-white/[0.08] pb-6">
@@ -472,11 +440,9 @@ export function FokusVertriebMarketing() {
               </p>
               <span className="text-[11px] text-white/30">04 Phasen</span>
             </div>
-
             <h2 className="mt-8 max-w-[28ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
-              Von der Diagnose zur performanten Vertriebsorganisation — strukturiert und messbar.
+              Von der Prozessaufnahme zur messbaren Verbesserung — strukturiert und nachhaltig.
             </h2>
-
             <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
               {prozessphasen.map((phase, i) => (
                 <div key={phase.num} className="relative flex flex-col bg-[#1a1f38]/60 px-6 py-8 backdrop-blur-sm">
@@ -503,33 +469,31 @@ export function FokusVertriebMarketing() {
                 </div>
               ))}
             </div>
-
             <p className="mt-8 max-w-[60ch] text-[15px] leading-relaxed text-white/50">
-              Jedes Engagement beginnt mit einer ehrlichen Bestandsaufnahme. Je nach Ausgangslage
-              arbeiten wir gezielt an einzelnen Hebeln oder begleiten Sie durch einen umfassenden
-              Go-to-Market-Aufbau — immer mit klaren Zielen und messbaren Ergebnissen.
+              Wir arbeiten pragmatisch: Scope und Tiefe richten sich nach Ihrer Ausgangslage.
+              Ob punktuelle Optimierung eines kritischen Prozesses oder systematisches
+              Programm — der Ansatz bleibt faktenbasiert, umsetzungsorientiert und messbar.
             </p>
           </div>
         </MotionSection>
       </section>
 
-      {/* ── 6. NUTZEN — Sticky left + card grid ──────────────────────────── */}
+      {/* ── 6. NUTZEN ────────────────────────────────────────────────────── */}
       <section className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
             <div className="grid gap-12 lg:grid-cols-[1fr_1.8fr] lg:gap-20 lg:items-start">
-              {/* Left anchor */}
               <div className="lg:sticky lg:top-28">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                   Nutzen
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Was professioneller Vertrieb und Marketing bringen.
+                  Was schlanke Prozesse einem Unternehmen bringen.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Die Wirkung zeigt sich nicht nur im Umsatz — sondern in der Art, wie ein
-                  Unternehmen am Markt auftritt, wächst und seine Kunden bindet.
+                  Prozessoptimierung ist keine Sparübung — sie ist eine Investition in
+                  Geschwindigkeit, Qualität und die Fähigkeit zu skalieren.
                 </p>
                 <Link
                   href="/kontakt"
@@ -541,8 +505,6 @@ export function FokusVertriebMarketing() {
                   </svg>
                 </Link>
               </div>
-
-              {/* Right: 4x2 card grid */}
               <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2">
                 {nutzen.map((n) => (
                   <div key={n.num} className="relative bg-white px-6 py-6">
@@ -562,29 +524,25 @@ export function FokusVertriebMarketing() {
         </MotionSection>
       </section>
 
-      {/* ── 7. GUIDE — Unsere Rolle ──────────────────────────────────────── */}
+      {/* ── 7. UNSERE ROLLE ──────────────────────────────────────────────── */}
       <section className="bg-white">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
-
-            {/* Header — two-column */}
             <div className="grid gap-8 border-b border-black/[0.06] pb-12 md:grid-cols-[1fr_1fr] md:gap-20 md:items-end">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                   Unsere Rolle
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f]">
-                  Der Unterschied zwischen Aktivität und Wachstum.
+                  Der externe Blick, der Vertrautes in Frage stellt.
                 </h2>
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
-                Viele Unternehmen haben aktive Vertriebsteams und laufende Marketingmassnahmen —
-                aber das Wachstum bleibt aus. Wir helfen Ihnen herauszufinden, wo die eigentlichen
-                Hebel liegen, und begleiten Sie beim Umsetzen.
+                Wer täglich in einem Prozess arbeitet, sieht ihn kaum noch. Wir bringen die
+                Distanz, die Methodik und die Erfahrung aus verschiedensten Branchen mit — und
+                stellen die Fragen, die intern niemand mehr stellt.
               </p>
             </div>
-
-            {/* Three situations */}
             <div className="mt-12">
               <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                 Typische Ausgangssituationen
@@ -593,18 +551,18 @@ export function FokusVertriebMarketing() {
                 {[
                   {
                     num: "01",
-                    title: "Stagnation trotz Aktivität",
-                    body: "Das Team ist beschäftigt, aber der Umsatz wächst nicht. Ziele werden verfehlt, ohne dass klar ist warum — Diagnose und Neuausrichtung sind gefragt.",
+                    title: "Wachstum hat Prozesse überholt",
+                    body: "Was in kleineren Strukturen funktionierte, erzeugt heute Reibung, Fehler und Verzögerungen. Die Prozesse müssen mit dem Unternehmen mitwachsen.",
                   },
                   {
                     num: "02",
-                    title: "Vertrieb und Marketing im Silo",
-                    body: "Beide Funktionen arbeiten mit unterschiedlichen Zielen, Sprachen und Messgrössen. Das kostet Wirkung — und Energie, die im Markt fehlt.",
+                    title: "Kostendruck erfordert Effizienz",
+                    body: "Sinkende Margen oder steigender Wettbewerb zwingen dazu, operativen Aufwand zu reduzieren — ohne Qualität und Lieferfähigkeit zu gefährden.",
                   },
                   {
                     num: "03",
-                    title: "Wachstum ohne Fundament",
-                    body: "Schnelles Wachstum hat Strukturen überholt: Prozesse, Rollen und Steuerung halten nicht Schritt. Jetzt braucht es Stabilisierung und skalierbare Grundlagen.",
+                    title: "Automatisierung will geplant sein",
+                    body: "Die Technologie ist vorhanden, aber unklar ist, welche Prozesse sich wirklich eignen und wo der Business Case überzeugend ist.",
                   },
                 ].map((s) => (
                   <div key={s.num} className="relative bg-white px-7 py-8">
@@ -620,7 +578,6 @@ export function FokusVertriebMarketing() {
                 ))}
               </div>
             </div>
-
           </div>
         </MotionSection>
       </section>
@@ -640,7 +597,6 @@ export function FokusVertriebMarketing() {
               "radial-gradient(ellipse 60% 80% at 15% 100%, rgba(201,169,110,0.14) 0%, transparent 50%), radial-gradient(ellipse 50% 60% at 90% 10%, rgba(255,255,255,0.07) 0%, transparent 45%)",
           }}
         />
-
         <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
           <div className="grid gap-10 md:grid-cols-[1fr_auto] md:items-center">
             <div>
@@ -648,13 +604,12 @@ export function FokusVertriebMarketing() {
                 Nächster Schritt
               </p>
               <h2 className="mt-4 max-w-[30ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white text-balance">
-                Mehr Wirkung im Markt beginnt mit dem richtigen Gespräch.
+                Operative Exzellenz ist kein Zustand — sie ist eine Entscheidung.
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
-                In einem kostenlosen 30-Minuten-Erstgespräch klären wir gemeinsam, wo Ihr
-                Vertrieb und Marketing heute stehen — und wo die grössten Hebel liegen.
+                In einem kostenlosen 30-Minuten-Erstgespräch klären wir, wo in Ihren Prozessen
+                die grössten Hebel liegen — und wie ein gezieltes Optimierungsprogramm aussehen könnte.
               </p>
-
               <div className="mt-7 flex flex-wrap gap-4">
                 {["Kostenlos", "30 Minuten", "Unverbindlich"].map((tag) => (
                   <span
@@ -667,7 +622,6 @@ export function FokusVertriebMarketing() {
                 ))}
               </div>
             </div>
-
             <div className="flex flex-col gap-3 md:shrink-0">
               <Link
                 href="/kontakt"
@@ -685,7 +639,6 @@ export function FokusVertriebMarketing() {
               </Link>
             </div>
           </div>
-
           <div className="mt-16 flex items-center gap-4 opacity-20">
             <div className="h-px flex-1 bg-white" />
             <div className="relative h-4 w-4">

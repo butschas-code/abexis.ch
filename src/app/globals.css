@@ -299,8 +299,13 @@ body {
 .legacy-prose p {
   margin-bottom: 1rem;
 }
-.legacy-prose ul,
+.legacy-prose ul {
+  list-style-type: disc;
+  margin: 0.75rem 0 1.25rem 1.25rem;
+  padding: 0;
+}
 .legacy-prose ol {
+  list-style-type: decimal;
   margin: 0.75rem 0 1.25rem 1.25rem;
   padding: 0;
 }

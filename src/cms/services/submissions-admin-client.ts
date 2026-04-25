@@ -26,6 +26,7 @@ export type SubmissionListItem = {
   createdAt: string | null;
   /** From payload when present */
   summary: string | null;
+  hasFiles: boolean;
 };
 
 export type SubmissionDetail = Submission & { id: string };
@@ -72,7 +73,8 @@ function payloadSummary(payload: Record<string, string>): string | null {
   const name = payload.name?.trim();
   const email = payload.email?.trim();
   const company = payload.company?.trim();
-  const bits = [name, company, email].filter(Boolean);
+  const jobTitle = payload.jobTitle?.trim();
+  const bits = [name, company, jobTitle, email].filter(Boolean);
   return bits.length ? bits.join(" · ") : null;
 }
 
@@ -94,6 +96,7 @@ export async function listSubmissionsForAdmin(max = 150): Promise<SubmissionList
       status: normalizeSubmissionStatus(data.status),
       createdAt: toIso(data.createdAt),
       summary: payloadSummary(payload),
+      hasFiles: Array.isArray(data.fileUrls) && data.fileUrls.length > 0,
     };
   });
 }

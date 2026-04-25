@@ -10,6 +10,7 @@ import { getPublishedVacancyBySlug, listPublishedVacancies } from "@/public-site
 import { parsePostBody } from "@/lib/cms/post-body-storage";
 import { sanitizeBlogHtml } from "@/lib/cms/sanitize-blog-html";
 import { unsplash } from "@/executive-search/lib/images/unsplash";
+import { VacancyApplicationForm } from "@/components/executive-search/VacancyApplicationForm";
 
 export const revalidate = 120;
 
@@ -145,25 +146,31 @@ export default async function VacancyDetailPage({ params }: Props) {
 
       {/* Apply / CTA */}
       <MotionSection>
-        <section className="apple-section-mesh py-16 sm:py-20">
+        <section className="apple-section-mesh py-16 sm:py-20" id="bewerbung">
           <PublicContentWidth>
-            <div className="max-w-3xl">
-              {v.apply && (
-                <p className="mb-8 text-[15px] leading-relaxed text-[#6e6e73]">{v.apply}</p>
-              )}
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  href="/kontakt"
-                  className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-brand-900 px-8 text-[17px] font-medium text-white shadow-sm transition-all duration-200 hover:bg-[var(--brand-900-hover)] hover:-translate-y-0.5"
-                >
-                  Jetzt bewerben
-                </Link>
-                <Link
-                  href="/executive-search/vakanzen"
-                  className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-black/[0.10] bg-white px-8 text-[17px] font-medium text-[#1d1d1f] transition-all duration-200 hover:bg-[#f5f5f7] hover:-translate-y-0.5"
-                >
-                  Alle Vakanzen
-                </Link>
+            <div className="grid gap-12 lg:grid-cols-[1fr_400px]">
+              <div className="max-w-3xl">
+                <h2 className="text-[24px] font-semibold text-[#1d1d1f] mb-4">Interesse geweckt?</h2>
+                {v.apply && (
+                  <p className="mb-8 text-[15px] leading-relaxed text-[#6e6e73]">{v.apply}</p>
+                )}
+                {!v.apply && (
+                  <p className="mb-8 text-[15px] leading-relaxed text-[#6e6e73]">
+                    Reichen Sie Ihre Bewerbung direkt über unser Formular ein oder kontaktieren Sie uns für ein unverbindliches Erstgespräch.
+                  </p>
+                )}
+                <div className="flex flex-wrap gap-4 mb-10">
+                  <Link
+                    href="/executive-search/vakanzen"
+                    className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-black/[0.10] bg-white px-8 text-[17px] font-medium text-[#1d1d1f] transition-all duration-200 hover:bg-[#f5f5f7] hover:-translate-y-0.5"
+                  >
+                    Alle Vakanzen
+                  </Link>
+                </div>
+              </div>
+
+              <div>
+                <VacancyApplicationForm vacancyId={v.slug} vacancyTitle={v.title} />
               </div>
             </div>
           </PublicContentWidth>

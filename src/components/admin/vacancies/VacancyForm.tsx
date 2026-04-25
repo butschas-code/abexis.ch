@@ -23,6 +23,7 @@ import {
 } from "@/components/admin/admin-ui";
 import { AdminLoading } from "@/components/admin/AdminLoading";
 import { AdminPageHeader } from "@/components/admin/AdminPageContainer";
+import { AdminFileUpload } from "../AdminFileUpload";
 
 const PostBodyEditor = dynamic(
   () => import("@/components/admin/PostBodyEditor").then((m) => ({ default: m.PostBodyEditor })),
@@ -261,6 +262,7 @@ export function VacancyForm({ mode, vacancyId }: Props) {
           value={bodyHtml}
           onChange={handleBodyChange}
           placeholder="Stellenbeschreibung: Ausgangslage, Aufgaben, Anforderungen, Angebot… H2 für Abschnittstitel, Aufzählungen für Listen."
+          uploadPath={`cms/vacancies/${vacancyId}/body`}
         />
       </div>
 
@@ -277,7 +279,7 @@ export function VacancyForm({ mode, vacancyId }: Props) {
         ) : (
           <div className="space-y-3">
             {form.files.map((f, i) => (
-              <div key={i} className="grid gap-3 sm:grid-cols-[1fr_2fr_auto] items-end">
+              <div key={i} className="grid gap-3 sm:grid-cols-[1fr_2fr_auto_auto] items-end">
                 <div>
                   <span className="mb-1.5 block text-[12px] font-medium text-[var(--apple-text-secondary)]">Bezeichnung</span>
                   <input
@@ -289,13 +291,21 @@ export function VacancyForm({ mode, vacancyId }: Props) {
                   />
                 </div>
                 <div>
-                  <span className="mb-1.5 block text-[12px] font-medium text-[var(--apple-text-secondary)]">URL</span>
+                  <span className="mb-1.5 block text-[12px] font-medium text-[var(--apple-text-secondary)]">URL / Pfad</span>
                   <input
-                    type="url"
+                    type="text"
                     value={f.url}
                     onChange={(e) => updateFile(i, { url: e.target.value })}
-                    placeholder="https://…"
+                    placeholder="https://… oder Upload nutzen"
                     className={adminInput}
+                  />
+                </div>
+                <div className="mb-0.5">
+                  <AdminFileUpload
+                    path={`cms/vacancies/${vacancyId}`}
+                    label="↑"
+                    onUploadSuccess={(url) => updateFile(i, { url })}
+                    className="!w-10"
                   />
                 </div>
                 <button

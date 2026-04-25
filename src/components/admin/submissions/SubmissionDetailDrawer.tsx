@@ -14,6 +14,11 @@ const statusLabel: Record<CmsSubmissionStatus, string> = {
   reviewed: "Gelesen",
   archived: "Archiviert",
   spam: "Spam",
+  screening: "In Prüfung",
+  interview: "Interview",
+  offer: "Angebot",
+  hired: "Eingestellt",
+  rejected: "Abgesagt",
 };
 
 type Props = {

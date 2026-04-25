@@ -71,17 +71,30 @@ export async function POST(req: Request) {
       file.name.replace(/[^\w.\-()+ ]+/g, "_").slice(0, 120) || "upload.bin";
     const path = `cms/submissions/incoming/${uploadId}/${Date.now()}-${safeName}`;
     const buf = Buffer.from(await file.arrayBuffer());
-    const f = bucket.file(path);
-    await f.save(buf, {
-      contentType: type,
-      resumable: false,
-    });
-    const [signedUrl] = await f.getSignedUrl({
-      action: "read",
-      expires: Date.now() + SIGNED_URL_EXPIRY_MS,
-    });
-    urls.push(signedUrl);
-    paths.push(path);
+    
+    try {
+      const f = bucket.file(path);
+      const downloadToken = randomUUID();
+      
+      await f.save(buf, {
+        contentType: type,
+        resumable: false,
+        metadata: {
+          metadata: {
+            firebaseStorageDownloadTokens: downloadToken,
+          },
+        },
+      });
+      
+      const encodedPath = encodeURIComponent(path);
+      const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${encodedPath}?alt=media&token=${downloadToken}`;
+      
+      urls.push(publicUrl);
+      paths.push(path);
+    } catch (firebaseErr: any) {
+      console.error("Firebase Storage explicit error:", firebaseErr);
+      return NextResponse.json({ error: "UPLOAD_REJECTED", message: firebaseErr?.message || "Unknown Firebase Storage error" }, { status: 500 });
+    }
   }
 
   return NextResponse.json({ urls, paths }, { status: 201 });

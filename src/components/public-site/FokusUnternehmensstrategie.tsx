@@ -10,6 +10,7 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 const meta = fokusthemenMeta.find((m) => m.slug === "unternehmensstrategie")!;
 const heroImage = fokusPageHeroImages["unternehmensstrategie"];
+const contentImage = "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fe006b913-0cb3-4631-9d9d-7304bc2bab8e.jpg?alt=media";
 
 const prozessSchritte = [
   {
@@ -335,6 +336,24 @@ export function FokusUnternehmensstrategie() {
           </div>
         </MotionSection>
       </section>
+
+      {/* ── IMAGE BREAK ──────────────────────────────────────────────────── */}
+      <div className="relative h-[380px] overflow-hidden md:h-[480px]">
+        <img
+          src={contentImage}
+          alt="Strategieprozess in der Praxis"
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="lazy"
+        />
+        <div
+          className="absolute inset-0"
+          aria-hidden
+          style={{
+            background:
+              "linear-gradient(to top, rgba(26,31,56,0.55) 0%, transparent 55%), linear-gradient(to bottom, rgba(26,31,56,0.2) 0%, transparent 30%)",
+          }}
+        />
+      </div>
 
       {/* ── 5. PULL QUOTE ────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">

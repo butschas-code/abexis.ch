@@ -4,64 +4,44 @@ import { adminBody, adminBtnSecondary, adminFeedbackInfo, adminPanel, adminSecti
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
 
 /**
- * Hinweise-Seite: keine Medienbibliothek / kein Firebase Storage — Bilder nur per URL im Beitrag oder lokal unter `public/uploads/`.
+ * Media management information.
  */
 export function AdminMediaClient() {
   return (
     <AdminPageContainer>
       <AdminPageHeader
         title="Medien"
-        description="Hier gibt es keine Upload-Funktion. Bilder binden Sie direkt im Beitrag ein — ruhig und nachvollziehbar für die tägliche Arbeit."
+        description="Verwalten Sie Bilder und Dokumente. Dieses System nutzt Firebase Storage für Uploads in Beiträgen und Vakanzen."
       />
 
-      <div className={adminFeedbackInfo} role="note">
-        <p className="font-medium text-[var(--apple-text)]">Kurz erklärt</p>
+      <div className={adminFeedbackSuccess} role="status">
+        <p className="font-medium">Firebase Storage ist aktiv</p>
         <p className={`mt-2 ${adminBody}`}>
-          Firebase Storage wird in diesem CMS nicht verwendet. Stattdessen nutzen Sie öffentlich erreichbare
-          Bild-Adressen (https://…) im Beitragseditor und beim Titelbild.
+          Sie können nun Bilder für Blog-Beiträge und Dokumente für Vakanzen direkt hochladen. 
+          Die Dateien werden sicher in der Cloud gespeichert und automatisch mit der Website verknüpft.
         </p>
       </div>
 
       <AdminPageSection>
         <div className={`space-y-6 ${adminPanel} p-6 sm:p-8`}>
           <div>
-            <h2 className={adminSectionLabel}>Beiträge</h2>
+            <h2 className={adminSectionLabel}>Bilder & Dokumente</h2>
             <p className={`mt-3 max-w-prose ${adminBody}`}>
-              <strong className="font-medium text-[var(--apple-text)]">Titelbild:</strong> Im Beitragsformular unter
-              «Titelbild URL» die vollständige Web-Adresse des Bildes eintragen — optional mit Alternativtext.
+              <strong className="font-medium text-[var(--apple-text)]">Vakanzen:</strong> Laden Sie PDFs oder Detailbeschriebe
+              direkt bei der Bearbeitung der Vakanz hoch. Die Verknüpfung erfolgt automatisch.
             </p>
             <p className={`mt-3 max-w-prose ${adminBody}`}>
-              <strong className="font-medium text-[var(--apple-text)]">Bilder im Text:</strong> In der Werkzeugleiste
-              des Texteditors auf «Bild (URL)» tippen und die Adresse einfügen. Es wird nichts auf einen separaten
-              Speicher hochgeladen.
+              <strong className="font-medium text-[var(--apple-text)]">Blog-Beiträge:</strong> Das Titelbild kann nun
+              direkt hochgeladen werden. In Zukunft werden auch Uploads für Bilder innerhalb des Textes unterstützt.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link href={CMS_PATHS.adminPostNew} className={adminBtnSecondary}>
-                Neuer Beitrag
+              <Link href={CMS_PATHS.adminVacancies} className={adminBtnSecondary}>
+                Zu den Vakanzen
               </Link>
               <Link href={CMS_PATHS.adminPosts} className={adminBtnSecondary}>
                 Zur Beitragsliste
               </Link>
             </div>
-          </div>
-
-          <hr className="border-black/[0.06]" />
-
-          <div>
-            <h2 className={adminSectionLabel}>Eigene Dateien auf der Website (optional)</h2>
-            <p className={`mt-3 max-w-prose ${adminBody}`}>
-              Wenn Ihre Agentur oder IT statische Dateien ins Projekt legt, können diese unter dem Ordner{" "}
-              <code className="rounded-md bg-black/[0.05] px-1.5 py-0.5 font-mono text-[13px] text-[var(--apple-text)]">
-                public/uploads/
-              </code>{" "}
-              abgelegt werden. Nach dem nächsten Deployment sind sie unter Adressen wie
-            </p>
-            <p className="mt-3 rounded-xl border border-black/[0.06] bg-white px-4 py-3 font-mono text-[13px] text-[var(--apple-text-secondary)]">
-              …/uploads/<span className="text-[var(--apple-text-tertiary)]">beispiel.jpg</span>
-            </p>
-            <p className={`mt-3 max-w-prose ${adminBody}`}>
-              erreichbar — dieselbe Adresse können Sie dann als Bild-URL im Beitrag verwenden.
-            </p>
           </div>
         </div>
       </AdminPageSection>

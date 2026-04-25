@@ -8,72 +8,72 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 // ─── Static data — module level, no re-allocation ────────────────────────────
 
-const meta = fokusthemenMeta.find((m) => m.slug === "vertriebmarketing")!;
-const heroImage = fokusPageHeroImages["vertriebmarketing"];
-const contentImage = "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F5e9dd04f-ea8b-4c80-9830-7579ef4024df.png?alt=media";
+const meta = fokusthemenMeta.find((m) => m.slug === "veränderungsmanagement")!;
+const heroImage = fokusPageHeroImages["veränderungsmanagement"];
+const contentImage = "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F3f6bff6e-7e5a-4da7-92ad-f900954f953f.jpeg?alt=media";
 
 const handlungsfelder = [
   {
     num: "01",
-    title: "Vertriebsstrategie & Go-to-Market",
+    title: "Change Readiness & Diagnose",
     items: [
-      "Marktpotenziale identifizieren und Prioritäten setzen",
-      "Go-to-Market-Modell entwickeln und schärfen",
-      "Wettbewerbspositionierung klar definieren",
+      "Veränderungsbereitschaft in der Organisation messen",
+      "Risiken, Widerstände und Enabler frühzeitig identifizieren",
+      "Ausgangslage und Zielbild klar gegenüberstellen",
     ],
   },
   {
     num: "02",
-    title: "Vertriebsstruktur & Organisation",
+    title: "Führung & Sponsorship",
     items: [
-      "Rollen, Verantwortlichkeiten und Gebiete klar zuweisen",
-      "Innen- und Aussendienst effektiv verzahnen",
-      "Channel-Management und Partnerstrukturen aufbauen",
+      "Führungskräfte als sichtbare Treiber des Wandels befähigen",
+      "Aktives Sponsorship auf Ebene Geschäftsleitung sicherstellen",
+      "Kohärenz zwischen Aussage und Verhalten der Führung herstellen",
     ],
   },
   {
     num: "03",
-    title: "Kundensegmentierung & Targeting",
+    title: "Stakeholder-Management",
     items: [
-      "Ideale Kundenprofile definieren und priorisieren",
-      "Segmente nach Potenzial, Fit und Aufwand bewerten",
-      "Akquisefokus auf gewinnbare Märkte ausrichten",
+      "Einfluss- und Interessensgruppen systematisch kartieren",
+      "Gezielte Einbindungsstrategien je Stakeholdergruppe entwickeln",
+      "Kritische Akteure frühzeitig zu Mitgestaltenden machen",
     ],
   },
   {
     num: "04",
-    title: "Positionierung & Messaging",
+    title: "Kommunikation & Transparenz",
     items: [
-      "Klares Wertversprechen für jedes Segment formulieren",
-      "Differenzierung gegenüber dem Wettbewerb schärfen",
-      "Konsistente Kommunikation über alle Kanäle sicherstellen",
+      "Botschaften klar, konsistent und zielgruppengerecht gestalten",
+      "Kommunikationsrhythmus und Kanäle strukturiert aufbauen",
+      "Unsicherheiten direkt ansprechen statt ignorieren",
     ],
   },
   {
     num: "05",
-    title: "Sales Enablement & Prozesse",
+    title: "Mitarbeiterbeteiligung & Co-creation",
     items: [
-      "Vertriebsprozesse standardisieren und dokumentieren",
-      "Unterlagen, Tools und Argumentation für das Team aufbauen",
-      "Onboarding und Weiterentwicklung strukturieren",
+      "Betroffene zu Beteiligten machen — auf allen Ebenen",
+      "Rückmeldeschlaufen und Feedbackformate etablieren",
+      "Lösungen gemeinsam entwickeln statt verordnen",
     ],
   },
   {
     num: "06",
-    title: "Performance-Steuerung & KPIs",
+    title: "Kompetenzaufbau & Training",
     items: [
-      "Relevante Kennzahlen entlang des Funnels definieren",
-      "Reporting und Forecasting verlässlich gestalten",
-      "Führungsrhythmus mit datenbasierten Reviews etablieren",
+      "Neue Fähigkeiten und Verhaltensweisen gezielt aufbauen",
+      "Führungskräfte im Umgang mit Widerstand schulen",
+      "Lernformate an den Wandelprozess anpassen",
     ],
   },
   {
     num: "07",
-    title: "Digitaler Vertrieb & Kanäle",
+    title: "Verankerung & Nachhaltigkeit",
     items: [
-      "Digitale Akquise- und Nurturing-Kanäle aufbauen",
-      "CRM als strategisches Steuerungsinstrument nutzen",
-      "Marketing Automation sinnvoll einsetzen",
+      "Neue Arbeitsweisen in Strukturen und Prozessen verankern",
+      "Erfolge sichtbar machen und feiern",
+      "Rückfallmuster erkennen und frühzeitig gegensteuern",
     ],
   },
 ] as const;
@@ -81,41 +81,41 @@ const handlungsfelder = [
 const prozessphasen = [
   {
     num: "01",
-    title: "Analyse & Diagnose",
+    title: "Diagnose & Vorbereitung",
     items: [
-      "Ist-Situation im Vertrieb und Marketing erfassen",
-      "Pipeline-Qualität, Conversion-Raten und Deckungsbeiträge analysieren",
-      "Engpässe, Reibungsverluste und Blindflugbereiche identifizieren",
-      "Kundenperspektive und Wettbewerbsumfeld einbeziehen",
+      "Ausgangslage, Zielbild und Veränderungstiefe bestimmen",
+      "Stakeholder und Risiken kartieren",
+      "Change-Koalition und Sponsorship sicherstellen",
+      "Rahmenbedingungen und Ressourcen klären",
     ],
   },
   {
     num: "02",
-    title: "Strategie & Konzept",
+    title: "Planung & Design",
     items: [
-      "Zielkunden, Wertversprechen und Positionierung festlegen",
-      "Go-to-Market-Modell und Kanalstrategie definieren",
-      "Organisationsstruktur und Rollen klären",
-      "Messbare Ziele und Meilensteine vereinbaren",
+      "Change-Strategie und Roadmap entwickeln",
+      "Kommunikations- und Beteiligungskonzept erarbeiten",
+      "Führungskräfte und Multiplikatoren vorbereiten",
+      "Quick Wins identifizieren und einplanen",
     ],
   },
   {
     num: "03",
-    title: "Implementierung",
+    title: "Implementierung & Begleitung",
     items: [
-      "Prozesse, Tools und Unterlagen aufbauen",
-      "Team befähigen und Führungsrhythmus einführen",
-      "Pilotprojekte starten und erste Erkenntnisse gewinnen",
-      "Marketing- und Vertriebsaktivitäten koordiniert aufgleisen",
+      "Massnahmen rollieren und Fortschritt messen",
+      "Widerstand erkennen und konstruktiv bearbeiten",
+      "Kommunikation kontinuierlich aufrechterhalten",
+      "Lernschlaufen einbauen und Anpassungen vornehmen",
     ],
   },
   {
     num: "04",
-    title: "Performance & Optimierung",
+    title: "Verankerung & Transfer",
     items: [
-      "KPIs kontinuierlich messen und interpretieren",
-      "Learnings systematisch in den Prozess zurückspielen",
-      "Skalierung vorbereiten und Wachstumshebel aktivieren",
+      "Neues Verhalten in Prozessen und Strukturen festigen",
+      "Wirkung messen und dokumentieren",
+      "Interne Change-Kompetenz nachhaltig aufbauen",
     ],
   },
 ] as const;
@@ -123,43 +123,43 @@ const prozessphasen = [
 const nutzen = [
   {
     num: "01",
-    title: "Umsatzwachstum",
-    body: "Klare Strategie, besseres Targeting und strukturierte Prozesse führen zu mehr abgeschlossenen Geschäften.",
+    title: "Höhere Akzeptanz",
+    body: "Wenn Menschen den Wandel mitgestalten, tragen sie ihn mit — statt ihn zu bremsen.",
   },
   {
     num: "02",
-    title: "Effizienz",
-    body: "Weniger Streuverlust — das Team fokussiert sich auf die richtigen Kunden mit dem richtigen Angebot.",
+    title: "Geringeres Risiko",
+    body: "Strukturiertes Vorgehen reduziert die Wahrscheinlichkeit kostspieliger Rückschläge und Projektverzögerungen.",
   },
   {
     num: "03",
-    title: "Kundenbindung",
-    body: "Konsistente Kommunikation und echtes Verständnis der Kundenbedürfnisse stärken Loyalität und Weiterempfehlungen.",
+    title: "Schnellere Umsetzung",
+    body: "Klare Kommunikation und aktive Führung vermeiden Orientierungslosigkeit und Lähmung.",
   },
   {
     num: "04",
-    title: "Marktposition",
-    body: "Eine differenzierte Positionierung macht Sie im Wettbewerb sichtbarer und verhandlungsstärker.",
+    title: "Kulturwandel",
+    body: "Veränderungen, die tief verankert sind, verändern auch Haltungen und Arbeitsweisen dauerhaft.",
   },
   {
     num: "05",
-    title: "Planungssicherheit",
-    body: "Verlässliche Pipeline-Daten und Forecasts schaffen Grundlagen für sichere Ressourcen- und Investitionsentscheide.",
+    title: "Mitarbeiterbindung",
+    body: "Wer in Veränderungen einbezogen wird, fühlt sich gehört — das stärkt Motivation und Loyalität.",
   },
   {
     num: "06",
-    title: "Skalierbarkeit",
-    body: "Dokumentierte Prozesse und klare Strukturen ermöglichen Wachstum, ohne dass Qualität und Konsistenz leiden.",
+    title: "Führungskompetenz",
+    body: "Führungskräfte, die Wandel aktiv gestalten, wachsen in ihrer Wirksamkeit und Glaubwürdigkeit.",
   },
   {
     num: "07",
-    title: "Teamperformance",
-    body: "Klare Rollen, gute Werkzeuge und regelmässiges Coaching steigern Motivation und Abschlussquoten.",
+    title: "Projekterfolg",
+    body: "Transformationen mit professionellem Change Management erreichen ihre Ziele häufiger, schneller und nachhaltiger.",
   },
   {
     num: "08",
-    title: "Alignment",
-    body: "Marketing und Vertrieb ziehen am selben Strick — gemeinsame Ziele, gemeinsame Sprache, gemeinsame Wirkung.",
+    title: "Organisationale Resilienz",
+    body: "Unternehmen, die Wandel meistern, werden besser darin — und sind für künftige Veränderungen gewappnet.",
   },
 ] as const;
 
@@ -204,7 +204,7 @@ function SpineCard({ item }: { item: Handlungsfeld }) {
 
 // ─── Page component ───────────────────────────────────────────────────────────
 
-export function FokusVertriebMarketing() {
+export function FokusVeraenderungsmanagement() {
   return (
     <InteriorPageRoot>
       <SchemaMarkup type="Service" data={meta} />
@@ -213,7 +213,7 @@ export function FokusVertriebMarketing() {
         data={[
           { name: "Startseite", url: "/" },
           { name: "Leistungen", url: "/leistungen" },
-          { name: meta.title, url: "/fokusthemen/vertriebmarketing" },
+          { name: meta.title, url: "/fokusthemen/veränderungsmanagement" },
         ]}
       />
 
@@ -223,12 +223,12 @@ export function FokusVertriebMarketing() {
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Vertrieb ohne Strategie ist teures Rauschen.
+          Veränderung scheitert nicht an der Strategie — sie scheitert an den Menschen.
         </h1>
         <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
-          Wenn Vertrieb und Marketing gegeneinander arbeiten, Zielkunden unklar sind und Prozesse
-          vom Zufall abhängen, entgehen Ihnen Umsatz und Marktanteile. Wir helfen Ihnen, Struktur,
-          Fokus und Wirkung in Ihre Go-to-Market-Aktivitäten zu bringen.
+          Wenn Wandel von oben verordnet statt gemeinsam gestaltet wird, entsteht Widerstand,
+          Unsicherheit und Lähmung. Wir begleiten Organisationen dabei, Veränderungen so zu
+          führen, dass Menschen mitgehen — und Ergebnisse nachhaltig verankert bleiben.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Link
@@ -249,47 +249,46 @@ export function FokusVertriebMarketing() {
         </div>
       </PageHero>
 
-      {/* ── 2. SPLIT PANEL — Vertrieb vs. Marketing ──────────────────────── */}
+      {/* ── 2. SPLIT PANEL — Veränderungsmanagement vs. Projektmanagement ── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half — warm linen */}
-          <div className="relative bg-[#faf8f2]">
-            <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
-              <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
-              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
-              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Funktion 1
-              </h2>
-              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
-                Vertrieb
-              </h3>
-              <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
-                Vertrieb schafft direkte Kundenbeziehungen, qualifiziert Interessenten und
-                schliesst Geschäfte ab. Seine Wirkung hängt entscheidend davon ab, wie klar
-                Zielsegmente definiert, Prozesse strukturiert und Ressourcen eingesetzt sind.
-              </p>
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
-          </div>
-
-          {/* Right half — navy */}
+          {/* Left half — navy */}
           <div className="relative bg-[#1a2260]">
-            <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
+            <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
               <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
-                Funktion 2
+                Dimension 1
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
-                Marketing
+                Projektmanagement
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-white/65">
-                Marketing schafft Sichtbarkeit, Vertrauen und Nachfrage. Es positioniert das
-                Unternehmen, qualifiziert Interessenten vor und gibt dem Vertrieb die Grundlage,
-                auf der erfolgreiche Gespräche erst möglich werden.
+                Steuert Scope, Zeit, Budget und Qualität. Es sorgt dafür, dass die richtigen Dinge
+                in der richtigen Reihenfolge umgesetzt werden — technisch korrekt und termingerecht.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
+          </div>
+
+          {/* Right half — warm linen */}
+          <div className="relative bg-[#faf8f2]">
+            <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
+              <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
+              <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+                Dimension 2
+              </h2>
+              <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
+                Veränderungsmanagement
+              </h3>
+              <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
+                Sorgt dafür, dass Menschen die Veränderung verstehen, akzeptieren und mittragen.
+                Ohne diese menschliche Dimension scheitern selbst technisch perfekte Projekte —
+                im Widerstand, in der Ablehnung oder im stillen Boykott.
+              </p>
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
         </div>
       </MotionSection>
@@ -302,12 +301,12 @@ export function FokusVertriebMarketing() {
               {/* Left: sticky anchor */}
               <div className="lg:sticky lg:top-28 lg:self-start">
                 <h2 className="text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Sieben Hebel für wirksames Wachstum.
+                  Sieben Dimensionen wirksamen Wandels.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Vertrieb und Marketing wirken auf mehreren Ebenen. Wir helfen Ihnen, die
-                  richtigen Prioritäten zu setzen — und konsequent umzusetzen.
+                  Veränderung gelingt, wenn alle relevanten Dimensionen gleichzeitig adressiert
+                  werden — technisch, organisatorisch und menschlich.
                 </p>
                 <Link
                   href="/kontakt"
@@ -374,55 +373,23 @@ export function FokusVertriebMarketing() {
         </MotionSection>
       </section>
 
-      {/* ── DESIGN THINKING — Problemraum / Lösungsraum ─────────────────── */}
-      <section className="bg-white">
-        <MotionSection>
-          <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
-            <div className="grid gap-8 border-b border-black/[0.06] pb-10 md:grid-cols-[1fr_1fr] md:gap-16 md:items-end">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                  Denkrahmen
-                </p>
-                <h2 className="mt-4 text-[clamp(1.5rem,3vw+0.5rem,2.125rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f]">
-                  Vom Problem zur Lösung — methodisch und kundenorientiert.
-                </h2>
-              </div>
-              <p className="text-[16px] leading-relaxed text-[#6e6e73] md:pb-1">
-                Bevor Massnahmen definiert werden, stehen Verstehen und Beobachten. Wir arbeiten
-                im Problemraum, bevor wir in den Lösungsraum wechseln — das verhindert teure
-                Antworten auf die falschen Fragen.
-              </p>
-            </div>
-
-            <div className="mt-10 overflow-hidden rounded-2xl border border-black/[0.05] bg-[#f5f5f7] p-8 md:p-12">
-              <img
-                src={contentImage}
-                alt="Design Thinking Prozess: Problemraum und Lösungsraum"
-                className="mx-auto w-full max-w-[860px] object-contain"
-                loading="lazy"
-              />
-            </div>
-
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                { phase: "Problemraum", label: "Verstehen & Beobachten", body: "Kundenbedürfnisse, Marktdynamik und Vertriebsrealität tiefgreifend erfassen, bevor Lösungen entworfen werden." },
-                { phase: "Synthese", label: "Muster erkennen", body: "Erkenntnisse verdichten, Hypothesen formulieren und die eigentlichen Hebel von den Symptomen trennen." },
-                { phase: "Lösungsraum", label: "Entwickeln & Testen", body: "Ideen strukturiert entwickeln, priorisieren und in der Praxis validieren — iterativ statt auf einmal." },
-              ].map((item) => (
-                <div key={item.phase} className="rounded-xl border border-black/[0.06] bg-white px-5 py-5">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#45b3e2]">
-                    {item.phase}
-                  </p>
-                  <h3 className="mt-2 text-[15px] font-semibold leading-snug tracking-[-0.01em] text-[#1d1d1f]">
-                    {item.label}
-                  </h3>
-                  <p className="mt-2 text-[14px] leading-relaxed text-[#6e6e73]">{item.body}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </MotionSection>
-      </section>
+      {/* ── IMAGE BREAK ──────────────────────────────────────────────────── */}
+      <div className="relative h-[380px] overflow-hidden md:h-[480px]">
+        <img
+          src={contentImage}
+          alt="Change Management in der Praxis"
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="lazy"
+        />
+        <div
+          className="absolute inset-0"
+          aria-hidden
+          style={{
+            background:
+              "linear-gradient(to top, rgba(26,31,56,0.55) 0%, transparent 55%), linear-gradient(to bottom, rgba(26,31,56,0.2) 0%, transparent 30%)",
+          }}
+        />
+      </div>
 
       {/* ── 4. PULL QUOTE ────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
@@ -439,14 +406,14 @@ export function FokusVertriebMarketing() {
             Grundsatz
           </p>
           <blockquote className="mt-8 text-[clamp(1.375rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.22] tracking-[-0.025em] text-white text-balance">
-            &ldquo;Vertrieb und Marketing sind keine getrennten Welten — sie sind zwei Seiten
-            desselben Wachstumshebels. Wer sie ausrichtet, wächst. Wer sie entkoppelt, kämpft
-            mit sich selbst.&rdquo;
+            &ldquo;Organisatorischer Wandel ist kein Ereignis — er ist ein Prozess. Wer ihn
+            iterativ gestaltet, Menschen einbezieht und Unsicherheiten direkt adressiert,
+            verändert nicht nur Strukturen, sondern Haltungen.&rdquo;
           </blockquote>
           <div className="mt-10 flex items-center justify-center gap-5">
             <div className="h-px w-12 bg-[#c9a96e]/35" />
             <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-white/30">
-              Abexis Go-to-Market-Prinzip
+              Abexis Change-Prinzip
             </span>
             <div className="h-px w-12 bg-[#c9a96e]/35" />
           </div>
@@ -474,7 +441,7 @@ export function FokusVertriebMarketing() {
             </div>
 
             <h2 className="mt-8 max-w-[28ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
-              Von der Diagnose zur performanten Vertriebsorganisation — strukturiert und messbar.
+              Von der Diagnose zur verankerten Veränderung — iterativ, messbar, nachhaltig.
             </h2>
 
             <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
@@ -505,9 +472,9 @@ export function FokusVertriebMarketing() {
             </div>
 
             <p className="mt-8 max-w-[60ch] text-[15px] leading-relaxed text-white/50">
-              Jedes Engagement beginnt mit einer ehrlichen Bestandsaufnahme. Je nach Ausgangslage
-              arbeiten wir gezielt an einzelnen Hebeln oder begleiten Sie durch einen umfassenden
-              Go-to-Market-Aufbau — immer mit klaren Zielen und messbaren Ergebnissen.
+              Unser Ansatz ist bewusst iterativ: Zwischen den Phasen gibt es Schlaufen, nicht nur
+              Pfeile. Erkenntnisse aus der Umsetzung fliessen zurück in Planung und Kommunikation —
+              damit die Veränderung lebendig bleibt statt zu erstarren.
             </p>
           </div>
         </MotionSection>
@@ -524,12 +491,13 @@ export function FokusVertriebMarketing() {
                   Nutzen
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Was professioneller Vertrieb und Marketing bringen.
+                  Was professionelles Change Management bewirkt.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Die Wirkung zeigt sich nicht nur im Umsatz — sondern in der Art, wie ein
-                  Unternehmen am Markt auftritt, wächst und seine Kunden bindet.
+                  Der Unterschied liegt nicht darin, ob Veränderung stattfindet — sondern wie
+                  sie gestaltet wird. Struktur, Einbezug und Führung entscheiden über Erfolg
+                  oder Scheitern.
                 </p>
                 <Link
                   href="/kontakt"
@@ -574,13 +542,13 @@ export function FokusVertriebMarketing() {
                   Unsere Rolle
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f]">
-                  Der Unterschied zwischen Aktivität und Wachstum.
+                  Der Unterschied zwischen verordnetem und getragenem Wandel.
                 </h2>
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
-                Viele Unternehmen haben aktive Vertriebsteams und laufende Marketingmassnahmen —
-                aber das Wachstum bleibt aus. Wir helfen Ihnen herauszufinden, wo die eigentlichen
-                Hebel liegen, und begleiten Sie beim Umsetzen.
+                Veränderungen scheitern selten an der Idee — sie scheitern an der Umsetzung.
+                Wir bringen Methodik, externe Perspektive und die Erfahrung aus vielen
+                Transformationen mit, damit Ihr Wandel gelingt.
               </p>
             </div>
 
@@ -593,18 +561,18 @@ export function FokusVertriebMarketing() {
                 {[
                   {
                     num: "01",
-                    title: "Stagnation trotz Aktivität",
-                    body: "Das Team ist beschäftigt, aber der Umsatz wächst nicht. Ziele werden verfehlt, ohne dass klar ist warum — Diagnose und Neuausrichtung sind gefragt.",
+                    title: "Transformation droht zu scheitern",
+                    body: "Ein laufendes Projekt stösst auf Widerstand, Verzögerungen oder schwindende Unterstützung. Es braucht jetzt eine ehrliche Diagnose und gezielte Gegenmassnahmen.",
                   },
                   {
                     num: "02",
-                    title: "Vertrieb und Marketing im Silo",
-                    body: "Beide Funktionen arbeiten mit unterschiedlichen Zielen, Sprachen und Messgrössen. Das kostet Wirkung — und Energie, die im Markt fehlt.",
+                    title: "Fehlende interne Change-Kompetenz",
+                    body: "Das Unternehmen steht vor einer grösseren Veränderung — aber intern fehlen Erfahrung, Methodik und Kapazität, um sie professionell zu begleiten.",
                   },
                   {
                     num: "03",
-                    title: "Wachstum ohne Fundament",
-                    body: "Schnelles Wachstum hat Strukturen überholt: Prozesse, Rollen und Steuerung halten nicht Schritt. Jetzt braucht es Stabilisierung und skalierbare Grundlagen.",
+                    title: "Komplexe Stakeholder-Landschaft",
+                    body: "Verschiedene Interessensgruppen ziehen in unterschiedliche Richtungen. Eine neutrale, externe Begleitung schafft die nötige Glaubwürdigkeit, um alle ins Boot zu holen.",
                   },
                 ].map((s) => (
                   <div key={s.num} className="relative bg-white px-7 py-8">
@@ -648,11 +616,12 @@ export function FokusVertriebMarketing() {
                 Nächster Schritt
               </p>
               <h2 className="mt-4 max-w-[30ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white text-balance">
-                Mehr Wirkung im Markt beginnt mit dem richtigen Gespräch.
+                Veränderung gelingt — wenn sie gut begleitet wird.
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
-                In einem kostenlosen 30-Minuten-Erstgespräch klären wir gemeinsam, wo Ihr
-                Vertrieb und Marketing heute stehen — und wo die grössten Hebel liegen.
+                In einem kostenlosen 30-Minuten-Erstgespräch klären wir gemeinsam, wo Ihre
+                Organisation steht, welche Veränderung ansteht — und wie wir Sie dabei
+                begleiten können.
               </p>
 
               <div className="mt-7 flex flex-wrap gap-4">

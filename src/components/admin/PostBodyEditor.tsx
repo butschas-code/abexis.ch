@@ -7,6 +7,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useRef } from "react";
 import { sanitizeBlogHtml } from "@/lib/cms/sanitize-blog-html";
+import { useState } from "react";
 
 type Props = {
   /** Decoded HTML fragment (not the JSON envelope). */
@@ -14,6 +15,8 @@ type Props = {
   onChange: (html: string) => void;
   placeholder?: string;
   disabled?: boolean;
+  /** If provided, enables image uploads to this path in Firebase Storage. */
+  uploadPath?: string;
 };
 
 function isLikelyHttpUrl(s: string): boolean {
@@ -27,8 +30,10 @@ function isLikelyHttpUrl(s: string): boolean {
   }
 }
 
-export function PostBodyEditor({ value, onChange, placeholder, disabled }: Props) {
+export function PostBodyEditor({ value, onChange, placeholder, disabled, uploadPath }: Props) {
   const lastEmitted = useRef("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -97,6 +102,27 @@ export function PostBodyEditor({ value, onChange, placeholder, disabled }: Props
     const altRaw = window.prompt("Kurzer Alternativtext für das Bild (empfohlen, z. B. für Screenreader)", "");
     const alt = altRaw == null ? "" : altRaw.trim();
     editor.chain().focus().setImage({ src: url, alt }).run();
+  }
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !editor || !uploadPath) return;
+
+    setUploading(true);
+    try {
+      const { uploadCmsFile } = await import("@/firebase/storage");
+      const cleanName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
+      const path = uploadPath.endsWith("/") ? `${uploadPath}${cleanName}` : `${uploadPath}/${cleanName}`;
+      const url = await uploadCmsFile(file, path);
+      
+      editor.chain().focus().setImage({ src: url, alt: file.name }).run();
+    } catch (err) {
+      console.error("Upload error:", err);
+      window.alert("Upload fehlgeschlagen.");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   }
 
   function setLink() {
@@ -177,6 +203,23 @@ export function PostBodyEditor({ value, onChange, placeholder, disabled }: Props
         />
         <span className="mx-1 w-px self-stretch bg-black/10" aria-hidden />
         <ToolbarBtn label="Bild (URL)" active={false} disabled={disabled} onClick={() => insertImageByUrl()} />
+        {uploadPath && (
+          <>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              accept="image/*"
+              className="hidden"
+            />
+            <ToolbarBtn
+              label={uploading ? "Sende…" : "Bild hochladen ↑"}
+              active={false}
+              disabled={disabled || uploading}
+              onClick={() => fileInputRef.current?.click()}
+            />
+          </>
+        )}
       </div>
       <div className="legacy-prose max-w-none">
         <EditorContent editor={editor} />

@@ -33,12 +33,35 @@ function subLinkClassName(active: boolean) {
   }`;
 }
 
-const triggerClass = (groupActive: boolean) =>
-  `rounded-full px-4 py-1.5 text-[14px] leading-tight tracking-[-0.01em] transition-all duration-200 ${
+const triggerClass = (groupActive: boolean, open = false) =>
+  `flex items-center gap-1 rounded-full px-4 py-1.5 text-[14px] leading-tight tracking-[-0.01em] transition-all duration-200 select-none ${
     groupActive
       ? "bg-brand-900 font-medium text-white"
+      : open
+      ? "bg-black/[0.05] text-[#1d1d1f]"
       : "text-[#6e6e73] hover:bg-black/[0.04] hover:text-[#1d1d1f]"
   }`;
+
+function ChevronDown({ open }: { open: boolean }) {
+  return (
+    <svg
+      width="10"
+      height="6"
+      viewBox="0 0 10 6"
+      fill="none"
+      className={`mt-px shrink-0 transition-transform duration-200 ${open ? "-rotate-180" : ""}`}
+      aria-hidden="true"
+    >
+      <path
+        d="M1 1L5 5L9 1"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 function DesktopSubmenu({
   item,
@@ -57,6 +80,13 @@ function DesktopSubmenu({
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const menuId = useId();
   const parentIsLink = item.parentIsLink !== false;
+  const reduce = useReducedMotion();
+
+  const [overviewChild, ...restChildren] = item.children;
+  const overviewActive =
+    pathname === overviewChild.href ||
+    (overviewChild.href !== "/" && pathname.startsWith(`${overviewChild.href}/`));
+
   return (
     <div
       className="relative w-max max-w-full"
@@ -74,9 +104,10 @@ function DesktopSubmenu({
           aria-expanded={submenuOpen}
           aria-controls={menuId}
           onFocus={() => setSubmenuOpen(true)}
-          className={triggerClass(groupActive)}
+          className={triggerClass(groupActive, submenuOpen)}
         >
           {item.label}
+          <ChevronDown open={submenuOpen} />
         </Link>
       ) : (
         <button
@@ -85,41 +116,139 @@ function DesktopSubmenu({
           aria-expanded={submenuOpen}
           aria-controls={menuId}
           onFocus={() => setSubmenuOpen(true)}
-          className={triggerClass(groupActive)}
+          className={triggerClass(groupActive, submenuOpen)}
         >
           {item.label}
+          <ChevronDown open={submenuOpen} />
         </button>
       )}
-      <div
-        id={menuId}
-        className={`absolute left-0 top-full z-50 min-w-[14rem] max-w-[min(100vw-2rem,22rem)] pt-1 transition-[opacity,visibility] duration-150 ${
-          submenuOpen ? "visible opacity-100" : "invisible pointer-events-none opacity-0"
-        }`}
-        role="menu"
-        aria-label={`${item.label} Untermenü`}
-        aria-hidden={!submenuOpen}
-      >
-        <div className="rounded-2xl border border-black/[0.08] bg-white py-1 shadow-[0_12px_40px_rgba(0,0,0,0.12)]">
-          {item.children.map((c) => {
-            const subActive = pathname === c.href || (c.href !== "/" && pathname.startsWith(`${c.href}/`));
-            return (
+
+      <AnimatePresence>
+        {submenuOpen && (
+          <motion.div
+            id={menuId}
+            role="menu"
+            aria-label={`${item.label} Untermenü`}
+            initial={reduce ? false : { opacity: 0, y: -10, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={reduce ? undefined : { opacity: 0, y: -5, scale: 0.98 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            style={{ transformOrigin: "top left" }}
+            className="absolute left-0 top-full z-50 min-w-[15rem] max-w-[min(100vw-2rem,24rem)] pt-2"
+          >
+            <div className="overflow-hidden rounded-xl border border-black/[0.07] bg-white/[0.97] shadow-[0_32px_80px_rgba(0,0,0,0.16),0_6px_24px_rgba(0,0,0,0.08)] backdrop-blur-xl">
+              {/* Top gradient accent */}
+              <div className="h-[2.5px] bg-gradient-to-r from-[#26337c] via-[#3a68b8] to-[#45b3e2]" />
+
+              {/* Featured overview row */}
               <Link
-                key={c.href}
-                href={c.href}
-                className={`block px-2 py-2 text-[14px] leading-tight ${
-                  subActive
-                    ? "bg-brand-900/10 font-medium text-brand-900"
-                    : "text-[#1d1d1f] hover:bg-black/[0.04]"
-                }`}
+                href={overviewChild.href}
                 role="menuitem"
                 onClick={() => setSubmenuOpen(false)}
+                className={`group flex items-center justify-between px-4 py-3.5 transition-colors duration-150 ${
+                  overviewActive ? "bg-[#26337c]/[0.07]" : "hover:bg-[#26337c]/[0.04]"
+                }`}
               >
-                {c.label}
+                <div>
+                  <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#26337c]/50">
+                    {item.label}
+                  </p>
+                  <p
+                    className={`text-[13px] font-medium transition-colors duration-150 ${
+                      overviewActive ? "text-[#26337c]" : "text-[#1d1d1f] group-hover:text-[#26337c]"
+                    }`}
+                  >
+                    {overviewChild.label}
+                  </p>
+                </div>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  className={`shrink-0 transition-all duration-150 ${
+                    overviewActive
+                      ? "text-[#26337c] opacity-60"
+                      : "text-[#86868b] opacity-30 group-hover:translate-x-0.5 group-hover:text-[#26337c] group-hover:opacity-60"
+                  }`}
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2 7H12M8 3L12 7L8 11"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </Link>
-            );
-          })}
-        </div>
-      </div>
+
+              {restChildren.length > 0 && (
+                <>
+                  <div className="border-t border-black/[0.05]" />
+                  <div className="py-1.5">
+                    {restChildren.map((c, idx) => {
+                      const subActive =
+                        pathname === c.href || (c.href !== "/" && pathname.startsWith(`${c.href}/`));
+                      return (
+                        <motion.div
+                          key={c.href}
+                          initial={reduce ? false : { opacity: 0, x: -6 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{
+                            delay: 0.07 + idx * 0.04,
+                            duration: 0.2,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                        >
+                          <Link
+                            href={c.href}
+                            role="menuitem"
+                            onClick={() => setSubmenuOpen(false)}
+                            className={`group relative flex items-center px-4 py-[9px] text-[13.5px] leading-snug transition-colors duration-150 ${
+                              subActive
+                                ? "bg-[#26337c]/[0.07] font-medium text-[#26337c]"
+                                : "text-[#3a3a40] hover:bg-[#f4f6fb] hover:text-[#26337c]"
+                            }`}
+                          >
+                            {/* Gradient left rail */}
+                            <span
+                              className={`absolute left-0 inset-y-1.5 w-[2.5px] rounded-r-full bg-gradient-to-b from-[#26337c] to-[#45b3e2] transition-opacity duration-150 ${
+                                subActive ? "opacity-100" : "opacity-0 group-hover:opacity-50"
+                              }`}
+                            />
+                            <span className="flex-1 pl-1">{c.label}</span>
+                            <svg
+                              width="5"
+                              height="9"
+                              viewBox="0 0 5 9"
+                              fill="none"
+                              className={`ml-2.5 shrink-0 transition-all duration-150 ${
+                                subActive
+                                  ? "translate-x-0 opacity-60"
+                                  : "-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-40"
+                              }`}
+                              aria-hidden="true"
+                            >
+                              <path
+                                d="M1 1L4 4.5L1 8"
+                                stroke="currentColor"
+                                strokeWidth="1.4"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </Link>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

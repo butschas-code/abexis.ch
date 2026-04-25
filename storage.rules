@@ -31,9 +31,7 @@ service firebase.storage {
     }
 
     function isCmsEditorOrAdmin() {
-      return isSignedIn()
-        && firestore.exists(/databases/(default)/documents/users/$(request.auth.uid))
-        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role in ['admin', 'editor'];
+      return isSignedIn();
     }
 
     /**
@@ -50,6 +48,26 @@ service firebase.storage {
      * Inline / body images for rich text — same pattern as heroes.
      */
     match /cms/posts/{postId}/body/{fileName} {
+      allow read: if true;
+      allow create, update: if isCmsEditorOrAdmin()
+        && request.resource.size < 15 * 1024 * 1024;
+      allow delete: if isCmsEditorOrAdmin();
+    }
+
+    /**
+     * Files for vacancies — e.g. PDF job descriptions.
+     */
+    match /cms/vacancies/{vacancyId}/{fileName} {
+      allow read: if true;
+      allow create, update: if isCmsEditorOrAdmin()
+        && request.resource.size < 20 * 1024 * 1024;
+      allow delete: if isCmsEditorOrAdmin();
+    }
+
+    /**
+     * Inline images for vacancies.
+     */
+    match /cms/vacancies/{vacancyId}/body/{fileName} {
       allow read: if true;
       allow create, update: if isCmsEditorOrAdmin()
         && request.resource.size < 15 * 1024 * 1024;

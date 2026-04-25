@@ -117,6 +117,35 @@ export async function POST(req: Request) {
       ...parsed.data,
       createdAt: FieldValue.serverTimestamp(),
     });
+
+    if (parsed.data.type === "application") {
+      const formsparkId = process.env.FORMSPARK_APPLICATION_FORM_ID || "WJ0NX6MXO";
+      if (formsparkId) {
+        try {
+          await fetch(`https://submit-form.com/${formsparkId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              "Job": parsed.data.payload.jobTitle || "Unknown Job",
+              "Job ID": parsed.data.payload.jobId || "N/A",
+              "Name": parsed.data.payload.name || "",
+              "Email": parsed.data.payload.email || "",
+              "Phone": parsed.data.payload.phone || "",
+              "Message": parsed.data.payload.message || "",
+              "CV / Files": parsed.data.fileUrls?.join("\n") || "Keine Dateien hochgeladen",
+              "_email.from": parsed.data.payload.name || "",
+              "_email.subject": `Neue Bewerbung: ${parsed.data.payload.jobTitle || "Vakanz"}`,
+            }),
+          });
+        } catch (err) {
+          console.error("Formspark send error:", err);
+        }
+      }
+    }
+
     return NextResponse.json({ id: ref.id }, { status: 201 });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unknown error";
