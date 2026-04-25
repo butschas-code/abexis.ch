@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { CMS_PATHS } from "@/admin/paths";
-import { adminBody, adminBtnSecondary, adminFeedbackInfo, adminPanel, adminSectionLabel } from "@/components/admin/admin-ui";
+import { adminBody, adminBtnSecondary, adminFeedbackInfo, adminFeedbackSuccess, adminPanel, adminSectionLabel } from "@/components/admin/admin-ui";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
 
 /**
