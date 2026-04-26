@@ -35,19 +35,19 @@ export default function HomePage() {
     <>
       <SchemaMarkup type="WebSite" />
       <HomeHero>
-        <div className="mb-3 min-w-0 max-w-[40rem] md:mb-0 md:max-w-[44rem]">
+        <div className="min-w-0 max-w-[40rem] md:max-w-[44rem]">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{h.eyebrow}</p>
-          <h1 className="mt-3 text-[clamp(1.6rem,5.2vw+0.4rem,2.5rem)] font-semibold leading-none tracking-[-0.03em] text-balance break-words sm:text-[38px] md:text-[52px]">
+          <h1 className="hero-home-title-shadow mt-3 text-[clamp(1.6rem,5.2vw+0.4rem,2.5rem)] font-semibold leading-none tracking-[-0.03em] text-balance break-words sm:text-[38px] md:text-[52px]">
             <span className="text-white">{h.titleLines[0]}</span>
             <br />
             <BrandGrad variant="dark" className="text-balance">
               {h.titleLines[1]}
             </BrandGrad>
           </h1>
-          <p className="mt-5 text-[17px] font-medium leading-relaxed text-white/92 sm:mt-6 sm:text-[20px] md:text-[22px]">
+          <p className="hero-home-body-shadow mt-5 text-[17px] font-medium leading-relaxed text-white/92 sm:mt-6 sm:text-[20px] md:text-[22px]">
             Abexis schafft Klarheit, wenn sie fehlt.
           </p>
-          <p className="mt-4 text-[15px] font-normal leading-[1.65] text-white/84 sm:mt-5 sm:text-[17px] sm:leading-relaxed md:text-[19px]">
+          <p className="hero-home-body-shadow mt-4 text-[15px] font-normal leading-[1.65] text-white/84 sm:mt-5 sm:text-[17px] sm:leading-relaxed md:text-[19px]">
             {h.body}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">

@@ -34,10 +34,10 @@ export function PageHero({
 }: Props) {
   const reduce = useReducedMotion();
   const mdJustify = contentPlacement === "lower" ? "md:justify-end" : "md:justify-center";
-  /** Home hero (`lower`): generous mobile bottom padding so the copy block sits higher and more image shows under the CTAs. */
+  /** Home hero (`lower`): balanced mobile bottom padding; pair with `imageObjectClassName` for photo crop. */
   const bottomPad =
     contentPlacement === "lower"
-      ? "pb-[max(7.75rem,calc(4.75rem+env(safe-area-inset-bottom,0px)))] md:pb-[max(8.5rem,calc(6.5rem+env(safe-area-inset-bottom,0px)))]"
+      ? "pb-[max(5.25rem,calc(3.25rem+env(safe-area-inset-bottom,0px)))] md:pb-[max(8.5rem,calc(6.5rem+env(safe-area-inset-bottom,0px)))]"
       : "pb-[max(4rem,calc(2.5rem+env(safe-area-inset-bottom,0px)))] md:pb-[max(7rem,calc(5.5rem+env(safe-area-inset-bottom,0px)))]";
 
   return (
@@ -62,6 +62,13 @@ export function PageHero({
           />
         </motion.div>
         <div className="abexis-hero-fullbleed-overlay" aria-hidden />
+        {/**
+         * Mobile: extra dimming where the stock photo is brightest (top-right) so white headline stays legible.
+         * Only for `lower` (home) heroes.
+         */}
+        {contentPlacement === "lower" ? (
+          <div className="abexis-hero-lower-vignette pointer-events-none absolute inset-0 z-[2] md:hidden" aria-hidden />
+        ) : null}
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">

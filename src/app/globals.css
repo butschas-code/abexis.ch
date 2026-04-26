@@ -408,6 +408,23 @@ body {
   );
 }
 
+/** Home PageHero (mobile): tone down top-right hot spot; stays behind copy (z-2 within image stack). */
+@media (max-width: 767px) {
+  .abexis-hero-lower-vignette {
+    background:
+      radial-gradient(ellipse 100% 90% at 100% 0%, rgba(5, 8, 16, 0.55) 0%, rgba(5, 8, 16, 0.12) 48%, transparent 65%),
+      linear-gradient(180deg, rgba(4, 6, 12, 0.22) 0%, transparent 45%);
+  }
+
+  .hero-home-title-shadow {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 2px 16px rgba(0, 0, 0, 0.35);
+  }
+
+  .hero-home-body-shadow {
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+  }
+}
+
 /**
  * Karten / Hover-Layern: gleicher Farbverlauf, insgesamt transparenter als der Full-Bleed-Hero.
  */
