@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArticleBody } from "@/components/content/ArticleBody";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
-import { getBlogListCoverByIndex } from "@/data/site-images";
+import { resolvePostHeroImageUrl } from "@/lib/cms/resolve-post-hero-image";
 import type { PublishedPostPageData, PublishedPostWithId } from "@/public-site/cms";
 import { RelatedInsights } from "./RelatedInsights";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
@@ -28,7 +28,7 @@ function formatDate(iso: string | null | undefined) {
 
 export function CmsBlogPostView({ data, related }: Props) {
   const { post, authorName, categories } = data;
-  const heroImage = post.heroImageUrl?.trim() || getBlogListCoverByIndex(0);
+  const heroImage = resolvePostHeroImageUrl(post);
   const dateLong = formatDate(post.publishedAt);
   const tagList = Array.isArray(post.tags) ? post.tags : [];
   const hasTags = tagList.length > 0;

@@ -1,9 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { resolvePostHeroImageUrl } from "@/lib/cms/resolve-post-hero-image";
 import type { PublishedPostWithId } from "@/public-site/cms";
-
-const PLACEHOLDER =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 675'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23e8ecfc'/%3E%3Cstop offset='1' stop-color='%23f0f4fa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='675' fill='url(%23g)'/%3E%3C/svg%3E";
 
 type Props = {
   post: PublishedPostWithId;
@@ -16,7 +14,7 @@ type Props = {
 };
 
 export function InsightPostCard({ post, href, categoryLine, authorName, sizes, density = "comfortable" }: Props) {
-  const img = post.heroImageUrl?.trim() || PLACEHOLDER;
+  const img = resolvePostHeroImageUrl(post);
   const dateStr = post.publishedAt
     ? new Date(post.publishedAt).toLocaleDateString("de-CH", {
         day: "numeric",

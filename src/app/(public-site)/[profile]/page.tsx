@@ -90,7 +90,14 @@ export default async function TeamProfilePage({ params }: Props) {
       />
       <div className="flex flex-col gap-8 border-b border-black/[0.06] pb-10 md:flex-row md:items-start md:gap-10">
         <div className="relative mx-auto h-44 w-44 shrink-0 overflow-hidden rounded-[28px] bg-[#f5f5f7] shadow-[var(--apple-shadow)] ring-1 ring-black/[0.06] md:mx-0">
-          <Image src={p.image} alt={p.name} fill className="object-cover" sizes="176px" />
+          <Image
+            src={p.image}
+            alt={p.name}
+            fill
+            className="object-cover"
+            quality={95}
+            sizes="200px"
+          />
         </div>
         <div className="min-w-0 flex-1 text-center md:text-left">
           {p.phone ? (

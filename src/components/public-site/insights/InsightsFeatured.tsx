@@ -1,9 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { resolvePostHeroImageUrl } from "@/lib/cms/resolve-post-hero-image";
 import type { PublishedPostWithId } from "@/public-site/cms";
-
-const PLACEHOLDER =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 675'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='1' x2='1' y2='0'%3E%3Cstop stop-color='%2326337c' stop-opacity='0.08'/%3E%3Cstop offset='1' stop-color='%2345b3e2' stop-opacity='0.1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='675' fill='url(%23g)'/%3E%3C/svg%3E";
 
 type Props = {
   primary: PublishedPostWithId;
@@ -14,7 +12,7 @@ type Props = {
 };
 
 export function InsightsFeatured({ primary, secondary = [], hrefFor, categoryLine, authorName }: Props) {
-  const hero = primary.heroImageUrl?.trim() || PLACEHOLDER;
+  const hero = resolvePostHeroImageUrl(primary);
   const dateStr = primary.publishedAt
     ? new Date(primary.publishedAt).toLocaleDateString("de-CH", {
         day: "numeric",
@@ -76,7 +74,7 @@ export function InsightsFeatured({ primary, secondary = [], hrefFor, categoryLin
         {secondary.length > 0 ? (
           <div className="flex flex-col gap-4">
             {secondary.map((post) => {
-              const smImg = post.heroImageUrl?.trim() || PLACEHOLDER;
+              const smImg = resolvePostHeroImageUrl(post);
               const smDate = post.publishedAt
                 ? new Date(post.publishedAt).toLocaleDateString("de-CH", {
                     day: "numeric",

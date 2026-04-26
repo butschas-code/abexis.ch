@@ -13,7 +13,7 @@ export async function HomeVacancyTeasers() {
   if (vacancies.length === 0) return null;
 
   return (
-    <MotionSection className="py-20 md:py-28">
+    <MotionSection className="pt-10 pb-10 md:pt-12 md:pb-12">
       <div className="mx-auto max-w-[1068px] px-6">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
@@ -30,7 +30,7 @@ export async function HomeVacancyTeasers() {
           </Link>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {vacancies.map((v) => (
             <Link
               key={v.id}

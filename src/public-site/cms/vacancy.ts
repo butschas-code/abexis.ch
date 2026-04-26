@@ -49,6 +49,13 @@ function readStatus(v: unknown): PostStatus {
   return "draft";
 }
 
+/** Staging / placeholder rows that stay in CMS but must not show on the public site. */
+function isVacancyHiddenFromPublic(v: Pick<PublishedVacancy, "slug" | "title">): boolean {
+  const s = v.slug.trim().toLowerCase();
+  const t = v.title.trim().toLowerCase();
+  return s === "test" || t === "test";
+}
+
 function mapVacancyDoc(id: string, d: Record<string, unknown>): PublishedVacancy {
   return {
     id,
@@ -75,10 +82,11 @@ async function listPublishedVacanciesUncached(lim: number): Promise<PublishedVac
   if (db) {
     try {
       // Single equality filter only — no composite index needed. Sort in memory.
+      const fetchCap = Math.min(100, Math.max(lim, lim + 8));
       const snap = await db
         .collection(COLLECTIONS.vacancies)
         .where("status", "==", "published")
-        .limit(lim)
+        .limit(fetchCap)
         .get();
       const rows = snap.docs.map((doc) => mapVacancyDoc(doc.id, doc.data() as Record<string, unknown>));
       rows.sort((a, b) => {
@@ -86,7 +94,7 @@ async function listPublishedVacanciesUncached(lim: number): Promise<PublishedVac
         const tb = b.publishedAt ?? b.createdAt;
         return tb < ta ? -1 : ta < tb ? 1 : 0;
       });
-      return rows;
+      return rows.filter((v) => !isVacancyHiddenFromPublic(v)).slice(0, lim);
     } catch (error) {
       console.warn("[CMS] Admin Firestore vacancies failed; falling back to Web SDK.", error instanceof Error ? error.message : "Unknown error");
     }
@@ -95,10 +103,11 @@ async function listPublishedVacanciesUncached(lim: number): Promise<PublishedVac
   const webDb = getServerWebFirestore();
   if (!webDb) return [];
   try {
+    const fetchCap = Math.min(100, Math.max(lim, lim + 8));
     const q = query(
       collection(webDb, COLLECTIONS.vacancies),
       where("status", "==", "published"),
-      limit(lim)
+      limit(fetchCap)
     );
     const snap = await getDocs(q);
     const rows = snap.docs.map((doc) => mapVacancyDoc(doc.id, doc.data() as Record<string, unknown>));
@@ -107,7 +116,7 @@ async function listPublishedVacanciesUncached(lim: number): Promise<PublishedVac
       const tb = b.publishedAt ?? b.createdAt;
       return tb < ta ? -1 : ta < tb ? 1 : 0;
     });
-    return rows;
+    return rows.filter((v) => !isVacancyHiddenFromPublic(v)).slice(0, lim);
   } catch (error) {
     console.warn("[CMS] Web SDK vacancies query failed:", error instanceof Error ? error.message : "Unknown error");
     return [];
@@ -136,7 +145,10 @@ async function getVacancyBySlugUncached(slug: string): Promise<PublishedVacancy 
         .get();
       for (const doc of snap.docs) {
         const v = mapVacancyDoc(doc.id, doc.data() as Record<string, unknown>);
-        if (v.status === "published") return v;
+        if (v.status === "published") {
+          if (isVacancyHiddenFromPublic(v)) return null;
+          return v;
+        }
       }
       return null;
     } catch (error) {
@@ -155,7 +167,10 @@ async function getVacancyBySlugUncached(slug: string): Promise<PublishedVacancy 
     const snap = await getDocs(q);
     for (const doc of snap.docs) {
       const v = mapVacancyDoc(doc.id, doc.data() as Record<string, unknown>);
-      if (v.status === "published") return v;
+      if (v.status === "published") {
+        if (isVacancyHiddenFromPublic(v)) return null;
+        return v;
+      }
     }
     return null;
   } catch (error) {

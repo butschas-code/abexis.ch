@@ -185,8 +185,7 @@ Weitergehende Information zu Daniel Sengstag finden Sie unter: https://sengstag.
   },
   christophwainig: {
     name: "Christoph Wainig",
-    title:
-      "Experte für Unternehmenswachstum, Vertriebsoptimierung, Business Development, Change Management und Coaching",
+    title: "Vertrieb, Wachstum und Business Development",
     image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F7c5eb14e-4f16-428a-a581-c4cb4ee8185d.jpg?alt=media",
     body: `Christoph Wainig ist ein leidenschaftlicher Vertriebsleiter mit nachgewiesenen Fähigkeiten, Wachstumspotenziale zu analysieren, Geschäftsmodelle weiterzuentwickeln und funktionsübergreifende Teams effektiv durch Change Management zu führen. Er leitet multinational Vertriebsteams strategisch und lösungsorientiert, mit einem klaren Fokus auf die Umsetzung von Wachstumsstrategien, insbesondere auf Quick Wins. Darüber hinaus engagiert er sich intensiv in der Personalentwicklung, um nachhaltigen Erfolg sicherzustellen.
 
@@ -209,8 +208,7 @@ Expertise:
   },
   katrinyuan: {
     name: "Katrin J. Yuan",
-    title:
-      "Expertin für AI Transformation, kulturelle Transformation, New Work, Digital Leadership, Data Management und Taxonomie, Executive Coaching",
+    title: "AI-Transformation, Digital Leadership und Coaching",
     image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fb7ce050b-82b4-4acb-905f-bda7e0b119c5.jpg?alt=media",
     body: `Katrin J. Yuan ist eine preisgekrönte Führungskraft mit Erfahrung in den Bereichen Technologie, Strategie und Digitaler Transformation in internationalen Unternehmen, im Mittelstand und Startups. Katrin hat einen Master of Business Administration mit Schwerpunkt IT und Finanzen und spricht sechs Sprachen. Sie ist Aufsichtsrätin und Beirätin von mehreren KI-, IoT- und IT-Mandaten, hält Vorträge an renommierten Universitäten und ist Jury Mitglied für Digital Shapers.
 
@@ -223,8 +221,7 @@ Ihre Expertise erstreckt sich auf die Beratung von AI und Mensch, New Work, Data
   },
   sergegarazi: {
     name: "Serge Garazi",
-    title:
-      "Senior Projekt- & Operations-Manager in Business und Informatik, Digitale Transformation, CRM, Compliance, Banking",
+    title: "Projektmanagement, Banking und Compliance",
     image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fcdd4878d-fb8f-4d27-94c2-1aaa97bb1697.jpg?alt=media",
     body: `Serge ist ein Senior Projekt- & Operations-Manager in Business und Informatik, mit besonderem Fokus auf Digitale Transformation, Customer-Relationship Management (CRM), Compliance, Banking.
 
@@ -255,8 +252,7 @@ Ausbildung:
   },
   williamdemaeyer: {
     name: "William De Maeyer",
-    title:
-      "Senior Solution Architect & Projektleiter in Bereich PLM, MES bzw. sehr anspruchsvollen technischen Software-Lösungen / -projekten, im Maschinenbau, in MedTech, Fertigung, Transport, Luft- & Raumfahrt und Verteidigung.",
+    title: "PLM, MES und komplexe Softwareprojekte",
     image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F0b4b171f-3d10-4947-af9f-4bea14040a25.jpg?alt=media",
     body: `William De Maeyer ist Gründer von Valcore Sagl und seit über 30 Jahren in der PLM-Branche tätig. Er verfügt über umfassende Erfahrung in der Leitung und Umsetzung komplexer Projekte in verschiedenen Industrien, darunter Luft- und Raumfahrt, Verteidigung, Maschinenbau, Transport und Fertigung.
 
@@ -275,7 +271,7 @@ Erfahrung & Projekte (Auszug):
   },
   sachamoeller: {
     name: "Sacha Moeller",
-    title: "Partner",
+    title: "Executive Search, Finance und Transformation",
     image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F6ba66ce4-e338-42a5-9363-9bde653084c3.JPG?alt=media",
     body: `Sacha Moeller ist Partner bei Abexis SEARCH und verfügt über mehr als 20 Jahre Führungserfahrung in der Finanzindustrie und im Family Office, unter anderem in leitenden Funktionen bei UBS. Seine Expertise umfasst Business-, Risk- und Change-Management sowie komplexe Transformations- und Digitalisierungsprojekte. Er verbindet analytische Kompetenz mit empathischer Führung und fördert werteorientierte Kulturen. Bei Abexis SEARCH begleitet er Mandate in Finance, Risk, IT-Transformation und Human Capital – mit Fokus auf Wirkung und nachhaltigen Mehrwert.`,
     phone: "+41 78 604 87 65",
@@ -284,7 +280,7 @@ Erfahrung & Projekte (Auszug):
   },
   renatesengstag: {
     name: "Renate Sengstag",
-    title: "Miteigentümerin",
+    title: "Operations und Mandatskoordination",
     image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fd9de5400-785e-47ca-b6c6-fd49b25ba2f8.jpg?alt=media",
     body: `Renate Sengstag ist Miteigentümerin und bringt über 20 Jahre Erfahrung im Executive Management mit, unter anderem in der direkten Zusammenarbeit mit Geschäftsleitungen und CEOs international tätiger Unternehmen. Sie verfügt über exzellente Organisationsfähigkeiten, ein feines Gespür für Menschen sowie höchste Diskretion im Umgang mit sensiblen Informationen. Bei Abexis SEARCH leitet sie das Backoffice, koordiniert den operativen Ablauf und unterstützt Mandatsprozesse in administrativer Hinsicht. Ihre strukturierte Arbeitsweise sorgt für Stabilität und Effizienz im Tagesgeschäft.`,
     phone: "+41 79 417 77 58",

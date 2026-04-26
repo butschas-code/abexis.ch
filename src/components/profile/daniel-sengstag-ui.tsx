@@ -176,7 +176,6 @@ export function DanielSengstagProfilePage({ copy, images }: { copy: SiteContent;
                   sizes="(min-width: 1024px) 38vw, 100vw"
                   quality={90}
                 />
-                <div className="abexis-tint-overlay" aria-hidden />
               </div>
             </div>
             <div className="md:col-span-7 md:pl-2">

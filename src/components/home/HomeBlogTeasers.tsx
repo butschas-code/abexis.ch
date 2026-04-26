@@ -3,6 +3,7 @@ import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { getAllBlogPosts } from "@/data/pages";
 import { getBlogListCoverByIndex } from "@/data/site-images";
+import { resolvePostHeroImageUrl } from "@/lib/cms/resolve-post-hero-image";
 import { getPublishedCmsPosts, type PublishedPostWithId } from "@/public-site/cms";
 
 export type HomeBlogTeaser = {
@@ -13,18 +14,6 @@ export type HomeBlogTeaser = {
   tags: string[];
   coverSrc: string;
 };
-
-function coverForCmsPost(post: PublishedPostWithId, fallbackIndex: number): string {
-  const u = post.heroImageUrl?.trim();
-  if (u && /^https?:\/\//i.test(u)) {
-    /** Legacy scrape/CMS may store Hoststar as `http://`; Next/Image + browsers prefer https. */
-    if (u.startsWith("http://files.designer.hoststar.ch")) {
-      return `https://${u.slice("http://".length)}`;
-    }
-    return u;
-  }
-  return getBlogListCoverByIndex(fallbackIndex);
-}
 
 /**
  * Latest published CMS posts for this deployment (site-aware via `getPublishedCmsPosts`),
@@ -39,12 +28,12 @@ export async function getHomeBlogTeasers(): Promise<HomeBlogTeaser[]> {
   }
   // TODO(production): drop JSON fallback once builds always have Admin credentials, or feature-flag for staging only.
   if (cms.length > 0) {
-    return cms.map((p, idx) => ({
+    return cms.map((p) => ({
       slug: p.slug,
       title: p.title,
       publishedISO: p.publishedAt,
       tags: p.tags ?? [],
-      coverSrc: coverForCmsPost(p, idx),
+      coverSrc: resolvePostHeroImageUrl(p),
     }));
   }
 
@@ -71,7 +60,7 @@ export async function HomeBlogTeasers() {
   const posts = await getHomeBlogTeasers();
 
   return (
-    <MotionSection className="py-20 md:py-28">
+    <MotionSection className="pt-20 pb-10 md:pt-28 md:pb-12">
       <div className="mx-auto max-w-[1068px] px-6">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>

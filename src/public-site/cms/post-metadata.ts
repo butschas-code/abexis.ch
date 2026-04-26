@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { resolvePostHeroImageUrl } from "@/lib/cms/resolve-post-hero-image";
 import type { PublishedPostWithId } from "@/public-site/cms/published-post";
 
 /**
@@ -10,11 +11,8 @@ export function buildCmsPostMetadata(post: PublishedPostWithId, path: string): M
   const description = (post.seoDescription?.trim() || post.excerpt?.trim() || "").trim() || undefined;
   let hero: string | undefined;
   try {
-    hero = post.heroImageUrl?.trim() || undefined;
-    if (hero) {
-      // Reject relative / invalid URLs so Next metadata + OG resolution never throws.
-      new URL(hero, "https://www.abexis.ch");
-    }
+    hero = resolvePostHeroImageUrl(post);
+    new URL(hero, "https://www.abexis.ch");
   } catch {
     hero = undefined;
   }

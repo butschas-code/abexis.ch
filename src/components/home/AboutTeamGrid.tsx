@@ -6,40 +6,41 @@ import { teamOrder, teamProfiles } from "@/data/pages";
 
 export function AboutTeamGrid() {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
-      {teamOrder.map((slug) => {
-        const p = teamProfiles[slug];
-        return (
-          <Link
-            key={slug}
-            href={`/${slug}`}
-            className="group relative aspect-square overflow-hidden rounded-2xl bg-[#f5f5f7] shadow-sm ring-1 ring-black/[0.06] outline-none transition-[box-shadow,ring-color] duration-300 hover:shadow-[0_16px_40px_-12px_rgba(38,51,124,0.25)] hover:ring-brand-500/35 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
-          >
-            <Image
-              src={p.image}
-              alt=""
-              fill
-              className="object-cover saturate-[0.78] contrast-[1.08] transition duration-500 ease-out group-hover:scale-[1.05]"
-              sizes="(min-width: 1024px) 220px, (min-width: 640px) 33vw, 50vw"
-            />
-
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] translate-y-2 p-3 pt-10 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
-              <p className="text-[13px] font-semibold leading-tight tracking-[-0.01em] text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.9),0_2px_12px_rgba(0,0,0,0.65)] sm:text-[14px]">
-                {p.name}
-              </p>
-              {p.title ? (
-                <p className="mt-1 line-clamp-4 text-[10px] font-medium leading-snug text-white/95 [text-shadow:0_1px_2px_rgba(0,0,0,0.85),0_2px_10px_rgba(0,0,0,0.55)] sm:text-[11px]">
-                  {p.title}
+    <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-3 sm:gap-4">
+      {teamOrder
+        .filter((slug) => slug !== "danielsengstag")
+        .map((slug) => {
+          const p = teamProfiles[slug];
+          return (
+            <Link
+              key={slug}
+              href={`/${slug}`}
+              className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/[0.06] outline-none transition-[box-shadow,ring-color] duration-300 hover:shadow-[0_16px_40px_-12px_rgba(38,51,124,0.2)] hover:ring-brand-500/30 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+            >
+              <div className="relative aspect-[4/5] w-full min-w-0 overflow-hidden bg-[#f5f5f7]">
+                <Image
+                  src={p.image}
+                  alt=""
+                  fill
+                  quality={95}
+                  sizes="(min-width: 1280px) 400px, (min-width: 1024px) 32vw, (min-width: 640px) 33vw, 47vw"
+                  className="h-full w-full object-cover object-center"
+                  priority={false}
+                />
+              </div>
+              <div className="w-full shrink-0 border-t border-black/[0.06] px-3.5 py-2.5 sm:px-4 sm:py-2.5">
+                <p className="text-[15px] font-semibold leading-snug text-[#1d1d1f]">
+                  {p.name}
                 </p>
-              ) : null}
-            </div>
-            <span className="sr-only">
-              {p.name}
-              {p.title ? `, ${p.title}` : ""}
-            </span>
-          </Link>
-        );
-      })}
+                {p.title ? (
+                  <p className="mt-1.5 line-clamp-4 text-[15px] font-normal leading-relaxed text-[#6e6e73]">
+                    {p.title}
+                  </p>
+                ) : null}
+              </div>
+            </Link>
+          );
+        })}
     </div>
   );
 }
