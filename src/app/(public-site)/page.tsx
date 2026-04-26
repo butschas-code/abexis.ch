@@ -37,29 +37,29 @@ export default function HomePage() {
       <HomeHero>
         <div className="max-w-[40rem] md:max-w-[44rem]">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{h.eyebrow}</p>
-          <h1 className="mt-3 text-[clamp(1.75rem,5.5vw+0.5rem,2.5rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-balance sm:text-[38px] sm:leading-[1.08] md:text-[52px] md:leading-[1.05]">
+          <h1 className="mt-3 text-[clamp(1.6rem,5.2vw+0.4rem,2.5rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-balance sm:text-[38px] sm:leading-[1.08] md:text-[52px] md:leading-[1.05]">
             <span className="text-white">{h.titleLines[0]}</span>
             <br />
             <BrandGrad variant="dark" className="text-balance">
               {h.titleLines[1]}
             </BrandGrad>
           </h1>
-          <p className="mt-6 text-[19px] font-medium leading-relaxed text-white/92 sm:text-[20px] md:text-[22px]">
+          <p className="mt-5 text-[17px] font-medium leading-relaxed text-white/92 sm:mt-6 sm:text-[20px] md:text-[22px]">
             Abexis schafft Klarheit, wenn sie fehlt.
           </p>
-          <p className="mt-5 text-[16px] font-normal leading-relaxed text-white/84 sm:text-[17px] md:text-[19px]">
+          <p className="mt-4 text-[15px] font-normal leading-[1.65] text-white/84 sm:mt-5 sm:text-[17px] sm:leading-relaxed md:text-[19px]">
             {h.body}
           </p>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+          <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
             <Link
               href={h.primaryCta.href}
-              className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-brand-900 px-7 text-[17px] font-medium text-white shadow-lg shadow-brand-900/35 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] sm:w-auto sm:min-h-[48px] sm:px-8"
+              className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-full bg-brand-900 px-5 text-[16px] font-medium text-white shadow-lg shadow-brand-900/35 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] sm:w-auto sm:min-h-[48px] sm:px-8 sm:text-[17px]"
             >
               {h.primaryCta.label}
             </Link>
             <Link
               href={h.secondaryCta.href}
-              className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/35 bg-white/10 px-7 text-[17px] font-medium text-white backdrop-blur-sm transition-all duration-200 ease-out hover:border-white/60 hover:bg-white/22 hover:shadow-lg hover:shadow-black/15 hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:min-h-[48px] sm:px-8"
+              className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-full border border-white/35 bg-white/10 px-5 text-[16px] font-medium text-white backdrop-blur-sm transition-all duration-200 ease-out hover:border-white/60 hover:bg-white/22 hover:shadow-lg hover:shadow-black/15 hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:min-h-[48px] sm:px-8 sm:text-[17px]"
             >
               {h.secondaryCta.label}
             </Link>

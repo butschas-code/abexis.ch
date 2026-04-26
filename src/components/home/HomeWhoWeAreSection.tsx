@@ -9,21 +9,21 @@ export function HomeWhoWeAreSection() {
   const daniel = teamProfiles.danielsengstag;
 
   return (
-    <MotionSection className="py-20 md:py-28">
-      <div className="mx-auto max-w-[1068px] px-6">
+    <MotionSection className="py-14 sm:py-20 md:py-28">
+      <div className="mx-auto max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">{c.eyebrow}</p>
-        <h2 className="mt-2 max-w-[32ch] text-[32px] font-semibold tracking-[-0.03em] text-[#1d1d1f] text-balance md:text-[40px]">
+        <h2 className="mt-2 max-w-[32ch] text-[28px] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f] text-balance sm:text-[32px] md:text-[40px]">
           {c.headline}
         </h2>
-        <div className="mt-6 max-w-[56ch] space-y-4 text-[17px] leading-relaxed text-[#6e6e73]">
+        <div className="mt-5 max-w-[56ch] space-y-4 text-[16px] leading-relaxed text-[#6e6e73] sm:mt-6 sm:text-[17px]">
           {c.intro.map((p, i) => (
             <p key={i}>{p}</p>
           ))}
         </div>
 
-        <div className="mt-14 grid items-start gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
+        <div className="mt-10 grid items-start gap-6 sm:mt-14 sm:gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
           <div className="mx-auto w-full max-w-md md:mx-0 md:max-w-none">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[28px] bg-[#f5f5f7] shadow-[var(--apple-shadow)] ring-1 ring-black/[0.05]">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[20px] bg-[#f5f5f7] shadow-[var(--apple-shadow)] ring-1 ring-black/[0.05] sm:rounded-[24px] md:rounded-[28px]">
               <Image
                 src={daniel.image}
                 alt={daniel.name}
@@ -36,10 +36,10 @@ export function HomeWhoWeAreSection() {
             </div>
           </div>
           <div className="min-w-0">
-            <p className="text-[20px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">
+            <p className="text-[18px] font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f] sm:text-[20px]">
               {c.daniel.name} — {c.daniel.role}
             </p>
-            <div className="mt-4 space-y-3 text-[16px] leading-relaxed text-[#6e6e73]">
+            <div className="mt-3 space-y-3 text-[15px] leading-relaxed text-[#6e6e73] sm:mt-4 sm:text-[16px]">
               {c.daniel.body.map((p, i) => (
                 <p key={i}>{p}</p>
               ))}
@@ -47,7 +47,7 @@ export function HomeWhoWeAreSection() {
           </div>
         </div>
 
-        <div className="mt-14">
+        <div className="mt-10 sm:mt-14">
           <AboutTeamGrid />
         </div>
       </div>

@@ -59,7 +59,9 @@ export function PageHero({
         <div className="abexis-hero-fullbleed-overlay" aria-hidden />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-[1068px] px-6">{children}</div>
+      <div className="relative z-10 mx-auto w-full max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
+        {children}
+      </div>
     </section>
   );
 }

@@ -32,9 +32,9 @@ export function HomeChallengeSection() {
   return (
     <section
       id="herausforderung"
-      className="border-y border-black/[0.06] py-16 md:py-20 apple-animated-gradient"
+      className="border-y border-black/[0.06] py-12 sm:py-16 md:py-20 apple-animated-gradient"
     >
-      <div className="relative mx-auto max-w-[1068px] px-6">
+      <div className="relative mx-auto max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
         <motion.header
           className="max-w-2xl"
           initial={reduce ? false : { opacity: 0, y: 8 }}
@@ -43,7 +43,7 @@ export function HomeChallengeSection() {
           transition={{ duration: 0.4, ease }}
         >
           <Eyebrow>{c.eyebrow}</Eyebrow>
-          <h2 className="mt-1.5 text-balance text-[32px] font-semibold tracking-[-0.03em] text-[#1d1d1f] md:text-[40px]">
+          <h2 className="mt-1.5 text-balance text-[26px] font-semibold leading-[1.12] tracking-[-0.03em] text-[#1d1d1f] min-[400px]:text-[30px] sm:text-[32px] sm:leading-tight md:text-[40px]">
             {c.headline}
           </h2>
           <p className={`mt-4 ${body}`}>{c.intro}</p>
@@ -56,7 +56,7 @@ export function HomeChallengeSection() {
           </div>
 
           <ul
-            className="mx-auto mt-5 grid w-full max-w-3xl list-none grid-cols-2 gap-2.5 pl-0 sm:gap-4"
+            className="mx-auto mt-5 grid w-full max-w-3xl list-none grid-cols-1 gap-3 pl-0 min-[480px]:grid-cols-2 min-[480px]:gap-2.5 sm:gap-4"
             role="list"
             aria-label="Typische Projektsituationen"
           >
@@ -64,12 +64,12 @@ export function HomeChallengeSection() {
               const items = listItems(g);
               return (
                 <li key={g.title} className="min-w-0">
-                  <article className="h-full rounded-2xl border border-black/[0.08] bg-white p-3 shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] sm:p-5">
-                    <h3 className="text-[13px] font-semibold leading-tight text-[#1d1d1f] sm:text-base sm:leading-snug">
+                  <article className="h-full rounded-2xl border border-black/[0.08] bg-white p-4 shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] min-[480px]:p-3.5 sm:p-5">
+                    <h3 className="text-[15px] font-semibold leading-snug text-[#1d1d1f] sm:text-base">
                       {g.title}
                     </h3>
                     <ul
-                      className={`mt-2 space-y-1.5 list-none pl-0 text-sm font-normal leading-relaxed text-[#3c3c43] sm:mt-2.5 sm:space-y-2 sm:text-[15px]`}
+                      className="mt-2 list-none space-y-1.5 pl-0 text-[15px] font-normal leading-relaxed text-[#3c3c43] sm:mt-2.5 sm:space-y-2"
                     >
                       {items.map((line) => (
                         <li key={line} className="flex gap-2.5">

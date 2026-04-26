@@ -60,28 +60,28 @@ export async function HomeBlogTeasers() {
   const posts = await getHomeBlogTeasers();
 
   return (
-    <MotionSection className="pt-20 pb-10 md:pt-28 md:pb-12">
-      <div className="mx-auto max-w-[1068px] px-6">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+    <MotionSection className="pt-14 pb-8 sm:pt-20 sm:pb-10 md:pt-28 md:pb-12">
+      <div className="mx-auto max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
+        <div className="flex flex-col justify-between gap-5 sm:gap-6 md:flex-row md:items-end">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Insights</p>
-            <h2 className="mt-2 text-[32px] font-semibold tracking-[-0.03em] text-[#1d1d1f] md:text-[40px]">
+            <h2 className="mt-2 text-[28px] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f] sm:text-[32px] md:text-[40px]">
               Aus dem Blog
             </h2>
           </div>
           <Link
             href="/blog"
-            className="text-[15px] font-medium text-brand-900 transition-colors duration-200 hover:text-brand-500 hover:underline"
+            className="min-h-11 shrink-0 self-start text-[15px] font-medium text-brand-900 transition-colors duration-200 hover:text-brand-500 hover:underline md:self-auto"
           >
             Alle Beiträge
           </Link>
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
+        <div className="mt-8 grid gap-5 sm:mt-12 sm:gap-6 md:grid-cols-2">
           {posts.map((p) => (
             <Link
               key={p.slug}
               href={`/blog/${p.slug}`}
-              className="group overflow-hidden rounded-[28px] bg-white shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] transition hover:-translate-y-0.5 hover:shadow-[var(--apple-shadow-lg)]"
+              className="group overflow-hidden rounded-[22px] bg-white shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] transition hover:-translate-y-0.5 hover:shadow-[var(--apple-shadow-lg)] sm:rounded-[28px] active:scale-[0.99]"
             >
               <div className="relative isolate aspect-[16/9] w-full overflow-hidden bg-[#f5f5f7]">
                 <Image
@@ -93,11 +93,11 @@ export async function HomeBlogTeasers() {
                 />
                 <div className="abexis-tint-overlay" />
               </div>
-              <div className="px-6 pb-7 pt-5">
+              <div className="px-5 pb-6 pt-4 sm:px-6 sm:pb-7 sm:pt-5">
                 <time className="text-[11px] font-medium uppercase tracking-widest text-[#86868b]">
                   {p.publishedISO ? new Date(p.publishedISO).toLocaleDateString("de-CH") : ""}
                 </time>
-                <h3 className="mt-2 text-[21px] font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f] group-hover:text-brand-900">
+                <h3 className="mt-2 text-[18px] font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f] group-hover:text-brand-900 sm:text-[21px]">
                   {p.title}
                 </h3>
                 {p.tags?.length ? (
