@@ -32,9 +32,9 @@ export function HomeChallengeSection() {
   return (
     <section
       id="herausforderung"
-      className="border-y border-black/[0.06] py-12 sm:py-16 md:py-20 apple-animated-gradient"
+      className="apple-animated-gradient relative isolate overflow-x-hidden border-b border-t-0 border-black/[0.06] py-12 sm:py-16 md:py-20"
     >
-      <div className="relative mx-auto max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
+      <div className="relative mx-auto min-w-0 max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
         <motion.header
           className="max-w-2xl"
           initial={reduce ? false : { opacity: 0, y: 8 }}
@@ -43,7 +43,7 @@ export function HomeChallengeSection() {
           transition={{ duration: 0.4, ease }}
         >
           <Eyebrow>{c.eyebrow}</Eyebrow>
-          <h2 className="mt-1.5 text-balance text-[26px] font-semibold leading-[1.12] tracking-[-0.03em] text-[#1d1d1f] min-[400px]:text-[30px] sm:text-[32px] sm:leading-tight md:text-[40px]">
+          <h2 className="mt-1.5 text-balance break-words text-[26px] font-semibold leading-none tracking-[-0.03em] text-[#1d1d1f] min-[400px]:text-[30px] sm:text-[32px] md:text-[40px]">
             {c.headline}
           </h2>
           <p className={`mt-4 ${body}`}>{c.intro}</p>

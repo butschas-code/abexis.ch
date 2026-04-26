@@ -6,8 +6,8 @@ import { fokusPageHeroImages } from "@/data/site-images";
 export function HomeProcessSection() {
   const c = homeProcessContent;
   return (
-    <MotionSection className="py-14 sm:py-20 md:py-28">
-      <div className="mx-auto grid max-w-[1068px] items-center gap-8 pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:gap-10 sm:pl-6 sm:pr-6 md:gap-12 lg:grid-cols-[1fr_1.05fr]">
+    <MotionSection className="relative isolate bg-white py-14 sm:py-20 md:py-28">
+      <div className="mx-auto grid min-w-0 max-w-[1068px] items-center gap-8 overflow-x-hidden pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:gap-10 sm:pl-6 sm:pr-6 md:gap-12 lg:grid-cols-[1fr_1.05fr]">
         <div className="relative aspect-[4/3] order-2 overflow-hidden rounded-[22px] bg-[#f5f5f7] shadow-[var(--apple-shadow-lg)] ring-1 ring-black/[0.05] sm:rounded-[28px] lg:order-1 lg:rounded-[32px]">
           <Image
             src={fokusPageHeroImages.prozessoptimierung}
@@ -20,7 +20,7 @@ export function HomeProcessSection() {
         </div>
         <div className="order-1 min-w-0 lg:order-2">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">{c.eyebrow}</p>
-          <h2 className="mt-2 text-[28px] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f] text-balance sm:text-[32px] md:text-[40px]">
+          <h2 className="mt-2 text-balance break-words text-[28px] font-semibold leading-none tracking-[-0.03em] text-[#1d1d1f] hyphens-auto sm:text-[32px] md:text-[40px]">
             {c.headline}
           </h2>
           <ol className="mt-8 space-y-6 sm:mt-10 sm:space-y-8">

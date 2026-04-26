@@ -9,10 +9,10 @@ export function HomeWhoWeAreSection() {
   const daniel = teamProfiles.danielsengstag;
 
   return (
-    <MotionSection className="py-14 sm:py-20 md:py-28">
-      <div className="mx-auto max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
+    <MotionSection className="relative isolate bg-white py-14 sm:py-20 md:py-28">
+      <div className="mx-auto min-w-0 max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">{c.eyebrow}</p>
-        <h2 className="mt-2 max-w-[32ch] text-[28px] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f] text-balance sm:text-[32px] md:text-[40px]">
+        <h2 className="mt-2 max-w-full text-balance break-words text-[28px] font-semibold leading-none tracking-[-0.03em] text-[#1d1d1f] sm:max-w-[32ch] sm:text-[32px] md:text-[40px]">
           {c.headline}
         </h2>
         <div className="mt-5 max-w-[56ch] space-y-4 text-[16px] leading-relaxed text-[#6e6e73] sm:mt-6 sm:text-[17px]">

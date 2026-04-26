@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { type MainNavItem, mainNav } from "@/data/pages";
 import { logoUrl } from "@/data/site-images";
@@ -261,10 +261,35 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [mobileSubOpenHref, setMobileSubOpenHref] = useState<string | null>(null);
+  const isHome = pathname === "/";
+  const [mobileTopWash, setMobileTopWash] = useState(!isHome);
   const reduce = useReducedMotion();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!isHome) {
+      setMobileTopWash(true);
+      return;
+    }
+    const onScroll = () => setMobileTopWash(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isHome, pathname]);
 
   return (
     <>
+      {/**
+       * Mobile: full-bleed top layer so body copy cannot show through the “empty” sticky region
+       * (the pill is the only element with its own background; the header has h-0).
+       * Hidden on the home hero until the user has scrolled, so the first screen stays open.
+       */}
+      <div
+        aria-hidden
+        className={`pointer-events-none fixed inset-x-0 top-0 z-[35] h-[min(5.75rem,calc(3.25rem+env(safe-area-inset-top,0px)))] bg-white/90 backdrop-blur-md transition-opacity duration-200 md:hidden ${
+          mobileTopWash || open ? "opacity-100" : "opacity-0"
+        }`}
+      />
       {/* Floating pill nav — sticky, zero height so content flows under it */}
       <header className="pointer-events-none sticky top-0 z-40 h-0 overflow-visible">
         <div className="px-4 md:px-6" style={{ paddingTop: "calc(0.75rem + env(safe-area-inset-top, 0px))" }}>

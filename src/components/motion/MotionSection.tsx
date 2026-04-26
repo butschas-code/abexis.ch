@@ -25,10 +25,10 @@ export function MotionSection({ children, className, delay = 0, id }: Props) {
     <motion.section
       id={id}
       className={className}
-      initial={{ opacity: 0, y: 32 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reduce ? false : { y: 22 }}
+      whileInView={reduce ? undefined : { y: 0 }}
       viewport={{ once: true, margin: "-8% 0px" }}
-      transition={{ duration: 0.9, ease: appleEase, delay }}
+      transition={{ duration: 0.7, ease: appleEase, delay }}
     >
       {children}
     </motion.section>

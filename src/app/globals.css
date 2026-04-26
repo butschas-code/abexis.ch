@@ -215,15 +215,6 @@ body {
   }
 }
 
-@keyframes apple-shimmer {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
-}
-
 /* Partnerschaften: endloser Logo-Lauf */
 @keyframes partnership-marquee {
   from {
@@ -270,6 +261,11 @@ body {
   }
 }
 
+/**
+ * PRC / Leistungen / Challenge: static gradient (no `background-position` animation).
+ * Animating a large `background-size` caused visible banding and odd overlap when scrolling
+ * past team / adjacent sections; reduced-motion was already a flat fill.
+ */
 .apple-animated-gradient {
   background: linear-gradient(
     120deg,
@@ -279,13 +275,10 @@ body {
     color-mix(in srgb, var(--brand-900) 8%, #f0f2fa) 78%,
     #f5f5f7 100%
   );
-  background-size: 200% 200%;
-  animation: apple-shimmer 18s ease-in-out infinite alternate;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .apple-animated-gradient {
-    animation: none;
     background: #f5f5f7;
   }
 }

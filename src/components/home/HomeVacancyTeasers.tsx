@@ -18,7 +18,7 @@ export async function HomeVacancyTeasers() {
         <div className="flex flex-col justify-between gap-4 sm:gap-5 md:flex-row md:items-end">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Executive Search</p>
-            <h2 className="mt-2 text-[28px] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f] sm:text-[32px] md:text-[40px]">
+            <h2 className="mt-2 text-balance break-words text-[28px] font-semibold leading-none tracking-[-0.03em] text-[#1d1d1f] sm:text-[32px] md:text-[40px]">
               Aktuelle Vakanzen
             </h2>
           </div>

@@ -12,7 +12,7 @@ export function TestimonialsSection() {
       />
       <div className="relative mx-auto max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Referenzen</p>
-        <h2 className="mt-2 text-[28px] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f] sm:text-[32px] md:text-[40px]">
+        <h2 className="mt-2 text-balance break-words text-[28px] font-semibold leading-none tracking-[-0.03em] text-[#1d1d1f] sm:text-[32px] md:text-[40px]">
           Ergebnisse aus der Praxis.
         </h2>
         <p className="mt-3 max-w-[54ch] text-[15px] leading-relaxed text-[#6e6e73] sm:mt-4 sm:text-[16px]">

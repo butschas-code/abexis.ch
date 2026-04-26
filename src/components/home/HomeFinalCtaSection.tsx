@@ -15,7 +15,7 @@ export function HomeFinalCtaSection() {
           }}
         />
         <div className="relative">
-          <h2 className="text-[26px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[32px] md:text-[40px]">{c.headline}</h2>
+          <h2 className="text-balance break-words text-[26px] font-semibold leading-none tracking-[-0.03em] sm:text-[32px] md:text-[40px]">{c.headline}</h2>
           <p className="mx-auto mt-3 max-w-xl text-[16px] leading-relaxed text-white/90 sm:mt-4 sm:text-[17px]">{c.body}</p>
           <a
             href={siteConfig.bookingUrlDe}

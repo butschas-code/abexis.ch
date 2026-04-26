@@ -34,10 +34,15 @@ export function PageHero({
 }: Props) {
   const reduce = useReducedMotion();
   const mdJustify = contentPlacement === "lower" ? "md:justify-end" : "md:justify-center";
+  /** Home hero (`lower`): generous mobile bottom padding so the copy block sits higher and more image shows under the CTAs. */
+  const bottomPad =
+    contentPlacement === "lower"
+      ? "pb-[max(7.75rem,calc(4.75rem+env(safe-area-inset-bottom,0px)))] md:pb-[max(8.5rem,calc(6.5rem+env(safe-area-inset-bottom,0px)))]"
+      : "pb-[max(4rem,calc(2.5rem+env(safe-area-inset-bottom,0px)))] md:pb-[max(7rem,calc(5.5rem+env(safe-area-inset-bottom,0px)))]";
 
   return (
     <section
-      className={`relative isolate flex min-h-[min(100dvh,900px)] w-full flex-col justify-end overflow-hidden pt-24 pb-[max(4rem,calc(2.5rem+env(safe-area-inset-bottom,0px))] md:min-h-[min(92svh,960px)] ${mdJustify} md:pb-[max(7rem,calc(5.5rem+env(safe-area-inset-bottom,0px)))] md:pt-28`}
+      className={`relative isolate flex min-h-[min(100dvh,900px)] w-full flex-col justify-end overflow-hidden pt-24 md:min-h-[min(92svh,960px)] ${mdJustify} ${bottomPad} md:pt-28`}
     >
       <div className="pointer-events-none absolute inset-0 -z-10">
         <motion.div

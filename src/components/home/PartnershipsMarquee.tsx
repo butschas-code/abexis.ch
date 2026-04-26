@@ -26,7 +26,7 @@ export function PartnershipsMarquee() {
     <section className="relative border-y border-black/[0.06] bg-gradient-to-b from-[#eef2fb] via-white to-[#e8f4fa] py-12 sm:py-14 md:py-20">
       <div className="mx-auto max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Partnerschaften</p>
-        <h2 className="mt-2 text-[28px] font-semibold tracking-[-0.03em] text-[#1d1d1f] md:text-[32px]">Partnerschaften</h2>
+        <h2 className="mt-2 text-[28px] font-semibold leading-none tracking-[-0.03em] text-[#1d1d1f] md:text-[32px]">Partnerschaften</h2>
         <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-[#6e6e73]">{INTRO}</p>
       </div>
 

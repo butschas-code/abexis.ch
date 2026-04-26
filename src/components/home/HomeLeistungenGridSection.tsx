@@ -22,10 +22,10 @@ const LEISTUNG_IMAGES: readonly string[] = [
 export function HomeLeistungenGridSection() {
   const c = homeLeistungenBlock;
   return (
-    <MotionSection className="apple-animated-gradient py-14 sm:py-20 md:py-28">
-      <div className="mx-auto max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
+    <MotionSection className="apple-animated-gradient relative isolate overflow-x-hidden py-14 sm:py-20 md:py-28">
+      <div className="mx-auto min-w-0 max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
         <p className="text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">{c.eyebrow}</p>
-        <h2 className="mx-auto mt-2 max-w-[32ch] text-center text-[28px] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f] text-balance sm:text-[36px] sm:leading-tight md:text-[44px] lg:text-[48px]">
+        <h2 className="mx-auto mt-2 max-w-full text-center text-balance break-words text-[28px] font-semibold leading-none tracking-[-0.03em] text-[#1d1d1f] hyphens-auto sm:max-w-[32ch] sm:text-[36px] md:text-[44px] lg:text-[48px]">
           {c.headline}
         </h2>
         <p className="mx-auto mt-3 max-w-[60ch] text-center text-[16px] leading-relaxed text-[#6e6e73] sm:mt-4 sm:text-[17px]">{c.intro}</p>
