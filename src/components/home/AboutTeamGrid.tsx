@@ -37,6 +37,12 @@ export function AboutTeamGrid() {
                     {p.title}
                   </p>
                 ) : null}
+                <p className="mt-2.5 flex items-center gap-1 text-[13px] font-medium text-brand-600">
+                  Zum Profil
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </p>
               </div>
             </Link>
           );

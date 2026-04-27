@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { AboutTeamGrid } from "@/components/home/AboutTeamGrid";
 import { homeWhoWeAreContent } from "@/data/home-page-content";
 import { teamProfiles } from "@/data/pages";
@@ -44,6 +45,15 @@ export function HomeWhoWeAreSection() {
                 <p key={i}>{p}</p>
               ))}
             </div>
+            <Link
+              href="/danielsengstag"
+              className="mt-5 inline-flex items-center gap-1.5 text-[15px] font-medium text-brand-600 hover:text-brand-700 transition-colors duration-200 sm:mt-6"
+            >
+              Zum Profil
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
           </div>
         </div>
 

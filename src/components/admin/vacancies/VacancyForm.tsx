@@ -52,7 +52,7 @@ function blankForm(id: string): VacancyUpsertInput {
     body: serializePostBody(""),
     files: [],
     apply: "",
-    site: "search",
+    site: "both",
     status: "draft",
   };
 }
