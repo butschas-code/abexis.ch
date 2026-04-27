@@ -4,6 +4,7 @@ import { COLLECTIONS } from "@/cms/firestore/collections";
 import { parseSubmissionCreate } from "@/cms/schema";
 import { CMS_SUBMISSION_TYPES, type CmsSubmissionType } from "@/cms/types/enums";
 import { getAdminFirestore } from "@/firebase/server";
+import { notifySiteContactInbox } from "@/lib/notify-site-contact-inbox";
 
 type Body = {
   site?: unknown;
@@ -143,6 +144,18 @@ export async function POST(req: Request) {
         } catch (err) {
           console.error("Formspark send error:", err);
         }
+      }
+    }
+
+    if (parsed.data.type === "contact" || parsed.data.type === "executive_search") {
+      try {
+        await notifySiteContactInbox({
+          type: parsed.data.type,
+          payload: parsed.data.payload as Record<string, string>,
+          fileUrls: parsed.data.fileUrls ?? [],
+        });
+      } catch (err) {
+        console.error("Contact inbox notify error:", err);
       }
     }
 

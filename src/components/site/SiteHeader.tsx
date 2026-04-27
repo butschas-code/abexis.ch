@@ -338,7 +338,7 @@ export function SiteHeader() {
             </nav>
 
             <Link
-              href="/termin"
+              href="/kontakt"
               className="hidden shrink-0 items-center rounded-full bg-brand-900 px-5 py-2 text-[14px] font-medium text-white transition-colors duration-200 hover:bg-[#324891] md:flex"
             >
               Termin buchen
@@ -454,7 +454,7 @@ export function SiteHeader() {
                   })}
                   <div className="my-2 border-t border-black/[0.06]" />
                   <Link
-                    href="/termin"
+                    href="/kontakt"
                     className="mx-1 rounded-full bg-brand-900 px-5 py-3 text-center text-[16px] font-medium text-white transition-colors duration-200 hover:bg-[#324891]"
                     onClick={() => setOpen(false)}
                   >

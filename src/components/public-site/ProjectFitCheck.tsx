@@ -190,27 +190,27 @@ export function ProjectFitCheck() {
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
       <PageHero imageSrc={homeHeroImage} priority>
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Project Reality Check</p>
-        <h1 className="mt-3 max-w-[24ch] text-[clamp(2rem,6.5vw+0.5rem,3.5rem)] font-semibold leading-[1.06] tracking-[-0.035em] text-balance sm:max-w-[28ch]">
+        <h1 className="mt-3 max-w-[22rem] text-[clamp(1.75rem,6vw+0.35rem,3.5rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-balance sm:max-w-[28ch] sm:leading-[1.06]">
           <span className="text-white">Projekte laufen selten falsch</span>
           <br />
           <BrandGrad variant="dark" className="text-balance">
             aber oft in die falsche Richtung
           </BrandGrad>
         </h1>
-        <p className="mt-6 max-w-[52ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/88 text-balance">
+        <p className="mt-5 max-w-[52ch] text-[clamp(0.9375rem,2.8vw+0.35rem,1.175rem)] leading-[1.55] text-white/88 text-balance sm:mt-6 sm:leading-relaxed">
           Der Abexis Project Reality Check zeigt in kurzer Zeit, wo Ihr Projekt wirklich steht und was jetzt entschieden
           werden muss.
         </p>
-        <div className="mt-10 flex flex-wrap items-center gap-3">
+        <div className="mt-8 flex w-full max-w-lg flex-col gap-3 sm:mt-10 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center">
           <Link
             href="/termin"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-brand-900 px-7 text-[15px] font-medium text-white shadow-lg shadow-brand-900/35 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:shadow-brand-500/25 hover:-translate-y-0.5 active:translate-y-0 sm:min-h-[48px] sm:px-8 sm:text-[16px]"
+            className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-full bg-brand-900 px-6 text-[15px] font-medium text-white shadow-lg shadow-brand-900/35 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:shadow-brand-500/25 hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:min-h-[48px] sm:px-8 sm:text-[16px]"
           >
             Unverbindlichen Termin vereinbaren
           </Link>
           <Link
             href="#ablauf"
-            className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/35 bg-white/10 px-7 text-[15px] font-medium text-white backdrop-blur-sm transition-all duration-200 ease-out hover:border-white/55 hover:bg-white/18 sm:min-h-[48px] sm:text-[16px]"
+            className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-full border border-white/35 bg-white/10 px-6 text-[15px] font-medium text-white backdrop-blur-sm transition-all duration-200 ease-out hover:border-white/55 hover:bg-white/18 sm:w-auto sm:min-h-[48px] sm:px-7 sm:text-[16px]"
           >
             Ablauf ansehen
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
@@ -227,40 +227,40 @@ export function ProjectFitCheck() {
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_55%_70%_at_100%_40%,rgba(201,169,110,0.08),transparent_55%)]"
           aria-hidden
         />
-        <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-24">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20 lg:items-center">
+        <div className="relative mx-auto max-w-[1068px] px-4 py-14 sm:px-6 sm:py-16 md:py-24">
+          <div className="grid gap-10 sm:gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20 lg:items-center">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                 Früherkennung
               </p>
-              <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f]">
+              <h2 className="mt-4 text-[clamp(1.5rem,4.2vw+0.5rem,2.25rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-[#1d1d1f]">
                 6 Warnsignale, dass ein Projekt kritisch wird.
               </h2>
-              <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
+              <p className="mt-4 text-[15px] leading-relaxed text-[#6e6e73] sm:mt-5 sm:text-[16px]">
                 Wenn 2 bis 3 davon erkennbar sind, lohnt sich ein genauer Blick.
               </p>
               <Link
                 href="/termin"
-                className="mt-8 inline-flex items-center gap-3 text-[14px] font-semibold text-brand-900 transition-all hover:gap-4 hover:text-brand-500"
+                className="mt-6 inline-flex min-h-11 touch-manipulation items-center gap-3 py-1 text-[14px] font-semibold text-brand-900 transition-all hover:gap-4 hover:text-brand-500 sm:mt-8"
               >
                 Jetzt Termin vereinbaren
                 <ArrowRight />
               </Link>
             </div>
-            <ul className="flex flex-col gap-3" role="list">
+            <ul className="flex flex-col gap-2.5 sm:gap-3" role="list">
               {warnsignale.map((signal, i) => (
                 <li
                   key={signal}
-                  className="group relative flex items-center gap-5 overflow-hidden rounded-2xl border border-black/[0.07] bg-white/90 px-6 py-5 shadow-[0_2px_12px_rgba(38,51,124,0.06)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#26337c]/12 hover:shadow-[0_12px_40px_rgba(38,51,124,0.10)]"
+                  className="group relative flex items-start gap-3 overflow-hidden rounded-2xl border border-black/[0.07] bg-white/90 px-4 py-4 shadow-[0_2px_12px_rgba(38,51,124,0.06)] backdrop-blur-sm transition-all duration-300 sm:items-center sm:gap-5 sm:px-6 sm:py-5 hover:-translate-y-0.5 hover:border-[#26337c]/12 hover:shadow-[0_12px_40px_rgba(38,51,124,0.10)]"
                 >
                   <span
-                    className="shrink-0 text-[1.75rem] font-semibold leading-none tabular-nums"
+                    className="shrink-0 pt-0.5 text-[1.35rem] font-semibold leading-none tabular-nums sm:pt-0 sm:text-[1.75rem]"
                     style={{ color: `rgba(201,169,110,${0.25 + i * 0.15})` }}
                     aria-hidden
                   >
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-[16px] font-medium leading-snug text-[#1d1d1f]">
+                  <span className="min-w-0 text-[15px] font-medium leading-snug text-[#1d1d1f] sm:text-[16px]">
                     {signal}
                   </span>
                   <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#c9a96e]/80 to-[#c9a96e]/20 transition-all duration-500 group-hover:w-full" />
@@ -275,8 +275,8 @@ export function ProjectFitCheck() {
       <div className="overflow-hidden md:grid md:grid-cols-2">
         {/* Challenge — dark navy */}
         <div className="relative bg-[#1a2260]">
-          <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
-            <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
+          <div className="relative ml-auto max-w-[534px] px-4 py-12 sm:px-8 sm:py-14 md:px-12 md:py-20">
+            <LCorner className="top-5 left-4 text-[#45b3e2]/30 sm:top-6 sm:left-6" />
             <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Herausforderung</p>
             <h2 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
@@ -309,8 +309,8 @@ export function ProjectFitCheck() {
 
         {/* Result — warm linen */}
         <div className="relative bg-[#faf8f2]">
-          <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
-            <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
+          <div className="relative mr-auto max-w-[534px] px-4 py-12 sm:px-8 sm:py-14 md:px-12 md:py-20">
+            <LCorner className="top-5 left-4 text-[#c9a96e]/40 sm:top-6 sm:left-6" />
             <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Ergebnis</p>
             <h2 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
@@ -338,8 +338,8 @@ export function ProjectFitCheck() {
       {/* ── 4. 6 DIMENSIONEN ─────────────────────────────────────────────── */}
       <MotionSection className="relative overflow-hidden">
         <div aria-hidden className={SECTION_MESH_LIGHT} />
-        <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-24">
-          <div className="grid gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-16">
+        <div className="relative mx-auto max-w-[1068px] px-4 py-14 sm:px-6 sm:py-16 md:py-24">
+          <div className="grid gap-8 sm:gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-16">
             <div className="lg:sticky lg:top-28 lg:self-start">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Ansatz</p>
               <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
@@ -377,11 +377,11 @@ export function ProjectFitCheck() {
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-2">
               {dimensionen.map((dim) => (
                 <div
                   key={dim.key}
-                  className="group relative overflow-hidden rounded-2xl border border-black/[0.07] bg-white/95 px-6 py-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-900/15 hover:shadow-[0_16px_48px_rgba(38,51,124,0.10)]"
+                  className="group relative overflow-hidden rounded-2xl border border-black/[0.07] bg-white/95 px-5 py-5 backdrop-blur-sm transition-all duration-300 sm:px-6 sm:py-6 hover:-translate-y-1 hover:border-brand-900/15 hover:shadow-[0_16px_48px_rgba(38,51,124,0.10)]"
                 >
                   <LCorner className="top-3 right-3 text-[#c9a96e]/0 transition-colors duration-300 group-hover:text-[#c9a96e]" />
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#45b3e2]">
@@ -404,8 +404,8 @@ export function ProjectFitCheck() {
       {/* ── 5. LIEFEROBJEKTE ─────────────────────────────────────────────── */}
       <MotionSection className="relative overflow-hidden border-y border-black/[0.05]">
         <div aria-hidden className={SECTION_MESH_LIGHT} />
-        <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-24">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,320px)_1fr] lg:gap-16 lg:items-start">
+        <div className="relative mx-auto max-w-[1068px] px-4 py-14 sm:px-6 sm:py-16 md:py-24">
+          <div className="grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,320px)_1fr] lg:gap-16 lg:items-start">
             <div className="lg:sticky lg:top-28">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Lieferobjekte</p>
               <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
@@ -441,10 +441,10 @@ export function ProjectFitCheck() {
               </ol>
             </div>
           </div>
-          <div className="relative mt-14 flex justify-center border-t border-black/[0.06] pt-12">
+          <div className="relative mt-10 flex justify-center border-t border-black/[0.06] px-1 pt-10 sm:mt-14 sm:pt-12">
             <Link
               href="/termin"
-              className="inline-flex min-h-12 items-center justify-center rounded-full bg-brand-900 px-8 text-[15px] font-medium text-white shadow-md shadow-brand-900/20 transition-all hover:bg-[var(--brand-900-hover)] sm:text-[16px]"
+              className="inline-flex min-h-12 w-full max-w-md touch-manipulation items-center justify-center rounded-full bg-brand-900 px-6 text-[15px] font-medium text-white shadow-md shadow-brand-900/20 transition-all hover:bg-[var(--brand-900-hover)] sm:w-auto sm:max-w-none sm:px-8 sm:text-[16px]"
             >
               Unverbindlichen Termin vereinbaren
             </Link>
@@ -459,21 +459,21 @@ export function ProjectFitCheck() {
           aria-hidden
         />
         <MotionSection>
-          <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-28">
-            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-white/10 pb-6">
+          <div className="relative mx-auto max-w-[1068px] px-4 py-14 sm:px-6 sm:py-16 md:py-28">
+            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-white/10 pb-5 sm:pb-6">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#45b3e2]/85">
                 Klare Empfehlung
               </p>
               <span className="text-[11px] text-white/40">3 mögliche Pfade</span>
             </div>
-            <h2 className="mt-8 max-w-[34ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
+            <h2 className="mt-6 max-w-[34ch] text-[clamp(1.375rem,3.2vw+0.5rem,2.25rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-white sm:mt-8 sm:leading-[1.1]">
               Jeder Project Reality Check endet mit einer klaren Handlungsempfehlung.
             </h2>
-            <div className="mt-12 grid gap-5 sm:grid-cols-3">
+            <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-3 sm:gap-5">
               {empfehlungen.map((e) => (
                 <div
                   key={e.key}
-                  className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] px-7 py-8 backdrop-blur-[2px]"
+                  className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-6 backdrop-blur-[2px] sm:px-7 sm:py-8"
                 >
                   <h3
                     className={`text-[20px] font-semibold leading-snug tracking-[-0.02em] sm:text-[22px] ${e.titleClass}`}
@@ -492,50 +492,52 @@ export function ProjectFitCheck() {
       </section>
 
       {/* ── 7. ABLAUF — zusammenhängende Pipeline (Light → Core → Deep Dive) ─ */}
-      <section id="ablauf" className="relative overflow-hidden scroll-mt-28">
+      <section id="ablauf" className="relative overflow-hidden scroll-mt-24 sm:scroll-mt-28">
         <div aria-hidden className={SECTION_MESH_LIGHT} />
         <MotionSection>
-          <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-28">
+          <div className="relative mx-auto max-w-[1068px] px-4 py-14 sm:px-6 sm:py-16 md:py-28">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
               Abexis Project Reality Check
             </p>
-            <h2 className="mt-4 max-w-[40ch] text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
+            <h2 className="mt-3 max-w-[40ch] text-[clamp(1.5rem,4vw+0.5rem,2.375rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f] sm:mt-4 sm:leading-[1.09]">
               Ablauf: drei Phasen, ein zusammenhängender Prozess
             </h2>
-            <p className="mt-5 max-w-[56ch] text-[16px] leading-relaxed text-[#6e6e73]">
+            <p className="mt-4 max-w-[56ch] text-[15px] leading-[1.55] text-[#6e6e73] sm:mt-5 sm:text-[16px] sm:leading-relaxed">
               Light, Core und Deep Dive sind keine alternativen «Pakete», sondern die aufeinander aufbauenden Stufen
               desselben Reality Check — von der ersten Einordnung bis zur vertieuten Entscheidungs- und Umsetzungsgrundlage.
               Umfang und Investition klären wir im Erstgespräch; in der Regel als Fixpreis, ohne versteckte Folgekosten.
             </p>
 
-            <div className="relative mx-auto mt-14 max-w-3xl">
-              <ol className="relative m-0 flex list-none flex-col gap-8 p-0 sm:gap-10">
+            <div className="relative mx-auto mt-10 max-w-3xl sm:mt-14">
+              <ol className="relative m-0 flex list-none flex-col gap-6 p-0 sm:gap-8 md:gap-10">
                 {prcPipelinePhasen.map((phase, index) => {
                   const step = index + 1;
                   return (
                     <li key={phase.name}>
-                      <article className="rounded-2xl border border-black/[0.07] bg-white/95 py-6 pl-5 pr-5 shadow-[0_2px_12px_rgba(38,51,124,0.06)] backdrop-blur-sm sm:px-8 sm:py-7">
-                        <div className="flex gap-4 sm:gap-5">
+                      <article className="rounded-2xl border border-black/[0.07] bg-white/95 py-5 pl-4 pr-4 shadow-[0_2px_12px_rgba(38,51,124,0.06)] backdrop-blur-sm sm:py-6 sm:pl-5 sm:pr-5 md:px-8 md:py-7">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 md:gap-5">
                           <span
-                            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-white bg-brand-900 text-[12px] font-semibold tabular-nums text-white shadow-md"
+                            className="flex h-8 w-8 shrink-0 items-center justify-center self-start rounded-full border-2 border-white bg-brand-900 text-[12px] font-semibold tabular-nums text-white shadow-md"
                             aria-hidden
                           >
                             {step}
                           </span>
                           <div className="min-w-0 flex-1">
-                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#45b3e2]">
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#45b3e2] sm:text-[11px] sm:tracking-[0.18em]">
                               Phase {step} · {phase.dauer}
                             </p>
-                            <h3 className="mt-2 text-[clamp(1.125rem,2vw+0.5rem,1.375rem)] font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f]">
+                            <h3 className="mt-1.5 text-[clamp(1.0625rem,2.5vw+0.35rem,1.375rem)] font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f] sm:mt-2">
                               {phase.name}{" "}
-                              <span className="font-normal text-[#6e6e73]">— {phase.tagline}</span>
+                              <span className="block font-normal text-[#6e6e73] sm:inline sm:font-normal">
+                                — {phase.tagline}
+                              </span>
                             </h3>
-                            <p className="mt-3 text-[14px] font-medium leading-snug text-[#26337c] sm:text-[15px]">
+                            <p className="mt-2 text-[14px] font-medium leading-snug text-[#26337c] sm:mt-3 sm:text-[15px]">
                               Ziel: {phase.ziel}
                             </p>
                           </div>
                         </div>
-                        <div className="mt-6 grid gap-8 sm:grid-cols-2 sm:gap-10">
+                        <div className="mt-5 grid gap-6 sm:mt-6 sm:grid-cols-2 sm:gap-8 md:gap-10">
                           <div>
                             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">Inhalt</p>
                             <ul className="mt-3 flex flex-col gap-2.5">
@@ -570,14 +572,14 @@ export function ProjectFitCheck() {
                   );
                 })}
               </ol>
-              <div className="mt-2 flex flex-col items-center gap-3 border-t border-black/[0.06] pt-10">
+              <div className="mt-2 flex flex-col items-center gap-3 border-t border-black/[0.06] px-1 pt-8 sm:pt-10">
                 <p className="max-w-md text-center text-[14px] leading-relaxed text-[#6e6e73]">
                   Wir stimmen den genauen Umfang und die Dauer mit Ihnen ab — als durchgängiger Ablauf, nicht als
                   isolierte Bausteine.
                 </p>
                 <Link
                   href="/termin"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-brand-900 px-8 text-[15px] font-medium text-white shadow-lg shadow-brand-900/25 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 sm:text-[16px]"
+                  className="inline-flex min-h-12 w-full max-w-md touch-manipulation items-center justify-center gap-2 rounded-full bg-brand-900 px-6 text-[15px] font-medium text-white shadow-lg shadow-brand-900/25 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:max-w-none sm:px-8 sm:text-[16px]"
                 >
                   Termin vereinbaren
                   <ArrowRight />
@@ -589,9 +591,9 @@ export function ProjectFitCheck() {
       </section>
 
       {/* ── 8. CTA — gleiche Oberfläche wie Home-Abschluss (`abexis-hero-gradient-surface`) ─ */}
-      <section className="px-[max(1rem,env(safe-area-inset-left,0px))] py-16 pr-[max(1rem,env(safe-area-inset-right,0px))] sm:px-6 md:py-24">
+      <section className="px-[max(1rem,env(safe-area-inset-left,0px))] py-12 pr-[max(1rem,env(safe-area-inset-right,0px))] sm:px-6 sm:py-16 md:py-24">
         <div className="mx-auto max-w-[1068px]">
-          <div className="abexis-hero-gradient-surface relative overflow-hidden rounded-[20px] px-5 py-10 sm:rounded-[24px] sm:px-8 sm:py-12 md:rounded-[32px] md:px-12 md:py-16">
+          <div className="abexis-hero-gradient-surface relative overflow-hidden rounded-[20px] px-4 py-8 sm:rounded-[24px] sm:px-8 sm:py-12 md:rounded-[32px] md:px-12 md:py-16">
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 opacity-50"
@@ -600,21 +602,21 @@ export function ProjectFitCheck() {
                   "radial-gradient(circle at 18% 22%, rgba(255,255,255,0.38), transparent 42%), radial-gradient(circle at 82% 78%, rgba(69,179,226,0.45), transparent 45%), linear-gradient(160deg, rgba(38,51,124,0.2), transparent 55%)",
               }}
             />
-            <div className="relative grid gap-10 md:grid-cols-[1fr_auto] md:items-center">
+            <div className="relative grid gap-8 md:grid-cols-[1fr_auto] md:items-center md:gap-10">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Nächster Schritt</p>
-                <h2 className="mt-4 max-w-[32ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white text-balance md:max-w-[36ch]">
+                <h2 className="mt-3 max-w-[32ch] text-[clamp(1.375rem,3.2vw+0.5rem,2.25rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-white text-balance sm:mt-4 sm:leading-[1.1] md:max-w-[36ch]">
                   Lassen Sie uns kurz darauf schauen
                 </h2>
-                <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/88 sm:text-[17px]">
+                <p className="mt-4 max-w-[50ch] text-[15px] leading-[1.55] text-white/88 sm:mt-5 sm:text-[16px] sm:leading-relaxed md:text-[17px]">
                   In einem kurzen Gespräch klären wir, ob ein Project Reality Check sinnvoll ist und wo Ihr Projekt aktuell
                   steht — unverbindlich.
                 </p>
-                <div className="mt-7 flex flex-wrap gap-3">
+                <div className="mt-5 flex flex-wrap gap-2 sm:mt-7 sm:gap-3">
                   {["Kostenlos", "Kurzes Gespräch", "Unverbindlich", "Modular"].map((tag) => (
                     <span
                       key={tag}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[12px] font-medium text-white/85"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[11px] font-medium text-white/85 sm:px-4 sm:text-[12px]"
                     >
                       <span className="h-1.5 w-1.5 rounded-full bg-[#c9a96e]/90" />
                       {tag}
@@ -622,10 +624,10 @@ export function ProjectFitCheck() {
                   ))}
                 </div>
               </div>
-              <div className="flex flex-col gap-3 md:shrink-0 md:min-w-[240px]">
+              <div className="flex w-full flex-col gap-3 md:w-auto md:shrink-0 md:min-w-[240px]">
                 <Link
                   href="/termin"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-8 text-[15px] font-medium text-brand-900 shadow-lg shadow-brand-900/20 transition-all duration-200 ease-out hover:bg-white hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 sm:text-[16px]"
+                  className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-full bg-white px-6 text-[15px] font-medium text-brand-900 shadow-lg shadow-brand-900/20 transition-all duration-200 ease-out hover:bg-white hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 sm:px-8 sm:text-[16px]"
                 >
                   Unverbindlichen Termin vereinbaren
                 </Link>
@@ -633,7 +635,7 @@ export function ProjectFitCheck() {
                   href={siteConfig.bookingUrlDe}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/35 bg-white/10 px-8 text-[15px] font-medium text-white backdrop-blur-sm transition-all hover:border-white/55 hover:bg-white/15 sm:text-[16px]"
+                  className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-full border border-white/35 bg-white/10 px-6 text-[15px] font-medium text-white backdrop-blur-sm transition-all hover:border-white/55 hover:bg-white/15 sm:px-8 sm:text-[16px]"
                 >
                   Online-Kalender öffnen
                 </Link>
