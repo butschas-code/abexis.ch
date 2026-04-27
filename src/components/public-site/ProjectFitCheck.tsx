@@ -2,17 +2,43 @@ import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { PageHero } from "@/components/site/PageHero";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
-import { projectFitVisual } from "@/data/site-images";
+import { BrandGrad } from "@/components/ui/BrandGrad";
+import { homeHeroImage } from "@/data/site-images";
 import { siteConfig } from "@/data/pages";
+
+/** Same ambient layer as Leistungen / interior long-form pages (`apple-section-mesh` sits on the root). */
+const SECTION_MESH_LIGHT =
+  "pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_100%_70%_at_50%_-10%,rgba(38,51,124,0.11),transparent_50%),radial-gradient(ellipse_60%_50%_at_100%_50%,rgba(69,179,226,0.1),transparent_45%),linear-gradient(180deg,#fbfbfd_0%,#f0f3fb_40%,#fbfbfd_100%)]";
 
 // ─── Static data ──────────────────────────────────────────────────────────────
 
+/** Entspricht [abexis.ch/projectfitcheck](https://abexis.ch/projectfitcheck); Punkt 4 dort widerspricht «Was wir häufig sehen» — hier konsistent mit Unklarheit formuliert. */
 const warnsignale = [
   "Entscheidungen werden vertagt",
   "Statusberichte werden «optimistisch»",
   "Risiken sind bekannt, aber nicht priorisiert",
+  "Verantwortlichkeiten sind unklar",
   "Key Personen verlieren das Vertrauen",
   "Niemand hat den Gesamtüberblick",
+] as const;
+
+const herausforderungBullets = [
+  "Entscheidungen werden vertagt",
+  "Risiken sind bekannt, aber nicht priorisiert",
+  "Verantwortlichkeiten sind unklar",
+  "Probleme werden diskutiert, aber nicht gelöst",
+] as const;
+
+const ergebnisFolgen = [
+  "Das Projekt bewegt sich, aber nicht wirklich vorwärts",
+  "Das grösste Risiko ist nicht der Fehler, sondern die fehlende Klarheit",
+] as const;
+
+const ergebnisLieferung = [
+  "Eine klare Einschätzung der aktuellen Situation",
+  "Priorisierte Risiken",
+  "Konkrete Handlungsempfehlungen",
+  "Klar formulierter Entscheidungsbedarf",
 ] as const;
 
 const dimensionen = [
@@ -49,97 +75,92 @@ const dimensionen = [
 ] as const;
 
 const lieferobjekte = [
-  { num: "01", title: "Executive Summary", sub: "Management & Board ready" },
-  { num: "02", title: "Ampelbewertung", sub: "Green / Yellow / Red je Dimension" },
-  { num: "03", title: "Top 10 Risiken", sub: "Inkl. Eintrittswahrscheinlichkeit" },
-  { num: "04", title: "Governance Bewertung", sub: "Strukturen und Entscheidungswege" },
-  { num: "05", title: "Change Readiness", sub: "Organisatorische Einschätzung" },
-  { num: "06", title: "Massnahmenplan", sub: "30 / 60 / 90 Tage konkret" },
+  { id: "exec", title: "Executive Summary", sub: "Management und Board ready" },
+  { id: "ampel", title: "Ampelbewertung", sub: "Green / Yellow / Red je Dimension" },
+  { id: "risiken", title: "Top 10 Risiken", sub: "inkl. Eintrittswahrscheinlichkeit" },
+  { id: "governance", title: "Governance Bewertung", sub: "Strukturen, Rollen und Entscheidungswege" },
+  { id: "change", title: "Change Readiness Einschätzung", sub: "Organisatorische Einschätzung" },
+  { id: "plan", title: "Konkreter Massnahmenplan", sub: "30 / 60 / 90 Tage" },
+  { id: "empfehlung", title: "Klare Empfehlung", sub: "Continue · Stabilize · Reset" },
 ] as const;
 
 const empfehlungen = [
   {
-    signal: "Continue",
-    color: "#22c55e",
-    darkBg: "rgba(34,197,94,0.08)",
-    border: "rgba(34,197,94,0.2)",
-    icon: "→",
+    key: "continue",
+    titleClass: "text-[#7dd3fc]",
+    barClass: "from-[#45b3e2]/70",
     title: "Weiterführen",
     body: "Das Projekt ist grundsätzlich auf Kurs. Identifizierte Punkte werden mit gezielten Massnahmen adressiert.",
   },
   {
-    signal: "Stabilize",
-    color: "#f59e0b",
-    darkBg: "rgba(245,158,11,0.08)",
-    border: "rgba(245,158,11,0.2)",
-    icon: "⟳",
+    key: "stabilize",
+    titleClass: "text-[#e8d4a8]",
+    barClass: "from-[#c9a96e]/80",
     title: "Stabilisieren",
     body: "Wesentliche Risiken erfordern sofortige Massnahmen, bevor das Projekt in die nächste Phase übergeht.",
   },
   {
-    signal: "Reset",
-    color: "#ef4444",
-    darkBg: "rgba(239,68,68,0.08)",
-    border: "rgba(239,68,68,0.2)",
-    icon: "✕",
+    key: "reset",
+    titleClass: "text-[#fecaca]",
+    barClass: "from-[#f0a8a8]/75",
     title: "Neu ausrichten",
     body: "Grundlegende Annahmen oder Strukturen müssen überarbeitet werden. Ein kontrollierter Neustart ist empfehlenswert.",
   },
 ] as const;
 
-const pakete = [
+/**
+ * Drei aufeinander aufbauende Phasen eines Project Reality Check — ein zusammenhängender Ablauf, keine isolierten «Produkte».
+ * Inhalt gemäss [abexis.ch/projectfitcheck](https://abexis.ch/projectfitcheck).
+ */
+const prcPipelinePhasen = [
   {
-    name: "Lite",
-    dauer: "3 Tage",
-    preis: "CHF 5'900.–",
-    fokus: "Schnellcheck & Früherkennung",
-    bestseller: false,
-    items: [
-      "Kick-off-Interview mit Projektleitung",
-      "Schnellbewertung aller 6 Dimensionen",
-      "Ampel-Übersicht (Green / Yellow / Red)",
-      "Top 5 Risiken",
-      "Kurze schriftliche Einschätzung",
+    name: "Light",
+    tagline: "Schnelle Standortbestimmung",
+    dauer: "3–5 Tage",
+    ziel: "Erste Klarheit",
+    inhalt: [
+      "Interviews (3–5 Schlüsselpersonen)",
+      "High Level Analyse entlang 6 Dimensionen",
+      "Erste Risikoeinschätzung",
     ],
+    output: ["Kurzbewertung", "Top 3–5 kritische Punkte", "Erste Handlungsempfehlungen"],
   },
   {
-    name: "Professional",
-    dauer: "5 Tage",
-    preis: "CHF 9'750.–",
-    fokus: "Vollständige Analyse + Massnahmenplan",
-    bestseller: true,
-    items: [
-      "Interviews mit Schlüssel-Stakeholdern",
-      "Vollständige 6-Dimensionen-Analyse",
-      "Executive Summary (Board-ready)",
-      "Top 10 Risiken inkl. Wahrscheinlichkeit",
-      "Governance & Change Readiness Einschätzung",
-      "Massnahmenplan 30 / 60 / 90 Tage",
-      "Klare Empfehlung: Continue / Stabilize / Reset",
+    name: "Core",
+    tagline: "Management Klarheit",
+    dauer: "1–2 Wochen",
+    ziel: "Entscheidungsbasis für das Management",
+    inhalt: [
+      "Strukturierte Analyse (6 Dimensionen)",
+      "Interviews (5–10 Personen)",
+      "Dokumentenreview",
+      "Bewertung Risiken, Governance, Execution",
+    ],
+    output: [
+      "Klare Lageeinschätzung",
+      "Priorisierte Risiken",
+      "Konkrete Massnahmen",
+      "Entscheidungsbedarf klar formuliert",
     ],
   },
   {
     name: "Deep Dive",
-    dauer: "10 Tage",
-    preis: "CHF 19'500.–",
-    fokus: "Detailanalyse + Umsetzungsbegleitung",
-    bestseller: false,
-    items: [
-      "Alles aus Professional",
-      "Erweiterte Stakeholder-Interviews",
-      "Technische Deep-Dive-Analyse",
-      "Workshop mit Führungsteam",
-      "Umsetzungsbegleitung der Massnahmen",
-      "Follow-up nach 30 Tagen",
+    tagline: "Stabilisierung & Richtung",
+    dauer: "3–4 Wochen",
+    ziel: "Grundlage für Turnaround oder Neuausrichtung",
+    inhalt: [
+      "Vertiefte Analyse",
+      "Workshops mit Management / Projektteam",
+      "Konkrete Massnahmenplanung",
+      "Governance-Empfehlungen",
+    ],
+    output: [
+      "Vollständiges Lagebild",
+      "Klare Prioritäten",
+      "Konkrete Roadmap",
+      "Vorschlag für nächste Schritte (inkl. Rollenbedarf)",
     ],
   },
-] as const;
-
-const differenziierung = [
-  "Kombination aus Projekt-, Risk- und Change-Expertise",
-  "Unabhängig von Software-Anbietern und Interessen",
-  "Management-verständlich statt technisch-abstrakt",
-  "Schnell, präzise und umsetzungsorientiert",
 ] as const;
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -167,29 +188,31 @@ export function ProjectFitCheck() {
   return (
     <InteriorPageRoot>
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
-      <PageHero imageSrc={projectFitVisual} priority>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">
-          Angebot
-        </p>
-        <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Bringen Sie Klarheit in wichtige Projekte.
+      <PageHero imageSrc={homeHeroImage} priority>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Project Reality Check</p>
+        <h1 className="mt-3 max-w-[24ch] text-[clamp(2rem,6.5vw+0.5rem,3.5rem)] font-semibold leading-[1.06] tracking-[-0.035em] text-balance sm:max-w-[28ch]">
+          <span className="text-white">Projekte laufen selten falsch</span>
+          <br />
+          <BrandGrad variant="dark" className="text-balance">
+            aber oft in die falsche Richtung
+          </BrandGrad>
         </h1>
-        <p className="mt-6 max-w-[52ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
-          Ein strukturierter, unabhängiger Project Fit Check in wenigen Tagen —
-          damit Sie wissen, wo Ihr Projekt wirklich steht und wie es weitergeht.
+        <p className="mt-6 max-w-[52ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/88 text-balance">
+          Der Abexis Project Reality Check zeigt in kurzer Zeit, wo Ihr Projekt wirklich steht und was jetzt entschieden
+          werden muss.
         </p>
-        <div className="mt-10 flex flex-wrap gap-3">
+        <div className="mt-10 flex flex-wrap items-center gap-3">
           <Link
             href="/termin"
-            className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-7 text-sm font-semibold text-[#26337c] transition-all hover:bg-white/90 hover:scale-[1.02]"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-brand-900 px-7 text-[15px] font-medium text-white shadow-lg shadow-brand-900/35 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:shadow-brand-500/25 hover:-translate-y-0.5 active:translate-y-0 sm:min-h-[48px] sm:px-8 sm:text-[16px]"
           >
-            Unverbindlichen Termin planen
+            Unverbindlichen Termin vereinbaren
           </Link>
           <Link
-            href="#pakete"
-            className="inline-flex h-11 items-center gap-2 rounded-full border border-white/30 px-7 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:border-white/60 hover:bg-white/10"
+            href="#ablauf"
+            className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/35 bg-white/10 px-7 text-[15px] font-medium text-white backdrop-blur-sm transition-all duration-200 ease-out hover:border-white/55 hover:bg-white/18 sm:min-h-[48px] sm:text-[16px]"
           >
-            Pakete ansehen
+            Ablauf ansehen
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
               <path d="M7 2v10M2 7l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -198,14 +221,11 @@ export function ProjectFitCheck() {
       </PageHero>
 
       {/* ── 2. WARNSIGNALE ───────────────────────────────────────────────── */}
-      <MotionSection className="relative overflow-hidden bg-[#faf8f2]">
+      <MotionSection className="relative overflow-hidden">
+        <div aria-hidden className={SECTION_MESH_LIGHT} />
         <div
-          className="pointer-events-none absolute inset-0"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_55%_70%_at_100%_40%,rgba(201,169,110,0.08),transparent_55%)]"
           aria-hidden
-          style={{
-            background:
-              "radial-gradient(ellipse 60% 80% at 100% 50%, rgba(201,169,110,0.07) 0%, transparent 60%)",
-          }}
         />
         <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-24">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20 lg:items-center">
@@ -214,15 +234,14 @@ export function ProjectFitCheck() {
                 Früherkennung
               </p>
               <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f]">
-                5 Warnsignale, dass ein Projekt kritisch wird.
+                6 Warnsignale, dass ein Projekt kritisch wird.
               </h2>
               <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
-                Wenn 2 bis 3 davon erkennbar sind, lohnt sich ein genauer
-                Blick — bevor aus Risiken Realität wird.
+                Wenn 2 bis 3 davon erkennbar sind, lohnt sich ein genauer Blick.
               </p>
               <Link
                 href="/termin"
-                className="mt-8 inline-flex items-center gap-3 text-[14px] font-semibold text-[#26337c] transition-all hover:gap-4"
+                className="mt-8 inline-flex items-center gap-3 text-[14px] font-semibold text-brand-900 transition-all hover:gap-4 hover:text-brand-500"
               >
                 Jetzt Termin vereinbaren
                 <ArrowRight />
@@ -232,7 +251,7 @@ export function ProjectFitCheck() {
               {warnsignale.map((signal, i) => (
                 <li
                   key={signal}
-                  className="group relative flex items-center gap-5 overflow-hidden rounded-2xl border border-[#c9a96e]/15 bg-white px-6 py-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#c9a96e]/30 hover:shadow-[0_8px_32px_rgba(201,169,110,0.10)]"
+                  className="group relative flex items-center gap-5 overflow-hidden rounded-2xl border border-black/[0.07] bg-white/90 px-6 py-5 shadow-[0_2px_12px_rgba(38,51,124,0.06)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#26337c]/12 hover:shadow-[0_12px_40px_rgba(38,51,124,0.10)]"
                 >
                   <span
                     className="shrink-0 text-[1.75rem] font-semibold leading-none tabular-nums"
@@ -259,31 +278,31 @@ export function ProjectFitCheck() {
           <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
             <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
             <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40">
-              Herausforderung
-            </p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Herausforderung</p>
             <h2 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
-              Viele Projekte laufen scheinbar nach Plan.
+              Viele Projekte wirken stabil, liefern aber nicht den erwarteten Impact.
             </h2>
-            <p className="mt-5 text-[16px] leading-relaxed text-white/65">
-              Doch unter der Oberfläche entstehen Risiken — oft schleichend
-              und unsichtbar für das Management.
+            <p className="mt-5 text-[16px] leading-relaxed text-white/88">
+              Meetings finden statt, Statusberichte sehen gut aus — und trotzdem entsteht Unsicherheit.
             </p>
-            <ul className="mt-7 flex flex-col gap-3">
-              {[
-                "Unterschiedliche Wahrnehmung im Management",
-                "Fehlende Transparenz über den tatsächlichen Fortschritt",
-                "Kritische Themen werden zu spät sichtbar",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3 text-[15px] text-white/60">
-                  <span className="mt-[7px] h-[5px] w-[5px] shrink-0 rounded-full bg-[#45b3e2]/50" />
+            <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/65">Was wir häufig sehen</p>
+            <ul className="mt-4 flex flex-col gap-3">
+              {herausforderungBullets.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-[15px] text-white/82">
+                  <span className="mt-[7px] h-[5px] w-[5px] shrink-0 rounded-full bg-[#45b3e2]/70" />
                   {item}
                 </li>
               ))}
             </ul>
-            <p className="mt-8 border-l-2 border-[#45b3e2]/25 pl-4 text-[15px] italic leading-relaxed text-white/40">
-              Das Ergebnis: Verzögerungen, Kostensteigerungen und Unsicherheit.
-            </p>
+            <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/65">Das Ergebnis</p>
+            <ul className="mt-4 flex flex-col gap-2">
+              {ergebnisFolgen.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-[15px] text-white/82">
+                  <span className="mt-[7px] h-[5px] w-[5px] shrink-0 rounded-full bg-[#45b3e2]/60" />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
           <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
         </div>
@@ -293,65 +312,65 @@ export function ProjectFitCheck() {
           <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
             <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
             <div className="mb-6 h-[3px] w-10 rounded-full bg-[#c9a96e]/60" />
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-              Ergebnis
-            </p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Ergebnis</p>
             <h2 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
-              Sie erhalten konkrete Klarheit.
+              Das Ergebnis ist sofort nutzbar.
             </h2>
-            <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
-              Keine Beraterberichte, die im Regal verstauben — sondern eine
-              klare Standortbestimmung mit konkretem Handlungsplan.
-            </p>
-            <ul className="mt-7 flex flex-col gap-4">
-              {[
-                { label: "Klare Standortbestimmung", sub: "Wo steht das Projekt wirklich?" },
-                { label: "Transparenz über Risiken", sub: "Priorisiert nach Eintrittswahrscheinlichkeit" },
-                { label: "Konkreter Massnahmenplan", sub: "30 / 60 / 90 Tage umsetzbar" },
-                { label: "Klare Empfehlung", sub: "Continue, Stabilize oder Reset" },
-              ].map(({ label, sub }) => (
-                <li key={label} className="flex items-start gap-3">
+            <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Sie erhalten</p>
+            <ul className="mt-4 flex flex-col gap-3">
+              {ergebnisLieferung.map((item) => (
+                <li key={item} className="flex items-start gap-3">
                   <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#c9a96e]/20">
                     <span className="h-1.5 w-1.5 rounded-full bg-[#c9a96e]" />
                   </span>
-                  <span>
-                    <span className="block text-[15px] font-semibold text-[#1d1d1f]">{label}</span>
-                    <span className="text-[13px] text-[#86868b]">{sub}</span>
-                  </span>
+                  <span className="text-[15px] leading-snug text-[#1d1d1f]">{item}</span>
                 </li>
               ))}
             </ul>
+            <p className="mt-8 text-[15px] font-medium leading-relaxed text-[#6e6e73]">
+              Damit Sie wissen, was zu tun ist — und was passiert, wenn nichts passiert.
+            </p>
           </div>
           <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
         </div>
       </div>
 
       {/* ── 4. 6 DIMENSIONEN ─────────────────────────────────────────────── */}
-      <MotionSection className="bg-[#f5f5f7]">
-        <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
+      <MotionSection className="relative overflow-hidden">
+        <div aria-hidden className={SECTION_MESH_LIGHT} />
+        <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-24">
           <div className="grid gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-16">
             <div className="lg:sticky lg:top-28 lg:self-start">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Ansatz
-              </p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Ansatz</p>
               <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                Wir bewerten Ihr Projekt entlang von sechs Dimensionen.
+                Klarheit statt Vermutung
               </h2>
               <div className="mt-7 h-px w-full bg-black/[0.06]" />
               <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                Jede Dimension wird mit einer Ampelbewertung versehen —
-                Green, Yellow oder Red — und in den Gesamtkontext eingeordnet.
+                Der Project Reality Check ist eine kurze, unabhängige Analyse auf Management-Ebene — ein strukturierter
+                Reality Check mit Fokus auf Entscheidungen, Risiken und Steuerbarkeit.
               </p>
-              <div className="mt-8 flex items-center gap-4">
-                {(["Green", "Yellow", "Red"] as const).map((status) => (
+              <p className="mt-4 text-[15px] font-medium leading-relaxed text-[#1d1d1f]">
+                Damit sichtbar wird, wo Ihr Projekt wirklich steht.
+              </p>
+              <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#86868b]">
+                Abexis 6 Dimensionen — Methodik
+              </p>
+              <p className="mt-3 text-[14px] leading-relaxed text-[#6e6e73]">
+                Jede Dimension wird mit einer Ampelbewertung (Green, Yellow, Red) in den Gesamtkontext eingeordnet.
+                Methodik und Bewertungslogik bleiben über den gesamten Ablauf gleich; Umfang und Detailtiefe steigen von
+                Phase zu Phase — von Light über Core bis Deep Dive.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
+                {(
+                  [
+                    { status: "Green" as const, tone: "bg-[#5ab88a]" },
+                    { status: "Yellow" as const, tone: "bg-[#d4a853]" },
+                    { status: "Red" as const, tone: "bg-[#c97a7a]" },
+                  ] as const
+                ).map(({ status, tone }) => (
                   <span key={status} className="flex items-center gap-1.5 text-[13px] text-[#6e6e73]">
-                    <span
-                      className="h-2.5 w-2.5 rounded-full"
-                      style={{
-                        background:
-                          status === "Green" ? "#22c55e" : status === "Yellow" ? "#f59e0b" : "#ef4444",
-                      }}
-                    />
+                    <span className={`h-2.5 w-2.5 rounded-full ring-1 ring-black/[0.06] ${tone}`} />
                     {status}
                   </span>
                 ))}
@@ -359,18 +378,12 @@ export function ProjectFitCheck() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
-              {dimensionen.map((dim, i) => (
+              {dimensionen.map((dim) => (
                 <div
                   key={dim.key}
-                  className="group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white px-6 py-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#26337c]/15 hover:shadow-[0_16px_48px_rgba(38,51,124,0.10)]"
+                  className="group relative overflow-hidden rounded-2xl border border-black/[0.07] bg-white/95 px-6 py-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-900/15 hover:shadow-[0_16px_48px_rgba(38,51,124,0.10)]"
                 >
                   <LCorner className="top-3 right-3 text-[#c9a96e]/0 transition-colors duration-300 group-hover:text-[#c9a96e]" />
-                  <span
-                    className="pointer-events-none absolute -bottom-1 right-3 select-none text-[4.5rem] font-semibold leading-none text-[#c9a96e]/[0.06] transition-opacity duration-300 group-hover:opacity-50"
-                    aria-hidden
-                  >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#45b3e2]">
                     {dim.key}
                   </p>
@@ -389,83 +402,87 @@ export function ProjectFitCheck() {
       </MotionSection>
 
       {/* ── 5. LIEFEROBJEKTE ─────────────────────────────────────────────── */}
-      <MotionSection className="bg-white">
-        <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20 lg:items-start">
+      <MotionSection className="relative overflow-hidden border-y border-black/[0.05]">
+        <div aria-hidden className={SECTION_MESH_LIGHT} />
+        <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-24">
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,320px)_1fr] lg:gap-16 lg:items-start">
             <div className="lg:sticky lg:top-28">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Lieferobjekte
-              </p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Lieferobjekte</p>
               <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                Was Sie konkret von uns erhalten.
+                Was Sie konkret erhalten
               </h2>
               <div className="mt-7 h-px w-full bg-black/[0.06]" />
               <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                Alle Dokumente sind Management- und Board-ready: klar strukturiert,
-                verdichtet auf das Wesentliche, direkt handlungsrelevant.
+                Klar strukturiert, management- und board-tauglich — verdichtet auf das Wesentliche.
               </p>
             </div>
-            <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2">
-              {lieferobjekte.map((item) => (
-                <div key={item.num} className="relative bg-white px-6 py-6">
-                  <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
-                  <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                    {item.num}
-                  </p>
-                  <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-                    {item.title}
-                  </h3>
-                  <p className="mt-1.5 text-[13px] text-[#86868b]">{item.sub}</p>
-                </div>
-              ))}
+            <div className="relative max-w-xl lg:max-w-lg xl:max-w-xl">
+              <ol className="relative m-0 flex list-none flex-col gap-3 p-0">
+                {lieferobjekte.map((item, index) => (
+                  <li
+                    key={item.id}
+                    className="flex gap-3 rounded-2xl border border-black/[0.06] bg-white/90 py-4 pl-5 pr-5 shadow-[0_1px_3px_rgba(38,51,124,0.05)] backdrop-blur-sm transition-[border-color,box-shadow] hover:border-black/10 hover:shadow-[0_6px_22px_rgba(38,51,124,0.07)] sm:gap-4 sm:py-5 sm:pl-6 sm:pr-6"
+                  >
+                    <span
+                      className="mt-[0.4rem] flex h-2 w-2 shrink-0 rounded-full bg-[#45b3e2] ring-2 ring-white sm:mt-[0.45rem]"
+                      aria-hidden
+                    />
+                    <div className="min-w-0 flex-1">
+                      <span className="sr-only">
+                        {index + 1}.{" "}
+                      </span>
+                      <h3 className="text-[16px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f] sm:text-[17px]">
+                        {item.title}
+                      </h3>
+                      <p className="mt-1.5 text-[13px] leading-relaxed text-[#6e6e73] sm:text-[14px]">{item.sub}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
             </div>
+          </div>
+          <div className="relative mt-14 flex justify-center border-t border-black/[0.06] pt-12">
+            <Link
+              href="/termin"
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-brand-900 px-8 text-[15px] font-medium text-white shadow-md shadow-brand-900/20 transition-all hover:bg-[var(--brand-900-hover)] sm:text-[16px]"
+            >
+              Unverbindlichen Termin vereinbaren
+            </Link>
           </div>
         </div>
       </MotionSection>
 
-      {/* ── 6. EMPFEHLUNG: CONTINUE / STABILIZE / RESET ──────────────────── */}
-      <section className="relative overflow-hidden bg-[#1a1f38]">
+      {/* ── 6. EMPFEHLUNG: CONTINUE / STABILIZE / RESET (navy wie Fokus-Split) ─ */}
+      <section className="relative overflow-hidden bg-[#1a2260]">
         <div
-          className="pointer-events-none absolute inset-0"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_85%_55%_at_50%_0%,rgba(69,179,226,0.14),transparent_58%),radial-gradient(ellipse_50%_40%_at_100%_100%,rgba(201,169,110,0.08),transparent_45%)]"
           aria-hidden
-          style={{
-            background:
-              "radial-gradient(ellipse 90% 60% at 50% 50%, rgba(38,51,124,0.6) 0%, transparent 70%)",
-          }}
         />
         <MotionSection>
           <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-28">
-            <div className="flex items-baseline gap-4 border-b border-white/[0.08] pb-6">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#45b3e2]/70">
+            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-white/10 pb-6">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#45b3e2]/85">
                 Klare Empfehlung
               </p>
-              <span className="text-[11px] text-white/30">3 mögliche Pfade</span>
+              <span className="text-[11px] text-white/40">3 mögliche Pfade</span>
             </div>
-            <h2 className="mt-8 max-w-[32ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
-              Jeder Fit Check endet mit einer klaren Handlungsempfehlung.
+            <h2 className="mt-8 max-w-[34ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
+              Jeder Project Reality Check endet mit einer klaren Handlungsempfehlung.
             </h2>
             <div className="mt-12 grid gap-5 sm:grid-cols-3">
               {empfehlungen.map((e) => (
                 <div
-                  key={e.signal}
-                  className="relative overflow-hidden rounded-2xl border px-7 py-8 backdrop-blur-sm"
-                  style={{ borderColor: e.border, background: e.darkBg }}
+                  key={e.key}
+                  className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] px-7 py-8 backdrop-blur-[2px]"
                 >
-                  <p
-                    className="text-[11px] font-semibold uppercase tracking-[0.18em]"
-                    style={{ color: e.color }}
+                  <h3
+                    className={`text-[20px] font-semibold leading-snug tracking-[-0.02em] sm:text-[22px] ${e.titleClass}`}
                   >
-                    → {e.signal}
-                  </p>
-                  <h3 className="mt-3 text-[20px] font-semibold leading-snug tracking-[-0.02em] text-white">
                     {e.title}
                   </h3>
-                  <p className="mt-3 text-[14px] leading-relaxed text-white/55">{e.body}</p>
+                  <p className="mt-4 text-[14px] leading-relaxed text-white/60">{e.body}</p>
                   <div
-                    className="absolute bottom-0 left-0 right-0 h-[2px]"
-                    style={{
-                      background: `linear-gradient(to right, ${e.color}60, transparent)`,
-                    }}
+                    className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r ${e.barClass} to-transparent`}
                   />
                 </div>
               ))}
@@ -474,179 +491,153 @@ export function ProjectFitCheck() {
         </MotionSection>
       </section>
 
-      {/* ── 7. PAKETE / PRICING ───────────────────────────────────────────── */}
-      <section id="pakete" className="bg-[#f5f5f7]">
+      {/* ── 7. ABLAUF — zusammenhängende Pipeline (Light → Core → Deep Dive) ─ */}
+      <section id="ablauf" className="relative overflow-hidden scroll-mt-28">
+        <div aria-hidden className={SECTION_MESH_LIGHT} />
         <MotionSection>
-          <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
+          <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-28">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-              Produktvarianten
+              Abexis Project Reality Check
             </p>
-            <h2 className="mt-4 max-w-[28ch] text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-              Wählen Sie das passende Paket.
+            <h2 className="mt-4 max-w-[40ch] text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
+              Ablauf: drei Phasen, ein zusammenhängender Prozess
             </h2>
-            <p className="mt-5 max-w-[52ch] text-[16px] leading-relaxed text-[#6e6e73]">
-              Alle Pakete sind fix-preis und zeitlich klar begrenzt — keine versteckten Kosten,
-              kein endloses Consulting.
+            <p className="mt-5 max-w-[56ch] text-[16px] leading-relaxed text-[#6e6e73]">
+              Light, Core und Deep Dive sind keine alternativen «Pakete», sondern die aufeinander aufbauenden Stufen
+              desselben Reality Check — von der ersten Einordnung bis zur vertieuten Entscheidungs- und Umsetzungsgrundlage.
+              Umfang und Investition klären wir im Erstgespräch; in der Regel als Fixpreis, ohne versteckte Folgekosten.
             </p>
-            <div className="mt-12 grid gap-5 lg:grid-cols-3">
-              {pakete.map((paket) => (
-                <div
-                  key={paket.name}
-                  className={`group relative flex flex-col overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-1 ${
-                    paket.bestseller
-                      ? "border-[#26337c]/25 bg-white shadow-[0_8px_48px_rgba(38,51,124,0.12)]"
-                      : "border-black/[0.07] bg-white hover:border-[#26337c]/15 hover:shadow-[0_16px_48px_rgba(38,51,124,0.08)]"
-                  }`}
+
+            <div className="relative mx-auto mt-14 max-w-3xl">
+              <ol className="relative m-0 flex list-none flex-col gap-8 p-0 sm:gap-10">
+                {prcPipelinePhasen.map((phase, index) => {
+                  const step = index + 1;
+                  return (
+                    <li key={phase.name}>
+                      <article className="rounded-2xl border border-black/[0.07] bg-white/95 py-6 pl-5 pr-5 shadow-[0_2px_12px_rgba(38,51,124,0.06)] backdrop-blur-sm sm:px-8 sm:py-7">
+                        <div className="flex gap-4 sm:gap-5">
+                          <span
+                            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-white bg-brand-900 text-[12px] font-semibold tabular-nums text-white shadow-md"
+                            aria-hidden
+                          >
+                            {step}
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#45b3e2]">
+                              Phase {step} · {phase.dauer}
+                            </p>
+                            <h3 className="mt-2 text-[clamp(1.125rem,2vw+0.5rem,1.375rem)] font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f]">
+                              {phase.name}{" "}
+                              <span className="font-normal text-[#6e6e73]">— {phase.tagline}</span>
+                            </h3>
+                            <p className="mt-3 text-[14px] font-medium leading-snug text-[#26337c] sm:text-[15px]">
+                              Ziel: {phase.ziel}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="mt-6 grid gap-8 sm:grid-cols-2 sm:gap-10">
+                          <div>
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">Inhalt</p>
+                            <ul className="mt-3 flex flex-col gap-2.5">
+                              {phase.inhalt.map((item) => (
+                                <li
+                                  key={item}
+                                  className="flex items-start gap-2.5 text-[14px] leading-snug text-[#3c3c43]"
+                                >
+                                  <span className="mt-[5px] h-[5px] w-[5px] shrink-0 rounded-full bg-[#45b3e2]" />
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div>
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">Output</p>
+                            <ul className="mt-3 flex flex-col gap-2.5">
+                              {phase.output.map((item) => (
+                                <li
+                                  key={item}
+                                  className="flex items-start gap-2.5 text-[14px] leading-snug text-[#3c3c43]"
+                                >
+                                  <span className="mt-[5px] h-[5px] w-[5px] shrink-0 rounded-full bg-[#c9a96e]/85" />
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </article>
+                    </li>
+                  );
+                })}
+              </ol>
+              <div className="mt-2 flex flex-col items-center gap-3 border-t border-black/[0.06] pt-10">
+                <p className="max-w-md text-center text-[14px] leading-relaxed text-[#6e6e73]">
+                  Wir stimmen den genauen Umfang und die Dauer mit Ihnen ab — als durchgängiger Ablauf, nicht als
+                  isolierte Bausteine.
+                </p>
+                <Link
+                  href="/termin"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-brand-900 px-8 text-[15px] font-medium text-white shadow-lg shadow-brand-900/25 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 sm:text-[16px]"
                 >
-                  {paket.bestseller && (
-                    <div className="bg-gradient-to-r from-[#26337c] to-[#3550a4] px-6 py-2.5 text-center">
-                      <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80">
-                        Best Seller
-                      </span>
-                    </div>
-                  )}
-                  <div className="flex flex-1 flex-col px-7 pb-8 pt-7">
-                    <LCorner className="top-4 right-4 text-[#c9a96e]/20 transition-colors duration-300 group-hover:text-[#c9a96e]/40" />
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#45b3e2]">
-                      {paket.dauer}
-                    </p>
-                    <h3 className="mt-2 text-[22px] font-semibold leading-snug tracking-[-0.025em] text-[#1d1d1f]">
-                      {paket.name}
-                    </h3>
-                    <p className="mt-1 text-[13px] text-[#86868b]">{paket.fokus}</p>
-                    <div className="my-6 h-px bg-black/[0.06]" />
-                    <p className="text-[28px] font-semibold tracking-[-0.03em] text-[#1d1d1f]">
-                      {paket.preis}
-                    </p>
-                    <p className="text-[12px] text-[#86868b]">exkl. MwSt.</p>
-                    <ul className="mt-6 flex flex-1 flex-col gap-3">
-                      {paket.items.map((item) => (
-                        <li key={item} className="flex items-start gap-2.5 text-[14px] leading-snug text-[#3c3c43]">
-                          <span className="mt-[5px] h-[5px] w-[5px] shrink-0 rounded-full bg-[#45b3e2]" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="mt-8">
-                      <Link
-                        href="/termin"
-                        className={`inline-flex w-full items-center justify-center gap-2 rounded-full py-3 text-[14px] font-semibold transition-all hover:scale-[1.02] ${
-                          paket.bestseller
-                            ? "bg-[#26337c] text-white hover:bg-[#324891]"
-                            : "border border-[#26337c]/25 text-[#26337c] hover:border-[#26337c]/50 hover:bg-[#26337c]/05"
-                        }`}
-                      >
-                        Termin vereinbaren
-                        <ArrowRight />
-                      </Link>
-                    </div>
-                  </div>
-                  <div
-                    className={`absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#26337c] to-[#45b3e2] transition-all duration-500 group-hover:w-full ${paket.bestseller ? "w-full opacity-30" : ""}`}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </MotionSection>
-      </section>
-
-      {/* ── 8. WESHALB ABEXIS ────────────────────────────────────────────── */}
-      <MotionSection className="bg-white">
-        <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
-          <div className="grid gap-8 border-b border-black/[0.06] pb-12 md:grid-cols-[1fr_1fr] md:gap-20 md:items-end">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                Weshalb Abexis
-              </p>
-              <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f]">
-                Erfahrung, die den Unterschied macht.
-              </h2>
-            </div>
-            <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
-              Wir bringen nicht nur Methodik — sondern das Urteilsvermögen aus
-              hunderten realer Projektsituationen in verschiedenen Branchen
-              und Unternehmensstrukturen.
-            </p>
-          </div>
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2" role="list">
-            {differenziierung.map((d, i) => (
-              <li
-                key={d}
-                className="flex items-start gap-4 rounded-2xl border border-black/[0.06] bg-[#f5f5f7] px-6 py-5"
-              >
-                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#26337c]/08 text-[11px] font-semibold tabular-nums text-[#26337c]">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="text-[15px] font-medium leading-snug text-[#1d1d1f]">{d}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </MotionSection>
-
-      {/* ── 9. CTA ───────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
-        <div
-          className="absolute inset-0 -z-10"
-          aria-hidden
-          style={{ background: "linear-gradient(115deg, #26337c 0%, #3550a4 45%, #45b3e2 100%)" }}
-        />
-        <div
-          className="pointer-events-none absolute inset-0 -z-10"
-          aria-hidden
-          style={{
-            backgroundImage:
-              "radial-gradient(ellipse 60% 80% at 15% 100%, rgba(201,169,110,0.14) 0%, transparent 50%), radial-gradient(ellipse 50% 60% at 90% 10%, rgba(255,255,255,0.07) 0%, transparent 45%)",
-          }}
-        />
-        <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
-          <div className="grid gap-10 md:grid-cols-[1fr_auto] md:items-center">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/50">
-                Nächster Schritt
-              </p>
-              <h2 className="mt-4 max-w-[30ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white text-balance">
-                Bereit für Klarheit in Ihrem Projekt?
-              </h2>
-              <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
-                In einem kostenlosen 30-Minuten-Erstgespräch besprechen wir Ihr Vorhaben
-                und welches Paket am besten passt — unverbindlich und ohne Verpflichtung.
-              </p>
-              <div className="mt-7 flex flex-wrap gap-4">
-                {["Kostenlos", "30 Minuten", "Unverbindlich", "Fixpreis"].map((tag) => (
-                  <span
-                    key={tag}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-4 py-1.5 text-[12px] font-medium text-white/70"
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#c9a96e]/70" />
-                    {tag}
-                  </span>
-                ))}
+                  Termin vereinbaren
+                  <ArrowRight />
+                </Link>
               </div>
             </div>
-            <div className="flex flex-col gap-3 md:shrink-0">
-              <Link
-                href="/termin"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-8 text-[14px] font-semibold text-[#26337c] shadow-lg transition-all hover:bg-white/90 hover:scale-[1.02]"
-              >
-                Jetzt Termin buchen
-              </Link>
-              <Link
-                href={siteConfig.bookingUrlDe}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/25 px-8 text-[14px] font-semibold text-white backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/10"
-              >
-                Online-Kalender öffnen
-              </Link>
-            </div>
           </div>
-          <div className="mt-16 flex items-center gap-4 opacity-20">
-            <div className="h-px flex-1 bg-white" />
-            <div className="relative h-4 w-4">
-              <div className="absolute top-0 left-0 h-4 w-px bg-white" />
-              <div className="absolute top-0 left-0 h-px w-4 bg-white" />
+        </MotionSection>
+      </section>
+
+      {/* ── 8. CTA — gleiche Oberfläche wie Home-Abschluss (`abexis-hero-gradient-surface`) ─ */}
+      <section className="px-[max(1rem,env(safe-area-inset-left,0px))] py-16 pr-[max(1rem,env(safe-area-inset-right,0px))] sm:px-6 md:py-24">
+        <div className="mx-auto max-w-[1068px]">
+          <div className="abexis-hero-gradient-surface relative overflow-hidden rounded-[20px] px-5 py-10 sm:rounded-[24px] sm:px-8 sm:py-12 md:rounded-[32px] md:px-12 md:py-16">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 opacity-50"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle at 18% 22%, rgba(255,255,255,0.38), transparent 42%), radial-gradient(circle at 82% 78%, rgba(69,179,226,0.45), transparent 45%), linear-gradient(160deg, rgba(38,51,124,0.2), transparent 55%)",
+              }}
+            />
+            <div className="relative grid gap-10 md:grid-cols-[1fr_auto] md:items-center">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Nächster Schritt</p>
+                <h2 className="mt-4 max-w-[32ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white text-balance md:max-w-[36ch]">
+                  Lassen Sie uns kurz darauf schauen
+                </h2>
+                <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/88 sm:text-[17px]">
+                  In einem kurzen Gespräch klären wir, ob ein Project Reality Check sinnvoll ist und wo Ihr Projekt aktuell
+                  steht — unverbindlich.
+                </p>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  {["Kostenlos", "Kurzes Gespräch", "Unverbindlich", "Modular"].map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[12px] font-medium text-white/85"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#c9a96e]/90" />
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="flex flex-col gap-3 md:shrink-0 md:min-w-[240px]">
+                <Link
+                  href="/termin"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-8 text-[15px] font-medium text-brand-900 shadow-lg shadow-brand-900/20 transition-all duration-200 ease-out hover:bg-white hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 sm:text-[16px]"
+                >
+                  Unverbindlichen Termin vereinbaren
+                </Link>
+                <Link
+                  href={siteConfig.bookingUrlDe}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/35 bg-white/10 px-8 text-[15px] font-medium text-white backdrop-blur-sm transition-all hover:border-white/55 hover:bg-white/15 sm:text-[16px]"
+                >
+                  Online-Kalender öffnen
+                </Link>
+              </div>
             </div>
           </div>
         </div>

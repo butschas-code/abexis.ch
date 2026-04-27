@@ -47,6 +47,8 @@ type LayoutProps = HeaderProps & {
   heroPriority?: boolean;
   /** Pass-through to {@link PageHero} `imageObjectClassName` (e.g. portrait focal shift). */
   heroImageObjectClassName?: string;
+  /** e.g. {@link HeroProjectRealityCheckCta} below the hero description */
+  heroActions?: ReactNode;
   contentMaxWidth?: InteriorMaxWidth;
   contentClassName?: string;
   wrapContentInMotion?: boolean;
@@ -62,6 +64,7 @@ export function InteriorPageLayout({
   heroImage = homeHeroImage,
   heroPriority = false,
   heroImageObjectClassName,
+  heroActions,
   contentMaxWidth,
   contentClassName = "",
   wrapContentInMotion = true,
@@ -83,6 +86,11 @@ export function InteriorPageLayout({
         {description != null ? (
           <div className="mt-6 max-w-2xl text-[17px] font-normal leading-relaxed text-white/88 sm:text-[19px] md:text-[21px] [&_a]:font-medium [&_a]:text-white [&_a]:underline [&_a]:underline-offset-4 [&_a]:transition-colors [&_a:hover]:text-[#b8e8f7] [&_strong]:font-semibold [&_strong]:text-white">
             {description}
+          </div>
+        ) : null}
+        {heroActions != null ? (
+          <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+            {heroActions}
           </div>
         ) : null}
       </PageHero>

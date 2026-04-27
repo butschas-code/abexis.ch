@@ -4,6 +4,7 @@ import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { fokusthemenMeta, getFokusthemaHtml, normalizeFokusSlug } from "@/data/pages";
 import { fokusPageHeroImages, homeHeroImage } from "@/data/site-images";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
 import { FokusDigitaleTransformation } from "@/components/public-site/FokusDigitaleTransformation";
 import { FokusUnternehmensstrategie } from "@/components/public-site/FokusUnternehmensstrategie";
 import { FokusVertriebMarketing } from "@/components/public-site/FokusVertriebMarketing";
@@ -63,6 +64,7 @@ export default async function FokusthemaPage({ params }: Props) {
       contentMaxWidth="4xl"
       contentClassName="pt-10 md:pt-12"
       heroImage={heroImage}
+      heroActions={<HeroProjectRealityCheckCta />}
     >
       {meta && <SchemaMarkup type="Service" data={meta} />}
       <SchemaMarkup

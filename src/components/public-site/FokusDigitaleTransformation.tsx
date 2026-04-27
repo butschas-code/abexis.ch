@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
+import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
 import { PageHero } from "@/components/site/PageHero";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { fokusPageHeroImages } from "@/data/site-images";
@@ -232,7 +233,8 @@ export function FokusDigitaleTransformation() {
           entstehen Fehlinvestitionen, Reibung und verpasste Chancen. Wir helfen Ihnen, aus
           Technologie echten Unternehmenswert zu machen — strukturiert, strategisch, umsetzbar.
         </p>
-        <div className="mt-10 flex flex-wrap gap-3">
+        <div className="mt-10 flex flex-wrap items-center gap-3">
+          <HeroProjectRealityCheckCta />
           <Link
             href="/kontakt"
             className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-7 text-sm font-semibold text-[#26337c] transition-all hover:bg-white/90 hover:scale-[1.02]"

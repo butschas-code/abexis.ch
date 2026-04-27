@@ -1,6 +1,7 @@
 import { LeistungenBentoGrid } from "@/components/leistungen/LeistungenBentoGrid";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
+import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
 import { PageHero } from "@/components/site/PageHero";
 import { fokusPageHeroImages } from "@/data/site-images";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
@@ -36,6 +37,9 @@ export default function LeistungenPage() {
           Beratung in zentralen Führungs- und Personalthemen — präzise in der Analyse, diskret in der Begleitung und
           konsequent in der Umsetzung.
         </p>
+        <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+          <HeroProjectRealityCheckCta />
+        </div>
       </PageHero>
 
       <MotionSection className="relative overflow-hidden py-16 md:py-28">

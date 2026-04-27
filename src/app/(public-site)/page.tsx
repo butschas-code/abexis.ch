@@ -15,6 +15,7 @@ import { PartnershipsMarquee } from "@/components/home/PartnershipsMarquee";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { BrandGrad } from "@/components/ui/BrandGrad";
+import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
 import { homeHeroContent } from "@/data/home-page-content";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
@@ -51,12 +52,7 @@ export default function HomePage() {
             {h.body}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-            <Link
-              href={h.primaryCta.href}
-              className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-full bg-brand-900 px-5 text-[16px] font-medium text-white shadow-lg shadow-brand-900/35 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] sm:w-auto sm:min-h-[48px] sm:px-8 sm:text-[17px]"
-            >
-              {h.primaryCta.label}
-            </Link>
+            <HeroProjectRealityCheckCta />
             <Link
               href={h.secondaryCta.href}
               className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-full border border-white/35 bg-white/10 px-5 text-[16px] font-medium text-white backdrop-blur-sm transition-all duration-200 ease-out hover:border-white/60 hover:bg-white/22 hover:shadow-lg hover:shadow-black/15 hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:min-h-[48px] sm:px-8 sm:text-[17px]"

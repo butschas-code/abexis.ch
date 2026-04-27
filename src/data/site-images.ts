@@ -49,9 +49,6 @@ export const homeHeroImage = fokusPageHeroImages["digitale-transformation"];
 /** Kontaktseite — separates Hero-Motiv (nicht Startseiten-Hero). */
 export const kontaktPageHeroImage = fokusPageHeroImages.unternehmensstrategie;
 
-/** Project Fit Check – Visual aus der Originalseite */
-export const projectFitVisual = (scraped["https://www.abexis.ch/projectfitcheck"] as string[])[2];
-
 /** Blog-Übersicht: Cover-Thumbnails in Listenreihenfolge (ohne Logo) */
 const blogCovers = BLOG_PAGE.filter((u) => !u.includes("9fa6de2e-48f4-4837-8a9b-43f06f5ecc7f"));
 

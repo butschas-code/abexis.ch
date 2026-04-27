@@ -2,9 +2,9 @@ import { ProjectFitCheck } from "@/components/public-site/ProjectFitCheck";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 export const metadata = {
-  title: "Project Fit Check — Strukturiertes Projekt-Review | Abexis",
+  title: "Project Reality Check | Abexis",
   description:
-    "Ein unabhängiger Project Fit Check in 3, 5 oder 10 Tagen: Klare Standortbestimmung, Risikoanalyse und konkreter Massnahmenplan für Ihr Projekt.",
+    "Projekte laufen selten falsch — aber oft in die falsche Richtung. Der Abexis Project Reality Check zeigt in kurzer Zeit, wo Ihr Projekt steht und was jetzt entschieden werden muss. Modular: Light, Core, Deep Dive.",
 };
 
 export default function ProjectFitCheckPage() {
@@ -14,7 +14,7 @@ export default function ProjectFitCheckPage() {
         type="BreadcrumbList"
         data={[
           { name: "Startseite", url: "/" },
-          { name: "Project Fit Check", url: "/projectfitcheck" },
+          { name: "Project Reality Check", url: "/projectfitcheck" },
         ]}
       />
       <ProjectFitCheck />
