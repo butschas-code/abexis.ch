@@ -4,7 +4,7 @@ import { siteConfig } from "@/data/pages";
 export function HomeFinalCtaSection() {
   const c = homeClosingContent;
   return (
-    <section className="pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] pt-2 pb-20 sm:px-6 sm:pb-24 md:pb-28">
+    <section className="pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] pt-20 pb-20 sm:px-6 sm:pt-24 sm:pb-24 md:pt-28 md:pb-28">
       <div className="abexis-hero-gradient-surface relative mx-auto max-w-[1068px] overflow-hidden rounded-[20px] px-4 py-10 text-center text-white sm:rounded-[24px] sm:px-8 sm:py-12 md:rounded-[32px] md:px-16 md:py-20">
         <div
           aria-hidden

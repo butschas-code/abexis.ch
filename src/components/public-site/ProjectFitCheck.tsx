@@ -204,7 +204,7 @@ export function ProjectFitCheck() {
         </p>
         <div className="mt-8 flex w-full max-w-lg flex-col gap-3 sm:mt-10 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center">
           <Link
-            href="/termin"
+            href="/kontakt"
             className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-full bg-brand-900 px-6 text-[15px] font-medium text-white shadow-lg shadow-brand-900/35 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:shadow-brand-500/25 hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:min-h-[48px] sm:px-8 sm:text-[16px]"
           >
             Unverbindlichen Termin vereinbaren
@@ -241,7 +241,7 @@ export function ProjectFitCheck() {
                 Wenn 2 bis 3 davon erkennbar sind, lohnt sich ein genauer Blick.
               </p>
               <Link
-                href="/termin"
+                href="/kontakt"
                 className="mt-6 inline-flex min-h-11 touch-manipulation items-center gap-3 py-1 text-[14px] font-semibold text-brand-900 transition-all hover:gap-4 hover:text-brand-500 sm:mt-8"
               >
                 Jetzt Termin vereinbaren
@@ -467,7 +467,7 @@ export function ProjectFitCheck() {
 
           <div className="relative mt-10 flex justify-center border-t border-black/[0.06] px-1 pt-10 sm:mt-14 sm:pt-12">
             <Link
-              href="/termin"
+              href="/kontakt"
               className="inline-flex min-h-12 w-full max-w-md touch-manipulation items-center justify-center rounded-full bg-brand-900 px-6 text-[15px] font-medium text-white shadow-md shadow-brand-900/20 transition-all hover:bg-[var(--brand-900-hover)] sm:w-auto sm:max-w-none sm:px-8 sm:text-[16px]"
             >
               Unverbindlichen Termin vereinbaren
@@ -615,7 +615,7 @@ export function ProjectFitCheck() {
                   isolierte Bausteine.
                 </p>
                 <Link
-                  href="/termin"
+                  href="/kontakt"
                   className="inline-flex min-h-12 w-full max-w-md touch-manipulation items-center justify-center gap-2 rounded-full bg-brand-900 px-6 text-[15px] font-medium text-white shadow-lg shadow-brand-900/25 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:max-w-none sm:px-8 sm:text-[16px]"
                 >
                   Termin vereinbaren
@@ -663,7 +663,7 @@ export function ProjectFitCheck() {
               </div>
               <div className="flex w-full flex-col gap-3 md:w-auto md:shrink-0 md:min-w-[240px]">
                 <Link
-                  href="/termin"
+                  href="/kontakt"
                   className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-full bg-white px-6 text-[15px] font-medium text-brand-900 shadow-lg shadow-brand-900/20 transition-all duration-200 ease-out hover:bg-white hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 sm:px-8 sm:text-[16px]"
                 >
                   Unverbindlichen Termin vereinbaren

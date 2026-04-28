@@ -29,7 +29,13 @@ export function HomePrcSection() {
           </div>
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#a1a1a6]">{c.dimensionsLabel}</p>
-            <p className="mt-3 text-[16px] font-medium leading-relaxed text-[#1d1d1f]">{c.dimensions}</p>
+            <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3">
+              {c.dimensions.split(" · ").map((dim) => (
+                <div key={dim} className="border-t border-brand-900/20 pt-3">
+                  <dt className="text-[13px] font-semibold tracking-[0.04em] text-[#3d3d41]">{dim}</dt>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
 
