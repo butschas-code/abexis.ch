@@ -11,8 +11,9 @@ export default function LegalPolicyPage() {
   return (
     <InteriorPageLayout eyebrow="Rechtliches" title="Impressum" maxWidth="1068" contentMaxWidth="3xl" contentClassName="pt-10 md:pt-12">
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        path="/legal-policy"
+        name="Impressum"
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Impressum", url: "/legal-policy" },
         ]}

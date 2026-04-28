@@ -17,8 +17,9 @@ export default function PrivacyPolicyPage() {
       contentClassName="pt-10 md:pt-12"
     >
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        path="/privacy-policy"
+        name="Datenschutzerklärung"
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Datenschutz", url: "/privacy-policy" },
         ]}

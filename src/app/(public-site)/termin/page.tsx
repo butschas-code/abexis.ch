@@ -14,8 +14,9 @@ export default function TerminPage() {
       }
     >
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        path="/termin"
+        name="Termin buchen"
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Termin buchen", url: "/termin" },
         ]}

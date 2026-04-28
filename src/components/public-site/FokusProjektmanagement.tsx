@@ -207,10 +207,12 @@ function SpineCard({ item }: { item: Handlungsfeld }) {
 export function FokusProjektmanagement() {
   return (
     <InteriorPageRoot>
-      <SchemaMarkup type="Service" data={meta} />
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        type="Service"
+        path="/fokusthemen/projektmanagement"
+        name={meta.title}
+        data={meta}
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Leistungen", url: "/leistungen" },
           { name: meta.title, url: "/fokusthemen/projektmanagement" },
