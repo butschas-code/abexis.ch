@@ -15,6 +15,7 @@ type Body = {
   sourceUrl?: unknown;
   userAgent?: unknown;
   fileUrls?: unknown;
+  turnstileToken?: unknown;
 };
 
 function isDeploymentSite(v: unknown): v is "abexis" | "search" {
@@ -94,7 +95,11 @@ export async function POST(req: Request) {
   const sourceUrl = typeof json.sourceUrl === "string" ? json.sourceUrl.slice(0, 2000) : null;
   const userAgent = typeof json.userAgent === "string" ? json.userAgent.slice(0, 500) : null;
   const fileUrls = sanitizeFileUrls(json.fileUrls);
+  const turnstileToken = typeof json.turnstileToken === "string" ? json.turnstileToken.trim().slice(0, 4096) : "";
   const type = resolveSubmissionType(json.type, formId);
+  if ((type === "contact" || type === "application") && !turnstileToken) {
+    return NextResponse.json({ error: "TURNSTILE_REQUIRED" }, { status: 400 });
+  }
 
   const candidate = {
     type,
@@ -114,35 +119,32 @@ export async function POST(req: Request) {
   }
 
   try {
-    const ref = await db.collection(COLLECTIONS.submissions).add({
-      ...parsed.data,
-      createdAt: FieldValue.serverTimestamp(),
-    });
-
     if (parsed.data.type === "application") {
       const formsparkId = process.env.FORMSPARK_APPLICATION_FORM_ID || "WJ0NX6MXO";
       if (formsparkId) {
-        try {
-          await fetch(`https://submit-form.com/${formsparkId}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({
-              "Job": parsed.data.payload.jobTitle || "Unknown Job",
-              "Job ID": parsed.data.payload.jobId || "N/A",
-              "Name": parsed.data.payload.name || "",
-              "Email": parsed.data.payload.email || "",
-              "Phone": parsed.data.payload.phone || "",
-              "Message": parsed.data.payload.message || "",
-              "CV / Files": parsed.data.fileUrls?.join("\n") || "Keine Dateien hochgeladen",
-              "_email.from": parsed.data.payload.name || "",
-              "_email.subject": `Neue Bewerbung: ${parsed.data.payload.jobTitle || "Vakanz"}`,
-            }),
-          });
-        } catch (err) {
-          console.error("Formspark send error:", err);
+        const res = await fetch(`https://submit-form.com/${formsparkId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            "Job": parsed.data.payload.jobTitle || "Unknown Job",
+            "Job ID": parsed.data.payload.jobId || "N/A",
+            "Name": parsed.data.payload.name || "",
+            "Email": parsed.data.payload.email || "",
+            "Phone": parsed.data.payload.phone || "",
+            "Message": parsed.data.payload.message || "",
+            "CV / Files": parsed.data.fileUrls?.join("\n") || "Keine Dateien hochgeladen",
+            ...(turnstileToken ? { "cf-turnstile-response": turnstileToken } : {}),
+            "_email.from": parsed.data.payload.name || "",
+            "_email.subject": `Neue Bewerbung: ${parsed.data.payload.jobTitle || "Vakanz"}`,
+          }),
+        });
+        if (!res.ok) {
+          const err = await res.text().catch(() => "");
+          console.error("Formspark send error:", res.status, err);
+          throw new Error("FORMSPARK_APPLICATION_FAILED");
         }
       }
     }
@@ -153,11 +155,18 @@ export async function POST(req: Request) {
           type: parsed.data.type,
           payload: parsed.data.payload as Record<string, string>,
           fileUrls: parsed.data.fileUrls ?? [],
+          turnstileToken,
         });
       } catch (err) {
         console.error("Contact inbox notify error:", err);
+        throw err;
       }
     }
+
+    const ref = await db.collection(COLLECTIONS.submissions).add({
+      ...parsed.data,
+      createdAt: FieldValue.serverTimestamp(),
+    });
 
     return NextResponse.json({ id: ref.id }, { status: 201 });
   } catch (e) {

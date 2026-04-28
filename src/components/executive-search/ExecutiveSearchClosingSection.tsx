@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
-import { SearchBriefForm } from "@/components/executive-search/SearchBriefForm";
 
 export function ExecutiveSearchClosingSection() {
   return (
@@ -21,7 +20,7 @@ export function ExecutiveSearchClosingSection() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
               <Link
-                href="#suchmandat"
+                href="/kontakt"
                 className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-brand-900 px-7 text-[17px] font-medium text-white shadow-lg shadow-brand-900/35 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl sm:w-auto sm:min-h-[48px] sm:px-8"
               >
                 Suchmandat anfragen
@@ -32,9 +31,6 @@ export function ExecutiveSearchClosingSection() {
               >
                 Kontakt aufnehmen
               </Link>
-            </div>
-            <div className="mt-10 rounded-2xl border border-black/[0.06] bg-[#fbfbfd]/90 p-5 shadow-inner sm:p-6 md:p-7">
-              <SearchBriefForm id="suchmandat" />
             </div>
           </div>
         </PublicContentWidth>

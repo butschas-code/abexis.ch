@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useId, useState } from "react";
 import { z } from "zod";
 import { submitPublicForm } from "@/cms/services/form-submission-public-client";
+import { isTurnstileConfigured, TurnstileField } from "@/components/site/TurnstileField";
 
 const schema = z.object({
   name: z.string().trim().min(1, "Bitte geben Sie Ihren Namen an."),
@@ -27,34 +28,21 @@ const initial = {
   privacyAccepted: false as boolean,
 };
 
-async function submitViaWebhook(body: {
-  name: string;
-  company: string;
-  email: string;
-  phone: string;
-  message: string;
-  consent: true;
-  formContext: "kontakt";
-}) {
-  const res = await fetch("/api/contact", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error("Senden fehlgeschlagen. Bitte versuchen Sie es später erneut oder rufen Sie uns an.");
-}
-
 type KontaktPageFormProps = {
   /** Outlook / Buchungs-URL : vom Server übergeben, damit der Client nicht `pages.ts` bundelt. */
   bookingUrl: string;
+  site?: "abexis" | "search";
 };
 
 /** Kontaktformular für `/kontakt` (ohne Datei-Upload). */
-export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
+export function KontaktPageForm({ bookingUrl, site = "abexis" }: KontaktPageFormProps) {
   const formId = useId();
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState<Partial<Record<keyof Values | "privacyAccepted", string>>>({});
   const [formError, setFormError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileError, setTurnstileError] = useState<string | null>(null);
+  const [turnstileResetSignal, setTurnstileResetSignal] = useState(0);
   const [phase, setPhase] = useState<"idle" | "submitting" | "success">("idle");
 
   const set =
@@ -89,6 +77,10 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
       setErrors(next);
       return;
     }
+    if (!turnstileToken) {
+      setTurnstileError("Bitte bestätigen Sie den Bot-Schutz.");
+      return;
+    }
 
     setPhase("submitting");
     const payload = {
@@ -100,37 +92,26 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
     };
 
     try {
-      try {
-        await submitPublicForm({
-          site: "abexis",
-          type: "contact",
-          formId: "kontakt-page",
-          payload: {
-            ...payload,
-            extra: { privacyConsent: "true" },
-          },
-        });
-      } catch (cmsErr) {
-        const msg = cmsErr instanceof Error ? cmsErr.message : "";
-        const isCmsUnavailable =
-          msg.includes("CMS_ADMIN_NOT_CONFIGURED") || msg.includes("503") || msg.includes("Submit failed (503)");
-        if (!isCmsUnavailable) throw cmsErr;
-        await submitViaWebhook({
-          name: payload.name,
-          company: ("company" in payload ? payload.company : "") ?? "",
-          email: payload.email,
-          phone: ("phone" in payload ? payload.phone : "") ?? "",
-          message: payload.message,
-          consent: true,
-          formContext: "kontakt",
-        });
-      }
+      await submitPublicForm({
+        site,
+        type: "contact",
+        formId: site === "search" ? "kontakt-page-search" : "kontakt-page",
+        payload: {
+          ...payload,
+          extra: { privacyConsent: "true" },
+        },
+        turnstileToken,
+      });
 
       setPhase("success");
       setValues(initial);
+      setTurnstileToken(null);
+      setTurnstileResetSignal((n) => n + 1);
     } catch (err) {
       setPhase("idle");
       setFormError(err instanceof Error ? err.message : "Senden fehlgeschlagen.");
+      setTurnstileToken(null);
+      setTurnstileResetSignal((n) => n + 1);
     }
   };
 
@@ -278,12 +259,21 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
             </p>
           ) : null}
         </div>
+
+        <TurnstileField
+          resetSignal={turnstileResetSignal}
+          error={turnstileError}
+          onVerify={(token) => {
+            setTurnstileToken(token);
+            setTurnstileError(null);
+          }}
+        />
       </div>
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <button
           type="submit"
-          disabled={phase === "submitting"}
+          disabled={phase === "submitting" || !isTurnstileConfigured()}
           className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-brand-900 px-8 text-[16px] font-medium text-white shadow-lg shadow-brand-900/28 transition-all duration-200 hover:bg-[var(--brand-900-hover)] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
         >
           {phase === "submitting" ? "Wird gesendet …" : "Nachricht senden"}

@@ -4,7 +4,7 @@ import { MotionSection } from "@/components/motion/MotionSection";
 import { DanielSengstagProfilePage } from "@/components/profile/daniel-sengstag-ui";
 import { InteriorPageLayout, InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { danielSengstagContent, danielSengstagImages } from "@/data/daniel-sengstag";
-import { siteConfig, teamOrder, teamProfiles, type TeamSlug } from "@/data/pages";
+import { teamOrder, teamProfiles, type TeamSlug } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 type Props = { params: Promise<{ profile: string }> };
@@ -136,13 +136,6 @@ export default async function TeamProfilePage({ params }: Props) {
               ))}
             </ul>
           ) : null}
-          <a
-            href={siteConfig.bookingUrlDe}
-            className="mt-8 inline-flex min-h-[48px] items-center justify-center rounded-full bg-brand-900 px-8 text-[15px] font-medium text-white shadow-lg shadow-brand-900/30 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
-            rel="noreferrer"
-          >
-            Unverbindlicher Termin vereinbaren
-          </a>
         </div>
       </div>
       <MotionSection className="mt-10 pt-2">

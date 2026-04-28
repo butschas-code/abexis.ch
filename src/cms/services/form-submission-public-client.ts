@@ -26,6 +26,7 @@ export type SubmitFormOptions = {
   payload: SubmissionPayloadInput;
   files?: File[];
   formId?: string;
+  turnstileToken?: string;
 };
 
 async function uploadFiles(files: File[]): Promise<string[]> {
@@ -84,6 +85,7 @@ export async function submitPublicForm(options: SubmitFormOptions): Promise<{ id
     fileUrls,
     sourceUrl: typeof window !== "undefined" ? window.location.href : null,
     userAgent: typeof navigator !== "undefined" ? navigator.userAgent : null,
+    turnstileToken: options.turnstileToken,
   };
 
   const res = await fetch(SUBMIT_URL, {

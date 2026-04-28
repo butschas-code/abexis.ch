@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { submitPublicForm } from "@/cms/services/form-submission-public-client";
+import { isTurnstileConfigured, TurnstileField } from "@/components/site/TurnstileField";
 
 const initial = {
   name: "",
@@ -24,12 +25,19 @@ export function VacancyApplicationForm({
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileResetSignal, setTurnstileResetSignal] = useState(0);
   const reduce = useReducedMotion();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.consent) {
       setErrorMessage("Bitte bestätigen Sie die Datenschutzerklärung.");
+      setStatus("error");
+      return;
+    }
+    if (!turnstileToken) {
+      setErrorMessage("Bitte bestätigen Sie den Bot-Schutz.");
       setStatus("error");
       return;
     }
@@ -51,14 +59,19 @@ export function VacancyApplicationForm({
           },
         },
         files: file ? [file] : [],
+        turnstileToken,
       });
       setStatus("ok");
       setForm(initial);
       setFile(null);
+      setTurnstileToken(null);
+      setTurnstileResetSignal((n) => n + 1);
     } catch (err) {
       console.error(err);
       setStatus("error");
       setErrorMessage("Es gab ein Problem beim Senden. Bitte versuchen Sie es erneut.");
+      setTurnstileToken(null);
+      setTurnstileResetSignal((n) => n + 1);
     }
   }
 
@@ -169,10 +182,18 @@ export function VacancyApplicationForm({
         </span>
       </label>
 
+      <TurnstileField
+        resetSignal={turnstileResetSignal}
+        onVerify={(token) => {
+          setTurnstileToken(token);
+          if (token && errorMessage === "Bitte bestätigen Sie den Bot-Schutz.") setErrorMessage("");
+        }}
+      />
+
       <div className="flex flex-wrap items-center gap-4 pt-2">
         <button
           type="submit"
-          disabled={status === "sending"}
+          disabled={status === "sending" || !isTurnstileConfigured()}
           className="focus-ring rounded-full bg-[#26337c] px-6 py-2.5 text-[13px] font-semibold uppercase tracking-[0.15em] text-white transition hover:bg-[#324891] disabled:opacity-50"
         >
           {status === "sending" ? "Wird gesendet…" : "Bewerbung einreichen"}

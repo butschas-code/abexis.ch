@@ -78,22 +78,24 @@ export const mainNav: MainNavItem[] = [
   { href: "/kontakt", label: "Kontakt" },
 ];
 
+const PARTNERS_BASE = "https://storage.googleapis.com/abexis-cms.firebasestorage.app/site/partners";
+
 export const footerPartners = [
-  { label: "Swiss Institute of Directors", href: "https://boardfoundation.org/en/institution/swiss-institute-of-directors/" },
-  { label: "Sustainable Leaders", href: "https://www.sustainableleaders.ch/de/" },
-  { label: "Digital Winterthur", href: "https://www.digital-winterthur.ch/" },
-  { label: "Swiss Leaders", href: "https://swissleaders.ch/" },
-  { label: "SwissICT", href: "https://www.swissict.ch/" },
-  { label: "Ausbildung & Weiterbildung", href: "https://www.ausbildung-weiterbildung.ch/" },
-  { label: "UFZ", href: "https://www.ufz.ch/" },
-  { label: "AVZO", href: "https://avzo.ch/" },
-  { label: "Zürcher Oberland", href: "https://www.zuerioberland.ch/" },
-  { label: "SVC", href: "https://svc.swiss/de" },
-  { label: "Future Institute", href: "https://www.futureinstitute.ch/" },
-  { label: "Valueon", href: "https://www.valueon.ch/" },
-  { label: "Swiss MBAs", href: "https://swissmbas.com/" },
-  { label: "Leverage Experts", href: "https://leverage-experts.com/de/" },
-] as const;
+  { label: "Swiss Institute of Directors", href: "https://boardfoundation.org/en/institution/swiss-institute-of-directors/", logo: `${PARTNERS_BASE}/swiss-institute-of-directors.jpg` },
+  { label: "Sustainable Leaders", href: "https://www.sustainableleaders.ch/de/", logo: `${PARTNERS_BASE}/sustainable-leaders.png` },
+  { label: "Digital Winterthur", href: "https://www.digital-winterthur.ch/", logo: `${PARTNERS_BASE}/digital-winterthur.png` },
+  { label: "Swiss Leaders", href: "https://swissleaders.ch/", logo: `${PARTNERS_BASE}/swiss-leaders.png` },
+  { label: "SwissICT", href: "https://www.swissict.ch/", logo: `${PARTNERS_BASE}/swissict.png` },
+  { label: "Ausbildung & Weiterbildung", href: "https://www.ausbildung-weiterbildung.ch/", logo: `${PARTNERS_BASE}/ausbildung-weiterbildung.png` },
+  { label: "UFZ", href: "https://www.ufz.ch/", logo: `${PARTNERS_BASE}/ufz.jpg` },
+  { label: "AVZO", href: "https://avzo.ch/", logo: `${PARTNERS_BASE}/avzo.jpg` },
+  { label: "Zürcher Oberland", href: "https://www.zuerioberland.ch/", logo: `${PARTNERS_BASE}/zuerioberland.jpg` },
+  { label: "SVC", href: "https://svc.swiss/de", logo: `${PARTNERS_BASE}/svc.jpg` },
+  { label: "Future Institute", href: "https://www.futureinstitute.ch/", logo: `${PARTNERS_BASE}/future-institute.jpg` },
+  { label: "Valueon", href: "https://www.valueon.ch/", logo: `${PARTNERS_BASE}/valueon.png` },
+  { label: "Swiss MBAs", href: "https://swissmbas.com/", logo: `${PARTNERS_BASE}/swiss-mbas.jpg` },
+  { label: "Leverage Experts", href: "https://leverage-experts.com/de/", logo: `${PARTNERS_BASE}/leverage-experts.jpg` },
+];
 
 export const homeIntroLines = [
   "BUSINESS TRANSFORMATION, DIGITALISIERUNG",

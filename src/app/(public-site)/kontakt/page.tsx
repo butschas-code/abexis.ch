@@ -1,7 +1,6 @@
+import Link from "next/link";
 import { BookingCta } from "@/components/site/BookingCta";
-import { KontaktMapIframe } from "@/components/site/KontaktMapIframe";
 import { KontaktPageForm } from "@/components/site/KontaktPageForm";
-import { SearchBriefContactForm } from "@/components/site/search/SearchBriefContactForm";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { siteConfig } from "@/data/pages";
 import { kontaktPageHeroImage } from "@/data/site-images";
@@ -42,10 +41,9 @@ export default async function KontaktPage() {
             { name: "Kontakt", url: "/kontakt" },
           ]}
         />
-        <SearchBriefContactForm />
+        <KontaktPageForm bookingUrl={siteConfig.bookingUrlDe} site="search" />
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-2 lg:items-stretch lg:gap-10">
-          <div className="rounded-[28px] border border-black/[0.06] bg-white/80 p-8 shadow-sm ring-1 ring-black/[0.03] md:p-10">
+        <div className="mt-14 rounded-[28px] border border-black/[0.06] bg-white/80 p-8 shadow-sm ring-1 ring-black/[0.03] md:p-10">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Direkt erreichen</p>
             <dl className="mt-6 space-y-6 text-[15px]">
               <div>
@@ -83,8 +81,6 @@ export default async function KontaktPage() {
               .
             </p>
           </div>
-          <KontaktMapIframe />
-        </div>
       </InteriorPageLayout>
     );
   }
@@ -109,8 +105,8 @@ export default async function KontaktPage() {
           { name: "Kontakt", url: "/kontakt" },
         ]}
       />
-      <div className="grid gap-8 lg:grid-cols-2 lg:items-start lg:gap-10">
-        <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8">
+        <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
           <div className="rounded-[28px] bg-white p-8 shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] md:p-10">
             <dl className="space-y-8 text-[15px]">
               <div>
@@ -167,9 +163,8 @@ export default async function KontaktPage() {
             </dl>
           </div>
           <BookingCta />
-          <KontaktPageForm bookingUrl={siteConfig.bookingUrlDe} />
         </div>
-        <KontaktMapIframe className="lg:sticky lg:top-28" />
+        <KontaktPageForm bookingUrl={siteConfig.bookingUrlDe} site="abexis" />
       </div>
     </InteriorPageLayout>
   );
