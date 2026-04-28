@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Firebase **client** (Web SDK) — browser only.
+ * Firebase **client** (Web SDK) : browser only.
  *
  * -----------------------------------------------------------------------------
  * Firebase Console checklist (same project for Auth + Firestore + Storage)
@@ -23,7 +23,7 @@
  * 5) **Storage** → Get started → same project. Deploy `storage.rules`.
  *    CORS is usually fine for same-origin uploads; configure if you use another origin.
  *
- * 6) **Emulators (optional, local dev)** — see `.env.example` for
+ * 6) **Emulators (optional, local dev)** : see `.env.example` for
  *    `NEXT_PUBLIC_USE_FIREBASE_EMULATORS` and emulator host vars.
  *
  * -----------------------------------------------------------------------------
@@ -91,7 +91,7 @@ export function isFirebaseClientConfigured(): boolean {
   return parseFirebaseWebEnv().ok;
 }
 
-/** Missing env keys (for dev diagnostics only — do not log in production). */
+/** Missing env keys (for dev diagnostics only : do not log in production). */
 export function getFirebaseClientConfigMissingKeys(): readonly string[] {
   const r = parseFirebaseWebEnv();
   return r.ok ? [] : r.missing;

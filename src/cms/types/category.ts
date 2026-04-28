@@ -1,7 +1,7 @@
 import type { CategorySiteKey } from "./category-site";
 
 /**
- * `categories/{categoryId}` — taxonomy scoped to a public surface.
+ * `categories/{categoryId}` : taxonomy scoped to a public surface.
  * Legacy `siteScope` / `site: "both"` are normalized when reading.
  */
 export type Category = {

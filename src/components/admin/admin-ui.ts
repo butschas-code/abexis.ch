@@ -1,5 +1,5 @@
 /**
- * Shared **editorial admin** visuals — boutique / calm, not generic SaaS.
+ * Shared **editorial admin** visuals : boutique / calm, not generic SaaS.
  * Use these instead of one-off rounded/border classes for consistency.
  */
 
@@ -17,7 +17,7 @@ export const adminInput =
 export const adminInputError =
   "border-red-300/90 focus:border-red-400/80 focus:shadow-[0_0_0_3px_rgba(220,38,38,0.12)]";
 
-/** Section label / Kapitälchen — hierarchy without shouting. */
+/** Section label / Kapitälchen : hierarchy without shouting. */
 export const adminSectionLabel =
   "text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--apple-text-tertiary)]";
 

@@ -3,19 +3,19 @@ import { getFirestore, type Firestore } from "firebase-admin/firestore";
 import { getStorage, type Storage } from "firebase-admin/storage";
 
 /**
- * Firebase **Admin** (server-only) — Route Handlers, Server Actions, cron, imports.
+ * Firebase **Admin** (server-only) : Route Handlers, Server Actions, cron, imports.
  * Do **not** import this module from Client Components (`"use client"`).
  *
  * -----------------------------------------------------------------------------
  * Firebase Console / GCP checklist
  * -----------------------------------------------------------------------------
  *
- * **Option A — Vercel / local with a service account key (common)**
+ * **Option A : Vercel / local with a service account key (common)**
  * 1) Console → Project settings → **Service accounts** → “Generate new private key”.
  * 2) Store JSON as **one line** in `FIREBASE_SERVICE_ACCOUNT_JSON` (CI: Secret / Env).
  * 3) Set `FIREBASE_PROJECT_ID` to the same project (or rely on `project_id` inside JSON).
  *
- * **Option B — Application Default Credentials (GCP / Firebase App Hosting / Cloud Run)**
+ * **Option B : Application Default Credentials (GCP / Firebase App Hosting / Cloud Run)**
  * 1) Omit `FIREBASE_SERVICE_ACCOUNT_JSON`.
  * 2) Set `FIREBASE_PROJECT_ID` (or `GCLOUD_PROJECT` on GCP).
  * 3) Ensure the runtime service account has **Firebase Admin** / datastore access.

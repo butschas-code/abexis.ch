@@ -1,4 +1,4 @@
-/** Legacy /expertise page — sector depth & process (abexis-search.ch), preserved in structure. */
+/** Legacy /expertise page : sector depth & process (abexis-search.ch), preserved in structure. */
 
 /** Original page imagery (Hoststar / legacy BaseKit), see https://abexis-search.ch/expertise */
 const IMG = {
@@ -22,7 +22,7 @@ export type ExpertiseSector = {
   title: string;
   imageSrc: string;
   imageAlt: string;
-  /** Optional `object-*` overrides — e.g. IT stock has the person on the right of the frame. */
+  /** Optional `object-*` overrides : e.g. IT stock has the person on the right of the frame. */
   imageObjectClass?: string;
   intro: string[];
   specializationHeading: string;
@@ -42,11 +42,11 @@ export const expertiseSectors: ExpertiseSector[] = [
     id: "informationstechnologie",
     title: "Informationstechnologie",
     imageSrc: IMG.it,
-    imageAlt: "Technologie und digitale Zusammenarbeit — Executive Search im IT-Umfeld",
+    imageAlt: "Technologie und digitale Zusammenarbeit : Executive Search im IT-Umfeld",
     imageObjectClass: "object-[82%_46%] sm:object-[78%_44%] lg:object-[74%_48%]",
     intro: [
-      "Die IT-Branche ist Treiberin der digitalen Transformation – gleichzeitig ist der Wettbewerb um Fach- und Führungskräfte in kaum einem Bereich so intensiv. Gefragt sind Persönlichkeiten, die Technologie nicht nur beherrschen, sondern Innovation ermöglichen, Teams führen und Strukturen skalieren können.",
-      "Wir unterstützen IT-Unternehmen sowie technologiegetriebene Organisationen bei der gezielten Besetzung von Schlüsselrollen – von Tech-Startups bis zu etablierten Konzernen.",
+      "Die IT-Branche ist Treiberin der digitalen Transformation - gleichzeitig ist der Wettbewerb um Fach- und Führungskräfte in kaum einem Bereich so intensiv. Gefragt sind Persönlichkeiten, die Technologie nicht nur beherrschen, sondern Innovation ermöglichen, Teams führen und Strukturen skalieren können.",
+      "Wir unterstützen IT-Unternehmen sowie technologiegetriebene Organisationen bei der gezielten Besetzung von Schlüsselrollen - von Tech-Startups bis zu etablierten Konzernen.",
     ],
     specializationHeading: "Unsere Spezialisierung im IT-Umfeld umfasst:",
     specializationItems: [
@@ -72,9 +72,9 @@ export const expertiseSectors: ExpertiseSector[] = [
     id: "industrie",
     title: "Industrie",
     imageSrc: IMG.industrie,
-    imageAlt: "Industrie und Engineering — Führungspositionen in der Fertigung",
+    imageAlt: "Industrie und Engineering : Führungspositionen in der Fertigung",
     intro: [
-      "Die Industrie steht im Spannungsfeld zwischen Digitalisierung, Nachhaltigkeit und globalem Wettbewerbsdruck. Unternehmen benötigen Führungspersönlichkeiten, die operative Exzellenz mit strategischem Weitblick verbinden – sei es in der Produktion, Supply Chain, Entwicklung oder Geschäftsführung.",
+      "Die Industrie steht im Spannungsfeld zwischen Digitalisierung, Nachhaltigkeit und globalem Wettbewerbsdruck. Unternehmen benötigen Führungspersönlichkeiten, die operative Exzellenz mit strategischem Weitblick verbinden - sei es in der Produktion, Supply Chain, Entwicklung oder Geschäftsführung.",
       "Als Executive Search Partner mit tiefem Industrieverständnis identifizieren wir genau jene Talente, die nicht nur Expertise mitbringen, sondern auch Veränderung gestalten und Teams zu Spitzenleistungen führen.",
     ],
     specializationHeading: "Unsere Spezialisierung in der Industrie umfasst:",
@@ -99,10 +99,10 @@ export const expertiseSectors: ExpertiseSector[] = [
     id: "finanzen",
     title: "Finanzen, Banking & Risk Management",
     imageSrc: IMG.finanzen,
-    imageAlt: "Finanz- und Bankenumfeld — Executive Search in Finance und Risk",
+    imageAlt: "Finanz- und Bankenumfeld : Executive Search in Finance und Risk",
     intro: [
       "Die Finanzwelt bewegt sich zwischen Stabilität, Regulatorik und technologischem Wandel. Fach- und Führungspersönlichkeiten in diesem Umfeld benötigen sowohl unternehmerisches Denken als auch höchste Präzision und müssen in dynamischen Märkten souverän agieren.",
-      "Wir unterstützen Banken, Versicherungen, Finanzdienstleister und FinTech-Unternehmen bei der gezielten Besetzung kritischer Schlüsselpositionen – von etablierten Finanzinstituten bis hin zu innovationsgetriebenen Akteuren der Branche.",
+      "Wir unterstützen Banken, Versicherungen, Finanzdienstleister und FinTech-Unternehmen bei der gezielten Besetzung kritischer Schlüsselpositionen - von etablierten Finanzinstituten bis hin zu innovationsgetriebenen Akteuren der Branche.",
     ],
     specializationHeading: "Unsere Spezialisierung im Finanzbereich umfasst:",
     specializationItems: [
@@ -128,10 +128,10 @@ export const expertiseSectors: ExpertiseSector[] = [
     id: "oeffentlicher-sektor",
     title: "Öffentlicher Sektor & Verwaltung",
     imageSrc: IMG.oeffentlich,
-    imageAlt: "Öffentliche Verwaltung und Institutionen — Führungsrollen im öffentlichen Sektor",
+    imageAlt: "Öffentliche Verwaltung und Institutionen : Führungsrollen im öffentlichen Sektor",
     intro: [
-      "Der öffentliche Sektor befindet sich im Wandel: Digitalisierung, demografischer Druck, Fachkräftemangel und steigende Ansprüche an Effizienz und Bürgernähe fordern neue Kompetenzen – gerade in Schlüsselpositionen. Erfolgreiche Führung in der Verwaltung verlangt heute Managementfähigkeit, Kommunikationsstärke und ein tiefes Verständnis für politische und gesellschaftliche Zusammenhänge.",
-      "Wir begleiten öffentliche Institutionen, Körperschaften und staatsnahe Betriebe bei der gezielten Besetzung von Führungs- und Fachfunktionen – mit Fingerspitzengefühl, Transparenz und Erfahrung.",
+      "Der öffentliche Sektor befindet sich im Wandel: Digitalisierung, demografischer Druck, Fachkräftemangel und steigende Ansprüche an Effizienz und Bürgernähe fordern neue Kompetenzen - gerade in Schlüsselpositionen. Erfolgreiche Führung in der Verwaltung verlangt heute Managementfähigkeit, Kommunikationsstärke und ein tiefes Verständnis für politische und gesellschaftliche Zusammenhänge.",
+      "Wir begleiten öffentliche Institutionen, Körperschaften und staatsnahe Betriebe bei der gezielten Besetzung von Führungs- und Fachfunktionen - mit Fingerspitzengefühl, Transparenz und Erfahrung.",
     ],
     specializationHeading: "Unsere Spezialisierung im öffentlichen Umfeld umfasst:",
     specializationItems: [
@@ -156,38 +156,38 @@ export type ProcessStep = {
   label: string;
   title: string;
   body: string;
-  /** Illustration from legacy expertise page (optional — e.g. home uses same steps without visuals). */
+  /** Illustration from legacy expertise page (optional : e.g. home uses same steps without visuals). */
   imageSrc?: string;
   imageAlt?: string;
 };
 
 export const expertiseProcessIntro = {
-  title: "Unser Suchprozess – in 6 Schritten zum nachhaltigen Besetzungserfolg",
+  title: "Unser Suchprozess - in 6 Schritten zum nachhaltigen Besetzungserfolg",
   lead:
-    "Bei der Direktansprache von Führungspersönlichkeiten arbeiten wir mit einem strukturierten, bewährten Prozess. Er verbindet methodische Exzellenz, Marktverständnis und persönliche Betreuung – für ein Ergebnis, das langfristig trägt.",
+    "Bei der Direktansprache von Führungspersönlichkeiten arbeiten wir mit einem strukturierten, bewährten Prozess. Er verbindet methodische Exzellenz, Marktverständnis und persönliche Betreuung - für ein Ergebnis, das langfristig trägt.",
 } as const;
 
 export const expertiseProcessSteps: ProcessStep[] = [
   {
     id: "briefing",
     label: "Briefing",
-    title: "Briefing – Der Schlüssel zum Erfolg",
-    body: "In einem ausführlichen Startgespräch analysieren wir gemeinsam Ihre unternehmerische Ausgangslage: Strategie, Marktposition, Kultur, Führungsstruktur und Anforderungsprofil. Diese Tiefe ist entscheidend – denn eine klare Zieldefinition bildet die Grundlage für eine treffsichere Suche.",
+    title: "Briefing - Der Schlüssel zum Erfolg",
+    body: "In einem ausführlichen Startgespräch analysieren wir gemeinsam Ihre unternehmerische Ausgangslage: Strategie, Marktposition, Kultur, Führungsstruktur und Anforderungsprofil. Diese Tiefe ist entscheidend - denn eine klare Zieldefinition bildet die Grundlage für eine treffsichere Suche.",
     imageSrc: IMG.briefing,
     imageAlt: "Illustration: Briefing und Zieldefinition",
   },
   {
     id: "research",
     label: "Research",
-    title: "Research – Marktanalyse mit strategischem Fokus",
-    body: "Unser internes Research-Team sondiert systematisch den relevanten Kandidatenmarkt: branchenübergreifend, anonymisiert, datenbasiert. Wir analysieren Zielgruppenpotenziale und liefern wertvolle Insights – z. B. zur Realisierbarkeit des Wunschprofils oder zu alternativen Denkansätzen bei der Besetzung.",
+    title: "Research - Marktanalyse mit strategischem Fokus",
+    body: "Unser internes Research-Team sondiert systematisch den relevanten Kandidatenmarkt: branchenübergreifend, anonymisiert, datenbasiert. Wir analysieren Zielgruppenpotenziale und liefern wertvolle Insights - z. B. zur Realisierbarkeit des Wunschprofils oder zu alternativen Denkansätzen bei der Besetzung.",
     imageSrc: IMG.research,
     imageAlt: "Illustration: Research und Marktanalyse",
   },
   {
     id: "direktansprache",
     label: "Direktansprache",
-    title: "Direktansprache – Zugang zu den richtigen Persönlichkeiten",
+    title: "Direktansprache - Zugang zu den richtigen Persönlichkeiten",
     body: "Ausgewählte Kandidat:innen werden persönlich und diskret von unseren erfahrenen Berater:innen kontaktiert. Wir evaluieren in ersten Gesprächen sowohl Qualifikation als auch Motivation und Wechselbereitschaft. Nur Profile mit echter Relevanz werden weiterverfolgt.",
     imageSrc: IMG.direktansprache,
     imageAlt: "Illustration: Direktansprache von Kandidatinnen und Kandidaten",
@@ -195,24 +195,24 @@ export const expertiseProcessSteps: ProcessStep[] = [
   {
     id: "praesentation",
     label: "Präsentation & Vorauswahl",
-    title: "Präsentation & Vorauswahl – Strukturierter Dialog auf Augenhöhe",
-    body: "Wir stellen Ihnen eine Longlist mit geeigneten Persönlichkeiten vor – transparent, anonymisiert, klar begründet. Gemeinsam definieren wir daraus eine Shortlist, mit der wir in die vertiefte Interviewphase gehen. Ihre Rückmeldungen fliessen kontinuierlich in die Feinjustierung des Profils ein.",
+    title: "Präsentation & Vorauswahl - Strukturierter Dialog auf Augenhöhe",
+    body: "Wir stellen Ihnen eine Longlist mit geeigneten Persönlichkeiten vor - transparent, anonymisiert, klar begründet. Gemeinsam definieren wir daraus eine Shortlist, mit der wir in die vertiefte Interviewphase gehen. Ihre Rückmeldungen fliessen kontinuierlich in die Feinjustierung des Profils ein.",
     imageSrc: IMG.praesentation,
     imageAlt: "Illustration: Präsentation und Vorauswahl",
   },
   {
     id: "interviews",
     label: "Interviews & Entscheidungsfindung",
-    title: "Interviews & Entscheidungsfindung – Präzise Auswahl, klar dokumentiert",
-    body: "In strukturierten Gesprächen bewerten wir die Shortlist-Kandidat:innen hinsichtlich Führungsverhalten, Persönlichkeitsprofil und kultureller Passung. Sie erhalten zu jedem Finalisten ein fundiertes Dossier mit unserer Einschätzung. Wir koordinieren die Kundengespräche diskret und effizient – bei Bedarf in unseren Räumlichkeiten.",
+    title: "Interviews & Entscheidungsfindung - Präzise Auswahl, klar dokumentiert",
+    body: "In strukturierten Gesprächen bewerten wir die Shortlist-Kandidat:innen hinsichtlich Führungsverhalten, Persönlichkeitsprofil und kultureller Passung. Sie erhalten zu jedem Finalisten ein fundiertes Dossier mit unserer Einschätzung. Wir koordinieren die Kundengespräche diskret und effizient - bei Bedarf in unseren Räumlichkeiten.",
     imageSrc: IMG.interviews,
     imageAlt: "Illustration: Interviews und Entscheidungsfindung",
   },
   {
     id: "coaching",
     label: "Coaching & Abschluss",
-    title: "Coaching & Abschluss – Wir bleiben an Ihrer Seite",
-    body: "Auch nach erfolgreicher Auswahl begleiten wir den finalen Entscheidungs- und Vertragsprozess aktiv mit. Referenzeinholung, Zweitmeinung über Assessment oder Moderation sensibler Punkte – wir unterstützen Sie mit Erfahrung und Fingerspitzengefühl.",
+    title: "Coaching & Abschluss - Wir bleiben an Ihrer Seite",
+    body: "Auch nach erfolgreicher Auswahl begleiten wir den finalen Entscheidungs- und Vertragsprozess aktiv mit. Referenzeinholung, Zweitmeinung über Assessment oder Moderation sensibler Punkte - wir unterstützen Sie mit Erfahrung und Fingerspitzengefühl.",
     imageSrc: IMG.coaching,
     imageAlt: "Illustration: Coaching und Abschluss",
   },

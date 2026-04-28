@@ -17,7 +17,7 @@ const heroImageAltSchema = z.preprocess((v) => {
   return t === "" ? null : t;
 }, z.union([z.null(), z.string().max(500)]));
 
-/** Create a new post (no Firestore id yet — assign client-side id before first write). */
+/** Create a new post (no Firestore id yet : assign client-side id before first write). */
 export const postCreateInputSchema = z.object({
   title: z.string().trim().min(1).max(500),
   slug: slugSegment,
@@ -38,7 +38,7 @@ export const postCreateInputSchema = z.object({
   featured: z.boolean().default(false),
 });
 
-/** Upsert (admin editor) — includes Firestore document id. */
+/** Upsert (admin editor) : includes Firestore document id. */
 export const postUpsertInputSchema = postCreateInputSchema.extend({
   id: idString,
   /** When publishing: optional fixed publish time (ISO). Omit = server time on first publish; preserve when omitted on update. */

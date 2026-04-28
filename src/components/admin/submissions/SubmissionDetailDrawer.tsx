@@ -136,7 +136,7 @@ export function SubmissionDetailDrawer({ submissionId, open, onClose, onStatusCh
               <MetaLine label="Website" value={row.site} />
               <MetaLine
                 label="Eingang"
-                value={row.createdAt ? new Date(row.createdAt).toLocaleString("de-CH") : "—"}
+                value={row.createdAt ? new Date(row.createdAt).toLocaleString("de-CH") : ","}
               />
               {row.updatedAt ? (
                 <MetaLine label="Zuletzt bearbeitet" value={new Date(row.updatedAt).toLocaleString("de-CH")} />
@@ -164,7 +164,7 @@ export function SubmissionDetailDrawer({ submissionId, open, onClose, onStatusCh
                       <dt className="text-[11px] font-medium uppercase tracking-wide text-[var(--apple-text-tertiary)]">
                         {k}
                       </dt>
-                      <dd className="whitespace-pre-wrap text-[var(--apple-text)]">{v || "—"}</dd>
+                      <dd className="whitespace-pre-wrap text-[var(--apple-text)]">{v || ","}</dd>
                     </div>
                   ))}
                 </dl>

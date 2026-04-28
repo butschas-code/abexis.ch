@@ -1,12 +1,14 @@
 /** Editorial photography for homepage sections (Unsplash, executive / Swiss business tone). */
 export const homeImagery = {
   intro: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fe44da72a-1261-48e6-aa49-17b2d7ae5cd5.jpg?alt=media",
-  /** Self-hosted — avoids remote 404s / ad blockers on pillar cards */
+  /** Self-hosted : avoids remote 404s / ad blockers on pillar cards */
   pillarCustomer: "/images/home-pillars/customer.jpg",
   pillarNetwork: "/images/home-pillars/network.jpg",
   pillarQuality: "/images/home-pillars/quality.jpg",
   sectors:
     "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1800&q=82",
+  projectFitCheck:
+    "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=82",
   process:
     "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1600&q=82",
   trust:

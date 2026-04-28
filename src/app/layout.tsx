@@ -12,7 +12,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.abexis.ch"),
   title: {
-    default: "Abexis — Managementberatung",
+    default: "Abexis : Managementberatung",
     template: "%s | Abexis",
   },
   description:
@@ -26,13 +26,13 @@ export const metadata: Metadata = {
         url: homeHeroImage,
         width: 1200,
         height: 630,
-        alt: "Abexis — Managementberatung",
+        alt: "Abexis : Managementberatung",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abexis — Managementberatung",
+    title: "Abexis : Managementberatung",
     description: "Business Transformation, Strategie & Führungsberatung.",
   },
 };

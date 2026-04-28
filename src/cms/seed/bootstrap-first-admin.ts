@@ -2,7 +2,7 @@ import type { AppUserRole } from "@/cms/types/enums";
 
 /**
  * -----------------------------------------------------------------------------
- * First admin user — **manual steps in Firebase Console** (no production emails here)
+ * First admin user : **manual steps in Firebase Console** (no production emails here)
  * -----------------------------------------------------------------------------
  *
  * 1) **Authentication**
@@ -17,12 +17,12 @@ import type { AppUserRole } from "@/cms/types/enums";
  *      Admin seed script pattern, or set ISO strings if editing manually).
  *    - Field **`role`** must be **`admin`** for full CMS access (see RBAC in `src/cms/auth/permissions.ts`).
  *
- * 3) **Optional — Custom claims** (future)
+ * 3) **Optional : Custom claims** (future)
  *    - If you later sync `role` to Firebase Auth custom claims for server-side checks, deploy a Cloud Function or
  *      use the Admin SDK in a trusted environment. TODO: document when implemented.
  *
  * 4) **Security rules**
- *    - Ensure Firestore rules restrict `users/{uid}` writes to admins or service accounts — editors must not
+ *    - Ensure Firestore rules restrict `users/{uid}` writes to admins or service accounts : editors must not
  *      edit arbitrary user documents.
  *
  * **Never** commit service account JSON or real user passwords into the repo.
@@ -32,7 +32,7 @@ import type { AppUserRole } from "@/cms/types/enums";
 export type FirstAdminUserInput = {
   /** Firebase Authentication user id (same as Firestore document id under `users`). */
   uid: string;
-  /** Must match the email on the Auth user record — used for display / audit in CMS. */
+  /** Must match the email on the Auth user record : used for display / audit in CMS. */
   email: string;
   displayName: string;
   /**
@@ -43,7 +43,7 @@ export type FirstAdminUserInput = {
 };
 
 /**
- * Serializable Firestore fields for `users/{uid}` (no `FieldValue` — callers add timestamps server-side).
+ * Serializable Firestore fields for `users/{uid}` (no `FieldValue` : callers add timestamps server-side).
  * Does not write anything by itself.
  */
 export function buildFirstAdminUserFirestoreFields(input: FirstAdminUserInput): {
@@ -61,7 +61,7 @@ export function buildFirstAdminUserFirestoreFields(input: FirstAdminUserInput): 
 }
 
 /**
- * Human-readable checklist for README / onboarding docs — safe to log in dev tooling.
+ * Human-readable checklist for README / onboarding docs : safe to log in dev tooling.
  * Still does not contain real credentials; replace placeholders in your runbook.
  */
 export const FIRST_ADMIN_CONSOLE_CHECKLIST = `

@@ -1,6 +1,6 @@
 /**
  * Environment variable **schema** (types + validation helpers).
- * Values are never hardcoded here — only keys and shapes.
+ * Values are never hardcoded here : only keys and shapes.
  *
  * Firebase Console → Project settings:
  * - Web app config → `NEXT_PUBLIC_FIREBASE_*` (safe to expose; still treat as config secrets in CI logs).
@@ -27,7 +27,7 @@ export type FirebaseWebConfig = {
   storageBucket: string;
   messagingSenderId: string;
   appId: string;
-  /** Optional — Analytics only; add in Console if you use GA4 + Firebase Analytics. */
+  /** Optional : Analytics only; add in Console if you use GA4 + Firebase Analytics. */
   measurementId?: string;
 };
 

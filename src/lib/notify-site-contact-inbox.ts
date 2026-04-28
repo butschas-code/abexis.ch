@@ -22,13 +22,13 @@ export async function notifySiteContactInbox(opts: {
   const bodyText = [
     `Eingang über abexis.ch (CMS)`,
     `Typ: ${opts.type}`,
-    `Formular-ID: ${payload.formId ?? "—"}`,
+    `Formular-ID: ${payload.formId ?? "n/a"}`,
     "",
     ...Object.entries(payload)
       .filter(([k]) => k !== "formId")
       .map(([k, v]) => `${k}: ${v}`),
     "",
-    fileUrls.length ? `Dateien (URLs):\n${fileUrls.join("\n")}` : "Dateien: —",
+    fileUrls.length ? `Dateien (URLs):\n${fileUrls.join("\n")}` : "Dateien: keine",
   ].join("\n");
 
   const submitterEmail = payload.email?.trim();
@@ -75,7 +75,7 @@ export async function notifySiteContactInbox(opts: {
           Email: payload.email ?? "",
           Phone: payload.phone ?? "",
           Message: payload.message ?? "",
-          "File URLs": fileUrls.length ? fileUrls.join("\n") : "—",
+          "File URLs": fileUrls.length ? fileUrls.join("\n") : "none",
           "_email.from": submitterEmail || payload.name || "abexis.ch",
           "_email.subject": `[abexis.ch] ${opts.type}: ${payload.name || payload.email || "Kontakt"}`,
         }),

@@ -4,7 +4,7 @@ import type { CmsPostListItem } from "@/cms/services/posts-client";
 import type { SubmissionRow } from "@/cms/services/submissions-client";
 
 function formatWhen(iso: string | null) {
-  if (!iso) return "—";
+  if (!iso) return ",";
   try {
     return new Intl.DateTimeFormat("de-CH", {
       day: "2-digit",
@@ -14,7 +14,7 @@ function formatWhen(iso: string | null) {
       minute: "2-digit",
     }).format(new Date(iso));
   } catch {
-    return "—";
+    return ",";
   }
 }
 

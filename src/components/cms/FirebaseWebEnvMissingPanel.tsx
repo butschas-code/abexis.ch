@@ -35,7 +35,7 @@ export function FirebaseWebEnvMissingPanel({ title = "CMS nicht konfiguriert", f
           <code className="rounded bg-black/[0.06] px-1 py-0.5 text-[13px]">NEXT_PUBLIC_FIREBASE_*</code>-Werte wie
           lokal eintragen (für <strong className="text-[var(--apple-text)]">Production</strong> und ggf.{" "}
           <strong className="text-[var(--apple-text)]">Preview</strong>), dann eine{" "}
-          <strong className="text-[var(--apple-text)]">neue Deployment</strong> auslösen — die Werte werden beim Build
+          <strong className="text-[var(--apple-text)]">neue Deployment</strong> auslösen : die Werte werden beim Build
           ins Client-Bundle übernommen.
         </p>
       )}

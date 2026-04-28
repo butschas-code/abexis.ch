@@ -3,13 +3,13 @@ import { deploymentSiteKeySchema, submissionStatusSchema, submissionTypeSchema }
 
 const payloadRecord = z
   .record(z.string().max(80), z.string().max(8000))
-  .refine((o) => Object.keys(o).length > 0 && Object.keys(o).length <= 40, { message: "Payload: 1–40 Felder." });
+  .refine((o) => Object.keys(o).length > 0 && Object.keys(o).length <= 40, { message: "Payload: 1-40 Felder." });
 
 export const submissionCreateInputSchema = z.object({
   type: submissionTypeSchema,
   site: deploymentSiteKeySchema,
   payload: payloadRecord,
-  /** Public or signed URLs — not strictly `http(s)` (may be relative paths from clients). */
+  /** Public or signed URLs : not strictly `http(s)` (may be relative paths from clients). */
   fileUrls: z.array(z.string().max(2000)).max(20).default([]),
   status: submissionStatusSchema.default("new"),
   sourceUrl: z.union([z.string().max(2000), z.null()]).default(null),

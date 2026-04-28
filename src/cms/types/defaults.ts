@@ -3,7 +3,7 @@ import { serializePostBody } from "@/lib/cms/post-body-storage";
 
 /**
  * Initial editor state for a new Firestore post id.
- * Satisfies `postUpsertInputSchema` — replace title/slug before publishing.
+ * Satisfies `postUpsertInputSchema` : replace title/slug before publishing.
  */
 export function defaultPostUpsertDraft(id: string): PostUpsertInput {
   const slugTail = id.replace(/[^a-zA-Z0-9]+/g, "").slice(0, 12) || "x";

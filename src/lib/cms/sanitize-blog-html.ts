@@ -52,7 +52,7 @@ export function sanitizeBlogHtml(html: string): string {
           tagName,
           attribs: {
             ...attribs,
-            /** External link hardening — safe default for CMS/legacy content. */
+            /** External link hardening : safe default for CMS/legacy content. */
             target: attribs.target ?? "_blank",
             rel: attribs.rel ?? "noopener noreferrer",
           },

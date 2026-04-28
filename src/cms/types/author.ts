@@ -1,5 +1,5 @@
 /**
- * `authors/{authorId}` — attributed people on posts.
+ * `authors/{authorId}` : attributed people on posts.
  */
 export type Author = {
   name: string;

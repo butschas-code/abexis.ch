@@ -57,7 +57,7 @@ export function PostBodyEditor({ value, onChange, placeholder, disabled, uploadP
       Placeholder.configure({
         placeholder:
           placeholder ??
-          "Fliesstext und Überschriften. Bilder: Schaltfläche «Bild (URL)» — öffentliche Bild-Adresse einfügen.",
+          "Fliesstext und Überschriften. Bilder: Schaltfläche «Bild (URL)» : öffentliche Bild-Adresse einfügen.",
       }),
     ],
     content: sanitizeBlogHtml(value || "<p></p>"),

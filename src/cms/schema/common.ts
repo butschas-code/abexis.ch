@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const siteKeySchema = z.enum(["abexis", "search", "both"]);
-/** `categories.site` — cross-site uses `shared` (legacy `both` normalized at read time). */
+/** `categories.site` : cross-site uses `shared` (legacy `both` normalized at read time). */
 export const categorySiteKeySchema = z.enum(["abexis", "search", "shared"]);
 export const deploymentSiteKeySchema = z.enum(["abexis", "search"]);
 

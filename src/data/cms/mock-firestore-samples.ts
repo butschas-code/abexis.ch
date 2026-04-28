@@ -1,5 +1,5 @@
 /**
- * Mock sample documents for Firestore seeding / tests — **not** loaded at runtime by the app.
+ * Mock sample documents for Firestore seeding / tests : **not** loaded at runtime by the app.
  * Copy shapes into Emulator UI, seed scripts, or unit tests.
  */
 import { CMS_SETTINGS_GLOBAL_DOC_ID } from "@/cms/types/settings";
@@ -14,7 +14,7 @@ import type { CmsUser } from "@/cms/types/user";
 export const mockPostSample: CmsPost = {
   title: "Strategische Klarheit in unsicheren Märkten",
   slug: "strategische-klarheit",
-  excerpt: "Wie Führungsteams Entscheidungsfähigkeit stärken — ohne den operativen Alltag zu vernachlässigen.",
+  excerpt: "Wie Führungsteams Entscheidungsfähigkeit stärken, ohne den operativen Alltag zu vernachlässigen.",
   body: "<p>Beispielinhalt …</p>",
   heroImageUrl: "https://example.com/hero.jpg",
   heroImageAlt: "Beispiel-Titelbild",
@@ -86,7 +86,7 @@ export const mockSettingsSample: CmsSettings = {
   },
   seoBySite: {
     abexis: {
-      defaultTitle: "Abexis — Managementberatung",
+      defaultTitle: "Abexis : Managementberatung",
       defaultMetaDescription: "Strategie, Transformation und Leadership in Schweizer KMU.",
       titleSuffix: " | Abexis",
       ogType: "website",

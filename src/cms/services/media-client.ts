@@ -19,7 +19,7 @@ export type RecordMediaAssetInput = {
   sizeBytes: number;
   kind: MediaKind;
   postId?: string | null;
-  /** e.g. executive_search, contact — for form/brief pipelines */
+  /** e.g. executive_search, contact : for form/brief pipelines */
   source?: string | null;
 };
 

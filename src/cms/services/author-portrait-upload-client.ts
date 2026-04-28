@@ -9,7 +9,7 @@ function safeFileSegment(name: string) {
 }
 
 /**
- * Portrait for an author — stored under `cms/media/` (Storage rules allow editors).
+ * Portrait for an author : stored under `cms/media/` (Storage rules allow editors).
  */
 export async function uploadAuthorPortrait(authorId: string, file: File): Promise<{ url: string }> {
   const storage = getCmsStorage();

@@ -13,7 +13,7 @@ export async function getVisibleCategorySitesAsync(): Promise<CategorySiteKey[]>
   return visibleCategorySiteKeysForDeployment(d);
 }
 
-/** Cached category list — `allowedSites` passed as arg so no `headers()` runs inside the cache callback. */
+/** Cached category list : `allowedSites` passed as arg so no `headers()` runs inside the cache callback. */
 const _listCategoriesCached = async (allowedSites: string[]): Promise<PublicCategoryOption[]> => {
   const getCached = unstable_cache(
     async (): Promise<PublicCategoryOption[]> => {

@@ -10,7 +10,7 @@ export const metadata = {
   title: "Management Consulting",
   description: "Abexis helps your company move forward strategically, exploit growth potential and establish effective structures.",
   openGraph: {
-    title: "Abexis — Management Consulting",
+    title: "Abexis : Management Consulting",
     description: "Transformation, Strategy & Leadership Advisory.",
     images: [{ url: homeHeroImage }],
   },

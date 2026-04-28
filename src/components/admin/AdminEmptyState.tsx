@@ -10,7 +10,7 @@ type AdminEmptyStateProps = {
 };
 
 /**
- * Calm placeholder when a section has no data yet — inviting, not “empty error”.
+ * Calm placeholder when a section has no data yet : inviting, not “empty error”.
  */
 export function AdminEmptyState({ title, description, action }: AdminEmptyStateProps) {
   return (

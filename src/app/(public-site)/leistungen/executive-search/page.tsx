@@ -14,7 +14,7 @@ export default function ExecutiveSearchReferralPage() {
         <p>
           Executive Search und Personalberatung sind unter der Marke <strong className="font-semibold text-[#1d1d1f]">Abexis Search</strong>{" "}
           auf <strong className="font-semibold text-[#1d1d1f]">abexis.ch</strong> integriert. Hier finden Sie Fokusbereiche, den Suchprozess
-          und aktuelle Vakanzen — im gleichen Look &amp; Feel wie die Managementberatung.
+          und aktuelle Vakanzen : im gleichen Look &amp; Feel wie die Managementberatung.
         </p>
       }
     >

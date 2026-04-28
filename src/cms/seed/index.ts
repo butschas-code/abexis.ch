@@ -6,7 +6,7 @@
  * -----------------------------------------------------------------------------
  *
  * - **Create the first login**: Authentication → Users → Add user (email + password or provider).
- * - **Grant CMS role**: Firestore → `users/{uid}` where `uid` matches Auth — set `role: "admin"` via
+ * - **Grant CMS role**: Firestore → `users/{uid}` where `uid` matches Auth : set `role: "admin"` via
  *   {@link buildFirstAdminUserFirestoreFields} from `./bootstrap-first-admin` (see long comment there).
  * - **Optional**: run `npm run cms:seed:dev` locally with Admin credentials to insert sample categories / authors /
  *   starter settings (dev/staging only).

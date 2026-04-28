@@ -1,5 +1,5 @@
 /**
- * @deprecated Import from `@/cms/auth/permissions` for new code — this file re-exports for backwards compatibility.
+ * @deprecated Import from `@/cms/auth/permissions` for new code : this file re-exports for backwards compatibility.
  */
 export {
   canAccessCmsDashboard,

@@ -2,11 +2,17 @@ import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/admin/", "/api/"],
-    },
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin/", "/api/", "/(cms)/"],
+      },
+      {
+        userAgent: ["GPTBot", "Google-Extended", "PerplexityBot", "ClaudeBot", "Amazonbot"],
+        allow: "/",
+      }
+    ],
     sitemap: "https://www.abexis.ch/sitemap.xml",
   };
 }

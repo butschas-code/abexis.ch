@@ -4,7 +4,7 @@ import type { SiteKey } from "./site";
 export type { PostStatus } from "./enums";
 
 /**
- * `posts/{postId}` — Firestore uses **Timestamp** for dates; client/API map to ISO strings.
+ * `posts/{postId}` : Firestore uses **Timestamp** for dates; client/API map to ISO strings.
  * Legacy `heroStoragePath` is still read in mappers; new writes use `heroImagePath`.
  */
 export type Post = {

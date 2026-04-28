@@ -1,7 +1,7 @@
 /**
  * Programmatic seeding via Firebase **Admin SDK** (service account or ADC).
  *
- * Intended for **development / staging** only — see `scripts/cms-seed-dev.ts` and package script `cms:seed:dev`.
+ * Intended for **development / staging** only : see `scripts/cms-seed-dev.ts` and package script `cms:seed:dev`.
  *
  * Manual production bootstrap still relies on Firebase Console steps documented in `bootstrap-first-admin.ts`.
  *

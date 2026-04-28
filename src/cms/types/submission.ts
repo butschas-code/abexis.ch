@@ -15,7 +15,7 @@ export type SubmissionPayloadKnownFields = {
 };
 
 /**
- * `submissions/{submissionId}` — form / upload intakes (Admin API or trusted server).
+ * `submissions/{submissionId}` : form / upload intakes (Admin API or trusted server).
  */
 export type Submission = {
   type: CmsSubmissionType;

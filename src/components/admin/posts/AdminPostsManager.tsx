@@ -45,7 +45,7 @@ const statusLabel: Record<PostStatus, string> = {
 };
 
 function formatWhen(iso: string | null) {
-  if (!iso) return "—";
+  if (!iso) return ",";
   try {
     return new Intl.DateTimeFormat("de-CH", {
       day: "2-digit",
@@ -55,7 +55,7 @@ function formatWhen(iso: string | null) {
       minute: "2-digit",
     }).format(new Date(iso));
   } catch {
-    return "—";
+    return ",";
   }
 }
 
@@ -231,7 +231,7 @@ export function AdminPostsManager() {
 
   const description =
     statusFilter !== "all" || siteFilter !== "all" || categoryFilter !== "all" || qLocal.trim()
-      ? "Gefilterte und sortierte Liste — bis zu 500 zuletzt bearbeitete Beiträge aus der Datenbank."
+      ? "Gefilterte und sortierte Liste : bis zu 500 zuletzt bearbeitete Beiträge aus der Datenbank."
       : "Bis zu 500 zuletzt bearbeitete Beiträge. Suche und Filter wirken auf diese Auswahl.";
 
   return (
@@ -339,8 +339,8 @@ export function AdminPostsManager() {
                 <option value="updatedAt:asc">Bearbeitet (alt zuerst)</option>
                 <option value="publishedAt:desc">Veröffentlicht (neu zuerst)</option>
                 <option value="publishedAt:asc">Veröffentlicht (alt zuerst)</option>
-                <option value="title:asc">Titel A–Z</option>
-                <option value="title:desc">Titel Z–A</option>
+                <option value="title:asc">Titel A-Z</option>
+                <option value="title:desc">Titel Z-A</option>
               </select>
             </label>
           </div>
@@ -368,7 +368,7 @@ export function AdminPostsManager() {
           <div className="rounded-[1.25rem] border border-dashed border-black/[0.1] bg-[color-mix(in_srgb,var(--apple-bg-subtle)_50%,var(--apple-bg-elevated))] px-8 py-14 text-center">
             <p className="font-serif text-[1.2rem] font-medium text-[var(--apple-text)]">Keine Treffer</p>
             <p className="mx-auto mt-2 max-w-md text-[15px] leading-relaxed text-[var(--apple-text-secondary)]">
-              Passe Suche oder Filter an — oder setzen Sie die Filter zurück.
+              Passe Suche oder Filter an : oder setzen Sie die Filter zurück.
             </p>
             <button
               type="button"
@@ -421,7 +421,7 @@ export function AdminPostsManager() {
                       <span className={`${adminPill} whitespace-nowrap`}>{statusLabel[p.status]}</span>
                     </td>
                     <td className="hidden max-w-[160px] truncate px-4 py-3.5 text-[var(--apple-text-secondary)] lg:table-cell">
-                      {authorById.get(p.authorId) ?? (p.authorId && p.authorId !== "_" ? p.authorId : "—")}
+                      {authorById.get(p.authorId) ?? (p.authorId && p.authorId !== "_" ? p.authorId : ",")}
                     </td>
                     <td className="hidden whitespace-nowrap px-4 py-3.5 text-[var(--apple-text-secondary)] md:table-cell">
                       {formatWhen(p.updatedAt)}

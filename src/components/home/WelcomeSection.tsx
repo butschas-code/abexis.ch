@@ -22,7 +22,7 @@ export function WelcomeSection() {
       ref={ref}
       className="relative border-b border-t border-black/[0.06] py-12 sm:py-16 md:py-20"
       style={{
-        /* Solid base matches `apple-animated-gradient` top (Challenge) — layered tints fade to transparent so the bottom edge is uniform on mobile. */
+        /* Solid base matches `apple-animated-gradient` top (Challenge) : layered tints fade to transparent so the bottom edge is uniform on mobile. */
         backgroundColor: "#f5f5f7",
         backgroundImage: [
           "linear-gradient(115deg, rgba(38,51,124,0.08) 0%, rgba(255,255,255,0.72) 36%, rgba(255,255,255,0.2) 68%, rgba(255,255,255,0) 100%)",

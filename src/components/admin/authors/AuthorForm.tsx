@@ -205,7 +205,7 @@ export function AuthorForm({ mode, authorId }: { mode: Mode; authorId: string })
               className="w-full resize-y rounded-xl border border-black/10 bg-white px-3 py-2.5 text-sm outline-none ring-[var(--brand-500)]/20 focus:ring-4"
               value={input.bio}
               onChange={(e) => setInput((s) => ({ ...s, bio: e.target.value }))}
-              placeholder="Optional — erscheint z. B. auf Profilseiten oder im Beitragskopf."
+              placeholder="Optional : erscheint z. B. auf Profilseiten oder im Beitragskopf."
             />
           </label>
 

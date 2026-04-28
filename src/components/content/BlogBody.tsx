@@ -2,7 +2,7 @@ import { parsePostBody } from "@/lib/cms/post-body-storage";
 import { sanitizeBlogHtml } from "@/lib/cms/sanitize-blog-html";
 
 type Props = {
-  /** Firestore `posts.body` — JSON envelope or legacy HTML. */
+  /** Firestore `posts.body` : JSON envelope or legacy HTML. */
   storedBody: string;
   className?: string;
 };

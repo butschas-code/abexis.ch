@@ -9,6 +9,7 @@ export {
   getPublishedCmsPostsAllSites,
   getPublishedPostBySlug,
   listPublishedPostsFromDb,
+  listSearchSitePublishedPosts,
   normalizeBlogSlugParam,
   type PublishedPostWithId,
 } from "./get-published-posts";
@@ -38,7 +39,7 @@ export {
 } from "./post-detail";
 export { buildCmsPostMetadata } from "./post-metadata";
 
-/** Central two-site resolution + filters — prefer importing from `@/public-site/site` directly. */
+/** Central two-site resolution + filters : prefer importing from `@/public-site/site` directly. */
 export {
   type PublicDeploymentSite,
   visiblePostSitesInClause,

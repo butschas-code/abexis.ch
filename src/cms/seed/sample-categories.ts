@@ -1,7 +1,7 @@
 import type { Category } from "@/cms/types/category";
 
 /**
- * Stable **document ids** for seed categories — safe to reference from sample posts or docs.
+ * Stable **document ids** for seed categories : safe to reference from sample posts or docs.
  * Replace display copy in the CMS after onboarding; IDs can stay for stable URLs and relations.
  */
 export const SEED_CATEGORY_DOC_IDS = {
@@ -13,7 +13,7 @@ export const SEED_CATEGORY_DOC_IDS = {
 } as const;
 
 /**
- * Sample categories for local / staging onboarding — **not** production copy.
+ * Sample categories for local / staging onboarding : **not** production copy.
  * Firestore writes should use these shapes; timestamps are applied at upload time.
  */
 export const SEED_SAMPLE_CATEGORIES: ReadonlyArray<{
@@ -26,7 +26,7 @@ export const SEED_SAMPLE_CATEGORIES: ReadonlyArray<{
       name: "Strategie & Wachstum",
       slug: "strategie-wachstum",
       site: "abexis",
-      description: "Beispielkategorie für Strategie- und Wachstumsthemen — Text in der Redaktion anpassen.",
+      description: "Beispielkategorie für Strategie- und Wachstumsthemen : Text in der Redaktion anpassen.",
       sortOrder: 10,
     },
   },

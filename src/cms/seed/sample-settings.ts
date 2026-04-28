@@ -5,7 +5,7 @@ import type { SiteSettings } from "@/cms/types/settings";
 export const SEED_SETTINGS_DOC_ID = CMS_SETTINGS_GLOBAL_DOC_ID;
 
 /**
- * Starter **SiteSettings** payload for dev/staging — all contact emails are `example.com` placeholders.
+ * Starter **SiteSettings** payload for dev/staging : all contact emails are `example.com` placeholders.
  *
  * Manual follow-up in Firebase Console or CMS **Einstellungen**:
  * - Replace `example.com` addresses and phone numbers with real values before production.
@@ -33,7 +33,7 @@ export const SEED_SAMPLE_SITE_SETTINGS: Pick<SiteSettings, "contactBySite" | "fo
     },
   },
   footer: {
-    copyrightHtml: "© {year} Abexis GmbH — Beispieltext".replace("{year}", String(new Date().getFullYear())),
+    copyrightHtml: "© {year} Abexis GmbH : Beispieltext".replace("{year}", String(new Date().getFullYear())),
     legalLinks: [
       { label: "Datenschutz", href: "/privacy-policy" },
       { label: "Impressum", href: "/legal-policy" },
@@ -42,18 +42,18 @@ export const SEED_SAMPLE_SITE_SETTINGS: Pick<SiteSettings, "contactBySite" | "fo
   },
   defaultSeo: {
     titleSuffix: " | Abexis",
-    defaultDescription: "Managementberatung — Platzhalterbeschreibung für Suchmaschinen.",
+    defaultDescription: "Managementberatung : Platzhalterbeschreibung für Suchmaschinen.",
     ogType: "website",
   },
   seoBySite: {
     abexis: {
-      defaultTitle: "Abexis — Managementberatung (Beispiel)",
+      defaultTitle: "Abexis : Managementberatung (Beispiel)",
       defaultMetaDescription: "Platzhalter Meta-Beschreibung für die Beratungsseite.",
       titleSuffix: " | Abexis",
       ogType: "website",
     },
     search: {
-      defaultTitle: "Executive Search — Beispiel",
+      defaultTitle: "Executive Search : Beispiel",
       defaultMetaDescription: "Platzhalter für die Search-Auffindbarkeit.",
       titleSuffix: " | Abexis Search",
       ogType: "website",

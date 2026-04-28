@@ -1,7 +1,7 @@
 import type { AppUserRole } from "@/cms/types/enums";
 
 /**
- * Fine-grained CMS capabilities. Use these for route guards and UI — not raw role string checks — so new roles
+ * Fine-grained CMS capabilities. Use these for route guards and UI : not raw role string checks : so new roles
  * or rule changes stay localized.
  *
  * TODO(future-roles): When adding roles (e.g. `moderator`, `translator`), extend {@link ROLE_PERMISSIONS} only.
@@ -13,9 +13,9 @@ export const CMS_PERMISSIONS = [
   "manage_media",
   "manage_categories",
   "manage_authors",
-  /** Form intakes, PII — admin only in v1. */
+  /** Form intakes, PII : admin only in v1. */
   "manage_submissions",
-  /** Site settings, SEO blocks, legal/contact config — admin only. */
+  /** Site settings, SEO blocks, legal/contact config : admin only. */
   "manage_site_settings",
   /** Executive Search vacancy/mandate postings. */
   "manage_vacancies",
@@ -25,7 +25,7 @@ export type CmsPermission = (typeof CMS_PERMISSIONS)[number];
 
 /**
  * Explicit grant list per role. `admin` is handled as a superset in {@link roleHasPermission}.
- * `viewer` is never granted CMS UI access via this matrix — see {@link canAccessCmsDashboard}.
+ * `viewer` is never granted CMS UI access via this matrix : see {@link canAccessCmsDashboard}.
  */
 const EDITOR_PERMISSIONS: ReadonlySet<CmsPermission> = new Set([
   "view_dashboard",
@@ -52,7 +52,7 @@ export function isCmsAdminRole(role: AppUserRole | null | undefined): boolean {
 }
 
 /**
- * @param allowed — legacy API: list of roles that may pass (typically `['admin']`).
+ * @param allowed : legacy API: list of roles that may pass (typically `['admin']`).
  */
 export function userHasAnyCmsRole(
   userRole: AppUserRole | null | undefined,

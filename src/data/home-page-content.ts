@@ -106,14 +106,14 @@ export const homePrcContent = {
     {
       name: "LIGHT",
       sub: "Schnelle Standortbestimmung",
-      duration: "3–5 Tage",
+      duration: "3-5 Tage",
       body: "Erste strukturierte Einschätzung mit Fokus auf kritische Punkte",
       outcome: "Überblick, zentrale Risiken, erste Empfehlungen",
     },
     {
       name: "CORE",
       sub: "Management Klarheit (empfohlen)",
-      duration: "1–2 Wochen",
+      duration: "1-2 Wochen",
       body: "Interviews, Dokumentenreview, vollständige Bewertung",
       outcome: "Klare Lageeinschätzung und konkrete Entscheidungsgrundlage",
       recommended: true,
@@ -121,7 +121,7 @@ export const homePrcContent = {
     {
       name: "DEEP DIVE",
       sub: "Stabilisierung und Ausrichtung",
-      duration: "3–4 Wochen",
+      duration: "3-4 Wochen",
       body: "Vertiefte Analyse und Workshops",
       outcome: "Gesamtbild, klare Prioritäten und umsetzbare Roadmap",
     },
@@ -156,6 +156,11 @@ export const homeLeistungenBlock = {
   intro:
     "Der Project Reality Check ist der Einstieg. Darüber hinaus arbeiten wir in folgenden Bereichen.",
   items: [
+    {
+      title: "Project Reality Check",
+      body: "Unabhängige Beurteilung Ihres Projekts: Risiken, Lücken und konkrete Handlungsempfehlungen in kompakter Form.",
+      href: "/projectfitcheck",
+    },
     {
       title: "Digitale Transformation",
       body: "Einführung und Weiterentwicklung von digitalen Lösungen, KI und Analytics. Fokus auf Nutzen, Integration und Umsetzung.",

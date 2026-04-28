@@ -10,7 +10,7 @@ export type VacancyFile = {
 };
 
 /**
- * `vacancies/{vacancyId}` — Executive Search job postings.
+ * `vacancies/{vacancyId}` : Executive Search job postings.
  * Body is stored in the same JSON envelope as blog posts (see `post-body-storage.ts`).
  */
 export type Vacancy = {
@@ -23,7 +23,7 @@ export type Vacancy = {
   employmentType: string;
   /** Attention-grabbing hook shown in the hero. */
   hook: string;
-  /** Rich text body — JSON envelope `{ format, version, html }`. */
+  /** Rich text body : JSON envelope `{ format, version, html }`. */
   body: string;
   /** Downloadable attachments (PDF briefs, etc.). */
   files: VacancyFile[];

@@ -9,7 +9,7 @@ export type Pillar = {
   body: string;
   imageSrc: string;
   imageAlt: string;
-  /** Optional `object-*` classes — tall portraits in short cards often need a higher anchor (e.g. `object-[50%_12%]`). */
+  /** Optional `object-*` classes : tall portraits in short cards often need a higher anchor (e.g. `object-[50%_12%]`). */
   imageObjectClass?: string;
 };
 

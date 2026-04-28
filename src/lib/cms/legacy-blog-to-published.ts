@@ -14,7 +14,7 @@ function legacyRowId(slug: string): string {
   return `legacy__${slug}`;
 }
 
-/** Scraped covers are ordered by original blog-page position — use that to pick a stable thumb. */
+/** Scraped covers are ordered by original blog-page position : use that to pick a stable thumb. */
 function coverIndexForSlug(slug: string): number {
   const all = getAllBlogPosts();
   const idx = all.findIndex((p) => p.slug === slug);

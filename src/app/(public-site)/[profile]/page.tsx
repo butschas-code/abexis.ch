@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props) {
   const p = teamProfiles[profile];
   return {
     title: p.name,
-    description: `${p.name} — ${p.title} bei Abexis.`,
+    description: `${p.name} : ${p.title} bei Abexis.`,
     openGraph: {
       title: `${p.name} | Abexis`,
       description: p.title,
@@ -53,10 +53,11 @@ export default async function TeamProfilePage({ params }: Props) {
   if (profile === "danielsengstag") {
     return (
       <InteriorPageRoot>
-        <SchemaMarkup type="Person" data={{ ...p, slug: profile }} />
         <SchemaMarkup
-          type="BreadcrumbList"
-          data={[
+          type="Person"
+          path={`/${profile}`}
+          data={{ ...p, slug: profile }}
+          breadcrumbs={[
             { name: "Startseite", url: "/" },
             { name: "Über uns", url: "/ueber-uns" },
             { name: p.name, url: `/${profile}` },
@@ -79,10 +80,11 @@ export default async function TeamProfilePage({ params }: Props) {
       heroImage={p.image}
       heroImageObjectClassName="object-[center_28%]"
     >
-      <SchemaMarkup type="Person" data={{ ...p, slug: profile }} />
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        type="Person"
+        path={`/${profile}`}
+        data={{ ...p, slug: profile }}
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Über uns", url: "/ueber-uns" },
           { name: p.name, url: `/${profile}` },

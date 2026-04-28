@@ -12,7 +12,7 @@ export const revalidate = 120;
 
 export const metadata: Metadata = {
   title: "Vakanzen",
-  description: "Aktuelle Executive Search Mandate — Abexis SEARCH besetzt Führungs- und Schlüsselpositionen diskret und präzise.",
+  description: "Aktuelle Executive Search Mandate : Abexis SEARCH besetzt Führungs- und Schlüsselpositionen diskret und präzise.",
   openGraph: {
     title: "Vakanzen | Executive Search | Abexis",
     description: "Aktuelle Führungs- und Schlüsselpositionen im Executive Search.",
@@ -25,8 +25,11 @@ export default async function ExecutiveSearchVakanzenPage() {
   return (
     <InteriorPageRoot>
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        type="Collection"
+        path="/executive-search/vakanzen"
+        name="Vakanzen | Executive Search | Abexis"
+        description="Aktuelle Executive Search Mandate : Abexis SEARCH besetzt Führungs- und Schlüsselpositionen diskret und präzise."
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Executive Search", url: "/executive-search" },
           { name: "Vakanzen", url: "/executive-search/vakanzen" },
@@ -38,7 +41,7 @@ export default async function ExecutiveSearchVakanzenPage() {
           Aktuelle Vakanzen
         </h1>
         <p className="mt-6 max-w-2xl text-[17px] font-normal leading-relaxed text-white/88 sm:text-[19px] md:text-[21px]">
-          Im Auftrag unserer Mandant:innen suchen wir Persönlichkeiten für Führungs- und Schlüsselpositionen — diskret, präzise und auf Augenhöhe.
+          Im Auftrag unserer Mandant:innen suchen wir Persönlichkeiten für Führungs- und Schlüsselpositionen : diskret, präzise und auf Augenhöhe.
         </p>
       </PageHero>
 
@@ -52,7 +55,7 @@ export default async function ExecutiveSearchVakanzenPage() {
                   Aktuell keine offenen Stellen
                 </p>
                 <p className="mx-auto mt-4 max-w-[48ch] text-[17px] leading-relaxed text-[#6e6e73]">
-                  Wir nehmen neue Mandate laufend an. Nehmen Sie gerne Kontakt auf — wir informieren Sie sobald passende Positionen verfügbar sind.
+                  Wir nehmen neue Mandate laufend an. Nehmen Sie gerne Kontakt auf : wir informieren Sie sobald passende Positionen verfügbar sind.
                 </p>
                 <Link
                   href="/kontakt"

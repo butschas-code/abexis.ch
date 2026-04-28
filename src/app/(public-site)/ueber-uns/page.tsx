@@ -7,10 +7,10 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 export const metadata = {
   title: "Über uns",
-  description: "Erfahren Sie mehr über das Team hinter Abexis — Managementberatung mit Substanz.",
+  description: "Erfahren Sie mehr über das Team hinter Abexis : Managementberatung mit Substanz.",
   openGraph: {
     title: "Über uns | Abexis",
-    description: "Begleitung mit Erfahrung und Substanz — Lernen Sie unser Team kennen.",
+    description: "Begleitung mit Erfahrung und Substanz : Lernen Sie unser Team kennen.",
   },
 };
 
@@ -22,8 +22,9 @@ export default function UeberUnsPage() {
       description={<p className="whitespace-pre-line">{homeAboutTeaser}</p>}
     >
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        type="About"
+        path="/ueber-uns"
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Über uns", url: "/ueber-uns" },
         ]}
@@ -37,23 +38,21 @@ export default function UeberUnsPage() {
               key={slug}
               className="flex h-full min-h-0 flex-col overflow-hidden rounded-[28px] bg-white p-6 shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] transition-shadow duration-300 hover:shadow-[var(--apple-shadow-lg)] hover:ring-brand-500/20"
             >
-              <div className={`flex min-w-0 ${slug === "danielsengstag" ? "gap-0" : "gap-5"}`}>
-                {slug === "danielsengstag" ? null : (
-                  <Link
-                    href={`/${slug}`}
-                    className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-[#f5f5f7] ring-1 ring-black/[0.06] outline-none transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
-                    aria-label={`Profil: ${p.name}`}
-                  >
-                    <Image
-                      src={p.image}
-                      alt=""
-                      fill
-                      className="object-cover"
-                      quality={95}
-                      sizes="96px"
-                    />
-                  </Link>
-                )}
+              <div className="flex min-w-0 gap-5">
+                <Link
+                  href={`/${slug}`}
+                  className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-[#f5f5f7] ring-1 ring-black/[0.06] outline-none transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+                  aria-label={`Profil: ${p.name}`}
+                >
+                  <Image
+                    src={p.image}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    quality={95}
+                    sizes="96px"
+                  />
+                </Link>
                 <div className="min-w-0">
                   <h3 className="text-[20px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">
                     <Link

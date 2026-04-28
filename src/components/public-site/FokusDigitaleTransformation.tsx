@@ -7,7 +7,7 @@ import { fokusPageHeroImages } from "@/data/site-images";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
-// ─── Static data — module level, no re-allocation ────────────────────────────
+// ─── Static data : module level, no re-allocation ────────────────────────────
 
 const meta = fokusthemenMeta.find((m) => m.slug === "digitale-transformation")!;
 const heroImage = fokusPageHeroImages["digitale-transformation"];
@@ -60,7 +60,7 @@ const handlungsfelder = [
   },
   {
     num: "06",
-    title: "Technologien — KI, IoT, Industrie 4.0",
+    title: "Technologien : KI, IoT, Industrie 4.0",
     items: [
       "Anwendungsfälle für KI und Machine Learning identifizieren",
       "IoT- und Industrie-4.0-Lösungen in bestehende Anlagen integrieren",
@@ -113,7 +113,7 @@ const prozessphasen = [
     num: "04",
     title: "Umsetzungsphase",
     items: [
-      "Strategie umsetzen — z.B. mit agiler Methodik",
+      "Strategie umsetzen : z.B. mit agiler Methodik",
       "Kontinuierliche Überprüfung und Monitoring einrichten",
       "Allenfalls Justierungen vornehmen, Learnings integrieren",
       "Ergebnisse messen, kommunizieren und konsolidieren",
@@ -135,7 +135,7 @@ const nutzen = [
   {
     num: "03",
     title: "Kundenerlebnis",
-    body: "Besseres Erlebnis bei Beschaffung und Kundenservice — höhere Kundenzufriedenheit.",
+    body: "Besseres Erlebnis bei Beschaffung und Kundenservice : höhere Kundenzufriedenheit.",
   },
   {
     num: "04",
@@ -210,10 +210,11 @@ function SpineCard({ item }: { item: Handlungsfeld }) {
 export function FokusDigitaleTransformation() {
   return (
     <InteriorPageRoot>
-      <SchemaMarkup type="Service" data={meta} />
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        type="Service"
+        path="/fokusthemen/digitale-transformation"
+        data={meta}
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Leistungen", url: "/leistungen" },
           { name: meta.title, url: "/fokusthemen/digitale-transformation" },
@@ -226,12 +227,12 @@ export function FokusDigitaleTransformation() {
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Digitale Transformation ist kein IT-Projekt — sie ist eine Führungsaufgabe.
+          Digitale Transformation ist kein IT-Projekt : sie ist eine Führungsaufgabe.
         </h1>
         <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
           Wenn Verwaltungsrat und Management die Digitalisierung verschieden interpretieren,
           entstehen Fehlinvestitionen, Reibung und verpasste Chancen. Wir helfen Ihnen, aus
-          Technologie echten Unternehmenswert zu machen — strukturiert, strategisch, umsetzbar.
+          Technologie echten Unternehmenswert zu machen : strukturiert, strategisch, umsetzbar.
         </p>
         <div className="mt-10 flex flex-wrap items-center gap-3">
           <HeroProjectRealityCheckCta />
@@ -253,10 +254,10 @@ export function FokusDigitaleTransformation() {
         </div>
       </PageHero>
 
-      {/* ── 2. SPLIT PANEL — Digitalisierung vs. Digitale Transformation ─── */}
+      {/* ── 2. SPLIT PANEL : Digitalisierung vs. Digitale Transformation ─── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half — navy: content tracks the 1068px centre column */}
+          {/* Left half : navy: content tracks the 1068px centre column */}
           <div className="relative bg-[#1a2260]">
             <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
@@ -269,14 +270,14 @@ export function FokusDigitaleTransformation() {
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-white/65">
                 Betrifft die taktische Ebene: einzelne Prozesse, Tools und Arbeitsabläufe werden
-                digitalisiert oder automatisiert. Wichtig, aber nicht hinreichend — sie verändert
+                digitalisiert oder automatisiert. Wichtig, aber nicht hinreichend : sie verändert
                 das Geschäftsmodell nicht.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
           </div>
 
-          {/* Right half — warm linen: content tracks the 1068px centre column */}
+          {/* Right half : warm linen: content tracks the 1068px centre column */}
           <div className="relative bg-[#faf8f2]">
             <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
@@ -331,7 +332,7 @@ export function FokusDigitaleTransformation() {
                 </Link>
               </div>
 
-              {/* Right: alternating spine — desktop / simple list — mobile */}
+              {/* Right: alternating spine : desktop / simple list : mobile */}
               <div>
                 {/* ── Desktop: alternating two-column spine ── */}
                 <div className="hidden lg:block">
@@ -395,7 +396,7 @@ export function FokusDigitaleTransformation() {
           </p>
           <blockquote className="mt-8 text-[clamp(1.375rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.22] tracking-[-0.025em] text-white text-balance">
             &ldquo;Digitale Transformation bietet eine Grundlage, um ein Unternehmen zu erneuern
-            und qualifizierter für die Zukunft vorzubereiten — als strategische Initiative,
+            und qualifizierter für die Zukunft vorzubereiten : als strategische Initiative,
             nicht als Nebenprojekt.&rdquo;
           </blockquote>
           <div className="mt-10 flex items-center justify-center gap-5">
@@ -408,7 +409,7 @@ export function FokusDigitaleTransformation() {
         </div>
       </section>
 
-      {/* ── 6. PROZESSPHASEN — Dark navy phase grid ──────────────────────── */}
+      {/* ── 6. PROZESSPHASEN : Dark navy phase grid ──────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
         <div
           className="pointer-events-none absolute inset-0"
@@ -429,7 +430,7 @@ export function FokusDigitaleTransformation() {
             </div>
 
             <h2 className="mt-8 max-w-[28ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
-              Vom Kick-off zur lebenden Strategie — strukturiert, iterativ, messbar.
+              Vom Kick-off zur lebenden Strategie : strukturiert, iterativ, messbar.
             </h2>
 
             <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
@@ -461,14 +462,14 @@ export function FokusDigitaleTransformation() {
 
             <p className="mt-8 max-w-[60ch] text-[15px] leading-relaxed text-white/50">
               Der Ansatz ist flexibel: Je nach Ausgangslage können Sie mit einem einzelnen Teilaspekt
-              starten oder ein umfassendes Transformationsprogramm aufgleisen — immer mit klaren,
+              starten oder ein umfassendes Transformationsprogramm aufgleisen : immer mit klaren,
               messbaren Schritten.
             </p>
           </div>
         </MotionSection>
       </section>
 
-      {/* ── 7. NUTZEN — Sticky left + card grid ──────────────────────────── */}
+      {/* ── 7. NUTZEN : Sticky left + card grid ──────────────────────────── */}
       <section className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
@@ -483,7 +484,7 @@ export function FokusDigitaleTransformation() {
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Eine erfolgreiche digitale Transformation erzeugt Mehrwert auf mehreren Ebenen —
+                  Eine erfolgreiche digitale Transformation erzeugt Mehrwert auf mehreren Ebenen ,
                   operativ, strategisch und kulturell.
                 </p>
                 <Link
@@ -517,12 +518,12 @@ export function FokusDigitaleTransformation() {
         </MotionSection>
       </section>
 
-      {/* ── 8. GUIDE — Unsere Rolle ──────────────────────────────────────── */}
+      {/* ── 8. GUIDE : Unsere Rolle ──────────────────────────────────────── */}
       <section className="bg-white">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
 
-            {/* Header — two-column */}
+            {/* Header : two-column */}
             <div className="grid gap-8 border-b border-black/[0.06] pb-12 md:grid-cols-[1fr_1fr] md:gap-20 md:items-end">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
@@ -534,12 +535,12 @@ export function FokusDigitaleTransformation() {
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
                 Viele Unternehmen kaufen Software und nennen es Transformation. Wir helfen Ihnen,
-                die richtigen Fragen zuerst zu stellen — und dann die richtigen Schritte in der
+                die richtigen Fragen zuerst zu stellen : und dann die richtigen Schritte in der
                 richtigen Reihenfolge zu gehen.
               </p>
             </div>
 
-            {/* Three situations — when companies call Abexis */}
+            {/* Three situations : when companies call Abexis */}
             <div className="mt-12">
               <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                 Typische Ausgangssituationen
@@ -549,12 +550,12 @@ export function FokusDigitaleTransformation() {
                   {
                     num: "01",
                     title: "Fehlende interne Transformationsexpertise",
-                    body: "Know-how, Kapazität und Distanz zum Tagesgeschäft fehlen intern — die Voraussetzungen für einen strukturierten Prozess sind nicht vorhanden.",
+                    body: "Know-how, Kapazität und Distanz zum Tagesgeschäft fehlen intern : die Voraussetzungen für einen strukturierten Prozess sind nicht vorhanden.",
                   },
                   {
                     num: "02",
                     title: "Dringlichkeit durch Marktveränderung",
-                    body: "Neue Wettbewerber, technologische Disruption oder veränderte Kundenerwartungen erfordern rasches, gezieltes Handeln — ohne Orientierungsverlust.",
+                    body: "Neue Wettbewerber, technologische Disruption oder veränderte Kundenerwartungen erfordern rasches, gezieltes Handeln : ohne Orientierungsverlust.",
                   },
                   {
                     num: "03",
@@ -581,7 +582,7 @@ export function FokusDigitaleTransformation() {
         </MotionSection>
       </section>
 
-      {/* ── 9. CTA — Specific 30-min offer ───────────────────────────────── */}
+      {/* ── 9. CTA : Specific 30-min offer ───────────────────────────────── */}
       <section className="relative overflow-hidden">
         <div
           className="absolute inset-0 -z-10"
@@ -608,7 +609,7 @@ export function FokusDigitaleTransformation() {
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
                 In einem kostenlosen 30-Minuten-Erstgespräch klären wir gemeinsam, wo Ihr
-                Unternehmen steht, was Sie erreichen wollen — und wie wir Sie dabei begleiten können.
+                Unternehmen steht, was Sie erreichen wollen : und wie wir Sie dabei begleiten können.
               </p>
 
               <div className="mt-7 flex flex-wrap gap-4">

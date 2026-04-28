@@ -22,9 +22,9 @@ export function HomeWhoWeAreSection() {
           ))}
         </div>
 
-        <div className="mt-10 grid items-start gap-6 sm:mt-14 sm:gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
+        <div className="mt-10 grid items-center gap-6 sm:mt-14 sm:gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
           <div className="mx-auto w-full max-w-md md:mx-0 md:max-w-none">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[20px] bg-[#f5f5f7] shadow-[var(--apple-shadow)] ring-1 ring-black/[0.05] sm:rounded-[24px] md:rounded-[28px]">
+            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[20px] bg-[#f5f5f7] shadow-[var(--apple-shadow)] ring-1 ring-black/[0.05] sm:rounded-[24px] md:rounded-[28px]">
               <Image
                 src={daniel.image}
                 alt={daniel.name}
@@ -36,7 +36,7 @@ export function HomeWhoWeAreSection() {
               />
             </div>
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 text-center md:text-left">
             <p className="text-[18px] font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f] sm:text-[20px]">
               {c.daniel.name} — {c.daniel.role}
             </p>
@@ -45,15 +45,14 @@ export function HomeWhoWeAreSection() {
                 <p key={i}>{p}</p>
               ))}
             </div>
-            <Link
-              href="/danielsengstag"
-              className="mt-5 inline-flex items-center gap-1.5 text-[15px] font-medium text-brand-600 hover:text-brand-700 transition-colors duration-200 sm:mt-6"
-            >
-              Zum Profil
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
+            <div className="mt-6 flex justify-center md:justify-start">
+              <Link
+                href="/danielsengstag"
+                className="inline-flex min-h-[44px] touch-manipulation items-center justify-center rounded-full border border-black/[0.1] bg-white px-6 text-[15px] font-medium text-[#1d1d1f] transition hover:border-brand-500/30 hover:text-brand-900 active:scale-[0.99]"
+              >
+                Zum Profil
+              </Link>
+            </div>
           </div>
         </div>
 

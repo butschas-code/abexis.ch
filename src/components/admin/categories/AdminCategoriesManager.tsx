@@ -72,7 +72,7 @@ export function AdminCategoriesManager() {
     <AdminPageContainer>
       <AdminPageHeader
         title="Kategorien"
-        description="Themen und Navigation — pro Website oder für beide Auftritte."
+        description="Themen und Navigation : pro Website oder für beide Auftritte."
         actions={
           <Link
             href={CMS_PATHS.adminCategoryNew}

@@ -7,7 +7,7 @@ import { fokusPageHeroImages } from "@/data/site-images";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
-// ─── Static data — module level, no re-allocation ────────────────────────────
+// ─── Static data : module level, no re-allocation ────────────────────────────
 
 const meta = fokusthemenMeta.find((m) => m.slug === "prozessoptimierung")!;
 const heroImage = fokusPageHeroImages["prozessoptimierung"];
@@ -145,7 +145,7 @@ const nutzen = [
   {
     num: "05",
     title: "Skalierbarkeit",
-    body: "Optimierte und automatisierte Prozesse wachsen mit — ohne proportional mehr Personal zu erfordern.",
+    body: "Optimierte und automatisierte Prozesse wachsen mit : ohne proportional mehr Personal zu erfordern.",
   },
   {
     num: "06",
@@ -160,7 +160,7 @@ const nutzen = [
   {
     num: "08",
     title: "Wettbewerbsfähigkeit",
-    body: "Operative Exzellenz ist ein nachhaltiger Vorteil — besonders wenn Margen sinken und Geschwindigkeit zählt.",
+    body: "Operative Exzellenz ist ein nachhaltiger Vorteil : besonders wenn Margen sinken und Geschwindigkeit zählt.",
   },
 ] as const;
 
@@ -224,7 +224,7 @@ export function FokusProzessoptimierung() {
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Wenn Prozesse wachsen, aber nicht atmen — zahlt das Unternehmen dafür.
+          Wenn Prozesse wachsen, aber nicht atmen : zahlt das Unternehmen dafür.
         </h1>
         <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
           Gewachsene Strukturen, ungeklärte Schnittstellen und manuelle Umwege kosten täglich
@@ -251,10 +251,10 @@ export function FokusProzessoptimierung() {
         </div>
       </PageHero>
 
-      {/* ── 2. SPLIT PANEL — Optimierung vs. Automatisierung ─────────────── */}
+      {/* ── 2. SPLIT PANEL : Optimierung vs. Automatisierung ─────────────── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half — warm linen */}
+          {/* Left half : warm linen */}
           <div className="relative bg-[#faf8f2]">
             <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
@@ -268,13 +268,13 @@ export function FokusProzessoptimierung() {
               <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
                 Analysiert bestehende Abläufe und entfernt, was keinen Wert schafft: Wartezeiten,
                 Doppelarbeit, Medienbrüche, ungeklärte Zuständigkeiten. Das Ziel ist ein
-                schlanker, transparenter Prozess — mit oder ohne Technologie.
+                schlanker, transparenter Prozess : mit oder ohne Technologie.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
 
-          {/* Right half — navy */}
+          {/* Right half : navy */}
           <div className="relative bg-[#1a2260]">
             <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
@@ -287,7 +287,7 @@ export function FokusProzessoptimierung() {
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-white/65">
                 Nutzt Technologie, um repetitive, regelbasierte Aufgaben maschinell auszuführen.
-                Wirksam — aber nur dort, wo der Prozess bereits sauber ist. Automatisierung
+                Wirksam : aber nur dort, wo der Prozess bereits sauber ist. Automatisierung
                 eines schlechten Prozesses erzeugt nur schnellere Fehler.
               </p>
             </div>
@@ -308,7 +308,7 @@ export function FokusProzessoptimierung() {
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
                   Prozessoptimierung wirkt auf mehreren Ebenen. Wir helfen Ihnen, die richtigen
-                  Ansatzpunkte zu finden — und konsequent umzusetzen.
+                  Ansatzpunkte zu finden : und konsequent umzusetzen.
                 </p>
                 <Link
                   href="/kontakt"
@@ -360,7 +360,7 @@ export function FokusProzessoptimierung() {
         </MotionSection>
       </section>
 
-      {/* ── BPMN DIAGRAM — Beispiel Prozessvisualisierung ────────────────── */}
+      {/* ── BPMN DIAGRAM : Beispiel Prozessvisualisierung ────────────────── */}
       <section className="bg-white">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
@@ -370,12 +370,12 @@ export function FokusProzessoptimierung() {
                   Methodik
                 </p>
                 <h2 className="mt-4 text-[clamp(1.5rem,3vw+0.5rem,2.125rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f]">
-                  Prozesse sichtbar machen — als Grundlage jeder Verbesserung.
+                  Prozesse sichtbar machen : als Grundlage jeder Verbesserung.
                 </h2>
               </div>
               <p className="text-[16px] leading-relaxed text-[#6e6e73] md:pb-1">
                 Was nicht visualisiert ist, kann nicht verbessert werden. Wir erfassen Prozesse
-                in strukturierten Modellen — von einfachen Ablaufdiagrammen bis zu detaillierten
+                in strukturierten Modellen : von einfachen Ablaufdiagrammen bis zu detaillierten
                 BPMN-Darstellungen mit Swimlanes und Entscheidungspunkten.
               </p>
             </div>
@@ -388,7 +388,7 @@ export function FokusProzessoptimierung() {
                 loading="lazy"
               />
               <p className="mt-5 text-center text-[12px] text-[#86868b]">
-                Beispiel: BPMN-Prozessmodell mit Swimlanes — Rollen, Entscheidungen und Übergaben auf einen Blick
+                Beispiel: BPMN-Prozessmodell mit Swimlanes : Rollen, Entscheidungen und Übergaben auf einen Blick
               </p>
             </div>
           </div>
@@ -410,7 +410,7 @@ export function FokusProzessoptimierung() {
             Grundsatz
           </p>
           <blockquote className="mt-8 text-[clamp(1.375rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.22] tracking-[-0.025em] text-white text-balance">
-            &ldquo;Operative Exzellenz entsteht nicht durch Technologie allein — sie entsteht
+            &ldquo;Operative Exzellenz entsteht nicht durch Technologie allein : sie entsteht
             durch das konsequente Hinterfragen jedes Schritts, der keinen Wert schafft.
             Erst der saubere Prozess, dann die Automatisierung.&rdquo;
           </blockquote>
@@ -443,7 +443,7 @@ export function FokusProzessoptimierung() {
               <span className="text-[11px] text-white/30">04 Phasen</span>
             </div>
             <h2 className="mt-8 max-w-[28ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
-              Von der Prozessaufnahme zur messbaren Verbesserung — strukturiert und nachhaltig.
+              Von der Prozessaufnahme zur messbaren Verbesserung : strukturiert und nachhaltig.
             </h2>
             <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
               {prozessphasen.map((phase, i) => (
@@ -474,7 +474,7 @@ export function FokusProzessoptimierung() {
             <p className="mt-8 max-w-[60ch] text-[15px] leading-relaxed text-white/50">
               Wir arbeiten pragmatisch: Scope und Tiefe richten sich nach Ihrer Ausgangslage.
               Ob punktuelle Optimierung eines kritischen Prozesses oder systematisches
-              Programm — der Ansatz bleibt faktenbasiert, umsetzungsorientiert und messbar.
+              Programm : der Ansatz bleibt faktenbasiert, umsetzungsorientiert und messbar.
             </p>
           </div>
         </MotionSection>
@@ -494,7 +494,7 @@ export function FokusProzessoptimierung() {
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Prozessoptimierung ist keine Sparübung — sie ist eine Investition in
+                  Prozessoptimierung ist keine Sparübung : sie ist eine Investition in
                   Geschwindigkeit, Qualität und die Fähigkeit zu skalieren.
                 </p>
                 <Link
@@ -541,7 +541,7 @@ export function FokusProzessoptimierung() {
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
                 Wer täglich in einem Prozess arbeitet, sieht ihn kaum noch. Wir bringen die
-                Distanz, die Methodik und die Erfahrung aus verschiedensten Branchen mit — und
+                Distanz, die Methodik und die Erfahrung aus verschiedensten Branchen mit : und
                 stellen die Fragen, die intern niemand mehr stellt.
               </p>
             </div>
@@ -559,7 +559,7 @@ export function FokusProzessoptimierung() {
                   {
                     num: "02",
                     title: "Kostendruck erfordert Effizienz",
-                    body: "Sinkende Margen oder steigender Wettbewerb zwingen dazu, operativen Aufwand zu reduzieren — ohne Qualität und Lieferfähigkeit zu gefährden.",
+                    body: "Sinkende Margen oder steigender Wettbewerb zwingen dazu, operativen Aufwand zu reduzieren : ohne Qualität und Lieferfähigkeit zu gefährden.",
                   },
                   {
                     num: "03",
@@ -606,11 +606,11 @@ export function FokusProzessoptimierung() {
                 Nächster Schritt
               </p>
               <h2 className="mt-4 max-w-[30ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white text-balance">
-                Operative Exzellenz ist kein Zustand — sie ist eine Entscheidung.
+                Operative Exzellenz ist kein Zustand : sie ist eine Entscheidung.
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
                 In einem kostenlosen 30-Minuten-Erstgespräch klären wir, wo in Ihren Prozessen
-                die grössten Hebel liegen — und wie ein gezieltes Optimierungsprogramm aussehen könnte.
+                die grössten Hebel liegen : und wie ein gezieltes Optimierungsprogramm aussehen könnte.
               </p>
               <div className="mt-7 flex flex-wrap gap-4">
                 {["Kostenlos", "30 Minuten", "Unverbindlich"].map((tag) => (

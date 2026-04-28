@@ -83,7 +83,7 @@ async function listPublishedVacanciesUncached(lim: number, deployment: PublicDep
   const db = getAdminFirestore();
   if (db) {
     try {
-      // Single equality filter only — no composite index needed. Sort in memory.
+      // Single equality filter only : no composite index needed. Sort in memory.
       const fetchCap = Math.max(100, lim * 2);
       const snap = await db
         .collection(COLLECTIONS.vacancies)
@@ -152,7 +152,7 @@ async function getVacancyBySlugUncached(slug: string, deployment: PublicDeployme
         }
       }
 
-      // Single equality filter — no composite index needed. Check status in code.
+      // Single equality filter : no composite index needed. Check status in code.
       const snap = await db
         .collection(COLLECTIONS.vacancies)
         .where("slug", "==", slug)

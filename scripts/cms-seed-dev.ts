@@ -1,6 +1,6 @@
 #!/usr/bin/env npx tsx
 /**
- * Development / staging — seeds sample categories, authors, and starter settings into Firestore.
+ * Development / staging : seeds sample categories, authors, and starter settings into Firestore.
  *
  * -----------------------------------------------------------------------------
  * Prerequisites (manual)
@@ -30,7 +30,7 @@
  * CMS_SEED_ALLOW=1 NODE_ENV=production npm run cms:seed:dev
  * ```
  *
- * This script does **not** create Auth users — use Firebase Console + `bootstrap-first-admin` helpers for that.
+ * This script does **not** create Auth users : use Firebase Console + `bootstrap-first-admin` helpers for that.
  *
  * -----------------------------------------------------------------------------
  */

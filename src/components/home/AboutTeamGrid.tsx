@@ -6,7 +6,7 @@ import { teamOrder, teamProfiles } from "@/data/pages";
 
 export function AboutTeamGrid() {
   return (
-    <div className="grid grid-cols-1 items-stretch gap-4 min-[420px]:grid-cols-2 min-[420px]:gap-3 sm:grid-cols-3 sm:gap-4">
+    <div className="grid grid-cols-1 items-stretch gap-7 min-[420px]:grid-cols-2 min-[420px]:gap-6 sm:grid-cols-3 sm:gap-8">
       {teamOrder
         .filter((slug) => slug !== "danielsengstag")
         .map((slug) => {
@@ -28,7 +28,7 @@ export function AboutTeamGrid() {
                   priority={false}
                 />
               </div>
-              <div className="w-full shrink-0 border-t border-black/[0.06] px-4 py-3 min-[420px]:px-3.5 min-[420px]:py-2.5 sm:px-4 sm:py-2.5">
+              <div className="w-full shrink-0 border-t border-black/[0.06] px-4 py-4 min-[420px]:px-4 min-[420px]:py-3 sm:px-4 sm:py-4">
                 <p className="text-[16px] font-semibold leading-snug text-[#1d1d1f] min-[420px]:text-[15px]">
                   {p.name}
                 </p>

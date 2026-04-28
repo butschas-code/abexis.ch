@@ -1,7 +1,7 @@
 rules_version = '2';
 
 /**
- * Firebase Storage — CMS
+ * Firebase Storage : CMS
  *
  * Deploy: `firebase deploy --only storage`
  *
@@ -10,10 +10,10 @@ rules_version = '2';
  * ---------------------------------------------------------------------------
  * - Role is mirrored from Firestore `users/{uid}.role` (`admin` | `editor` | `viewer`).
  *   First-time setup: create the Firestore user doc before role-aware Storage writes work.
- * - Public hero/body images are often served via `downloadURL` in HTML — `read: if true` keeps
+ * - Public hero/body images are often served via `downloadURL` in HTML : `read: if true` keeps
  *   those URLs working for anonymous visitors. Do not store secrets in public buckets.
  * - **`cms/submissions/incoming/**`** is written only by the **form upload API** (Admin SDK) with
- *   signed read URLs — clients must not upload here (blocked).
+ *   signed read URLs : clients must not upload here (blocked).
  *
  * ---------------------------------------------------------------------------
  * Server-side enforcement still recommended
@@ -35,7 +35,7 @@ service firebase.storage {
     }
 
     /**
-     * Hero images for posts — public read (URLs embedded on site); edits require editor+.
+     * Hero images for posts : public read (URLs embedded on site); edits require editor+.
      */
     match /cms/heroes/{postId}/{fileName} {
       allow read: if true;
@@ -45,7 +45,7 @@ service firebase.storage {
     }
 
     /**
-     * Inline / body images for rich text — same pattern as heroes.
+     * Inline / body images for rich text : same pattern as heroes.
      */
     match /cms/posts/{postId}/body/{fileName} {
       allow read: if true;
@@ -55,7 +55,7 @@ service firebase.storage {
     }
 
     /**
-     * Files for vacancies — e.g. PDF job descriptions.
+     * Files for vacancies : e.g. PDF job descriptions.
      */
     match /cms/vacancies/{vacancyId}/{fileName} {
       allow read: if true;

@@ -25,14 +25,14 @@ import { AdminLoading } from "@/components/admin/AdminLoading";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
 
 function formatTs(iso: string | null) {
-  if (!iso) return "—";
+  if (!iso) return ",";
   try {
     return new Intl.DateTimeFormat("de-CH", {
       dateStyle: "medium",
       timeStyle: "short",
     }).format(new Date(iso));
   } catch {
-    return "—";
+    return ",";
   }
 }
 
@@ -141,7 +141,7 @@ export function SiteSettingsForm() {
       <AdminPageContainer>
         <AdminPageHeader
           title="Website-Einstellungen"
-          description="Kontakt, Footer, SEO und die Leiste oben — je nach Website einstellbar. Änderungen wirken auf der Live-Website, sobald Sie speichern."
+          description="Kontakt, Footer, SEO und die Leiste oben : je nach Website einstellbar. Änderungen wirken auf der Live-Website, sobald Sie speichern."
           actions={
             <div className="flex max-w-full flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
               <p className="text-center text-[12px] text-[var(--apple-text-tertiary)] sm:text-right">

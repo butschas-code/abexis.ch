@@ -10,6 +10,8 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 type Props = {
   data: PublishedPostPageData;
   related: PublishedPostWithId[];
+  backHref?: string;
+  backLabel?: string;
 };
 
 function formatDate(iso: string | null | undefined) {
@@ -26,7 +28,7 @@ function formatDate(iso: string | null | undefined) {
   }
 }
 
-export function CmsBlogPostView({ data, related }: Props) {
+export function CmsBlogPostView({ data, related, backHref = "/blog", backLabel = "← Alle Insights" }: Props) {
   const { post, authorName, categories } = data;
   const heroImage = resolvePostHeroImageUrl(post);
   const dateLong = formatDate(post.publishedAt);
@@ -75,6 +77,7 @@ export function CmsBlogPostView({ data, related }: Props) {
     >
       <SchemaMarkup
         type="Article"
+        path={`/blog/${post.slug}`}
         data={{
           title: post.title,
           excerpt: post.excerpt,
@@ -82,10 +85,7 @@ export function CmsBlogPostView({ data, related }: Props) {
           publishedAt: post.publishedAt,
           authorName: authorName,
         }}
-      />
-      <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Insights", url: "/blog" },
           { name: post.title, url: `/blog/${post.slug}` },
@@ -93,10 +93,10 @@ export function CmsBlogPostView({ data, related }: Props) {
       />
       <nav aria-label="Brotkrumen">
         <Link
-          href="/blog"
+          href={backHref}
           className="inline-flex text-[14px] font-medium text-[var(--brand-900)] underline-offset-4 transition-colors hover:text-[var(--brand-500)] hover:underline"
         >
-          ← Alle Insights
+          {backLabel}
         </Link>
       </nav>
 

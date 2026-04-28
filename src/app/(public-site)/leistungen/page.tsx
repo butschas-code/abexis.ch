@@ -9,11 +9,11 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 export const metadata = {
   title: "Leistungen",
   description:
-    "Abexis: substanzielle Beratung in Führungs- und Personalthemen — präzise, diskret, konsequent. Schwerpunkte: Digitale Transformation, Strategie, Vertrieb & Marketing u. a.",
+    "Abexis: substanzielle Beratung in Führungs- und Personalthemen : präzise, diskret, konsequent. Schwerpunkte: Digitale Transformation, Strategie, Vertrieb & Marketing u. a.",
   openGraph: {
     title: "Leistungen | Abexis",
     description:
-      "Wenn Entscheidungen Tragweite haben, braucht es mehr als Standardlösungen. Beratung mit Substanz — unsere Schwerpunkte im Überblick.",
+      "Wenn Entscheidungen Tragweite haben, braucht es mehr als Standardlösungen. Beratung mit Substanz : unsere Schwerpunkte im Überblick.",
     images: [{ url: fokusPageHeroImages["digitale-transformation"] }],
   },
 };
@@ -22,8 +22,9 @@ export default function LeistungenPage() {
   return (
     <InteriorPageRoot>
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        type="Collection"
+        path="/leistungen"
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Leistungen", url: "/leistungen" },
         ]}
@@ -34,7 +35,7 @@ export default function LeistungenPage() {
         </h1>
         <p className="mt-6 max-w-2xl text-[19px] font-normal leading-relaxed text-white/88 md:text-[21px]">
           Wenn Entscheidungen Tragweite haben, braucht es mehr als Standardlösungen. Abexis steht für substanzielle
-          Beratung in zentralen Führungs- und Personalthemen — präzise in der Analyse, diskret in der Begleitung und
+          Beratung in zentralen Führungs- und Personalthemen : präzise in der Analyse, diskret in der Begleitung und
           konsequent in der Umsetzung.
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
@@ -54,7 +55,7 @@ export default function LeistungenPage() {
               Beratungsfelder im Überblick
             </h2>
             <p className="mt-4 text-[15px] leading-relaxed text-[#6e6e73] md:text-[16px]">
-              Jedes Feld verweist auf die vollständige Themenseite mit Originalinhalt — hier als kompakte Orientierung.
+              Jedes Feld verweist auf die vollständige Themenseite mit Originalinhalt : hier als kompakte Orientierung.
             </p>
           </div>
           <LeistungenBentoGrid />

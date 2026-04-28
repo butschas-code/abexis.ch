@@ -1,7 +1,7 @@
 import type { PostUpsertInput } from "./dto";
 
 /**
- * Controlled state for the post editor — aligned with `PostUpsertInput`.
+ * Controlled state for the post editor : aligned with `PostUpsertInput`.
  * Tags are stored as a string array; the UI may use a comma-separated text field and map via `tagsFromCommaText`.
  */
 export type PostEditorFormValues = PostUpsertInput;

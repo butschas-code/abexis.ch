@@ -1,4 +1,4 @@
-/** Firestore top-level collection ids — keep in sync with `firestore.rules` and indexes. */
+/** Firestore top-level collection ids : keep in sync with `firestore.rules` and indexes. */
 export const COLLECTIONS = {
   authors: "authors",
   categories: "categories",
@@ -11,7 +11,7 @@ export const COLLECTIONS = {
   users: "users",
   /** CMS library uploads + registered hero/body/submission assets (metadata + Storage path). */
   media: "media",
-  /** Executive Search job postings — each doc is one vacancy/mandate. */
+  /** Executive Search job postings : each doc is one vacancy/mandate. */
   vacancies: "vacancies",
 } as const;
 

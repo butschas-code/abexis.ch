@@ -275,7 +275,7 @@ export function VacancyForm({ mode, vacancyId }: Props) {
           </button>
         </div>
         {form.files.length === 0 ? (
-          <p className="text-[13px] text-[var(--apple-text-tertiary)]">Noch keine Dateien — z.B. PDF-Stellenbeschrieb.</p>
+          <p className="text-[13px] text-[var(--apple-text-tertiary)]">Noch keine Dateien : z.B. PDF-Stellenbeschrieb.</p>
         ) : (
           <div className="space-y-3">
             {form.files.map((f, i) => (
@@ -329,7 +329,7 @@ export function VacancyForm({ mode, vacancyId }: Props) {
           rows={3}
           value={form.apply}
           onChange={(e) => set("apply", e.target.value)}
-          placeholder="Interesse geweckt? Sende uns Deine Unterlagen an contact@abexis.ch — oder nimm unverbindlich Kontakt auf."
+          placeholder="Interesse geweckt? Sende uns Deine Unterlagen an contact@abexis.ch : oder nimm unverbindlich Kontakt auf."
           className={`${adminInput} resize-y`}
         />
       </div>

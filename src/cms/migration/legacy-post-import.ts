@@ -18,7 +18,7 @@ export const legacyPostJsonSchema = z.object({
   tags: z.array(z.string()).optional().default([]),
   listTitle: z.string().optional(),
   url: z.string().optional(),
-  /** If present, scrape failed — importer skips. */
+  /** If present, scrape failed : importer skips. */
   error: z.string().optional(),
   excerpt: z.string().max(20_000).optional(),
   /** Validated again in mapper (must be http(s) if set). */
@@ -32,7 +32,7 @@ export const legacyPostJsonSchema = z.object({
 
 export type LegacyPostJson = z.infer<typeof legacyPostJsonSchema>;
 
-/** Wrapper file — `posts` rows are coerced (may use `body` / `publishedAt` export shape). */
+/** Wrapper file : `posts` rows are coerced (may use `body` / `publishedAt` export shape). */
 export const legacyPostsFileSchema = z.object({
   version: z.number().int().positive().optional(),
   posts: z.array(z.unknown()),

@@ -27,7 +27,7 @@ const statusLabel: Record<PostStatus, string> = {
 };
 
 function formatWhen(iso: string | null) {
-  if (!iso) return "—";
+  if (!iso) return ",";
   try {
     return new Intl.DateTimeFormat("de-CH", {
       day: "2-digit",
@@ -35,7 +35,7 @@ function formatWhen(iso: string | null) {
       year: "numeric",
     }).format(new Date(iso));
   } catch {
-    return "—";
+    return ",";
   }
 }
 
@@ -136,7 +136,7 @@ export function AdminVacanciesManager() {
         ) : vacancies.length === 0 ? (
           <AdminEmptyState
             title="Noch keine Vakanzen"
-            description="Legen Sie eine erste Vakanz an — sie erscheint dann auf der öffentlichen Seite, sobald veröffentlicht."
+            description="Legen Sie eine erste Vakanz an : sie erscheint dann auf der öffentlichen Seite, sobald veröffentlicht."
             action={{ label: "Erste Vakanz anlegen", href: CMS_PATHS.adminVacancyNew }}
           />
         ) : (
@@ -172,7 +172,7 @@ export function AdminVacanciesManager() {
                       <div className="mt-0.5 font-mono text-[11px] text-[var(--apple-text-tertiary)]">{v.slug}</div>
                     </td>
                     <td className="max-w-[160px] truncate px-4 py-3.5 text-[var(--apple-text-secondary)]">
-                      {v.sector || "—"}
+                      {v.sector || ","}
                     </td>
                     <td className="px-4 py-3.5">
                       <span className={`${adminPill} whitespace-nowrap`}>{statusLabel[v.status]}</span>

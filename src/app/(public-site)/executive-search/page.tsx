@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { ParallaxBlock } from "@/components/executive-search/ParallaxBlock";
@@ -13,12 +14,14 @@ import { homeImagery } from "@/executive-search/lib/images/homeImagery";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
+import { InsightPostCard } from "@/components/public-site/insights/InsightPostCard";
+import { listSearchSitePublishedPosts } from "@/public-site/cms";
 
 const HERO_LEAD =
-  "Abexis SEARCH besetzt Führungs- und Schlüsselpositionen diskret, präzise und mit echter Beratungskompetenz. Wir bringen Organisationen mit Persönlichkeiten zusammen, die nicht nur fachlich passen, sondern auch menschlich und strategisch Wirkung entfalten. Unsere Mandant:innen schätzen die Verbindung aus strukturierter Direktansprache, unternehmerischem Verständnis und einem klar geführten Suchprozess — für Besetzungen, die nachhaltig tragen.";
+  "Abexis SEARCH besetzt Führungs- und Schlüsselpositionen diskret, präzise und mit echter Beratungskompetenz. Wir bringen Organisationen mit Persönlichkeiten zusammen, die nicht nur fachlich passen, sondern auch menschlich und strategisch Wirkung entfalten. Unsere Mandant:innen schätzen die Verbindung aus strukturierter Direktansprache, unternehmerischem Verständnis und einem klar geführten Suchprozess : für Besetzungen, die nachhaltig tragen.";
 
 const INTRO_BODY =
-  "Executive Search ist für uns mehr als die Suche nach passenden Profilen. Es geht darum, Persönlichkeiten zu identifizieren, die Verantwortung übernehmen können, kulturell anschlussfähig sind und in ihrer Rolle Wirkung entfalten. Entscheidend ist nicht allein, ob ein Lebenslauf passt, sondern ob ein Mensch in einem bestimmten unternehmerischen Umfeld tragfähig führen, gestalten und entwickeln kann. Genau deshalb verstehen wir Executive Search als beratungsintensiven Prozess — mit Präzision in der Ansprache, Klarheit in der Einschätzung und Sorgfalt in der Besetzung.";
+  "Executive Search ist für uns mehr als die Suche nach passenden Profilen. Es geht darum, Persönlichkeiten zu identifizieren, die Verantwortung übernehmen können, kulturell anschlussfähig sind und in ihrer Rolle Wirkung entfalten. Entscheidend ist nicht allein, ob ein Lebenslauf passt, sondern ob ein Mensch in einem bestimmten unternehmerischen Umfeld tragfähig führen, gestalten und entwickeln kann. Genau deshalb verstehen wir Executive Search als beratungsintensiven Prozess : mit Präzision in der Ansprache, Klarheit in der Einschätzung und Sorgfalt in der Besetzung.";
 
 const BLOCK1 =
   "Wir unterstützen Unternehmen bei der Besetzung von Führungs- und Schlüsselpositionen dort, wo Standardprozesse nicht ausreichen. Unsere Arbeit verbindet diskrete Direktansprache mit einem klar geführten Suchprozess und echtem Verständnis für Rollen, Märkte und Organisationen. So identifizieren wir nicht nur qualifizierte Kandidat:innen, sondern Persönlichkeiten, die der Aufgabe, dem Umfeld und der strategischen Situation eines Unternehmens wirklich entsprechen. Das Ergebnis sind Besetzungen, die fachlich überzeugen, menschlich passen und langfristig Wirkung entfalten.";
@@ -26,10 +29,10 @@ const BLOCK1 =
 const BLOCK2_TITLE = "Beratungskompetenz statt reiner Vermittlung";
 
 const BLOCK2 =
-  "Abexis SEARCH versteht Executive Search nicht als operative Personalvermittlung, sondern als hochwertige Beratungsleistung. Im Mittelpunkt steht die Frage, wer in einer konkreten Rolle wirksam werden kann — nicht nur auf dem Papier, sondern im realen Zusammenspiel mit Führung, Team, Kultur und Markt. Deshalb bringen wir unternehmerisches Verständnis, strukturiertes Vorgehen und ein feines Gespür für Kontexte zusammen. Unsere Mandant:innen schätzen genau diese Verbindung: analytische Schärfe, diskrete Ansprache und belastbare Begleitung in einem Suchprozess, der klar geführt ist und Vertrauen schafft.";
+  "Abexis SEARCH versteht Executive Search nicht als operative Personalvermittlung, sondern als hochwertige Beratungsleistung. Im Mittelpunkt steht die Frage, wer in einer konkreten Rolle wirksam werden kann : nicht nur auf dem Papier, sondern im realen Zusammenspiel mit Führung, Team, Kultur und Markt. Deshalb bringen wir unternehmerisches Verständnis, strukturiertes Vorgehen und ein feines Gespür für Kontexte zusammen. Unsere Mandant:innen schätzen genau diese Verbindung: analytische Schärfe, diskrete Ansprache und belastbare Begleitung in einem Suchprozess, der klar geführt ist und Vertrauen schafft.";
 
 const BLOCK3 =
-  "Passgenauigkeit entsteht dort, wo Rollentiefe und Marktverständnis zusammenkommen. Unsere Branchenfokussierung ermöglicht eine präzise Ansprache, eine fundierte Einschätzung und eine Suche, die nicht nur sorgfaltig, sondern auch effizient ist. Wer Funktionen, Branchenlogiken und unternehmerische Realitäten versteht, kann schneller die richtigen Persönlichkeiten identifizieren und ihre Eignung belastbarer beurteilen. Genau daraus entsteht der Anspruch, für den Abexis SEARCH steht: passgenau, schnell und verlässlich — ohne Kompromisse bei Qualität und Diskretion.";
+  "Passgenauigkeit entsteht dort, wo Rollentiefe und Marktverständnis zusammenkommen. Unsere Branchenfokussierung ermöglicht eine präzise Ansprache, eine fundierte Einschätzung und eine Suche, die nicht nur sorgfaltig, sondern auch effizient ist. Wer Funktionen, Branchenlogiken und unternehmerische Realitäten versteht, kann schneller die richtigen Persönlichkeiten identifizieren und ihre Eignung belastbarer beurteilen. Genau daraus entsteht der Anspruch, für den Abexis SEARCH steht: passgenau, schnell und verlässlich : ohne Kompromisse bei Qualität und Diskretion.";
 
 const DESCRIPTION =
   "Executive Search, Personalvermittlung: Führungspositionen diskret und präzise besetzen. Beratungsintensiver Suchprozess, Branchenfokussierung, Abexis SEARCH.";
@@ -45,12 +48,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ExecutiveSearchPage() {
+export default async function ExecutiveSearchPage() {
+  const searchPosts = await listSearchSitePublishedPosts(6);
   return (
     <InteriorPageRoot>
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        type="Service"
+        path="/executive-search"
+        name="Executive Search | Abexis"
+        description={DESCRIPTION}
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Executive Search", url: "/executive-search" },
         ]}
@@ -117,6 +124,40 @@ export default function ExecutiveSearchPage() {
       </MotionSection>
 
       <HomeVacancyTeasers />
+
+      {searchPosts.length > 0 && (
+        <MotionSection>
+          <section className="apple-section-mesh py-20 sm:py-28">
+            <PublicContentWidth>
+              <div className="mb-10 flex items-end justify-between gap-4">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Executive Search · Insights</p>
+                  <h2 className="mt-2 text-[28px] font-semibold tracking-[-0.03em] text-[#1d1d1f] sm:text-[32px]">
+                    Perspektiven & Beiträge
+                  </h2>
+                </div>
+                <Link
+                  href="/blog"
+                  className="shrink-0 text-[14px] font-medium text-brand-900 hover:underline"
+                >
+                  Alle Insights →
+                </Link>
+              </div>
+              <ul className="grid list-none gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
+                {searchPosts.map((post) => (
+                  <li key={post.id} className="h-full">
+                    <InsightPostCard
+                      post={post}
+                      href={`/executive-search/blog/${encodeURIComponent(post.slug)}`}
+                      density="compact"
+                    />
+                  </li>
+                ))}
+              </ul>
+            </PublicContentWidth>
+          </section>
+        </MotionSection>
+      )}
 
       <ExecutiveSearchClosingSection />
     </InteriorPageRoot>

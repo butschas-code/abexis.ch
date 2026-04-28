@@ -290,7 +290,7 @@ export function SiteHeader() {
           mobileTopWash || open ? "opacity-100" : "opacity-0"
         }`}
       />
-      {/* Floating pill nav — sticky, zero height so content flows under it */}
+      {/* Floating pill nav : sticky, zero height so content flows under it */}
       <header className="pointer-events-none sticky top-0 z-40 h-0 overflow-visible">
         <div className="px-4 md:px-6" style={{ paddingTop: "calc(0.75rem + env(safe-area-inset-top, 0px))" }}>
           <div className="pointer-events-auto mx-auto flex w-full max-w-[1068px] items-center justify-between gap-2 rounded-full border border-black/[0.07] bg-white px-3 py-2 shadow-[0_4px_24px_rgba(0,0,0,0.07)] md:gap-4 md:px-4">

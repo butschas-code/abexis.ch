@@ -22,7 +22,7 @@ const CMS_POST_LIST_REVALIDATE = 120;
 /** Cross-request cache for single-slug resolution (seconds). */
 const CMS_POST_BY_SLUG_REVALIDATE = 120;
 
-/** Decode URL segment and trim — safe for already-decoded slugs. */
+/** Decode URL segment and trim : safe for already-decoded slugs. */
 export function normalizeBlogSlugParam(raw: string): string {
   const trimmed = raw.trim();
   if (!trimmed) return "";
@@ -137,6 +137,43 @@ const getPublishedCmsPostsAllSitesCached = unstable_cache(
   { revalidate: CMS_POST_LIST_REVALIDATE, tags: ["published-posts"] },
 );
 
+async function listSearchSitePostsUncached(limit: number): Promise<PublishedPostWithId[]> {
+  const lim = Math.min(200, Math.max(1, limit));
+  const db = getAdminFirestore();
+  if (db) {
+    try {
+      const snap = await db
+        .collection(COLLECTIONS.posts)
+        .where("status", "==", "published")
+        .where("site", "==", "search")
+        .orderBy("publishedAt", "desc")
+        .limit(lim)
+        .get();
+      return snap.docs
+        .map((doc) => {
+          const post = mapPostDoc(doc.id, doc);
+          return post ? { id: doc.id, ...post } : null;
+        })
+        .filter((p): p is PublishedPostWithId => p != null && p.status === "published");
+    } catch (err) {
+      console.error("[cms] Admin Firestore search-site posts failed; falling back to in-memory filter.", err);
+    }
+  }
+  const all = await getPublishedCmsPostsAllSitesUncached(lim * 5);
+  return all.filter((p) => p.site === "search").slice(0, lim);
+}
+
+const listSearchSitePostsCached = unstable_cache(
+  async (limit: number) => listSearchSitePostsUncached(limit),
+  ["search-site-published-posts"],
+  { revalidate: CMS_POST_LIST_REVALIDATE, tags: ["published-posts"] },
+);
+
+/** Published posts with `site: "search"` : surfaced on the Executive Search section of abexis.ch. */
+export const listSearchSitePublishedPosts = cache(async (limit = 20): Promise<PublishedPostWithId[]> => {
+  return listSearchSitePostsCached(Math.min(200, Math.max(1, limit)));
+});
+
 async function getPublishedCmsPostsImpl(limit = 20): Promise<PublishedPostWithId[]> {
   const deployment = await getResolvedPublicDeploymentSite();
   const lim = Math.min(200, Math.max(1, limit));
@@ -145,7 +182,7 @@ async function getPublishedCmsPostsImpl(limit = 20): Promise<PublishedPostWithId
 /**
  * Published posts for the public blog. Prefers **Admin SDK** (bypasses rules, works for locked-down rules).
  * Falls back to the **Firebase Web SDK** when Admin env is missing so local dev with only
- * `NEXT_PUBLIC_FIREBASE_*` still lists posts (see `firestore.rules` — anonymous read of published posts).
+ * `NEXT_PUBLIC_FIREBASE_*` still lists posts (see `firestore.rules` : anonymous read of published posts).
  *
  * Results are **cached for ~2 minutes** (`unstable_cache`) keyed by deployment + limit so home, blog index,
  * and related-posts scans do not each cold-hit Firestore on every navigation.

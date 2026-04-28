@@ -206,7 +206,7 @@ export function AdminSubmissionsManager() {
                             {r.summary || "Unbekannter Bewerber"}
                           </p>
                           <p className="text-[11px] text-[var(--apple-text-tertiary)]">
-                            {r.createdAt ? new Date(r.createdAt).toLocaleDateString("de-CH") : "—"}
+                            {r.createdAt ? new Date(r.createdAt).toLocaleDateString("de-CH") : ","}
                           </p>
                         </div>
                       ))
@@ -260,7 +260,7 @@ export function AdminSubmissionsManager() {
                       </td>
                       <td className="px-4 py-3.5 text-[var(--apple-text-secondary)]">{r.site}</td>
                       <td className="hidden px-4 py-3.5 text-[var(--apple-text-secondary)] md:table-cell">
-                        {r.createdAt ? new Date(r.createdAt).toLocaleString("de-CH") : "—"}
+                        {r.createdAt ? new Date(r.createdAt).toLocaleString("de-CH") : ","}
                       </td>
                       <td className="px-4 py-3.5 pr-5">
                         <span className={adminPill}>{statusLabel[r.status] ?? r.status}</span>

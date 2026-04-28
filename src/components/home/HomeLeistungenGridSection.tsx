@@ -15,6 +15,7 @@ const SERVICE_KEYS = [
 ] as const;
 
 const LEISTUNG_IMAGES: readonly string[] = [
+  homeImagery.projectFitCheck,
   ...SERVICE_KEYS.map((k) => serviceCardImages[k]),
   homeImagery.trust,
 ];
@@ -32,24 +33,30 @@ export function HomeLeistungenGridSection() {
         <div className="mt-10 grid gap-5 sm:mt-14 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           {c.items.map((s, i) => {
             const img = LEISTUNG_IMAGES[i] ?? homeBlogTeaserImage;
+            const isFullWidth = i === 0 || i === c.items.length - 1;
             return (
               <Link
                 key={s.href}
                 href={s.href}
-                className="group flex flex-col overflow-hidden rounded-[22px] bg-white shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--apple-shadow-lg)] hover:ring-brand-500/25 sm:rounded-[28px] active:scale-[0.99]"
+                className={`group flex overflow-hidden rounded-[22px] bg-white shadow-[var(--apple-shadow)] ring-1 transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--apple-shadow-lg)] sm:rounded-[28px] active:scale-[0.99]${isFullWidth ? " col-span-full flex-col sm:flex-row" : " flex-col"}${i === 0 ? " ring-brand-900/20 hover:ring-brand-500/40" : " ring-black/[0.04] hover:ring-brand-500/25"}`}
               >
-                <div className="relative isolate aspect-[16/10] w-full overflow-hidden bg-[#f5f5f7]">
+                <div className={`relative isolate overflow-hidden bg-[#f5f5f7]${isFullWidth ? " aspect-[16/10] w-full sm:aspect-auto sm:w-[44%] sm:flex-shrink-0" : " aspect-[16/10] w-full"}`}>
                   <Image
                     src={img}
                     alt=""
                     fill
                     className="object-cover saturate-[0.78] contrast-[1.08] transition duration-700 group-hover:scale-[1.04]"
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    sizes={isFullWidth ? "(min-width: 640px) 44vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
                   />
                   <div className="abexis-tint-overlay" />
                 </div>
                 <div className="flex flex-1 flex-col px-5 pb-7 pt-5 sm:px-6 sm:pb-8 sm:pt-6">
-                  <h3 className="text-[17px] font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f] sm:text-[19px]">{s.title}</h3>
+                  {i === 0 && (
+                    <span className="mb-3 inline-flex w-fit items-center rounded-full bg-brand-900 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
+                      Hier beginnen
+                    </span>
+                  )}
+                  <h3 className={`font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f]${isFullWidth ? " text-[19px] sm:text-[22px]" : " text-[17px] sm:text-[19px]"}`}>{s.title}</h3>
                   <p className="mt-2.5 flex-1 text-[14px] leading-relaxed text-[#6e6e73] sm:mt-3">{s.body}</p>
                   <span className="mt-4 inline-flex min-h-11 items-center text-[14px] font-medium text-brand-900 transition group-hover:translate-x-0.5 group-hover:text-brand-500 sm:mt-5">
                     Mehr erfahren →

@@ -87,7 +87,7 @@ export function SearchBriefForm({ id = "suchmandat" }: { id?: string }) {
           value={form.message}
           onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
           className="focus-ring mt-2 w-full rounded-xl border border-black/[0.08] bg-[#f5f5f7] px-3 py-2 text-[15px] text-[#1d1d1f] placeholder:text-[#86868b]"
-          placeholder="Rolle, Kontext, Zeitrahmen — frei formuliert."
+          placeholder="Rolle, Kontext, Zeitrahmen : frei formuliert."
         />
       </div>
       <label className="flex items-start gap-3 text-[15px] leading-snug text-[#6e6e73]">
@@ -114,7 +114,7 @@ export function SearchBriefForm({ id = "suchmandat" }: { id?: string }) {
         >
           {status === "sending" ? "Senden…" : "Suchmandat einreichen"}
         </button>
-        {status === "ok" && <p className="text-[15px] text-[#6e6e73]">Vielen Dank — wir melden uns diskret und zeitnah.</p>}
+        {status === "ok" && <p className="text-[15px] text-[#6e6e73]">Vielen Dank : wir melden uns diskret und zeitnah.</p>}
         {status === "error" && (
           <p className="text-[15px] text-[#424245]">Bitte prüfen Sie die Eingaben und die Einwilligung.</p>
         )}

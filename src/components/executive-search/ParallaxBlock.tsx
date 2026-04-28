@@ -10,7 +10,7 @@ type Props = {
   yRange?: [number, number];
 };
 
-/** Subtle scroll-linked vertical shift — premium, not gimmicky */
+/** Subtle scroll-linked vertical shift : premium, not gimmicky */
 export function ParallaxBlock({ children, className, yRange = [48, -48] }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();

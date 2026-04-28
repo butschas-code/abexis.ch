@@ -66,10 +66,11 @@ export default async function FokusthemaPage({ params }: Props) {
       heroImage={heroImage}
       heroActions={<HeroProjectRealityCheckCta />}
     >
-      {meta && <SchemaMarkup type="Service" data={meta} />}
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        type="Service"
+        path={`/fokusthemen/${slug}`}
+        data={meta}
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Leistungen", url: "/leistungen" },
           { name: meta?.title ?? "Thema", url: `/fokusthemen/${slug}` },

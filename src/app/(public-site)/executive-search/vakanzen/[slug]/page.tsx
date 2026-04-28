@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!v) return {};
   return {
     title: v.title,
-    description: v.excerpt || v.hook || `${v.title} — Abexis Executive Search`,
+    description: v.excerpt || v.hook || `${v.title} : Abexis Executive Search`,
     openGraph: {
       title: `${v.title} | Vakanzen | Abexis`,
       description: v.excerpt || v.hook || "",
@@ -46,8 +46,10 @@ export default async function VacancyDetailPage({ params }: Props) {
   return (
     <InteriorPageRoot>
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        type="JobPosting"
+        path={`/executive-search/vakanzen/${v.slug}`}
+        data={v}
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Executive Search", url: "/executive-search" },
           { name: "Vakanzen", url: "/executive-search/vakanzen" },

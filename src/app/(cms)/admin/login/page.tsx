@@ -1,7 +1,7 @@
 import { CmsLoginForm } from "@/components/auth/CmsLoginForm";
 
 export const metadata = {
-  title: "Anmeldung — CMS",
+  title: "Anmeldung : CMS",
   robots: { index: false, follow: false },
 };
 

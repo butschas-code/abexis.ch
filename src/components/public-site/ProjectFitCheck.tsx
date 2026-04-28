@@ -1,9 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { PageHero } from "@/components/site/PageHero";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { BrandGrad } from "@/components/ui/BrandGrad";
-import { homeHeroImage } from "@/data/site-images";
+import { homeHeroImage, prcChallengesInfographic, prcDimensionenModell, prcAblaufTimeline } from "@/data/site-images";
 import { siteConfig } from "@/data/pages";
 
 /** Same ambient layer as Leistungen / interior long-form pages (`apple-section-mesh` sits on the root). */
@@ -12,7 +13,7 @@ const SECTION_MESH_LIGHT =
 
 // ─── Static data ──────────────────────────────────────────────────────────────
 
-/** Entspricht [abexis.ch/projectfitcheck](https://abexis.ch/projectfitcheck); Punkt 4 dort widerspricht «Was wir häufig sehen» — hier konsistent mit Unklarheit formuliert. */
+/** Entspricht [abexis.ch/projectfitcheck](https://abexis.ch/projectfitcheck); Punkt 4 dort widerspricht «Was wir häufig sehen» : hier konsistent mit Unklarheit formuliert. */
 const warnsignale = [
   "Entscheidungen werden vertagt",
   "Statusberichte werden «optimistisch»",
@@ -109,30 +110,30 @@ const empfehlungen = [
 ] as const;
 
 /**
- * Drei aufeinander aufbauende Phasen eines Project Reality Check — ein zusammenhängender Ablauf, keine isolierten «Produkte».
+ * Drei aufeinander aufbauende Phasen eines Project Reality Check : ein zusammenhängender Ablauf, keine isolierten «Produkte».
  * Inhalt gemäss [abexis.ch/projectfitcheck](https://abexis.ch/projectfitcheck).
  */
 const prcPipelinePhasen = [
   {
     name: "Light",
     tagline: "Schnelle Standortbestimmung",
-    dauer: "3–5 Tage",
+    dauer: "3-5 Tage",
     ziel: "Erste Klarheit",
     inhalt: [
-      "Interviews (3–5 Schlüsselpersonen)",
+      "Interviews (3-5 Schlüsselpersonen)",
       "High Level Analyse entlang 6 Dimensionen",
       "Erste Risikoeinschätzung",
     ],
-    output: ["Kurzbewertung", "Top 3–5 kritische Punkte", "Erste Handlungsempfehlungen"],
+    output: ["Kurzbewertung", "Top 3-5 kritische Punkte", "Erste Handlungsempfehlungen"],
   },
   {
     name: "Core",
     tagline: "Management Klarheit",
-    dauer: "1–2 Wochen",
+    dauer: "1-2 Wochen",
     ziel: "Entscheidungsbasis für das Management",
     inhalt: [
       "Strukturierte Analyse (6 Dimensionen)",
-      "Interviews (5–10 Personen)",
+      "Interviews (5-10 Personen)",
       "Dokumentenreview",
       "Bewertung Risiken, Governance, Execution",
     ],
@@ -146,7 +147,7 @@ const prcPipelinePhasen = [
   {
     name: "Deep Dive",
     tagline: "Stabilisierung & Richtung",
-    dauer: "3–4 Wochen",
+    dauer: "3-4 Wochen",
     ziel: "Grundlage für Turnaround oder Neuausrichtung",
     inhalt: [
       "Vertiefte Analyse",
@@ -268,12 +269,24 @@ export function ProjectFitCheck() {
               ))}
             </ul>
           </div>
+
+          <div className="mt-10 sm:mt-14">
+            <div className="overflow-hidden rounded-2xl border border-black/[0.07] shadow-[0_4px_24px_rgba(38,51,124,0.08)]">
+              <Image
+                src={prcChallengesInfographic}
+                alt="Warum Projekte selten scheitern aber oft entgleisen : Übersicht der typischen Muster und wann ein externer Blick hilft"
+                width={1536}
+                height={1024}
+                className="w-full"
+              />
+            </div>
+          </div>
         </div>
       </MotionSection>
 
       {/* ── 3. HERAUSFORDERUNG + ERGEBNIS SPLIT ──────────────────────────── */}
       <div className="overflow-hidden md:grid md:grid-cols-2">
-        {/* Challenge — dark navy */}
+        {/* Challenge : dark navy */}
         <div className="relative bg-[#1a2260]">
           <div className="relative ml-auto max-w-[534px] px-4 py-12 sm:px-8 sm:py-14 md:px-12 md:py-20">
             <LCorner className="top-5 left-4 text-[#45b3e2]/30 sm:top-6 sm:left-6" />
@@ -283,7 +296,7 @@ export function ProjectFitCheck() {
               Viele Projekte wirken stabil, liefern aber nicht den erwarteten Impact.
             </h2>
             <p className="mt-5 text-[16px] leading-relaxed text-white/88">
-              Meetings finden statt, Statusberichte sehen gut aus — und trotzdem entsteht Unsicherheit.
+              Meetings finden statt, Statusberichte sehen gut aus : und trotzdem entsteht Unsicherheit.
             </p>
             <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/65">Was wir häufig sehen</p>
             <ul className="mt-4 flex flex-col gap-3">
@@ -307,7 +320,7 @@ export function ProjectFitCheck() {
           <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
         </div>
 
-        {/* Result — warm linen */}
+        {/* Result : warm linen */}
         <div className="relative bg-[#faf8f2]">
           <div className="relative mr-auto max-w-[534px] px-4 py-12 sm:px-8 sm:py-14 md:px-12 md:py-20">
             <LCorner className="top-5 left-4 text-[#c9a96e]/40 sm:top-6 sm:left-6" />
@@ -328,7 +341,7 @@ export function ProjectFitCheck() {
               ))}
             </ul>
             <p className="mt-8 text-[15px] font-medium leading-relaxed text-[#6e6e73]">
-              Damit Sie wissen, was zu tun ist — und was passiert, wenn nichts passiert.
+              Damit Sie wissen, was zu tun ist : und was passiert, wenn nichts passiert.
             </p>
           </div>
           <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
@@ -347,19 +360,19 @@ export function ProjectFitCheck() {
               </h2>
               <div className="mt-7 h-px w-full bg-black/[0.06]" />
               <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                Der Project Reality Check ist eine kurze, unabhängige Analyse auf Management-Ebene — ein strukturierter
+                Der Project Reality Check ist eine kurze, unabhängige Analyse auf Management-Ebene : ein strukturierter
                 Reality Check mit Fokus auf Entscheidungen, Risiken und Steuerbarkeit.
               </p>
               <p className="mt-4 text-[15px] font-medium leading-relaxed text-[#1d1d1f]">
                 Damit sichtbar wird, wo Ihr Projekt wirklich steht.
               </p>
               <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#86868b]">
-                Abexis 6 Dimensionen — Methodik
+                Abexis 6 Dimensionen : Methodik
               </p>
               <p className="mt-3 text-[14px] leading-relaxed text-[#6e6e73]">
                 Jede Dimension wird mit einer Ampelbewertung (Green, Yellow, Red) in den Gesamtkontext eingeordnet.
                 Methodik und Bewertungslogik bleiben über den gesamten Ablauf gleich; Umfang und Detailtiefe steigen von
-                Phase zu Phase — von Light über Core bis Deep Dive.
+                Phase zu Phase : von Light über Core bis Deep Dive.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
                 {(
@@ -375,6 +388,7 @@ export function ProjectFitCheck() {
                   </span>
                 ))}
               </div>
+
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-2">
@@ -413,7 +427,7 @@ export function ProjectFitCheck() {
               </h2>
               <div className="mt-7 h-px w-full bg-black/[0.06]" />
               <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                Klar strukturiert, management- und board-tauglich — verdichtet auf das Wesentliche.
+                Klar strukturiert, management- und board-tauglich : verdichtet auf das Wesentliche.
               </p>
             </div>
             <div className="relative max-w-xl lg:max-w-lg xl:max-w-xl">
@@ -441,6 +455,16 @@ export function ProjectFitCheck() {
               </ol>
             </div>
           </div>
+          <div className="mt-10 overflow-hidden rounded-2xl border border-black/[0.07] shadow-[0_4px_20px_rgba(38,51,124,0.08)] sm:mt-12">
+            <Image
+              src={prcDimensionenModell}
+              alt="Abexis 6 Dimensionen Modell : Strategy, Governance, Execution, Risks, Organisation & Change, Technology & Data"
+              width={1024}
+              height={1024}
+              className="w-full"
+            />
+          </div>
+
           <div className="relative mt-10 flex justify-center border-t border-black/[0.06] px-1 pt-10 sm:mt-14 sm:pt-12">
             <Link
               href="/termin"
@@ -491,7 +515,7 @@ export function ProjectFitCheck() {
         </MotionSection>
       </section>
 
-      {/* ── 7. ABLAUF — zusammenhängende Pipeline (Light → Core → Deep Dive) ─ */}
+      {/* ── 7. ABLAUF : zusammenhängende Pipeline (Light → Core → Deep Dive) ─ */}
       <section id="ablauf" className="relative overflow-hidden scroll-mt-24 sm:scroll-mt-28">
         <div aria-hidden className={SECTION_MESH_LIGHT} />
         <MotionSection>
@@ -504,9 +528,22 @@ export function ProjectFitCheck() {
             </h2>
             <p className="mt-4 max-w-[56ch] text-[15px] leading-[1.55] text-[#6e6e73] sm:mt-5 sm:text-[16px] sm:leading-relaxed">
               Light, Core und Deep Dive sind keine alternativen «Pakete», sondern die aufeinander aufbauenden Stufen
-              desselben Reality Check — von der ersten Einordnung bis zur vertieuten Entscheidungs- und Umsetzungsgrundlage.
+              desselben Reality Check : von der ersten Einordnung bis zur vertieuten Entscheidungs- und Umsetzungsgrundlage.
               Umfang und Investition klären wir im Erstgespräch; in der Regel als Fixpreis, ohne versteckte Folgekosten.
             </p>
+
+            <div className="mt-10 sm:mt-12">
+              <div className="overflow-hidden rounded-2xl border border-black/[0.07] bg-white shadow-[0_4px_20px_rgba(38,51,124,0.07)] p-4 sm:p-6">
+                <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Beispielhafter Ablauf : Core Phase</p>
+                <Image
+                  src={prcAblaufTimeline}
+                  alt="Ablauf Project Reality Check: Tag 1 Kickoff & Dokumentenanalyse, Tag 2-3 Interviews, Tag 4 Analyse & Bewertung, Tag 5 Executive Präsentation"
+                  width={1597}
+                  height={237}
+                  className="w-full"
+                />
+              </div>
+            </div>
 
             <div className="relative mx-auto mt-10 max-w-3xl sm:mt-14">
               <ol className="relative m-0 flex list-none flex-col gap-6 p-0 sm:gap-8 md:gap-10">
@@ -529,7 +566,7 @@ export function ProjectFitCheck() {
                             <h3 className="mt-1.5 text-[clamp(1.0625rem,2.5vw+0.35rem,1.375rem)] font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f] sm:mt-2">
                               {phase.name}{" "}
                               <span className="block font-normal text-[#6e6e73] sm:inline sm:font-normal">
-                                — {phase.tagline}
+                                : {phase.tagline}
                               </span>
                             </h3>
                             <p className="mt-2 text-[14px] font-medium leading-snug text-[#26337c] sm:mt-3 sm:text-[15px]">
@@ -574,7 +611,7 @@ export function ProjectFitCheck() {
               </ol>
               <div className="mt-2 flex flex-col items-center gap-3 border-t border-black/[0.06] px-1 pt-8 sm:pt-10">
                 <p className="max-w-md text-center text-[14px] leading-relaxed text-[#6e6e73]">
-                  Wir stimmen den genauen Umfang und die Dauer mit Ihnen ab — als durchgängiger Ablauf, nicht als
+                  Wir stimmen den genauen Umfang und die Dauer mit Ihnen ab : als durchgängiger Ablauf, nicht als
                   isolierte Bausteine.
                 </p>
                 <Link
@@ -590,7 +627,7 @@ export function ProjectFitCheck() {
         </MotionSection>
       </section>
 
-      {/* ── 8. CTA — gleiche Oberfläche wie Home-Abschluss (`abexis-hero-gradient-surface`) ─ */}
+      {/* ── 8. CTA : gleiche Oberfläche wie Home-Abschluss (`abexis-hero-gradient-surface`) ─ */}
       <section className="px-[max(1rem,env(safe-area-inset-left,0px))] py-12 pr-[max(1rem,env(safe-area-inset-right,0px))] sm:px-6 sm:py-16 md:py-24">
         <div className="mx-auto max-w-[1068px]">
           <div className="abexis-hero-gradient-surface relative overflow-hidden rounded-[20px] px-4 py-8 sm:rounded-[24px] sm:px-8 sm:py-12 md:rounded-[32px] md:px-12 md:py-16">
@@ -610,7 +647,7 @@ export function ProjectFitCheck() {
                 </h2>
                 <p className="mt-4 max-w-[50ch] text-[15px] leading-[1.55] text-white/88 sm:mt-5 sm:text-[16px] sm:leading-relaxed md:text-[17px]">
                   In einem kurzen Gespräch klären wir, ob ein Project Reality Check sinnvoll ist und wo Ihr Projekt aktuell
-                  steht — unverbindlich.
+                  steht : unverbindlich.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2 sm:mt-7 sm:gap-3">
                   {["Kostenlos", "Kurzes Gespräch", "Unverbindlich", "Modular"].map((tag) => (

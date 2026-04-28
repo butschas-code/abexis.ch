@@ -45,7 +45,7 @@ async function submitViaWebhook(body: {
 }
 
 type KontaktPageFormProps = {
-  /** Outlook / Buchungs-URL — vom Server übergeben, damit der Client nicht `pages.ts` bundelt. */
+  /** Outlook / Buchungs-URL : vom Server übergeben, damit der Client nicht `pages.ts` bundelt. */
   bookingUrl: string;
 };
 
@@ -146,7 +146,7 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
           Vielen Dank für Ihre Nachricht
         </h2>
         <p className="mt-4 text-[15px] leading-relaxed text-[#6e6e73]">
-          Wir melden uns, sobald es sachlich passt — in der Regel innerhalb weniger Werktage.
+          Wir melden uns, sobald es sachlich passt : in der Regel innerhalb weniger Werktage.
         </p>
         <p className="mt-6 text-[14px] text-[#86868b]">
           Alternativ:{" "}
@@ -288,14 +288,6 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
         >
           {phase === "submitting" ? "Wird gesendet …" : "Nachricht senden"}
         </button>
-        <a
-          className="text-center text-[14px] font-medium text-brand-900 underline-offset-4 hover:text-brand-500 hover:underline sm:text-left"
-          href={bookingUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Stattdessen Termin im Kalender wählen
-        </a>
       </div>
     </form>
   );

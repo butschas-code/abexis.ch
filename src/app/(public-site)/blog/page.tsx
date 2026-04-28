@@ -15,7 +15,7 @@ import {
 
 export const metadata = {
   title: "Insights",
-  description: "Perspektiven zu Strategie, Transformation und Führung — kuratiert von Abexis.",
+  description: "Perspektiven zu Strategie, Transformation und Führung : kuratiert von Abexis.",
   openGraph: {
     title: "Insights | Abexis",
     description: "Perspektiven zu Strategie, Transformation und Führung.",
@@ -29,7 +29,7 @@ export default async function BlogIndexPage() {
   const [posts, categories, deploymentSite] = await Promise.all([
     listInsightsPublishedPosts({}),
     listPublicCategoriesForInsights(),
-    /** Hostname hints (`NEXT_PUBLIC_SEARCH_SITE_HOST_HINTS`) + `NEXT_PUBLIC_CMS_SITE_ID` — drives Firestore filters. */
+    /** Hostname hints (`NEXT_PUBLIC_SEARCH_SITE_HOST_HINTS`) + `NEXT_PUBLIC_CMS_SITE_ID` : drives Firestore filters. */
     getResolvedPublicDeploymentSite(),
   ]);
 
@@ -65,7 +65,7 @@ export default async function BlogIndexPage() {
             </span>
           )}
           <span className="mt-3 block">
-            Strategie, Transformation und Führung — kompakt aufbereitet. Hier finden Sie alle veröffentlichten
+            Strategie, Transformation und Führung : kompakt aufbereitet. Hier finden Sie alle veröffentlichten
             Beiträge aus abexis.ch und der Executive-Search-Oberfläche (sowie geteilte Inhalte).
           </span>
         </p>

@@ -22,7 +22,7 @@ const ALLOWED_MIME = new Set([
  * (public clients cannot write Storage rules directly).
  *
  * POST `multipart/form-data` with field **`files`** (one or more).
- * Returns `{ urls: string[], paths: string[] }` — pass `urls` into `POST /api/cms/v1/form-submissions` as `fileUrls`.
+ * Returns `{ urls: string[], paths: string[] }` : pass `urls` into `POST /api/cms/v1/form-submissions` as `fileUrls`.
  */
 export async function POST(req: Request) {
   const storage = getAdminStorage();

@@ -42,7 +42,7 @@ export type LoadAdminDashboardOptions = {
   recentPostsLimit?: number;
   recentSubmissionsLimit?: number;
   /**
-   * When `false`, skip submission aggregates/lists (editors — no `manage_submissions`).
+   * When `false`, skip submission aggregates/lists (editors : no `manage_submissions`).
    * Avoids fetching PII-adjacent rows client-side.
    */
   includeSubmissionsIntake?: boolean;

@@ -4,7 +4,7 @@ type Props = {
   className?: string;
 };
 
-/** Eingebettete Google-Karte (Hinwil) — feste Adresse wie auf der Kontaktseite. */
+/** Eingebettete Google-Karte (Hinwil) : feste Adresse wie auf der Kontaktseite. */
 export function KontaktMapIframe({ className = "" }: Props) {
   return (
     <div

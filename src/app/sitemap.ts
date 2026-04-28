@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/legal-policy",
     "/privacy-policy",
     "/en/home",
+    "/executive-search/vakanzen",
   ].map((path) => ({
     url: `${base}${path}`,
     lastModified: new Date(),
@@ -59,6 +60,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("[sitemap] Failed to fetch CMS posts", err);
   }
 
+  let vacancies: MetadataRoute.Sitemap = [];
+  try {
+    const { listPublishedVacancies } = await import("@/public-site/cms/vacancy");
+    const published = await listPublishedVacancies(100);
+    vacancies = published.map((v) => ({
+      url: `${base}/executive-search/vakanzen/${encodeURIComponent(v.slug)}`,
+      lastModified: v.publishedAt ? new Date(v.publishedAt) : new Date(v.updatedAt),
+      changeFrequency: "weekly" as const,
+      priority: 0.65,
+    }));
+  } catch (err) {
+    console.error("[sitemap] Failed to fetch vacancies", err);
+  }
+
   let categories: MetadataRoute.Sitemap = [];
   try {
     const cats = await listPublicCategoriesForInsights();
@@ -74,7 +89,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const byUrl = new Map<string, MetadataRoute.Sitemap[number]>();
   // Prioritize CMS posts over legacy if slugs match (unlikely but safe)
-  for (const row of [...legacyPosts, ...cmsPosts, ...categories]) {
+  for (const row of [...legacyPosts, ...cmsPosts, ...vacancies, ...categories]) {
     byUrl.set(row.url, row);
   }
 

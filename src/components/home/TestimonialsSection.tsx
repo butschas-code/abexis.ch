@@ -16,7 +16,7 @@ export function TestimonialsSection() {
           Ergebnisse aus der Praxis.
         </h2>
         <p className="mt-3 max-w-[54ch] text-[15px] leading-relaxed text-[#6e6e73] sm:mt-4 sm:text-[16px]">
-          Stimmen von Führungspersonen und Partnern — kompakt wiedergegeben, mit Freigabe der Zitierten.
+          Stimmen von Führungspersonen und Partnern : kompakt wiedergegeben, mit Freigabe der Zitierten.
         </p>
 
         <ul className="mt-10 grid list-none grid-cols-1 gap-5 sm:mt-14 sm:gap-6 md:grid-cols-2 md:gap-8">

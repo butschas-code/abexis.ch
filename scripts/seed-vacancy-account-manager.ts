@@ -5,7 +5,7 @@
  * Run: npx tsx scripts/seed-vacancy-account-manager.ts
  *
  * Requires FIREBASE_PROJECT_ID + FIREBASE_SERVICE_ACCOUNT_JSON in .env.local, or ADC.
- * Uses NODE_ENV=development guard — override with SEED_ALLOW=1 for prod.
+ * Uses NODE_ENV=development guard : override with SEED_ALLOW=1 for prod.
  */
 
 import { existsSync, readFileSync } from "node:fs";
@@ -75,7 +75,7 @@ const body = `
 </ul>
 
 <h2>Warum diese Rolle spannend ist</h2>
-<p>Hier verkaufst du keine Standardlösung. Du arbeitest an Themen, die für Deine Kunden geschäftskritisch sind. Und genau deshalb zählt nicht nur, was Du verkaufst — sondern wie Du denkst, verstehst und berätst.</p>
+<p>Hier verkaufst du keine Standardlösung. Du arbeitest an Themen, die für Deine Kunden geschäftskritisch sind. Und genau deshalb zählt nicht nur, was Du verkaufst : sondern wie Du denkst, verstehst und berätst.</p>
 <p>Ein wertschätzendes Arbeitsumfeld sowie zahlreiche attraktive Benefits runden das Angebot ab.</p>
 `.trim();
 
@@ -112,7 +112,7 @@ async function main() {
   await ref.set({
     title: "Account Manager Industrie & Digitalisierung (m/w/d)",
     slug: SLUG,
-    excerpt: "Gestalte die digitale Weiterentwicklung von Industrieunternehmen in der Schweiz — an der Schnittstelle zwischen Business, Engineering und Technologie.",
+    excerpt: "Gestalte die digitale Weiterentwicklung von Industrieunternehmen in der Schweiz : an der Schnittstelle zwischen Business, Engineering und Technologie.",
     sector: "Industrie & Digitalisierung",
     location: "Schweiz",
     employmentType: "Vollzeit",
@@ -120,11 +120,11 @@ async function main() {
     body: bodyEnvelope,
     files: [
       {
-        label: "Abexis SEARCH — Account Manager I&D.pdf",
+        label: "Abexis SEARCH : Account Manager I&D.pdf",
         url: "https://files.designer.hoststar.ch/9e/d8/9ed818b8-6df9-4549-a501-eb744e1546ed.pdf",
       },
     ],
-    apply: "Interesse geweckt? Sende uns Deine aussagekräftigen Unterlagen an contact@abexis.ch — oder nimm unverbindlich Kontakt auf: +41 43 535 84 34",
+    apply: "Interesse geweckt? Sende uns Deine aussagekräftigen Unterlagen an contact@abexis.ch : oder nimm unverbindlich Kontakt auf: +41 43 535 84 34",
     site: "search",
     status: "published",
     publishedAt: FieldValue.serverTimestamp(),

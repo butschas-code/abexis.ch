@@ -19,7 +19,7 @@
    */
   --abexis-hero-on-image-opacity: 0.28;
   /**
-   * Full-bleed PageHero only: scrim built with per-stop alpha — dark grey bottom-left (text legible),
+   * Full-bleed PageHero only: scrim built with per-stop alpha : dark grey bottom-left (text legible),
    * transitions to brand cyan #45b3e2 top-right. Do not apply a second global opacity on this layer.
    */
   --abexis-hero-fullbleed-overlay: linear-gradient(
@@ -384,7 +384,7 @@ body {
 }
 
 /**
- * Full-bleed heroes (PageHero): strong diagonal scrim — do not share the card opacity knob.
+ * Full-bleed heroes (PageHero): strong diagonal scrim : do not share the card opacity knob.
  */
 .abexis-hero-fullbleed-overlay {
   position: absolute;

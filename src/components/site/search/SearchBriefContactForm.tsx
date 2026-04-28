@@ -144,7 +144,7 @@ export function SearchBriefContactForm() {
           Vielen Dank für Ihre Nachricht
         </h2>
         <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-[#6e6e73]">
-          Wir haben Ihre Angaben erhalten. Ein Berater nimmt bei passender Gelegenheit persönlich Kontakt mit Ihnen auf —
+          Wir haben Ihre Angaben erhalten. Ein Berater nimmt bei passender Gelegenheit persönlich Kontakt mit Ihnen auf ,
           diskret und ohne Dringlichkeitsversprechen.
         </p>
         <p className="mt-6 text-[14px] leading-relaxed text-[#86868b]">
@@ -232,7 +232,7 @@ export function SearchBriefContactForm() {
             value={values.message}
             onChange={(e) => set("message")(e.target.value)}
             className="mt-2 w-full resize-y rounded-2xl border border-black/[0.08] bg-[#fafafa] px-4 py-3 text-[15px] leading-relaxed text-[#1d1d1f] outline-none ring-brand-900/0 transition placeholder:text-[#aeaeb2] focus:border-brand-500/40 focus:bg-white focus:ring-2 focus:ring-brand-500/25"
-            placeholder="Kontext zur Position, Branche, Zeitrahmen — je nachdem, was für Sie sinnvoll ist."
+            placeholder="Kontext zur Position, Branche, Zeitrahmen : je nachdem, was für Sie sinnvoll ist."
             aria-invalid={fieldErrors.message ? true : undefined}
             aria-describedby={fieldErrors.message ? `${formId}-msg-err` : undefined}
           />

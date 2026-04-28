@@ -85,7 +85,7 @@ export default function ImportLegacyPostsPage() {
             publishedAt: pub,
           });
         } catch {
-          previews.push({ title: "(ungültige Zeile)", slug: "—", excerpt: "", publishedAt: null });
+          previews.push({ title: "(ungültige Zeile)", slug: "n/a", excerpt: "", publishedAt: null });
         }
       }
       setRows(previews);
@@ -264,7 +264,7 @@ export default function ImportLegacyPostsPage() {
                       <tr key={`${r.slug}-${i}`} className="border-t border-black/[0.06]">
                         <td className="max-w-[200px] truncate px-3 py-2 font-mono text-[12px]">{r.slug}</td>
                         <td className="max-w-[280px] truncate px-3 py-2">{r.title}</td>
-                        <td className="whitespace-nowrap px-3 py-2 text-[#6e6e73]">{r.publishedAt ?? "—"}</td>
+                        <td className="whitespace-nowrap px-3 py-2 text-[#6e6e73]">{r.publishedAt ?? "keine Angabe"}</td>
                       </tr>
                     ))}
                   </tbody>

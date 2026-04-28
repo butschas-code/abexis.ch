@@ -7,7 +7,7 @@ import { fokusPageHeroImages } from "@/data/site-images";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
-// ─── Static data — module level, no re-allocation ────────────────────────────
+// ─── Static data : module level, no re-allocation ────────────────────────────
 
 const meta = fokusthemenMeta.find((m) => m.slug === "projektmanagement")!;
 const heroImage = fokusPageHeroImages["projektmanagement"];
@@ -37,7 +37,7 @@ const handlungsfelder = [
     items: [
       "Projektbeteiligte und Betroffene systematisch kartieren",
       "Kommunikation und Einbindung je Stakeholdergruppe gestalten",
-      "Erwartungen aktiv managen — nicht nur erfüllen",
+      "Erwartungen aktiv managen : nicht nur erfüllen",
     ],
   },
   {
@@ -124,7 +124,7 @@ const nutzen = [
   {
     num: "01",
     title: "Zielerreichung",
-    body: "Projekte, die professionell geführt werden, erreichen ihre Ziele — im Zeit- und Kostenrahmen.",
+    body: "Projekte, die professionell geführt werden, erreichen ihre Ziele : im Zeit- und Kostenrahmen.",
   },
   {
     num: "02",
@@ -134,7 +134,7 @@ const nutzen = [
   {
     num: "03",
     title: "Transparenz",
-    body: "Klares Reporting schafft Vertrauen bei Auftraggebern und Stakeholdern — und ermöglicht fundierte Entscheidungen.",
+    body: "Klares Reporting schafft Vertrauen bei Auftraggebern und Stakeholdern : und ermöglicht fundierte Entscheidungen.",
   },
   {
     num: "04",
@@ -149,7 +149,7 @@ const nutzen = [
   {
     num: "06",
     title: "Ressourceneffizienz",
-    body: "Geplante und gesteuerte Projekte nutzen Ressourcen gezielter — ohne unnötige Leerlaufzeiten oder Engpässe.",
+    body: "Geplante und gesteuerte Projekte nutzen Ressourcen gezielter : ohne unnötige Leerlaufzeiten oder Engpässe.",
   },
   {
     num: "07",
@@ -159,7 +159,7 @@ const nutzen = [
   {
     num: "08",
     title: "Stakeholder-Vertrauen",
-    body: "Professionelle Projektführung stärkt die Glaubwürdigkeit der Organisation — intern wie extern.",
+    body: "Professionelle Projektführung stärkt die Glaubwürdigkeit der Organisation : intern wie extern.",
   },
 ] as const;
 
@@ -223,12 +223,12 @@ export function FokusProjektmanagement() {
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Projekte scheitern selten an der Idee — sie scheitern an der Führung.
+          Projekte scheitern selten an der Idee : sie scheitern an der Führung.
         </h1>
         <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
           Unklare Ziele, fehlende Ressourcen, schwache Governance und zu späte Eskalation
           kosten Unternehmen täglich Zeit und Geld. Wir bringen Fachkompetenz, Methodik und
-          Erfahrung mit — damit Ihre Projekte liefern, was sie versprechen.
+          Erfahrung mit : damit Ihre Projekte liefern, was sie versprechen.
         </p>
         <div className="mt-10 flex flex-wrap items-center gap-3">
           <HeroProjectRealityCheckCta />
@@ -250,10 +250,10 @@ export function FokusProjektmanagement() {
         </div>
       </PageHero>
 
-      {/* ── 2. SPLIT PANEL — Projektleitung vs. Projektassessment ────────── */}
+      {/* ── 2. SPLIT PANEL : Projektleitung vs. Projektassessment ────────── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half — warm linen */}
+          {/* Left half : warm linen */}
           <div className="relative bg-[#faf8f2]">
             <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
@@ -266,14 +266,14 @@ export function FokusProjektmanagement() {
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
                 Wir übernehmen die Leitung von Projekten, in denen interne Ressourcen oder
-                Methodenkompetenz fehlen — oder unterstützen bestehende Projektteams gezielt
+                Methodenkompetenz fehlen : oder unterstützen bestehende Projektteams gezielt
                 dort, wo Verstärkung am meisten bewirkt.
               </p>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
 
-          {/* Right half — navy */}
+          {/* Right half : navy */}
           <div className="relative bg-[#1a2260]">
             <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
@@ -407,7 +407,7 @@ export function FokusProjektmanagement() {
               <span className="text-[11px] text-white/30">04 Phasen</span>
             </div>
             <h2 className="mt-8 max-w-[28ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
-              Vom Projektauftrag zur geordneten Übergabe — strukturiert, transparent, lieferfähig.
+              Vom Projektauftrag zur geordneten Übergabe : strukturiert, transparent, lieferfähig.
             </h2>
             <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
               {prozessphasen.map((phase, i) => (
@@ -436,7 +436,7 @@ export function FokusProjektmanagement() {
               ))}
             </div>
             <p className="mt-8 max-w-[60ch] text-[15px] leading-relaxed text-white/50">
-              Wir passen Methodik und Intensität an Ihr Projekt an — ob klassisch, agil oder
+              Wir passen Methodik und Intensität an Ihr Projekt an : ob klassisch, agil oder
               hybrid. Entscheidend ist nicht die Methode, sondern dass die richtigen Dinge
               zur richtigen Zeit getan werden.
             </p>
@@ -459,7 +459,7 @@ export function FokusProjektmanagement() {
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
                   Der Unterschied zwischen einem gelieferten und einem gescheiterten Projekt
-                  liegt fast immer in der Führung — nicht in der Komplexität des Themas.
+                  liegt fast immer in der Führung : nicht in der Komplexität des Themas.
                 </p>
                 <Link
                   href="/kontakt"
@@ -505,7 +505,7 @@ export function FokusProjektmanagement() {
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
                 Unsere Berater haben Projekte in verschiedensten Branchen, Technologien und
-                Unternehmensstrukturen geleitet. Wir bringen nicht nur Methodik — sondern
+                Unternehmensstrukturen geleitet. Wir bringen nicht nur Methodik : sondern
                 das Urteilsvermögen, das aus hunderten realer Projektsituationen entsteht.
               </p>
             </div>
@@ -518,7 +518,7 @@ export function FokusProjektmanagement() {
                   {
                     num: "01",
                     title: "Ressourcenengpass intern",
-                    body: "Das Projekt ist strategisch wichtig, aber die internen Kapazitäten für eine professionelle Leitung fehlen. Wir übernehmen die Führung — nahtlos und umsetzungsorientiert.",
+                    body: "Das Projekt ist strategisch wichtig, aber die internen Kapazitäten für eine professionelle Leitung fehlen. Wir übernehmen die Führung : nahtlos und umsetzungsorientiert.",
                   },
                   {
                     num: "02",
@@ -528,7 +528,7 @@ export function FokusProjektmanagement() {
                   {
                     num: "03",
                     title: "Unabhängige Beurteilung gefordert",
-                    body: "VR, Steuerungsausschuss oder Auftraggeber benötigen eine externe Einschätzung zum Projektstatus — ehrlich, fundiert und ohne interne Befangenheit.",
+                    body: "VR, Steuerungsausschuss oder Auftraggeber benötigen eine externe Einschätzung zum Projektstatus : ehrlich, fundiert und ohne interne Befangenheit.",
                   },
                 ].map((s) => (
                   <div key={s.num} className="relative bg-white px-7 py-8">
@@ -573,7 +573,7 @@ export function FokusProjektmanagement() {
                 Ihr nächstes Projekt verdient eine solide Grundlage.
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
-                In einem kostenlosen 30-Minuten-Erstgespräch besprechen wir Ihr Vorhaben — ob
+                In einem kostenlosen 30-Minuten-Erstgespräch besprechen wir Ihr Vorhaben : ob
                 Unterstützung bei der Umsetzung, eine unabhängige Beurteilung oder eine
                 vollständige Projektleitung gefragt ist.
               </p>

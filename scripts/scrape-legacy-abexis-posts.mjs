@@ -206,7 +206,7 @@ async function main() {
       const row = extractPost(html, base, path, listTitle);
       if (!row.title) row.title = listTitle || row.slug;
       if (!row.body) {
-        console.log("EMPTY BODY — skipped");
+        console.log("EMPTY BODY - skipped");
         continue;
       }
       results.push(row);

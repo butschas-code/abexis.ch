@@ -7,7 +7,7 @@ import { fokusPageHeroImages } from "@/data/site-images";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
-// ─── Static data — module level, no re-allocation ────────────────────────────
+// ─── Static data : module level, no re-allocation ────────────────────────────
 
 const meta = fokusthemenMeta.find((m) => m.slug === "vertriebmarketing")!;
 const heroImage = fokusPageHeroImages["vertriebmarketing"];
@@ -130,7 +130,7 @@ const nutzen = [
   {
     num: "02",
     title: "Effizienz",
-    body: "Weniger Streuverlust — das Team fokussiert sich auf die richtigen Kunden mit dem richtigen Angebot.",
+    body: "Weniger Streuverlust : das Team fokussiert sich auf die richtigen Kunden mit dem richtigen Angebot.",
   },
   {
     num: "03",
@@ -160,7 +160,7 @@ const nutzen = [
   {
     num: "08",
     title: "Alignment",
-    body: "Marketing und Vertrieb ziehen am selben Strick — gemeinsame Ziele, gemeinsame Sprache, gemeinsame Wirkung.",
+    body: "Marketing und Vertrieb ziehen am selben Strick : gemeinsame Ziele, gemeinsame Sprache, gemeinsame Wirkung.",
   },
 ] as const;
 
@@ -251,10 +251,10 @@ export function FokusVertriebMarketing() {
         </div>
       </PageHero>
 
-      {/* ── 2. SPLIT PANEL — Vertrieb vs. Marketing ──────────────────────── */}
+      {/* ── 2. SPLIT PANEL : Vertrieb vs. Marketing ──────────────────────── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half — warm linen */}
+          {/* Left half : warm linen */}
           <div className="relative bg-[#faf8f2]">
             <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
@@ -274,7 +274,7 @@ export function FokusVertriebMarketing() {
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
 
-          {/* Right half — navy */}
+          {/* Right half : navy */}
           <div className="relative bg-[#1a2260]">
             <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
@@ -296,7 +296,7 @@ export function FokusVertriebMarketing() {
         </div>
       </MotionSection>
 
-      {/* ── 3. HANDLUNGSFELDER — Alternating spine ───────────────────────── */}
+      {/* ── 3. HANDLUNGSFELDER : Alternating spine ───────────────────────── */}
       <section id="handlungsfelder" className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
@@ -309,7 +309,7 @@ export function FokusVertriebMarketing() {
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
                   Vertrieb und Marketing wirken auf mehreren Ebenen. Wir helfen Ihnen, die
-                  richtigen Prioritäten zu setzen — und konsequent umzusetzen.
+                  richtigen Prioritäten zu setzen : und konsequent umzusetzen.
                 </p>
                 <Link
                   href="/kontakt"
@@ -328,7 +328,7 @@ export function FokusVertriebMarketing() {
                 </Link>
               </div>
 
-              {/* Right: alternating spine — desktop / simple list — mobile */}
+              {/* Right: alternating spine : desktop / simple list : mobile */}
               <div>
                 {/* ── Desktop: alternating two-column spine ── */}
                 <div className="hidden lg:block">
@@ -376,7 +376,7 @@ export function FokusVertriebMarketing() {
         </MotionSection>
       </section>
 
-      {/* ── DESIGN THINKING — Problemraum / Lösungsraum ─────────────────── */}
+      {/* ── DESIGN THINKING : Problemraum / Lösungsraum ─────────────────── */}
       <section className="bg-white">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
@@ -386,12 +386,12 @@ export function FokusVertriebMarketing() {
                   Denkrahmen
                 </p>
                 <h2 className="mt-4 text-[clamp(1.5rem,3vw+0.5rem,2.125rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#1d1d1f]">
-                  Vom Problem zur Lösung — methodisch und kundenorientiert.
+                  Vom Problem zur Lösung : methodisch und kundenorientiert.
                 </h2>
               </div>
               <p className="text-[16px] leading-relaxed text-[#6e6e73] md:pb-1">
                 Bevor Massnahmen definiert werden, stehen Verstehen und Beobachten. Wir arbeiten
-                im Problemraum, bevor wir in den Lösungsraum wechseln — das verhindert teure
+                im Problemraum, bevor wir in den Lösungsraum wechseln : das verhindert teure
                 Antworten auf die falschen Fragen.
               </p>
             </div>
@@ -409,7 +409,7 @@ export function FokusVertriebMarketing() {
               {[
                 { phase: "Problemraum", label: "Verstehen & Beobachten", body: "Kundenbedürfnisse, Marktdynamik und Vertriebsrealität tiefgreifend erfassen, bevor Lösungen entworfen werden." },
                 { phase: "Synthese", label: "Muster erkennen", body: "Erkenntnisse verdichten, Hypothesen formulieren und die eigentlichen Hebel von den Symptomen trennen." },
-                { phase: "Lösungsraum", label: "Entwickeln & Testen", body: "Ideen strukturiert entwickeln, priorisieren und in der Praxis validieren — iterativ statt auf einmal." },
+                { phase: "Lösungsraum", label: "Entwickeln & Testen", body: "Ideen strukturiert entwickeln, priorisieren und in der Praxis validieren : iterativ statt auf einmal." },
               ].map((item) => (
                 <div key={item.phase} className="rounded-xl border border-black/[0.06] bg-white px-5 py-5">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#45b3e2]">
@@ -441,7 +441,7 @@ export function FokusVertriebMarketing() {
             Grundsatz
           </p>
           <blockquote className="mt-8 text-[clamp(1.375rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.22] tracking-[-0.025em] text-white text-balance">
-            &ldquo;Vertrieb und Marketing sind keine getrennten Welten — sie sind zwei Seiten
+            &ldquo;Vertrieb und Marketing sind keine getrennten Welten : sie sind zwei Seiten
             desselben Wachstumshebels. Wer sie ausrichtet, wächst. Wer sie entkoppelt, kämpft
             mit sich selbst.&rdquo;
           </blockquote>
@@ -455,7 +455,7 @@ export function FokusVertriebMarketing() {
         </div>
       </section>
 
-      {/* ── 5. PROZESSPHASEN — Dark navy phase grid ──────────────────────── */}
+      {/* ── 5. PROZESSPHASEN : Dark navy phase grid ──────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
         <div
           className="pointer-events-none absolute inset-0"
@@ -476,7 +476,7 @@ export function FokusVertriebMarketing() {
             </div>
 
             <h2 className="mt-8 max-w-[28ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
-              Von der Diagnose zur performanten Vertriebsorganisation — strukturiert und messbar.
+              Von der Diagnose zur performanten Vertriebsorganisation : strukturiert und messbar.
             </h2>
 
             <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
@@ -509,13 +509,13 @@ export function FokusVertriebMarketing() {
             <p className="mt-8 max-w-[60ch] text-[15px] leading-relaxed text-white/50">
               Jedes Engagement beginnt mit einer ehrlichen Bestandsaufnahme. Je nach Ausgangslage
               arbeiten wir gezielt an einzelnen Hebeln oder begleiten Sie durch einen umfassenden
-              Go-to-Market-Aufbau — immer mit klaren Zielen und messbaren Ergebnissen.
+              Go-to-Market-Aufbau : immer mit klaren Zielen und messbaren Ergebnissen.
             </p>
           </div>
         </MotionSection>
       </section>
 
-      {/* ── 6. NUTZEN — Sticky left + card grid ──────────────────────────── */}
+      {/* ── 6. NUTZEN : Sticky left + card grid ──────────────────────────── */}
       <section className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
@@ -530,7 +530,7 @@ export function FokusVertriebMarketing() {
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                  Die Wirkung zeigt sich nicht nur im Umsatz — sondern in der Art, wie ein
+                  Die Wirkung zeigt sich nicht nur im Umsatz : sondern in der Art, wie ein
                   Unternehmen am Markt auftritt, wächst und seine Kunden bindet.
                 </p>
                 <Link
@@ -564,12 +564,12 @@ export function FokusVertriebMarketing() {
         </MotionSection>
       </section>
 
-      {/* ── 7. GUIDE — Unsere Rolle ──────────────────────────────────────── */}
+      {/* ── 7. GUIDE : Unsere Rolle ──────────────────────────────────────── */}
       <section className="bg-white">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
 
-            {/* Header — two-column */}
+            {/* Header : two-column */}
             <div className="grid gap-8 border-b border-black/[0.06] pb-12 md:grid-cols-[1fr_1fr] md:gap-20 md:items-end">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
@@ -580,7 +580,7 @@ export function FokusVertriebMarketing() {
                 </h2>
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
-                Viele Unternehmen haben aktive Vertriebsteams und laufende Marketingmassnahmen —
+                Viele Unternehmen haben aktive Vertriebsteams und laufende Marketingmassnahmen ,
                 aber das Wachstum bleibt aus. Wir helfen Ihnen herauszufinden, wo die eigentlichen
                 Hebel liegen, und begleiten Sie beim Umsetzen.
               </p>
@@ -596,12 +596,12 @@ export function FokusVertriebMarketing() {
                   {
                     num: "01",
                     title: "Stagnation trotz Aktivität",
-                    body: "Das Team ist beschäftigt, aber der Umsatz wächst nicht. Ziele werden verfehlt, ohne dass klar ist warum — Diagnose und Neuausrichtung sind gefragt.",
+                    body: "Das Team ist beschäftigt, aber der Umsatz wächst nicht. Ziele werden verfehlt, ohne dass klar ist warum : Diagnose und Neuausrichtung sind gefragt.",
                   },
                   {
                     num: "02",
                     title: "Vertrieb und Marketing im Silo",
-                    body: "Beide Funktionen arbeiten mit unterschiedlichen Zielen, Sprachen und Messgrössen. Das kostet Wirkung — und Energie, die im Markt fehlt.",
+                    body: "Beide Funktionen arbeiten mit unterschiedlichen Zielen, Sprachen und Messgrössen. Das kostet Wirkung : und Energie, die im Markt fehlt.",
                   },
                   {
                     num: "03",
@@ -654,7 +654,7 @@ export function FokusVertriebMarketing() {
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
                 In einem kostenlosen 30-Minuten-Erstgespräch klären wir gemeinsam, wo Ihr
-                Vertrieb und Marketing heute stehen — und wo die grössten Hebel liegen.
+                Vertrieb und Marketing heute stehen : und wo die grössten Hebel liegen.
               </p>
 
               <div className="mt-7 flex flex-wrap gap-4">

@@ -15,7 +15,7 @@ export type ListInsightsOptions = {
 };
 
 /**
- * Latest published posts across abexis, search, and shared (`both`) surfaces — unified Insights index.
+ * Latest published posts across abexis, search, and shared (`both`) surfaces : unified Insights index.
  * Optionally filtered by category (in-memory filter).
  */
 export async function listInsightsPublishedPosts(options: ListInsightsOptions = {}): Promise<PublishedPostWithId[]> {
@@ -46,7 +46,7 @@ export function partitionFeaturedForGrid(
   return posts.filter((p) => !ids.has(p.id));
 }
 
-/** Cached author name lookup — returns plain record for cache serializability. */
+/** Cached author name lookup : returns plain record for cache serializability. */
 const _fetchAuthorNamesCached = unstable_cache(
   async (ids: string[]): Promise<Record<string, string>> => {
     const db = getAdminFirestore();

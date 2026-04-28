@@ -1,7 +1,7 @@
 import { BlogBody } from "@/components/content/BlogBody";
 
 type Props = {
-  /** Firestore `posts.body` — JSON envelope or legacy HTML. */
+  /** Firestore `posts.body` : JSON envelope or legacy HTML. */
   storedBody: string;
 };
 

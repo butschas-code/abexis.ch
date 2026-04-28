@@ -11,7 +11,7 @@ export function visiblePostSiteKeysForDeployment(deployment: PublicDeploymentSit
 }
 
 /**
- * Same as {@link visiblePostSiteKeysForDeployment} — stable array for `where('site', 'in', …)` (max 10 entries).
+ * Same as {@link visiblePostSiteKeysForDeployment} : stable array for `where('site', 'in', …)` (max 10 entries).
  */
 export function visiblePostSitesInClause(deployment: PublicDeploymentSite): Array<"abexis" | "search" | "both"> {
   return visiblePostSiteKeysForDeployment(deployment);
@@ -25,7 +25,7 @@ export function visibleCategorySiteKeysForDeployment(deployment: PublicDeploymen
   return ["abexis", "shared"];
 }
 
-/** All `posts.site` values — for unified Insights (`/blog`) listing and slug resolution across surfaces. */
+/** All `posts.site` values : for unified Insights (`/blog`) listing and slug resolution across surfaces. */
 export function allInsightsPostSitesInClause(): Array<"abexis" | "search" | "both"> {
   return ["abexis", "search", "both"];
 }

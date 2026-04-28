@@ -16,6 +16,8 @@ export const homeTextureBar = HOME[1];
 
 /** Kachel-Bilder der sechs Fokusthemen, Reihenfolge wie auf der alten Startseite */
 export const serviceCardImages = {
+  projectfitcheck: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=82",
+  "executive-search": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=82",
   "digitale-transformation": HOME[2],
   unternehmensstrategie: HOME[3],
   vertriebmarketing: HOME[4],
@@ -24,7 +26,7 @@ export const serviceCardImages = {
   projektmanagement: HOME[7],
 } as const;
 
-/** Breites Teaser-Bild unter der Blog-Liste (nicht HOME[8] / 68671b2e — dort früheres Blog-Teaser) */
+/** Breites Teaser-Bild unter der Blog-Liste (nicht HOME[8] / 68671b2e : dort früheres Blog-Teaser) */
 export const homeBlogTeaserImage = HOME[29];
 
 /** Team-Portraits (Reihenfolge wie auf der alten Startseite) */
@@ -43,10 +45,19 @@ export const fokusPageHeroImages = {
   projektmanagement: (scraped["https://www.abexis.ch/fokusthemen/projektmanagement"] as string[])[1],
 } as const;
 
-/** Startseiten-Hero: markantes Bild aus «Digitale Transformation» */
-export const homeHeroImage = fokusPageHeroImages["digitale-transformation"];
+/** Startseiten-Hero: eigenes Bild, in Firebase Storage hochgeladen (site/hero/home-hero.png) */
+export const homeHeroImage = "https://storage.googleapis.com/abexis-cms.firebasestorage.app/site/hero/home-hero.png";
 
-/** Kontaktseite — separates Hero-Motiv (nicht Startseiten-Hero). */
+/** Project Reality Check : Infografik «Warum Projekte selten scheitern aber oft entgleisen» (Warnsignale-Sektion) */
+export const prcChallengesInfographic = "https://storage.googleapis.com/abexis-cms.firebasestorage.app/site/prc/prc-challenges-infographic.png";
+
+/** Project Reality Check : Hexagonales 6-Dimensionen-Modell (Dimensionen-Sektion) */
+export const prcDimensionenModell = "https://storage.googleapis.com/abexis-cms.firebasestorage.app/site/prc/prc-6-dimensionen-modell.png";
+
+/** Project Reality Check : Ablauf-Timeline Tag 1-5 (Ablauf-Sektion) */
+export const prcAblaufTimeline = "https://storage.googleapis.com/abexis-cms.firebasestorage.app/site/prc/prc-ablauf-timeline.jpg";
+
+/** Kontaktseite : separates Hero-Motiv (nicht Startseiten-Hero). */
 export const kontaktPageHeroImage = fokusPageHeroImages.unternehmensstrategie;
 
 /** Blog-Übersicht: Cover-Thumbnails in Listenreihenfolge (ohne Logo) */

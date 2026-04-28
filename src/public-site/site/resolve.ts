@@ -44,7 +44,7 @@ export function resolveDeploymentSiteFromHost(host: string | null | undefined): 
 }
 
 /**
- * **Config-first** deployment key — always available (build, API, Workers without request).
+ * **Config-first** deployment key : always available (build, API, Workers without request).
  * Set per project: `NEXT_PUBLIC_CMS_SITE_ID=abexis` | `search`.
  */
 export function getDeploymentSiteFromEnv(): PublicDeploymentSite {

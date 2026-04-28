@@ -9,7 +9,7 @@
  * **Query categories:** `visibleCategorySiteKeysForDeployment(site)` (+ normalize legacy `both` → `shared` via
  * `@/lib/cms/normalize-category-site`).
  *
- * @example Server page — use resolved site (already wired in CMS loaders):
+ * @example Server page : use resolved site (already wired in CMS loaders):
  * ```tsx
  * import { getResolvedPublicDeploymentSite } from "@/public-site/site";
  * export default async function Page() {

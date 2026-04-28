@@ -56,7 +56,7 @@ export type SiteSwitchBarLink = {
 };
 
 /**
- * `settings/{docId}` — singleton-style document (`CMS_SETTINGS_GLOBAL_DOC_ID`).
+ * `settings/{docId}` : singleton-style document (`CMS_SETTINGS_GLOBAL_DOC_ID`).
  */
 export type SiteSettings = {
   contactBySite: Partial<Record<DeploymentSiteKey, SiteContactDetails>>;
@@ -72,7 +72,7 @@ export type SiteSettings = {
 
 export const CMS_SETTINGS_GLOBAL_DOC_ID = "global" as const;
 
-/** Legacy names — prefer `Site*` types. */
+/** Legacy names : prefer `Site*` types. */
 export type CmsSiteContactDetails = SiteContactDetails;
 export type CmsFooterLegalLink = SiteFooterLegalLink;
 export type CmsFooterColumn = SiteFooterColumn;

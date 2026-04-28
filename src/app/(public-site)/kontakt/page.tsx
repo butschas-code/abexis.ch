@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { BookingCta } from "@/components/site/BookingCta";
 import { KontaktMapIframe } from "@/components/site/KontaktMapIframe";
 import { KontaktPageForm } from "@/components/site/KontaktPageForm";
 import { SearchBriefContactForm } from "@/components/site/search/SearchBriefContactForm";
@@ -10,10 +10,10 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 export const metadata = {
   title: "Kontakt",
-  description: "Wir freuen uns auf Ihre Kontaktaufnahme — per Telefon, E-Mail oder Kontaktformular.",
+  description: "Wir freuen uns auf Ihre Kontaktaufnahme : per Telefon, E-Mail oder Kontaktformular.",
   openGraph: {
     title: "Kontakt | Abexis",
-    description: "Wir freuen uns auf Ihre Kontaktaufnahme — Unverbindlicher Austausch oder konkrete Anfrage.",
+    description: "Wir freuen uns auf Ihre Kontaktaufnahme : Unverbindlicher Austausch oder konkrete Anfrage.",
     images: [{ url: kontaktPageHeroImage }],
   },
 };
@@ -29,14 +29,15 @@ export default async function KontaktPage() {
         heroImage={kontaktPageHeroImage}
         description={
           <p>
-            Teilen Sie uns Ihr Anliegen mit — wir behandeln Ihre Angaben vertraulich und melden uns zurück, sobald es
+            Teilen Sie uns Ihr Anliegen mit : wir behandeln Ihre Angaben vertraulich und melden uns zurück, sobald es
             sachlich passt.
           </p>
         }
       >
         <SchemaMarkup
-          type="BreadcrumbList"
-          data={[
+          type="Contact"
+          path="/kontakt"
+          breadcrumbs={[
             { name: "Startseite", url: "/" },
             { name: "Kontakt", url: "/kontakt" },
           ]}
@@ -95,14 +96,15 @@ export default async function KontaktPage() {
       heroImage={kontaktPageHeroImage}
       description={
         <p>
-          Schreiben Sie uns über das Formular — oder erreichen Sie uns direkt per E-Mail und Telefon. Einen Termin können
+          Schreiben Sie uns über das Formular : oder erreichen Sie uns direkt per E-Mail und Telefon. Einen Termin können
           Sie bei Bedarf auch online wählen.
         </p>
       }
     >
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        type="Contact"
+        path="/kontakt"
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Kontakt", url: "/kontakt" },
         ]}
@@ -164,6 +166,7 @@ export default async function KontaktPage() {
               </div>
             </dl>
           </div>
+          <BookingCta />
           <KontaktPageForm bookingUrl={siteConfig.bookingUrlDe} />
         </div>
         <KontaktMapIframe className="lg:sticky lg:top-28" />

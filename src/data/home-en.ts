@@ -1,5 +1,5 @@
 /**
- * Inhalt der bisherigen englischen Startseite (/en/home) — Kernbotschaften und Einleitungspassagen.
+ * Inhalt der bisherigen englischen Startseite (/en/home) : Kernbotschaften und Einleitungspassagen.
  * Detailseiten zu Fokusthemen auf Englisch können bei Bedarf analog zu den DE-Seiten ergänzt werden.
  */
 export const homeEn = {

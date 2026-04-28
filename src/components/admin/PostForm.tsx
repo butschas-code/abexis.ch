@@ -323,7 +323,7 @@ const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
     const heroAlt = escapeHtml(input.heroImageAlt?.trim() || "");
     const w = window.open("", "_blank", "noopener,noreferrer");
     if (!w) {
-      setError("Popup blockiert — bitte Popups für diese Seite erlauben, um die Vorschau zu öffnen.");
+      setError("Popup blockiert : bitte Popups für diese Seite erlauben, um die Vorschau zu öffnen.");
       return;
     }
     w.document.write(`<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -613,7 +613,7 @@ const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
                 value={input.authorId || "_"}
                 onChange={(e) => setInput((s) => ({ ...s, authorId: e.target.value }))}
               >
-                <option value="_">— noch nicht zugewiesen —</option>
+                <option value="_">, noch nicht zugewiesen ,</option>
                 {authors.map((a) => (
                   <option key={a.id} value={a.id}>
                     {a.name}

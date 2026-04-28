@@ -26,15 +26,15 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: { absolute: "Abexis — Klarheit, wenn sie fehlt" },
+  title: { absolute: "Abexis : Klarheit, wenn sie fehlt" },
   description:
-    "Abexis schafft Klarheit, wenn Projekte die Orientierung verlieren — mit Project Reality Check, Beratung und Executive Search. Schweiz.",
+    "Abexis schafft Klarheit, wenn Projekte die Orientierung verlieren : mit Project Reality Check, Beratung und Executive Search. Schweiz.",
 };
 export default function HomePage() {
   const h = homeHeroContent;
   return (
     <>
-      <SchemaMarkup type="WebSite" />
+      <SchemaMarkup type="Home" path="/" />
       <HomeHero>
         <div className="min-w-0 max-w-[40rem] md:max-w-[44rem]">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{h.eyebrow}</p>
@@ -67,17 +67,18 @@ export default function HomePage() {
 
       <HomeChallengeSection />
 
-      <HomeWhoWeAreSection />
-
       <HomePrcSection />
 
       <HomeProcessSection />
+
+      <HomeWhoWeAreSection />
 
       <HomeLeistungenGridSection />
 
       <HomeBlogTeasers />
 
       <HomeVacancyTeasers />
+
 
       <MotionSection>
         <TestimonialsSection />

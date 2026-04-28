@@ -1,4 +1,4 @@
-# Legacy blog → Firestore CMS import
+# Legacy blog : Firestore CMS import
 
 Import published legacy posts (e.g. from [abexis.ch/blog](https://abexis.ch/blog)) into the `posts` collection using a JSON file.
 
@@ -7,7 +7,7 @@ Import published legacy posts (e.g. from [abexis.ch/blog](https://abexis.ch/blog
 Either:
 
 - **Object:** `{ "version"?: number, "posts": [ … ] }`, or
-- **Array:** `[ … ]` — same format as `npm run scrape:blog` → `src/data/blog-posts.json` (root-level array).
+- **Array:** `[ … ]` : same format as `npm run scrape:blog` → `src/data/blog-posts.json` (root-level array).
 
 | Field      | Required | Description                          |
 | ---------- | -------- | ------------------------------------ |
@@ -50,24 +50,24 @@ Writes **`data/legacy-abexis-posts.json`** (`title`, `slug`, `excerpt`, `body`, 
 npm run cms:import:legacy -- data/legacy-abexis-posts.json
 ```
 
-**Alternative:** older raw scrape (`src/data/blog-posts.json` via `npm run scrape:blog`) still works — the importer accepts `body` / `bodyHtml` and `publishedAt` / `publishedISO`. URL-encoded slugs are normalized on import.
+**Alternative:** older raw scrape (`src/data/blog-posts.json` via `npm run scrape:blog`) still works : the importer accepts `body` / `bodyHtml` and `publishedAt` / `publishedISO`. URL-encoded slugs are normalized on import.
 
-Option B — export from Webflow / another tool into the same field names.
+Option B : export from Webflow / another tool into the same field names.
 
 ## 3. Prerequisites
 
 1. **Firebase Admin** env vars (same as `npm run cms:seed:dev`):
 
    - `FIREBASE_PROJECT_ID` (or project id inside the JSON)
-   - `FIREBASE_SERVICE_ACCOUNT_JSON` — one-line service account JSON **or** Application Default Credentials + project id.
+   - `FIREBASE_SERVICE_ACCOUNT_JSON` : one-line service account JSON **or** Application Default Credentials + project id.
 
-2. **Author document** — default author id is `seed_author_editorial`. Run `npm run cms:seed:dev` once so that author exists, **or** set:
+2. **Author document** : default author id is `seed_author_editorial`. Run `npm run cms:seed:dev` once so that author exists, **or** set:
 
    ```bash
    export CMS_LEGACY_IMPORT_AUTHOR_ID="<your-firestore-author-doc-id>"
    ```
 
-3. **Safety guard** — production requires an explicit flag:
+3. **Safety guard** : production requires an explicit flag:
 
    - Local: default `NODE_ENV=development` when using `npm run cms:import:legacy` is enough.
    - Production/staging: `CMS_LEGACY_IMPORT_ALLOW=1`.
@@ -104,12 +104,12 @@ node --env-file=.env.local --import tsx scripts/import-legacy-blog-posts.ts data
 
 The script prints:
 
-- `[imported]` — new document id, slug, title preview  
-- `[skip duplicate]` — slug already in Firestore  
-- `[skip invalid]` — validation / legacy error  
+- `[imported]` : new document id, slug, title preview  
+- `[skip duplicate]` : slug already in Firestore  
+- `[skip invalid]` : validation / legacy error  
 - Final **JSON summary** with counts and up to 30 invalid samples
 
 ## 7. Body & images
 
 - Inline images in `bodyHtml` are kept when they use **allowed** tags/attributes (`<img src="https://…">`, etc.); other markup is stripped to match `BlogBody` / `ArticleBody` behavior.
-- **Hero:** set `heroImageUrl` in JSON for the cover used by `CmsBlogPostView`. For `next/image` hosts not on the allowlist, add them in `next.config.ts` under `images.remotePatterns`.
+- **Hero:** set `heroImageUrl` in JSON for the cover used by `CmsBlogPostView`. For `next/image` hosts not on the allowlist, add them in `next.config.ts` under `images.remotePatterns`.` under `images.remotePatterns`.

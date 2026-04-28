@@ -101,7 +101,7 @@ export function AdminDashboardClient() {
     <AdminPageContainer>
       <AdminPageHeader
         title="Übersicht"
-        description="Kurzüberblick über Beiträge, Themen und Eingänge — gemeinsames CMS für abexis.ch und abexis-search.ch."
+        description="Kurzüberblick über Beiträge, Themen und Eingänge : gemeinsames CMS für abexis.ch und abexis-search.ch."
       />
 
       {listError ? (

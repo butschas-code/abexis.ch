@@ -1,7 +1,7 @@
 /**
  * @deprecated Import from `@/public-site/site` for new code.
  *
- * Legacy barrel — same semantics:
+ * Legacy barrel : same semantics:
  * - `getDeploymentSite()` = env-only (`NEXT_PUBLIC_CMS_SITE_ID`), for sync / build.
  * - For hostname-aware resolution use `getResolvedPublicDeploymentSite()` from `@/public-site/site`.
  */

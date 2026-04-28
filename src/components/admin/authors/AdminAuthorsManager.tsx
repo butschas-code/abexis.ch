@@ -70,7 +70,7 @@ export function AdminAuthorsManager() {
     <AdminPageContainer>
       <AdminPageHeader
         title="Autor:innen"
-        description="Personen, die auf Beiträgen erscheinen — mit Profil und Rolle."
+        description="Personen, die auf Beiträgen erscheinen : mit Profil und Rolle."
         actions={
           <Link
             href={CMS_PATHS.adminAuthorNew}
@@ -150,7 +150,7 @@ export function AdminAuthorsManager() {
                         </div>
                       </td>
                       <td className="hidden max-w-xs truncate px-4 py-3 text-[var(--apple-text-secondary)] sm:table-cell">
-                        {r.role || "—"}
+                        {r.role || ","}
                       </td>
                       <td className="whitespace-nowrap px-4 py-3 text-right">
                         <Link

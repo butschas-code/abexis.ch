@@ -106,15 +106,13 @@ export default async function BlogPostPage({ params }: Props) {
     >
       <SchemaMarkup
         type="Article"
+        path={`/blog/${post.slug}`}
         data={{
           title: post.title,
           image: heroImage,
           publishedAt: post.publishedISO,
         }}
-      />
-      <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        breadcrumbs={[
           { name: "Startseite", url: "/" },
           { name: "Insights", url: "/blog" },
           { name: post.title, url: `/blog/${post.slug}` },

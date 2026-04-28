@@ -30,7 +30,7 @@ export const site = {
   seoDefaults: {
     title: "Abexis Search",
     description:
-      "Abexis SEARCH ist spezialisiert auf die gezielte Besetzung von Führungs- und Schlüsselpositionen in anspruchsvollen Branchen – diskret, methodisch fundiert und mit echter Beratungskompetenz.",
+      "Abexis SEARCH ist spezialisiert auf die gezielte Besetzung von Führungs- und Schlüsselpositionen in anspruchsvollen Branchen - diskret, methodisch fundiert und mit echter Beratungskompetenz.",
     keywords: [
       "Stellen",
       "Vakanzen",
@@ -69,14 +69,14 @@ export const home = {
   heroMainLead:
     "Abexis SEARCH besetzt Führungs- und Schlüsselpositionen diskret, präzise und mit echter Beratungskompetenz. Wir bringen Organisationen mit Persönlichkeiten zusammen, die nicht nur passen, sondern Wirkung entfalten.",
   heroSupportingLead:
-    "Unsere Mandant:innen schätzen die Verbindung aus strukturierter Direktansprache, unternehmerischem Verständnis und einem klar geführten Suchprozess — für Besetzungen, die fachlich, menschlich und strategisch tragen.",
+    "Unsere Mandant:innen schätzen die Verbindung aus strukturierter Direktansprache, unternehmerischem Verständnis und einem klar geführten Suchprozess : für Besetzungen, die fachlich, menschlich und strategisch tragen.",
   introTitle: "Executive Search, Personalvermittlung",
   introLead:
     "Eine erfolgreiche und schnelle Besetzung von Schlüsselpositionen in Unternehmen ist aufwendig, Fehlentscheide resultieren fast immer in einer hohen Kostenfolge. Aus diesem Grund verlassen sich Entscheidungsträger oft auf spezialisierte Unternehmen wie die Abexis, welche den Rekrutierungsprozess neutral, effizient und professionell gestalten.",
   sectorsEyebrow: "Branchenexpertise",
   sectorsTitle: "Nur wer die Branchen kennt, versteht die Bedürfnisse der Unternehmen und kann sie gezielt beraten.",
   sectorsBody: [
-    "Bei Abexis Search setzen wir auf Tiefe statt Breite. Unsere Berater:innen sind in ausgewählten Branchen zu Hause – sie kennen die Dynamiken, sprechen die Sprache der Entscheider und verstehen, worauf es wirklich ankommt. Diese Fokussierung erlaubt es uns, Entwicklungen frühzeitig zu erkennen und tragfähige Beziehungen zu gefragten Talenten aufzubauen.",
+    "Bei Abexis Search setzen wir auf Tiefe statt Breite. Unsere Berater:innen sind in ausgewählten Branchen zu Hause - sie kennen die Dynamiken, sprechen die Sprache der Entscheider und verstehen, worauf es wirklich ankommt. Diese Fokussierung erlaubt es uns, Entwicklungen frühzeitig zu erkennen und tragfähige Beziehungen zu gefragten Talenten aufzubauen.",
   ],
   sectorsListHeading: "Unsere Branchenschwerpunkte:",
   sectorsList: [
@@ -92,33 +92,33 @@ export const home = {
   ],
   networkTitle: "Unser Netzwerk, Ihr Vorteil",
   networkBody: [
-    "Durch unser grosses Netzwerk qualifizierter Fach- und Führungskräfte profitieren Sie von einer gezielten und effektiven Suche nach den besten Talenten. Mit modernsten Recherchemethoden gewährleisten wir, dass Sie Zugang zu Top-Kandidaten erhalten, die perfekt auf Ihre Anforderungen abgestimmt sind. Unsere Mitgliedschaften in verschiedenen Branchenverbänden erweitern dieses Netzwerk zusätzlich und bieten Ihnen noch mehr Möglichkeiten. Besonders wertvoll: Durch die Direktansprache erreichen wir potenzielle Kandidaten, die auf herkömmlichen Jobplattformen nicht zu finden sind – ein entscheidender Vorteil für Ihre Besetzung von Schlüsselpositionen.",
+    "Durch unser grosses Netzwerk qualifizierter Fach- und Führungskräfte profitieren Sie von einer gezielten und effektiven Suche nach den besten Talenten. Mit modernsten Recherchemethoden gewährleisten wir, dass Sie Zugang zu Top-Kandidaten erhalten, die perfekt auf Ihre Anforderungen abgestimmt sind. Unsere Mitgliedschaften in verschiedenen Branchenverbänden erweitern dieses Netzwerk zusätzlich und bieten Ihnen noch mehr Möglichkeiten. Besonders wertvoll: Durch die Direktansprache erreichen wir potenzielle Kandidaten, die auf herkömmlichen Jobplattformen nicht zu finden sind - ein entscheidender Vorteil für Ihre Besetzung von Schlüsselpositionen.",
   ],
   qualityTitle: "Unser Qualitätsanspruch, Ihre Sicherheit für Zuverlässigkeit",
   qualityBody: [
-    "Wir legen höchste Qualitätsstandards bei der Personalsuche an und prüfen Kandidaten gründlich auf Fachkompetenz, persönliche Eigenschaften und kulturelle Passung. Mit unseren Assessmentverfahren – darunter Fachgespräche, Potenzialanalysen und Persönlichkeitstests – sichern Sie sich die besten Talente. So minimieren Sie Fehlbesetzungen und stärken Ihr Unternehmen nachhaltig.",
+    "Wir legen höchste Qualitätsstandards bei der Personalsuche an und prüfen Kandidaten gründlich auf Fachkompetenz, persönliche Eigenschaften und kulturelle Passung. Mit unseren Assessmentverfahren - darunter Fachgespräche, Potenzialanalysen und Persönlichkeitstests - sichern Sie sich die besten Talente. So minimieren Sie Fehlbesetzungen und stärken Ihr Unternehmen nachhaltig.",
   ],
   ctaBand:
     "Sie wollen mehr über unsere Leistungen erfahren? Wir freuen uns auf Ihre unverbindliche Kontaktaufnahme.",
   ctaBookingLine:
     "Gerne können Sie auch einen Termin für einen unverbindlichen Austausch vereinbaren:",
   ctaBookingLabel: "Termin planen",
-  /** Embedded profile text from legacy BaseKit `window.Profile` — preserved verbatim. */
-  profileExtended: `Abexis SEARCH ist spezialisiert auf die gezielte Besetzung von Führungs- und Schlüsselpositionen in anspruchsvollen Branchen – diskret, methodisch fundiert und mit echter Beratungskompetenz. Wir bringen Organisationen mit Persönlichkeiten zusammen, die nicht nur passen, sondern gestalten.
+  /** Embedded profile text from legacy BaseKit `window.Profile` : preserved verbatim. */
+  profileExtended: `Abexis SEARCH ist spezialisiert auf die gezielte Besetzung von Führungs- und Schlüsselpositionen in anspruchsvollen Branchen - diskret, methodisch fundiert und mit echter Beratungskompetenz. Wir bringen Organisationen mit Persönlichkeiten zusammen, die nicht nur passen, sondern gestalten.
 Unsere Mandant:innen schätzen unsere Kombination aus unternehmerischem Denken, strukturierter Direktansprache und tiefem Verständnis für Märkte, Geschäftsmodelle und Unternehmenskulturen.
 
 Unser Leistungsversprechen:
-•	Executive Search auf Augenhöhe – von C-Level bis zur strategisch wichtigen Fachrolle
-•	Personalvermittlung mit Tiefe – schnelle, fundierte Besetzungen auf Basis klarer Anforderungen
-•	Prozessklarheit & Verbindlichkeit – strukturierte Suche mit ehrlicher Beratung
-•	Candidate Experience auf Top-Niveau – wertschätzende, persönliche Betreuung aller Beteiligten
+•	Executive Search auf Augenhöhe - von C-Level bis zur strategisch wichtigen Fachrolle
+•	Personalvermittlung mit Tiefe - schnelle, fundierte Besetzungen auf Basis klarer Anforderungen
+•	Prozessklarheit & Verbindlichkeit - strukturierte Suche mit ehrlicher Beratung
+•	Candidate Experience auf Top-Niveau - wertschätzende, persönliche Betreuung aller Beteiligten
 •	Branchenfokus: Industrie, Technologie, MedTech, öffentlicher Sektor u. a.
 
-Wir sind überzeugt: Der richtige Mensch in der richtigen Rolle macht den Unterschied. Deshalb setzen wir auf Qualität vor Quantität – und auf Partnerschaften, die langfristig tragen.
+Wir sind überzeugt: Der richtige Mensch in der richtigen Rolle macht den Unterschied. Deshalb setzen wir auf Qualität vor Quantität - und auf Partnerschaften, die langfristig tragen.
 `,
   consultingCrosslink: {
     title: "Abexis Consulting",
-    body: "Abexis unterstützt darüber hinaus auch in ausgewählten Beratungsmandaten — getrennt organisiert unter abexis.ch.",
+    body: "Abexis unterstützt darüber hinaus auch in ausgewählten Beratungsmandaten : getrennt organisiert unter abexis.ch.",
     cta: "Zu Abexis Consulting",
   },
 } as const;
@@ -126,7 +126,7 @@ Wir sind überzeugt: Der richtige Mensch in der richtigen Rolle macht den Unters
 /** Copy for `/blog` (intro above cards). */
 export const insightsLanding = {
   articlesIntro:
-    "Unten finden Sie unsere aktuellen Beiträge — kompakte Impulse zu Führung, Karriere und Markt, für Kandidatinnen, Kandidaten und alle, die Executive Search aus der Praxis verstehen wollen.",
+    "Unten finden Sie unsere aktuellen Beiträge : kompakte Impulse zu Führung, Karriere und Markt, für Kandidatinnen, Kandidaten und alle, die Executive Search aus der Praxis verstehen wollen.",
 } as const;
 
 export const organization = {
@@ -139,23 +139,23 @@ export const organization = {
   values: [
     {
       title: "Verbindlichkeit in der Partnerschaft",
-      text: "– wir denken und handeln unternehmerisch im Sinne unserer Mandant:innen.",
+      text: "- wir denken und handeln unternehmerisch im Sinne unserer Mandant:innen.",
     },
     {
       title: "Tiefe im Prozess",
-      text: "– wir arbeiten analytisch, diskret und strukturiert.",
+      text: "- wir arbeiten analytisch, diskret und strukturiert.",
     },
     {
       title: "Wertschätzung im Dialog",
-      text: "– ob Kandidat:in oder Auftraggeber: Für uns zählen Mensch, Kontext und Wirkung.",
+      text: "- ob Kandidat:in oder Auftraggeber: Für uns zählen Mensch, Kontext und Wirkung.",
     },
     {
       title: "Klarheit im Anspruch",
-      text: "– wir übernehmen nur Mandate, von denen wir überzeugt sind.",
+      text: "- wir übernehmen nur Mandate, von denen wir überzeugt sind.",
     },
   ],
   closing:
-    "Unsere Arbeitsweise ist persönlich, professionell und geprägt vom Ziel, den entscheidenden Unterschied zu machen – für Menschen, Organisationen und Zukunftsthemen.",
+    "Unsere Arbeitsweise ist persönlich, professionell und geprägt vom Ziel, den entscheidenden Unterschied zu machen - für Menschen, Organisationen und Zukunftsthemen.",
   teamHeading: "Über uns",
   team: [
     {
@@ -184,7 +184,7 @@ export const organization = {
       name: "Sacha Moeller",
       role: "Partner",
       bio: [
-        "Sacha Moeller ist Partner bei Abexis SEARCH und verfügt über mehr als 20 Jahre Führungserfahrung in der Finanzindustrie und im Family Office, unter anderem in leitenden Funktionen bei UBS. Seine Expertise umfasst Business-, Risk- und Change-Management sowie komplexe Transformations- und Digitalisierungsprojekte. Er verbindet analytische Kompetenz mit empathischer Führung und fördert werteorientierte Kulturen. Bei Abexis SEARCH begleitet er Mandate in Finance, Risk, IT-Transformation und Human Capital – mit Fokus auf Wirkung und nachhaltigen Mehrwert.",
+        "Sacha Moeller ist Partner bei Abexis SEARCH und verfügt über mehr als 20 Jahre Führungserfahrung in der Finanzindustrie und im Family Office, unter anderem in leitenden Funktionen bei UBS. Seine Expertise umfasst Business-, Risk- und Change-Management sowie komplexe Transformations- und Digitalisierungsprojekte. Er verbindet analytische Kompetenz mit empathischer Führung und fördert werteorientierte Kulturen. Bei Abexis SEARCH begleitet er Mandate in Finance, Risk, IT-Transformation und Human Capital - mit Fokus auf Wirkung und nachhaltigen Mehrwert.",
       ],
       phone: "+41 78 604 87 65",
       email: "sacha.moeller@abexis.ch",
@@ -204,7 +204,7 @@ export const organization = {
   partnersHeading: "Partnerschaften und Verbände",
   partners: [
     "Wir arbeiten mit verschiedenen namhaften Unternehmen zusammen und haben strategische Partnerschaften aufgebaut. Wir sind Mitglied und aktiv in folgenden Verbänden und Fachvereinen.",
-    "Starke Partnerschaften und tragfähige Verbände entstehen dort, wo gemeinsame Werte auf klare Ziele treffen – und Vertrauen der verbindende Faktor ist.",
+    "Starke Partnerschaften und tragfähige Verbände entstehen dort, wo gemeinsame Werte auf klare Ziele treffen - und Vertrauen der verbindende Faktor ist.",
   ],
   /** Logo strip as published on legacy Unternehmen page (links + Hoststar assets). */
   partnerLogos: [

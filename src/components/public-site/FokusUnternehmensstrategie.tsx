@@ -7,7 +7,7 @@ import { fokusPageHeroImages } from "@/data/site-images";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
-// ─── Static data — module level, no re-allocation ────────────────────────────
+// ─── Static data : module level, no re-allocation ────────────────────────────
 
 const meta = fokusthemenMeta.find((m) => m.slug === "unternehmensstrategie")!;
 const heroImage = fokusPageHeroImages["unternehmensstrategie"];
@@ -180,7 +180,7 @@ export function FokusUnternehmensstrategie() {
         </h1>
         <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
           Wenn Verwaltungsrat und Führungsteam die Zukunft verschieden sehen, braucht es Methodik,
-          Struktur und eine externe Perspektive — keinen Kompromiss. Wir begleiten Sie vom ersten
+          Struktur und eine externe Perspektive : keinen Kompromiss. Wir begleiten Sie vom ersten
           Schritt bis zur gelebten Strategie.
         </p>
         <div className="mt-10 flex flex-wrap items-center gap-3">
@@ -203,10 +203,10 @@ export function FokusUnternehmensstrategie() {
         </div>
       </PageHero>
 
-      {/* ── 2. SPLIT PANEL — Unternehmensstrategie vs. Eignerstrategie ─── */}
+      {/* ── 2. SPLIT PANEL : Unternehmensstrategie vs. Eignerstrategie ─── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half — warm linen: content tracks the 1068px centre column */}
+          {/* Left half : warm linen: content tracks the 1068px centre column */}
           <div className="relative bg-[#faf8f2]">
             <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#c9a96e]/40" />
@@ -226,7 +226,7 @@ export function FokusUnternehmensstrategie() {
             <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
 
-          {/* Right half — navy: content tracks the 1068px centre column */}
+          {/* Right half : navy: content tracks the 1068px centre column */}
           <div className="relative bg-[#1a2260]">
             <div className="relative mr-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
@@ -250,7 +250,7 @@ export function FokusUnternehmensstrategie() {
       </MotionSection>
 
 
-      {/* ── 4. PROCESS — Alternating spine timeline ──────────────────────── */}
+      {/* ── 4. PROCESS : Alternating spine timeline ──────────────────────── */}
       <section id="prozess" className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-24">
@@ -258,7 +258,7 @@ export function FokusUnternehmensstrategie() {
               {/* Left: sticky anchor */}
               <div className="lg:sticky lg:top-28 lg:self-start">
                 <h2 className="text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
-                  Von der Analyse zur gelebten Strategie — in sieben Schritten.
+                  Von der Analyse zur gelebten Strategie : in sieben Schritten.
                 </h2>
                 <div className="mt-7 h-px w-full bg-black/[0.06]" />
                 <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
@@ -282,7 +282,7 @@ export function FokusUnternehmensstrategie() {
                 </Link>
               </div>
 
-              {/* Right: alternating spine — desktop / simple list — mobile */}
+              {/* Right: alternating spine : desktop / simple list : mobile */}
               <div>
                 {/* ── Desktop: alternating two-column spine ── */}
                 <div className="hidden lg:block">
@@ -304,7 +304,7 @@ export function FokusUnternehmensstrategie() {
                             key={step.num}
                             className="relative grid grid-cols-2"
                           >
-                            {/* Spine node — centered on the line */}
+                            {/* Spine node : centered on the line */}
                             <div className="absolute left-1/2 top-5 z-10 -translate-x-1/2">
                               <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c9a96e]/40 bg-white text-[11px] font-semibold tabular-nums text-[#26337c] shadow-sm">
                                 {step.num}
@@ -386,7 +386,7 @@ export function FokusUnternehmensstrategie() {
         </div>
       </section>
 
-      {/* ── 6. PITFALLS — Editorial newspaper list ───────────────────────── */}
+      {/* ── 6. PITFALLS : Editorial newspaper list ───────────────────────── */}
       <MotionSection>
         <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.8fr] lg:gap-20 lg:items-start">
@@ -400,7 +400,7 @@ export function FokusUnternehmensstrategie() {
               </h2>
               <div className="mt-7 h-px w-full bg-black/[0.06]" />
               <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
-                Die häufigsten Hindernisse sind keine Überraschungen. Sie sind bekannt — und
+                Die häufigsten Hindernisse sind keine Überraschungen. Sie sind bekannt : und
                 trotzdem werden sie in der Praxis immer wieder unterschätzt.
               </p>
               <div className="mt-8 h-px w-8 bg-[#c9a96e]/50" />
@@ -425,19 +425,19 @@ export function FokusUnternehmensstrategie() {
         </div>
       </MotionSection>
 
-      {/* ── 7. GUIDE — Unsere Rolle ──────────────────────────────────────── */}
+      {/* ── 7. GUIDE : Unsere Rolle ──────────────────────────────────────── */}
       <section className="bg-white">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
 
-            {/* Header — two-column */}
+            {/* Header : two-column */}
             <div className="grid gap-8 border-b border-black/[0.06] pb-12 md:grid-cols-[1fr_1fr] md:gap-20 md:items-end">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                   Unsere Rolle
                 </p>
                 <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f]">
-                  Die Perspektive, die intern fehlt — und den Unterschied macht.
+                  Die Perspektive, die intern fehlt : und den Unterschied macht.
                 </h2>
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
@@ -447,7 +447,7 @@ export function FokusUnternehmensstrategie() {
               </p>
             </div>
 
-            {/* Three situations — when companies call Abexis */}
+            {/* Three situations : when companies call Abexis */}
             <div className="mt-12">
               <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                 Typische Ausgangssituationen
@@ -457,7 +457,7 @@ export function FokusUnternehmensstrategie() {
                   {
                     num: "01",
                     title: "Fehlende interne Voraussetzungen",
-                    body: "Zeit, Distanz zum Tagesgeschäft und methodische Erfahrung fehlen — die Voraussetzungen für einen soliden Strategieprozess sind intern nicht gegeben.",
+                    body: "Zeit, Distanz zum Tagesgeschäft und methodische Erfahrung fehlen : die Voraussetzungen für einen soliden Strategieprozess sind intern nicht gegeben.",
                   },
                   {
                     num: "02",
@@ -489,7 +489,7 @@ export function FokusUnternehmensstrategie() {
         </MotionSection>
       </section>
 
-      {/* ── 8. CTA — Specific 30-min offer ───────────────────────────────── */}
+      {/* ── 8. CTA : Specific 30-min offer ───────────────────────────────── */}
       <section className="relative overflow-hidden">
         <div
           className="absolute inset-0 -z-10"
@@ -512,11 +512,11 @@ export function FokusUnternehmensstrategie() {
                 Nächster Schritt
               </p>
               <h2 className="mt-4 max-w-[30ch] text-[clamp(1.5rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white text-balance">
-                Strategische Klarheit entsteht nicht von selbst — aber mit dem richtigen Partner schneller.
+                Strategische Klarheit entsteht nicht von selbst : aber mit dem richtigen Partner schneller.
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">
                 In einem kostenlosen 30-Minuten-Erstgespräch klären wir gemeinsam, wo Ihr
-                Unternehmen steht, was Sie erreichen wollen — und wie wir Sie dabei begleiten können.
+                Unternehmen steht, was Sie erreichen wollen : und wie wir Sie dabei begleiten können.
               </p>
 
               {/* Offer details */}

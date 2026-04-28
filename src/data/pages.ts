@@ -6,15 +6,15 @@ import blogPosts from "./blog-posts.json";
  *
  * **Stimmung:** präzise, diskret, hochwertig.
  *
- * **Typografie:** Playfair Display (Überschriften — editorial, ruhig) + DM Sans (Fliesstext — klar, modern).
+ * **Typografie:** Playfair Display (Überschriften : editorial, ruhig) + DM Sans (Fliesstext : klar, modern).
  *
  * **Layout-Rhythmus:** grosszügiger Hero, viel Luft, alternierende editorial breite Sektionen, langsames visuelles «Pacing».
  *
  * **Marken-Cues:** feine Linien, dezente Akzentfarbe (Brass auf Navy), kleine Sektionslabels in Kapitälchen, keine lauten Illustrationen.
  *
- * **Signatur-Motiv:** 1-px-Linien und «Rahmenlicht» — L-förmige Ecken / dezente Kantenführung (siehe Komponenten), kein Tech-Grid.
+ * **Signatur-Motiv:** 1-px-Linien und «Rahmenlicht» : L-förmige Ecken / dezente Kantenführung (siehe Komponenten), kein Tech-Grid.
  *
- * **Gesamtfühle:** Senior Advisory Boutique, Schweizer Präzision, hohe Vertrauenswirkung — bewusst nicht «SaaS» oder Startup.
+ * **Gesamtfühle:** Senior Advisory Boutique, Schweizer Präzision, hohe Vertrauenswirkung : bewusst nicht «SaaS» oder Startup.
  */
 export const ART_DIRECTION = `Mood: präzise, diskret, hochwertig · Serif + Sans · Linienmotiv · ruhige Motion`;
 
@@ -55,6 +55,7 @@ export const mainNav: MainNavItem[] = [
     parentIsLink: false,
     children: [
       { href: "/leistungen", label: "Überblick" },
+      { href: "/projectfitcheck", label: "Project Reality Check" },
       { href: "/fokusthemen/digitale-transformation", label: "Digitale Transformation" },
       { href: "/fokusthemen/unternehmensstrategie", label: "Unternehmensstrategie" },
       { href: "/fokusthemen/vertriebmarketing", label: "Vertrieb & Marketing" },
@@ -109,10 +110,10 @@ export const homeLeadParagraph =
 /** Begrüssung unter dem Hero (ersetzt den früheren «Impulse»-Block mit Blog-Titeln) */
 export const homeWelcomeSection = {
   eyebrow: "Willkommen",
-  title: "Schön, dass Sie zu uns finden — ",
+  title: "Schön, dass Sie zu uns finden, ",
   titleAccent: "herzlich willkommen.",
   paragraphs: [
-    "Bei Abexis begleiten wir Unternehmen und Führungsteams dort, wo es zählt: Strategie, Digitalisierung, Veränderung, Vertrieb und Projekte — immer mit dem Fokus auf greifbare Resultate und eine Zusammenarbeit auf Augenhöhe.",
+    "Bei Abexis begleiten wir Unternehmen und Führungsteams dort, wo es zählt: Strategie, Digitalisierung, Veränderung, Vertrieb und Projekte, immer mit dem Fokus auf greifbare Resultate und eine Zusammenarbeit auf Augenhöhe.",
     "Schauen Sie sich unsere Schwerpunkte an, lesen Sie einen Beitrag im Blog oder nehmen Sie Kontakt auf, wenn Sie den Austausch suchen. Wir freuen uns, von Ihnen zu hören.",
   ],
 } as const;
@@ -120,7 +121,7 @@ export const homeWelcomeSection = {
 export const homeDifferentiators = [
   {
     label: "Strategie vor Technologie",
-    body: "Wir starten mit den Geschäftszielen — nicht mit der Technologie. Erst wenn klar ist, was erreicht werden soll, wählen wir die passenden Mittel.",
+    body: "Wir starten mit den Geschäftszielen, nicht mit der Technologie. Erst wenn klar ist, was erreicht werden soll, wählen wir die passenden Mittel.",
     accent: "#26337c",
   },
   {
@@ -273,7 +274,7 @@ Erfahrung & Projekte (Auszug):
     name: "Sacha Moeller",
     title: "Executive Search, Finance und Transformation",
     image: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F6ba66ce4-e338-42a5-9363-9bde653084c3.JPG?alt=media",
-    body: `Sacha Moeller ist Partner bei Abexis SEARCH und verfügt über mehr als 20 Jahre Führungserfahrung in der Finanzindustrie und im Family Office, unter anderem in leitenden Funktionen bei UBS. Seine Expertise umfasst Business-, Risk- und Change-Management sowie komplexe Transformations- und Digitalisierungsprojekte. Er verbindet analytische Kompetenz mit empathischer Führung und fördert werteorientierte Kulturen. Bei Abexis SEARCH begleitet er Mandate in Finance, Risk, IT-Transformation und Human Capital – mit Fokus auf Wirkung und nachhaltigen Mehrwert.`,
+    body: `Sacha Moeller ist Partner bei Abexis SEARCH und verfügt über mehr als 20 Jahre Führungserfahrung in der Finanzindustrie und im Family Office, unter anderem in leitenden Funktionen bei UBS. Seine Expertise umfasst Business-, Risk- und Change-Management sowie komplexe Transformations- und Digitalisierungsprojekte. Er verbindet analytische Kompetenz mit empathischer Führung und fördert werteorientierte Kulturen. Bei Abexis SEARCH begleitet er Mandate in Finance, Risk, IT-Transformation und Human Capital, mit Fokus auf Wirkung und nachhaltigen Mehrwert.`,
     phone: "+41 78 604 87 65",
     email: "sacha.moeller@abexis.ch",
     links: [{ label: "LinkedIn", href: "https://www.linkedin.com/in/sacha-moeller/" }],
@@ -290,6 +291,14 @@ Erfahrung & Projekte (Auszug):
 };
 
 export const fokusthemenMeta = [
+  {
+    slug: "projectfitcheck",
+    href: "/projectfitcheck",
+    title: "Project Reality Check",
+    subtitle: "Klarheit schaffen",
+    excerpt:
+      "Der Abexis Project Reality Check zeigt in kurzer Zeit, wo Ihr Projekt wirklich steht und was jetzt entschieden werden muss: präzise Analyse, klare Handlungsempfehlungen.",
+  },
   {
     slug: "digitale-transformation",
     href: "/fokusthemen/digitale-transformation",
@@ -337,6 +346,14 @@ export const fokusthemenMeta = [
     subtitle: "Umsetzung",
     excerpt:
       "Wir unterstützen Sie bei Projektumsetzungen, sollten Sie Ressourcenengpässen haben. Fachkompetenz, Methodenwissen und die Erfahrung aus verschiedensten erfolgreich durchgeführten Projekten machen uns zu einem starken Partner für Sie und Ihr Unternehmen.",
+  },
+  {
+    slug: "executive-search",
+    href: "/executive-search",
+    title: "Executive Search",
+    subtitle: "Personal",
+    excerpt:
+      "Wir finden Persönlichkeiten, nicht nur Profile. Diskrete Suche und passgenaue Besetzung von Führungs- und Schlüsselpositionen mit echtem Branchenverständnis.",
   },
 ] as const;
 
