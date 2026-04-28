@@ -26,8 +26,10 @@ export default function EnglishHomePage() {
       contentClassName="pt-10 md:pt-14"
     >
       <SchemaMarkup
-        type="BreadcrumbList"
-        data={[
+        path="/en/home"
+        name="Management Consulting"
+        description="Abexis helps your company move forward strategically, exploit growth potential and establish effective structures."
+        breadcrumbs={[
           { name: "Home", url: "/" },
           { name: "English", url: "/en/home" },
         ]}
