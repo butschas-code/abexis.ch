@@ -84,17 +84,6 @@ export function SiteFooter() {
                   <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
                 </svg>
               </a>
-              <a
-                href={siteConfig.xing}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Abexis auf Xing"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/50 transition-all duration-200 hover:border-white/30 hover:bg-white/[0.07] hover:text-white"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-12.5 16.999h-2l3.5-6-2-3.5h2l2 3.5-3.5 6zm8.5-11.999h2l-6 11h-2l2.5-4.5-2.5-4.5h2l1.5 2.5 2.5-4.5z" />
-                </svg>
-              </a>
             </div>
           </div>
 

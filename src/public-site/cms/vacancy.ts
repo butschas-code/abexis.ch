@@ -62,7 +62,7 @@ function mapVacancyDoc(id: string, d: Record<string, unknown>): PublishedVacancy
   return {
     id,
     title: String(d.title ?? ""),
-    slug: String(d.slug ?? id),
+    slug: String(d.slug || id),
     excerpt: String(d.excerpt ?? ""),
     sector: String(d.sector ?? ""),
     location: String(d.location ?? ""),

@@ -29,7 +29,6 @@ export const siteConfig = {
     "https://outlook.office.com/bookwithme/user/e725b81719d74d9fad11b791fafc6f6d@abexis.ch?anonymous&ismsaljsauthenabled=true",
   bookingUrlEn: "https://calendly.com/abexis-sengstag/",
   linkedin: "https://www.linkedin.com/company/abexis-gmbh",
-  xing: "https://www.xing.com/pages/abexis-gmbh",
   /** Executive Search lives on the same site under `/executive-search`. */
   searchSite: "https://abexis.ch/executive-search",
 } as const;
@@ -206,7 +205,6 @@ Expertise:
     email: "contact@abexis.ch",
     links: [
       { label: "LinkedIn", href: "https://www.linkedin.com/in/cwainig/" },
-      { label: "Xing", href: "https://www.xing.com/profile/Christoph_Wainig" },
     ],
   },
   katrinyuan: {

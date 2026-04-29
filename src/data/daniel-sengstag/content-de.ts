@@ -291,16 +291,13 @@ export const danielSengstagContent: SiteContent = {
       "Kurze Einleitung genügt, ich antworte persönlich. Für geschäftliche Anliegen der Abexis GmbH erreichen Sie mich ebenfalls über die untenstehenden Kanäle.",
     phone: "+41 79 349 04 54",
     emails: [
-      { label: "daniel@sengstag.ch", href: "mailto:daniel@sengstag.ch" },
       { label: "daniel.sengstag@abexis.ch", href: "mailto:daniel.sengstag@abexis.ch" },
     ],
     socialHeading: "Verlinkungen",
     social: [
       { label: "LinkedIn", href: "https://www.linkedin.com/in/danielsengstag" },
-      { label: "Xing", href: "https://www.xing.com/profile/Daniel_Sengstag" },
-      { label: "X (Twitter)", href: "https://twitter.com/DanielSengstag" },
     ],
-    address: ["Daniel Sengstag", "Glärnischstrasse 18", "8344 Bäretswil", "Schweiz"],
+    address: [],
   },
   footer: {
     rights: "Daniel Sengstag. Alle Rechte vorbehalten.",

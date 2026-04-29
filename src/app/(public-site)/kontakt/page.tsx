@@ -152,12 +152,6 @@ export default async function KontaktPage() {
                   >
                     LinkedIn
                   </a>
-                  <a
-                    className="font-medium text-brand-900 underline-offset-4 transition-colors hover:text-brand-500 hover:underline"
-                    href={siteConfig.xing}
-                  >
-                    Xing
-                  </a>
                 </dd>
               </div>
             </dl>

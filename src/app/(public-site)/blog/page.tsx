@@ -1,10 +1,8 @@
 import Link from "next/link";
-import { InsightPostCard } from "@/components/public-site/insights/InsightPostCard";
-import { InsightsFeatured } from "@/components/public-site/insights/InsightsFeatured";
+import { InsightsListWithSearch } from "@/components/public-site/insights/InsightsListWithSearch";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import {
   buildCategoryLabelLookup,
-  categoryLabelsForPost,
   getAuthorNameMap,
   getResolvedPublicDeploymentSite,
   listInsightsPublishedPosts,
@@ -33,16 +31,16 @@ export default async function BlogIndexPage() {
     getResolvedPublicDeploymentSite(),
   ]);
 
-  const catLookup = buildCategoryLabelLookup(categories);
+  const catMap = buildCategoryLabelLookup(categories);
   const authorIds = [...new Set(posts.map((p) => p.authorId).filter(Boolean))];
-  const authors = await getAuthorNameMap(authorIds);
+  const authorMap = await getAuthorNameMap(authorIds);
 
   const featured = pickFeaturedPosts(posts, 3);
   const gridPosts = partitionFeaturedForGrid(posts, featured);
 
-  const href = (slug: string) => `/blog/${encodeURIComponent(slug)}`;
-  const primaryFeatured = featured[0];
-  const secondaryFeatured = featured.slice(1);
+  // Maps are not serializable across the server→client boundary; convert to plain Records.
+  const catLookup = Object.fromEntries(catMap);
+  const authors = Object.fromEntries(authorMap);
 
   return (
     <InteriorPageLayout
@@ -85,44 +83,13 @@ export default async function BlogIndexPage() {
           </Link>
         </div>
       ) : (
-        <>
-          {primaryFeatured ? (
-            <InsightsFeatured
-              primary={primaryFeatured}
-              secondary={secondaryFeatured}
-              hrefFor={(p) => href(p.slug)}
-              categoryLine={
-                categoryLabelsForPost(primaryFeatured.categoryIds, catLookup).slice(0, 2).join(" · ") || null
-              }
-              authorName={authors.get(primaryFeatured.authorId) ?? null}
-            />
-          ) : null}
-
-          <section>
-            <div className="mb-8 flex items-end justify-between gap-4">
-              <h2 className="font-serif text-[22px] font-medium tracking-[-0.02em] text-[#1d1d1f] md:text-[24px]">
-                Neueste Artikel
-              </h2>
-              <div className="hidden h-px flex-1 translate-y-[-8px] bg-gradient-to-r from-black/[0.08] to-transparent md:block" />
-            </div>
-
-            <ul className="grid list-none gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
-              {gridPosts.map((post) => {
-                const catLine = categoryLabelsForPost(post.categoryIds, catLookup).slice(0, 2).join(" · ") || null;
-                return (
-                  <li key={post.id} className="h-full">
-                    <InsightPostCard
-                      post={post}
-                      href={href(post.slug)}
-                      categoryLine={catLine}
-                      authorName={post.authorId ? (authors.get(post.authorId) ?? null) : null}
-                    />
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        </>
+        <InsightsListWithSearch
+          allPosts={posts}
+          featured={featured}
+          gridPosts={gridPosts}
+          catLookup={catLookup}
+          authors={authors}
+        />
       )}
     </InteriorPageLayout>
   );
