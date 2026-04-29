@@ -226,12 +226,12 @@ export function FokusVeraenderungsmanagement() {
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Veränderung scheitert nicht an der Strategie : sie scheitert an den Menschen.
+          Veränderung scheitert nicht an der Strategie. Sie scheitert an den Menschen.
         </h1>
         <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
           Wenn Wandel von oben verordnet statt gemeinsam gestaltet wird, entsteht Widerstand,
           Unsicherheit und Lähmung. Wir begleiten Organisationen dabei, Veränderungen so zu
-          führen, dass Menschen mitgehen : und Ergebnisse nachhaltig verankert bleiben.
+          führen, dass Menschen mitgehen und Ergebnisse nachhaltig verankert bleiben.
         </p>
         <div className="mt-10 flex flex-wrap items-center gap-3">
           <HeroProjectRealityCheckCta />

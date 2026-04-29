@@ -6,7 +6,7 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PageHero } from "@/components/site/PageHero";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
-import { getPublishedVacancyBySlug, listPublishedVacancies } from "@/public-site/cms/vacancy";
+import { getPublishedVacancyBySlug, isSpontaneousVacancy, listPublishedVacancies } from "@/public-site/cms/vacancy";
 import { parsePostBody } from "@/lib/cms/post-body-storage";
 import { sanitizeBlogHtml } from "@/lib/cms/sanitize-blog-html";
 import { unsplash } from "@/executive-search/lib/images/unsplash";
@@ -42,6 +42,7 @@ export default async function VacancyDetailPage({ params }: Props) {
 
   const { html: bodyHtml } = parsePostBody(v.body);
   const safeBody = sanitizeBlogHtml(bodyHtml);
+  const spontaneous = isSpontaneousVacancy(v);
 
   return (
     <InteriorPageRoot>
@@ -172,7 +173,20 @@ export default async function VacancyDetailPage({ params }: Props) {
               </div>
 
               <div>
-                <VacancyApplicationForm vacancyId={v.slug} vacancyTitle={v.title} />
+                <VacancyApplicationForm
+                  vacancyId={v.slug}
+                  vacancyTitle={v.title}
+                  jobType={spontaneous ? "spontanbewerbung" : "vacancy"}
+                  isSpontaneous={spontaneous}
+                  heading={spontaneous ? "Spontanbewerbung" : undefined}
+                  intro={
+                    spontaneous
+                      ? "Übermitteln Sie uns Ihr Profil vertraulich. Wir prüfen, ob Ihr Hintergrund zu aktuellen oder künftigen verdeckten Mandaten passt."
+                      : undefined
+                  }
+                  submitButtonLabel={spontaneous ? "Spontanbewerbung einreichen" : undefined}
+                  formIdPrefix={`vacancy-${v.slug.replace(/[^a-z0-9-]+/gi, "-")}`}
+                />
               </div>
             </div>
           </PublicContentWidth>

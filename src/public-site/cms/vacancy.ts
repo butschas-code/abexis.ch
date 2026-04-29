@@ -51,6 +51,15 @@ function readStatus(v: unknown): PostStatus {
   return "draft";
 }
 
+function readJobType(v: unknown): "vacancy" | "spontanbewerbung" {
+  return v === "spontanbewerbung" ? "spontanbewerbung" : "vacancy";
+}
+
+/** True when the vacancy is the general spontaneous-application entry (not listed with public mandates). */
+export function isSpontaneousVacancy(v: Pick<PublishedVacancy, "jobType" | "isSpontaneous">): boolean {
+  return v.isSpontaneous === true || v.jobType === "spontanbewerbung";
+}
+
 /** Staging / placeholder rows that stay in CMS but must not show on the public site. */
 function isVacancyHiddenFromPublic(v: Pick<PublishedVacancy, "slug" | "title">): boolean {
   const s = v.slug.trim().toLowerCase();
@@ -59,6 +68,8 @@ function isVacancyHiddenFromPublic(v: Pick<PublishedVacancy, "slug" | "title">):
 }
 
 function mapVacancyDoc(id: string, d: Record<string, unknown>): PublishedVacancy {
+  const jobType = readJobType(d.jobType);
+  const isSpontaneous = typeof d.isSpontaneous === "boolean" ? d.isSpontaneous : jobType === "spontanbewerbung";
   return {
     id,
     title: String(d.title ?? ""),
@@ -67,6 +78,8 @@ function mapVacancyDoc(id: string, d: Record<string, unknown>): PublishedVacancy
     sector: String(d.sector ?? ""),
     location: String(d.location ?? ""),
     employmentType: String(d.employmentType ?? ""),
+    jobType,
+    isSpontaneous,
     hook: String(d.hook ?? ""),
     body: String(d.body ?? ""),
     files: readFiles(d.files),
@@ -79,7 +92,12 @@ function mapVacancyDoc(id: string, d: Record<string, unknown>): PublishedVacancy
   };
 }
 
-async function listPublishedVacanciesUncached(lim: number, deployment: PublicDeploymentSite): Promise<PublishedVacancy[]> {
+async function listPublishedVacanciesUncached(
+  lim: number,
+  deployment: PublicDeploymentSite,
+  opts?: { excludeSpontaneous?: boolean },
+): Promise<PublishedVacancy[]> {
+  const excludeSpontaneous = opts?.excludeSpontaneous !== false;
   const db = getAdminFirestore();
   if (db) {
     try {
@@ -96,7 +114,11 @@ async function listPublishedVacanciesUncached(lim: number, deployment: PublicDep
         const tb = b.publishedAt ?? b.createdAt;
         return tb < ta ? -1 : ta < tb ? 1 : 0;
       });
-      return rows.filter((v) => !isVacancyHiddenFromPublic(v) && isPostVisibleOnDeployment(v.site, deployment)).slice(0, lim);
+      let visible = rows.filter((v) => !isVacancyHiddenFromPublic(v) && isPostVisibleOnDeployment(v.site, deployment));
+      if (excludeSpontaneous) {
+        visible = visible.filter((v) => !isSpontaneousVacancy(v));
+      }
+      return visible.slice(0, lim);
     } catch (error) {
       console.warn("[CMS] Admin Firestore vacancies failed; falling back to Web SDK.", error instanceof Error ? error.message : "Unknown error");
     }
@@ -118,17 +140,25 @@ async function listPublishedVacanciesUncached(lim: number, deployment: PublicDep
       const tb = b.publishedAt ?? b.createdAt;
       return tb < ta ? -1 : ta < tb ? 1 : 0;
     });
-    return rows.filter((v) => !isVacancyHiddenFromPublic(v) && isPostVisibleOnDeployment(v.site, deployment)).slice(0, lim);
+    let visible = rows.filter((v) => !isVacancyHiddenFromPublic(v) && isPostVisibleOnDeployment(v.site, deployment));
+    if (excludeSpontaneous) {
+      visible = visible.filter((v) => !isSpontaneousVacancy(v));
+    }
+    return visible.slice(0, lim);
   } catch (error) {
     console.warn("[CMS] Web SDK vacancies query failed:", error instanceof Error ? error.message : "Unknown error");
     return [];
   }
 }
 
-const _listPublishedVacanciesCached = async (lim: number, deployment: PublicDeploymentSite): Promise<PublishedVacancy[]> => {
+const _listPublishedVacanciesCached = async (
+  lim: number,
+  deployment: PublicDeploymentSite,
+  excludeSpontaneous: boolean,
+): Promise<PublishedVacancy[]> => {
   const getCached = unstable_cache(
-    async () => listPublishedVacanciesUncached(lim, deployment),
-    ["published-vacancies", String(lim), deployment],
+    async () => listPublishedVacanciesUncached(lim, deployment, { excludeSpontaneous }),
+    ["published-vacancies", String(lim), deployment, excludeSpontaneous ? "no-spont" : "inc-spont"],
     { revalidate: REVALIDATE, tags: ["published-vacancies"] },
   );
   return getCached();
@@ -136,7 +166,21 @@ const _listPublishedVacanciesCached = async (lim: number, deployment: PublicDepl
 
 export const listPublishedVacancies = cache(async (limit = 20): Promise<PublishedVacancy[]> => {
   const d = await getResolvedPublicDeploymentSite();
-  return _listPublishedVacanciesCached(Math.min(100, Math.max(1, limit)), d);
+  return _listPublishedVacanciesCached(Math.min(100, Math.max(1, limit)), d, true);
+});
+
+/** First published spontaneous-application vacancy from CMS, if any. */
+export const getPublishedSpontaneousVacancy = cache(async (): Promise<PublishedVacancy | null> => {
+  const d = await getResolvedPublicDeploymentSite();
+  const getCached = unstable_cache(
+    async () => {
+      const rows = await listPublishedVacanciesUncached(400, d, { excludeSpontaneous: false });
+      return rows.find((v) => isSpontaneousVacancy(v)) ?? null;
+    },
+    ["published-spontaneous-vacancy", d],
+    { revalidate: REVALIDATE, tags: ["published-vacancies"] },
+  );
+  return getCached();
 });
 
 async function getVacancyBySlugUncached(slug: string, deployment: PublicDeploymentSite): Promise<PublishedVacancy | null> {

@@ -29,7 +29,13 @@ function readStatus(v: unknown): PostStatus {
   return "draft";
 }
 
+function readJobType(v: unknown): "vacancy" | "spontanbewerbung" {
+  return v === "spontanbewerbung" ? "spontanbewerbung" : "vacancy";
+}
+
 export function mapVacancyClientDoc(id: string, d: Record<string, unknown>): VacancyListItem {
+  const jobType = readJobType(d.jobType);
+  const isSpontaneous = typeof d.isSpontaneous === "boolean" ? d.isSpontaneous : jobType === "spontanbewerbung";
   return {
     id,
     title: String(d.title ?? ""),
@@ -38,6 +44,8 @@ export function mapVacancyClientDoc(id: string, d: Record<string, unknown>): Vac
     sector: String(d.sector ?? ""),
     location: String(d.location ?? ""),
     employmentType: String(d.employmentType ?? ""),
+    jobType,
+    isSpontaneous,
     hook: String(d.hook ?? ""),
     body: String(d.body ?? ""),
     files: readFiles(d.files),

@@ -13,7 +13,15 @@ const initial = {
   consent: false,
 };
 
-export function SearchBriefForm({ id = "suchmandat" }: { id?: string }) {
+export function SearchBriefForm({
+  id = "suchmandat",
+  messagePlaceholder = "Kontext zur Position, Branche, Zeitrahmen — je nachdem, was für Sie sinnvoll ist.",
+  privacyFootnote = "Ihre Angaben werden verschlüsselt übermittelt und vertraulich behandelt. Optional hochgeladene Dokumente speichern wir sicher in einem geschützten Bereich.",
+}: {
+  id?: string;
+  messagePlaceholder?: string;
+  privacyFootnote?: string;
+}) {
   const [form, setForm] = useState(initial);
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const reduce = useReducedMotion();
@@ -87,9 +95,12 @@ export function SearchBriefForm({ id = "suchmandat" }: { id?: string }) {
           value={form.message}
           onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
           className="focus-ring mt-2 w-full rounded-xl border border-black/[0.08] bg-[#f5f5f7] px-3 py-2 text-[15px] text-[#1d1d1f] placeholder:text-[#86868b]"
-          placeholder="Rolle, Kontext, Zeitrahmen : frei formuliert."
+          placeholder={messagePlaceholder}
         />
       </div>
+      {privacyFootnote ? (
+        <p className="text-[13px] leading-relaxed text-[#86868b]">{privacyFootnote}</p>
+      ) : null}
       <label className="flex items-start gap-3 text-[15px] leading-snug text-[#6e6e73]">
         <input
           type="checkbox"

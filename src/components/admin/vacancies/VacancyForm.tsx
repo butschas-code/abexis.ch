@@ -48,6 +48,8 @@ function blankForm(id: string): VacancyUpsertInput {
     sector: "",
     location: "",
     employmentType: "Vollzeit",
+    jobType: "vacancy",
+    isSpontaneous: false,
     hook: "",
     body: serializePostBody(""),
     files: [],
@@ -251,6 +253,40 @@ export function VacancyForm({ mode, vacancyId }: Props) {
                 <option value="archived">Archiviert</option>
               </select>
             </label>
+          </div>
+
+          <div className="mt-2 border-t border-black/[0.06] pt-5">
+            <p className={`mb-3 ${adminSectionLabel}`}>Typ</p>
+            <label className="flex cursor-pointer gap-3 rounded-xl border border-black/[0.08] bg-[var(--apple-bg-subtle)] p-4">
+            <input
+              type="checkbox"
+              checked={form.isSpontaneous}
+              onChange={(e) => {
+                const on = e.target.checked;
+                setForm((prev) => {
+                  const next: VacancyUpsertInput = {
+                    ...prev,
+                    isSpontaneous: on,
+                    jobType: on ? "spontanbewerbung" : "vacancy",
+                  };
+                  if (on) {
+                    if (!prev.title.trim()) next.title = "Spontanbewerbung";
+                    if (!prev.slug.trim()) next.slug = "spontan";
+                  }
+                  return next;
+                });
+                setSavedBanner(false);
+              }}
+              className="focus-ring mt-1 rounded border-black/25"
+            />
+            <span>
+              <span className="block text-[13px] font-medium text-[var(--apple-text)]">Spontanbewerbung</span>
+              <span className="mt-1 block text-[13px] leading-snug text-[var(--apple-text-secondary)]">
+                Diese Vakanz dient als allgemeine Spontanbewerbung und ist nicht an ein konkretes Suchmandat gebunden.
+                Öffentliche Listen blenden sie aus; die Bewerbung bleibt über die Stellen-URL erreichbar.
+              </span>
+            </span>
+          </label>
           </div>
         </div>
       </div>

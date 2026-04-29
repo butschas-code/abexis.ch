@@ -1,42 +1,55 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
-import { MotionSection } from "@/components/motion/MotionSection";
-import { ParallaxBlock } from "@/components/executive-search/ParallaxBlock";
+import { ConfidentialMandatesNotice } from "@/components/executive-search/ConfidentialMandatesNotice";
 import { ExecutiveSearchClosingSection } from "@/components/executive-search/ExecutiveSearchClosingSection";
+import { ExecutiveSearchIndustryStrip } from "@/components/executive-search/ExecutiveSearchIndustryStrip";
 import { ExecutiveSearchStatementParallax } from "@/components/executive-search/ExecutiveSearchStatementParallax";
 import { HeroPanel } from "@/components/executive-search/HeroPanel";
 import { HomeIntroBand } from "@/components/executive-search/HomeIntroBand";
+import { ParallaxBlock } from "@/components/executive-search/ParallaxBlock";
 import { SectionShell } from "@/components/executive-search/SectionShell";
-import { legacySiteImages } from "@/executive-search/data/legacy-site-images";
-import { homeImagery } from "@/executive-search/lib/images/homeImagery";
+import { SpontaneousApplicationSection } from "@/components/executive-search/SpontaneousApplicationSection";
+import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
+import { MotionSection } from "@/components/motion/MotionSection";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { InsightPostCard } from "@/components/public-site/insights/InsightPostCard";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
-import { InsightPostCard } from "@/components/public-site/insights/InsightPostCard";
-import { SearchBriefContactForm } from "@/components/site/search/SearchBriefContactForm";
+import { legacySiteImages } from "@/executive-search/data/legacy-site-images";
+import { homeImagery } from "@/executive-search/lib/images/homeImagery";
 import { listSearchSitePublishedPosts } from "@/public-site/cms";
+import { getPublishedSpontaneousVacancy } from "@/public-site/cms/vacancy";
 
 const HERO_LEAD =
-  "Abexis SEARCH besetzt Führungs- und Schlüsselpositionen diskret, präzise und mit echter Beratungskompetenz. Wir bringen Organisationen mit Persönlichkeiten zusammen, die nicht nur fachlich passen, sondern auch menschlich und strategisch Wirkung entfalten. Unsere Mandant:innen schätzen die Verbindung aus strukturierter Direktansprache, unternehmerischem Verständnis und einem klar geführten Suchprozess : für Besetzungen, die nachhaltig tragen.";
+  "Abexis SEARCH besetzt Führungs- und Schlüsselpositionen diskret, präzise und mit echter Beratungskompetenz. Viele unserer Mandate werden bewusst nicht öffentlich ausgeschrieben. Deshalb arbeiten wir mit vertraulicher Direktansprache, einem klar geführten Suchprozess und einem tiefen Verständnis für Rolle, Markt und Organisation. Wir bringen Unternehmen mit Persönlichkeiten zusammen, die fachlich überzeugen, menschlich passen und strategisch Wirkung entfalten.";
 
 const INTRO_BODY =
-  "Executive Search ist für uns mehr als die Suche nach passenden Profilen. Es geht darum, Persönlichkeiten zu identifizieren, die Verantwortung übernehmen können, kulturell anschlussfähig sind und in ihrer Rolle Wirkung entfalten. Entscheidend ist nicht allein, ob ein Lebenslauf passt, sondern ob ein Mensch in einem bestimmten unternehmerischen Umfeld tragfähig führen, gestalten und entwickeln kann. Genau deshalb verstehen wir Executive Search als beratungsintensiven Prozess : mit Präzision in der Ansprache, Klarheit in der Einschätzung und Sorgfalt in der Besetzung.";
+  "Executive Search ist für uns mehr als die Suche nach passenden Profilen. Es geht darum, Persönlichkeiten zu identifizieren, die Verantwortung übernehmen können, kulturell anschlussfähig sind und in ihrer Rolle Wirkung entfalten, mit Präzision in der Ansprache, Klarheit in der Einschätzung und Sorgfalt in der Besetzung.";
 
-const BLOCK1 =
-  "Wir unterstützen Unternehmen bei der Besetzung von Führungs- und Schlüsselpositionen dort, wo Standardprozesse nicht ausreichen. Unsere Arbeit verbindet diskrete Direktansprache mit einem klar geführten Suchprozess und echtem Verständnis für Rollen, Märkte und Organisationen. So identifizieren wir nicht nur qualifizierte Kandidat:innen, sondern Persönlichkeiten, die der Aufgabe, dem Umfeld und der strategischen Situation eines Unternehmens wirklich entsprechen. Das Ergebnis sind Besetzungen, die fachlich überzeugen, menschlich passen und langfristig Wirkung entfalten.";
+const BLOCK1_PARAS = [
+  "Wir unterstützen Unternehmen bei der Besetzung von Führungs- und Schlüsselpositionen dort, wo Standardprozesse nicht ausreichen. Unsere Arbeit verbindet diskrete Direktansprache mit einem klar strukturierten Suchprozess und echtem Verständnis für Rollen, Märkte und Organisationen.",
+  "Wir suchen nicht nur nach Qualifikationen, sondern nach Persönlichkeiten, die in einem konkreten Umfeld wirksam werden können. Entscheidend ist, ob Erfahrung, Haltung, Führungsverständnis und kulturelle Passung zur Aufgabe und zur strategischen Situation des Unternehmens passen.",
+  "Das Ergebnis sind Besetzungen, die fachlich überzeugen, menschlich tragen und langfristig Wirkung entfalten.",
+];
 
 const BLOCK2_TITLE = "Beratungskompetenz statt reiner Vermittlung";
 
-const BLOCK2 =
-  "Abexis SEARCH versteht Executive Search nicht als operative Personalvermittlung, sondern als hochwertige Beratungsleistung. Im Mittelpunkt steht die Frage, wer in einer konkreten Rolle wirksam werden kann : nicht nur auf dem Papier, sondern im realen Zusammenspiel mit Führung, Team, Kultur und Markt. Deshalb bringen wir unternehmerisches Verständnis, strukturiertes Vorgehen und ein feines Gespür für Kontexte zusammen. Unsere Mandant:innen schätzen genau diese Verbindung: analytische Schärfe, diskrete Ansprache und belastbare Begleitung in einem Suchprozess, der klar geführt ist und Vertrauen schafft.";
+const BLOCK2a =
+  "Abexis SEARCH versteht Executive Search nicht als operative Personalvermittlung, sondern als hochwertige Beratungsleistung. Im Mittelpunkt steht die Frage, wer in einer konkreten Rolle wirklich Wirkung entfalten kann: nicht nur auf dem Papier, sondern im Zusammenspiel mit Führung, Team, Kultur und Markt.";
 
-const BLOCK3 =
-  "Passgenauigkeit entsteht dort, wo Rollentiefe und Marktverständnis zusammenkommen. Unsere Branchenfokussierung ermöglicht eine präzise Ansprache, eine fundierte Einschätzung und eine Suche, die nicht nur sorgfaltig, sondern auch effizient ist. Wer Funktionen, Branchenlogiken und unternehmerische Realitäten versteht, kann schneller die richtigen Persönlichkeiten identifizieren und ihre Eignung belastbarer beurteilen. Genau daraus entsteht der Anspruch, für den Abexis SEARCH steht: passgenau, schnell und verlässlich : ohne Kompromisse bei Qualität und Diskretion.";
+const BLOCK2b =
+  "Deshalb bringen wir unternehmerisches Verständnis, strukturiertes Vorgehen und ein feines Gespür für Kontexte zusammen. Unsere Mandant:innen schätzen diese Verbindung aus analytischer Schärfe, diskreter Ansprache und belastbarer Begleitung in einem Suchprozess, der klar geführt ist und Vertrauen schafft.";
+
+const BLOCK3_TITLE = "Branchenschwerpunkte als Qualitätsvorteil";
+
+const BLOCK3_PARAS = [
+  "Passgenauigkeit entsteht dort, wo Rollentiefe und Marktverständnis zusammenkommen. Unsere Schwerpunkte liegen in Informationstechnologie & Digitalisierung, Industrie, Finanzen, Banking & Risk Management, öffentlichem Sektor & Verwaltung sowie Beratung.",
+  "Diese Fokussierung ermöglicht eine präzise Ansprache, eine fundierte Einschätzung und eine Suche, die nicht nur sorgfältig, sondern auch effizient ist. Wer Funktionen, Branchenlogiken und unternehmerische Realitäten versteht, kann schneller die richtigen Persönlichkeiten identifizieren und ihre Eignung belastbarer beurteilen.",
+];
 
 const DESCRIPTION =
-  "Executive Search, Personalvermittlung: Führungspositionen diskret und präzise besetzen. Beratungsintensiver Suchprozess, Branchenfokussierung, Abexis SEARCH.";
+  "Abexis SEARCH: diskrete Executive Search und Beratung für Führungs- und Schlüsselpositionen, verdeckte Mandate, Direktansprache, Branchentiefe.";
 
 export const revalidate = 120;
 
@@ -51,6 +64,8 @@ export const metadata: Metadata = {
 
 export default async function ExecutiveSearchPage() {
   const searchPosts = await listSearchSitePublishedPosts(6);
+  const cmsSpontaneous = await getPublishedSpontaneousVacancy();
+
   return (
     <InteriorPageRoot>
       <SchemaMarkup
@@ -71,37 +86,16 @@ export default async function ExecutiveSearchPage() {
         primaryHref="#suchmandat"
         primaryLabel="Suchmandat anfragen"
         secondaryHref="/kontakt"
-        secondaryLabel="Kontakt aufnehmen"
+        secondaryLabel="Vertraulich Kontakt aufnehmen"
       />
 
-      <section className="bg-white py-14 sm:py-16">
-        <PublicContentWidth>
-          <p className="mb-9 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-            Unsere Branchenschwerpunkte
-          </p>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-5 lg:gap-x-8">
-            {[
-              "Informationstechnologie & Digitalisierung",
-              "Industrie",
-              "Finanzen, Banking & Risk Management",
-              "Öffentlicher Sektor & Verwaltung",
-              "Beratung",
-            ].map((sector) => (
-              <div key={sector} className="border-t-2 border-[#26337c] pt-4">
-                <p className="text-[15px] font-medium leading-[1.35] tracking-[-0.01em] text-[#1d1d1f]">
-                  {sector}
-                </p>
-              </div>
-            ))}
-          </div>
-        </PublicContentWidth>
-      </section>
+      <ExecutiveSearchIndustryStrip />
 
       <ParallaxBlock yRange={[32, -32]}>
         <HomeIntroBand
-          title="Besetzung mit Urteil, Kontext und Substanz"
+          title="Executive Search mit Kontext und Urteil"
           imageSrc={homeImagery.intro}
-          imageAlt="Gezielte Auswahl und Fokus im Suchprozess"
+          imageAlt="Beratungsintensive Auswahl im Suchprozess"
         >
           <p className="max-w-3xl text-[17px] leading-relaxed text-[#6e6e73]">{INTRO_BODY}</p>
         </HomeIntroBand>
@@ -127,25 +121,40 @@ export default async function ExecutiveSearchPage() {
       </MotionSection>
 
       <MotionSection>
-        <SectionShell title="Diskrete Suche. Klare Führung. Hohe Passung.">
-          <p className="max-w-3xl text-[17px] leading-relaxed text-[#6e6e73]">{BLOCK1}</p>
+        <SectionShell id="diskrete-suche" title="Diskrete Suche. Klare Führung. Hohe Passung.">
+          <div className="max-w-3xl space-y-6">
+            {BLOCK1_PARAS.map((p, i) => (
+              <p key={`diskret-${i}`} className="text-[17px] leading-relaxed text-[#6e6e73]">
+                {p}
+              </p>
+            ))}
+          </div>
         </SectionShell>
       </MotionSection>
 
       <MotionSection>
         <ExecutiveSearchStatementParallax
           imageSrc={homeImagery.trust}
-          imageAlt="Vertrauensvolle Zusammenarbeit im Executive-Search-Mandat"
+          imageAlt="Vertrauliche Zusammenarbeit im Executive Search"
           title={BLOCK2_TITLE}
-          body={BLOCK2}
+          body={BLOCK2a}
+          bodyParagraph2={BLOCK2b}
         />
       </MotionSection>
 
       <MotionSection>
-        <SectionShell title="Branchenfokussierung als Qualitätsvorteil" density="tight">
-          <p className="max-w-3xl text-[17px] leading-relaxed text-[#6e6e73]">{BLOCK3}</p>
+        <SectionShell title={BLOCK3_TITLE} density="tight">
+          <div className="max-w-3xl space-y-6">
+            {BLOCK3_PARAS.map((p, i) => (
+              <p key={`branch-${i}`} className="text-[17px] leading-relaxed text-[#6e6e73]">
+                {p}
+              </p>
+            ))}
+          </div>
         </SectionShell>
       </MotionSection>
+
+      <ConfidentialMandatesNotice />
 
       <HomeVacancyTeasers />
 
@@ -183,25 +192,7 @@ export default async function ExecutiveSearchPage() {
         </MotionSection>
       )}
 
-      <MotionSection>
-        <section id="suchmandat" className="scroll-mt-28 bg-[#f5f5f7] py-16 sm:py-20 md:py-24">
-          <PublicContentWidth>
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
-              <div className="max-w-xl">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Suchmandat</p>
-                <h2 className="mt-3 text-[28px] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f] sm:text-[34px]">
-                  Besetzung vertraulich anfragen
-                </h2>
-                <p className="mt-5 text-[17px] leading-relaxed text-[#6e6e73]">
-                  Skizzieren Sie Rolle, Kontext und Zeitrahmen. Wir prüfen Ihre Anfrage vertraulich und melden uns mit
-                  einer ersten Einschätzung zum passenden Suchvorgehen.
-                </p>
-              </div>
-              <SearchBriefContactForm />
-            </div>
-          </PublicContentWidth>
-        </section>
-      </MotionSection>
+      <SpontaneousApplicationSection cmsVacancy={cmsSpontaneous} />
 
       <ExecutiveSearchClosingSection />
     </InteriorPageRoot>

@@ -13,6 +13,8 @@ export type VacancyFile = {
  * `vacancies/{vacancyId}` : Executive Search job postings.
  * Body is stored in the same JSON envelope as blog posts (see `post-body-storage.ts`).
  */
+export type VacancyJobKind = "vacancy" | "spontanbewerbung";
+
 export type Vacancy = {
   title: string;
   slug: string;
@@ -21,6 +23,10 @@ export type Vacancy = {
   sector: string;
   location: string;
   employmentType: string;
+  /** Classifies the posting for applications and CMS (general spontaneous entry vs. a concrete mandate). */
+  jobType: VacancyJobKind;
+  /** When true, the posting is excluded from public vacancy listings (general spontaneous application). */
+  isSpontaneous: boolean;
   /** Attention-grabbing hook shown in the hero. */
   hook: string;
   /** Rich text body : JSON envelope `{ format, version, html }`. */

@@ -9,12 +9,14 @@ type Props = {
   imageAlt: string;
   title: string;
   body: string;
+  /** Optional second paragraph (premium pacing). */
+  bodyParagraph2?: string;
 };
 
 /**
  * Full-bleed parallax image band with strong scrims; white overlay copy (PageHero-style readability).
  */
-export function ExecutiveSearchStatementParallax({ imageSrc, imageAlt, title, body }: Props) {
+export function ExecutiveSearchStatementParallax({ imageSrc, imageAlt, title, body, bodyParagraph2 }: Props) {
   return (
     <div
       className="relative w-screen max-w-[100vw] overflow-hidden"
@@ -52,6 +54,9 @@ export function ExecutiveSearchStatementParallax({ imageSrc, imageAlt, title, bo
             {title}
           </h2>
           <p className="mt-6 max-w-3xl text-[17px] leading-relaxed text-white/90 sm:text-[18px] md:leading-[1.75]">{body}</p>
+          {bodyParagraph2 ? (
+            <p className="mt-5 max-w-3xl text-[17px] leading-relaxed text-white/88 sm:text-[18px] md:leading-[1.75]">{bodyParagraph2}</p>
+          ) : null}
         </PublicContentWidth>
       </div>
     </div>

@@ -542,9 +542,8 @@ export function FokusProzessoptimierung() {
                 </h2>
               </div>
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">
-                Wer täglich in einem Prozess arbeitet, sieht ihn kaum noch. Wir bringen die
-                Distanz, die Methodik und die Erfahrung aus verschiedensten Branchen mit : und
-                stellen die Fragen, die intern niemand mehr stellt.
+                Wer täglich in einem Prozess arbeitet, sieht ihn kaum noch. Wir bringen die Distanz, die Methodik und die
+                Erfahrung aus verschiedensten Branchen mit und stellen die Fragen, die intern niemand mehr stellt.
               </p>
             </div>
             <div className="mt-12">

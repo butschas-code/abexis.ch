@@ -39,6 +39,10 @@ function formatWhen(iso: string | null) {
   }
 }
 
+function isSpontaneousRow(v: VacancyListItem) {
+  return v.isSpontaneous === true || v.jobType === "spontanbewerbung";
+}
+
 export function AdminVacanciesManager() {
   const router = useRouter();
   const [vacancies, setVacancies] = useState<VacancyListItem[]>([]);
@@ -112,7 +116,7 @@ export function AdminVacanciesManager() {
     <AdminPageContainer>
       <AdminPageHeader
         title="Vakanzen"
-        description="Aktuelle Executive Search Mandate. Veröffentlichte Vakanzen erscheinen auf der öffentlichen Vakanzen-Seite."
+        description="Suchmandate und Spontanbewerbungen verwalten. Veröffentlichte Einträge erscheinen auf der öffentlichen Seite — Spontanbewerbungen sind dort aus den Listen ausgeblendet, aber über Formular und URL nutzbar."
         actions={
           <Link href={CMS_PATHS.adminVacancyNew} className={adminBtnPrimary}>
             Neue Vakanz
@@ -141,10 +145,11 @@ export function AdminVacanciesManager() {
           />
         ) : (
           <div className={adminTableWrap}>
-            <table className="w-full min-w-[720px] text-left text-[15px]">
+            <table className="w-full min-w-[800px] text-left text-[15px]">
               <thead className="border-b border-black/[0.07] bg-[color-mix(in_srgb,var(--apple-bg-subtle)_70%,white)] text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--apple-text-tertiary)]">
                 <tr>
                   <th className="px-4 py-3.5 pl-5">Titel / Slug</th>
+                  <th className="px-4 py-3.5">Typ</th>
                   <th className="px-4 py-3.5">Branche</th>
                   <th className="px-4 py-3.5">Status</th>
                   <th className="hidden px-4 py-3.5 md:table-cell">Veröffentlicht</th>
@@ -170,6 +175,18 @@ export function AdminVacanciesManager() {
                         {v.title || "(ohne Titel)"}
                       </Link>
                       <div className="mt-0.5 font-mono text-[11px] text-[var(--apple-text-tertiary)]">{v.slug}</div>
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3.5 align-middle">
+                      {isSpontaneousRow(v) ? (
+                        <span
+                          className={`${adminPill} bg-[color-mix(in_srgb,#7c3aed_12%,white)] text-[12px] font-semibold text-[#5b21b6] ring-[#7c3aed]/18`}
+                          title="Allgemeine Spontanbewerbung — nicht in der öffentlichen Listenansicht"
+                        >
+                          Spontanbewerbung
+                        </span>
+                      ) : (
+                        <span className="text-[13px] text-[var(--apple-text-tertiary)]">Suchmandat</span>
+                      )}
                     </td>
                     <td className="max-w-[160px] truncate px-4 py-3.5 text-[var(--apple-text-secondary)]">
                       {v.sector || ","}

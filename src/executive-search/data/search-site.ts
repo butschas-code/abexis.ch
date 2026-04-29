@@ -69,7 +69,7 @@ export const home = {
   heroMainLead:
     "Abexis SEARCH besetzt Führungs- und Schlüsselpositionen diskret, präzise und mit echter Beratungskompetenz. Wir bringen Organisationen mit Persönlichkeiten zusammen, die nicht nur passen, sondern Wirkung entfalten.",
   heroSupportingLead:
-    "Unsere Mandant:innen schätzen die Verbindung aus strukturierter Direktansprache, unternehmerischem Verständnis und einem klar geführten Suchprozess : für Besetzungen, die fachlich, menschlich und strategisch tragen.",
+    "Unsere Mandant:innen schätzen die Verbindung aus strukturierter Direktansprache, unternehmerischem Verständnis und einem klar geführten Suchprozess. Für Besetzungen, die fachlich, menschlich und strategisch tragen.",
   introTitle: "Executive Search, Personalvermittlung",
   introLead:
     "Eine erfolgreiche und schnelle Besetzung von Schlüsselpositionen in Unternehmen ist aufwendig, Fehlentscheide resultieren fast immer in einer hohen Kostenfolge. Aus diesem Grund verlassen sich Entscheidungsträger oft auf spezialisierte Unternehmen wie die Abexis, welche den Rekrutierungsprozess neutral, effizient und professionell gestalten.",

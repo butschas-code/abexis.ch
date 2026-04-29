@@ -131,6 +131,8 @@ export async function POST(req: Request) {
           body: JSON.stringify({
             "Job": parsed.data.payload.jobTitle || "Unknown Job",
             "Job ID": parsed.data.payload.jobId || "N/A",
+            "Job type": parsed.data.payload.jobType || "",
+            "Spontaneous": parsed.data.payload.isSpontaneous || "",
             "Name": parsed.data.payload.name || "",
             "Email": parsed.data.payload.email || "",
             "Phone": parsed.data.payload.phone || "",

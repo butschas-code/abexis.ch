@@ -528,7 +528,7 @@ export function ProjectFitCheck() {
             </h2>
             <p className="mt-4 max-w-[56ch] text-[15px] leading-[1.55] text-[#6e6e73] sm:mt-5 sm:text-[16px] sm:leading-relaxed">
               Light, Core und Deep Dive sind keine alternativen «Pakete», sondern die aufeinander aufbauenden Stufen
-              desselben Reality Check : von der ersten Einordnung bis zur vertieuten Entscheidungs- und Umsetzungsgrundlage.
+              desselben Reality Check — von der ersten Einordnung bis zur vertieften Entscheidungs- und Umsetzungsgrundlage.
               Umfang und Investition klären wir im Erstgespräch; in der Regel als Fixpreis, ohne versteckte Folgekosten.
             </p>
 

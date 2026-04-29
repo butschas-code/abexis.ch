@@ -17,9 +17,22 @@ const initial = {
 export function VacancyApplicationForm({
   vacancyId,
   vacancyTitle,
+  jobType = "vacancy",
+  isSpontaneous = false,
+  heading,
+  intro,
+  submitButtonLabel,
+  formIdPrefix = "bewerbung",
 }: {
   vacancyId: string;
   vacancyTitle: string;
+  jobType?: "vacancy" | "spontanbewerbung";
+  isSpontaneous?: boolean;
+  heading?: string;
+  intro?: string;
+  submitButtonLabel?: string;
+  /** Keeps field ids unique when multiple forms appear on one page. */
+  formIdPrefix?: string;
 }) {
   const [form, setForm] = useState(initial);
   const [file, setFile] = useState<File | null>(null);
@@ -28,6 +41,12 @@ export function VacancyApplicationForm({
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [turnstileResetSignal, setTurnstileResetSignal] = useState(0);
   const reduce = useReducedMotion();
+
+  const resolvedHeading =
+    heading ?? (jobType === "spontanbewerbung" || isSpontaneous ? "Spontanbewerbung" : "Jetzt bewerben");
+  const resolvedSubmit = submitButtonLabel ?? "Bewerbung einreichen";
+
+  const hp = formIdPrefix.replace(/\s+/g, "-").toLowerCase();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -48,6 +67,7 @@ export function VacancyApplicationForm({
       await submitPublicForm({
         site: "search",
         type: "application",
+        formId: isSpontaneous ? `${formIdPrefix}-spontanbewerbung` : `${formIdPrefix}-${vacancyId}`,
         payload: {
           name: form.name,
           email: form.email,
@@ -56,6 +76,8 @@ export function VacancyApplicationForm({
           extra: {
             jobId: vacancyId,
             jobTitle: vacancyTitle,
+            jobType,
+            isSpontaneous: isSpontaneous ? "true" : "false",
           },
         },
         files: file ? [file] : [],
@@ -90,9 +112,13 @@ export function VacancyApplicationForm({
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-900/[0.08] text-brand-900">
           ✓
         </div>
-        <h3 className="text-[19px] font-medium text-[#1d1d1f]">Bewerbung erfolgreich gesendet</h3>
+        <h3 className="text-[19px] font-medium text-[#1d1d1f]">
+          {isSpontaneous || jobType === "spontanbewerbung" ? "Spontanbewerbung eingegangen" : "Bewerbung erfolgreich gesendet"}
+        </h3>
         <p className="mt-2 text-[15px] text-[#6e6e73]">
-          Vielen Dank für das Interesse an der Position als {vacancyTitle}. Wir werden uns in Kürze mit Ihnen in Verbindung setzen.
+          {isSpontaneous || jobType === "spontanbewerbung"
+            ? `Vielen Dank — wir prüfen Ihre Unterlagen vertraulich und melden uns, sobald sich eine Passung zu einem Mandat ergibt.`
+            : `Vielen Dank für das Interesse an der Position als ${vacancyTitle}. Wir werden uns in Kürze mit Ihnen in Verbindung setzen.`}
         </p>
       </div>
     );
@@ -100,7 +126,7 @@ export function VacancyApplicationForm({
 
   return (
     <motion.form
-      id="bewerbung"
+      id={hp}
       onSubmit={onSubmit}
       className="space-y-5 rounded-2xl border border-black/[0.06] bg-white p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] sm:p-8"
       initial={reduce ? false : { opacity: 0, y: 8 }}
@@ -109,18 +135,24 @@ export function VacancyApplicationForm({
       transition={{ duration: 0.45 }}
     >
       <div>
-        <h3 className="text-[19px] font-medium text-[#1d1d1f]">Jetzt bewerben</h3>
-        <p className="mt-1 text-[13px] text-[#86868b]">Position: {vacancyTitle}</p>
+        <h3 className="text-[19px] font-medium text-[#1d1d1f]">{resolvedHeading}</h3>
+        {intro ? (
+          <p className="mt-2 text-[14px] leading-relaxed text-[#6e6e73]">{intro}</p>
+        ) : (
+          <p className="mt-1 text-[13px] text-[#86868b]">Position: {vacancyTitle}</p>
+        )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field
+          id={`${hp}-name`}
           label="Name"
           value={form.name}
           onChange={(v) => setForm((f) => ({ ...f, name: v }))}
           required
         />
         <Field
+          id={`${hp}-email`}
           label="E-Mail"
           type="email"
           value={form.email}
@@ -129,6 +161,7 @@ export function VacancyApplicationForm({
         />
         <div className="sm:col-span-2">
           <Field
+            id={`${hp}-phone`}
             label="Telefon"
             type="tel"
             value={form.phone}
@@ -138,11 +171,11 @@ export function VacancyApplicationForm({
       </div>
 
       <div>
-        <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]" htmlFor="msg">
+        <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]" htmlFor={`${hp}-msg`}>
           Nachricht / Motivation
         </label>
         <textarea
-          id="msg"
+          id={`${hp}-msg`}
           rows={5}
           value={form.message}
           onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
@@ -152,11 +185,11 @@ export function VacancyApplicationForm({
       </div>
 
       <div>
-        <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b] block mb-2" htmlFor="cv">
+        <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]" htmlFor={`${hp}-cv`}>
           Lebenslauf & Dokumente hochladen
         </label>
         <input
-          id="cv"
+          id={`${hp}-cv`}
           type="file"
           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp"
           onChange={handleFileChange}
@@ -166,12 +199,12 @@ export function VacancyApplicationForm({
         <p className="mt-1.5 text-[11px] text-[#86868b]">Erlaubt: PDF, Word oder Bild. Max 10MB.</p>
       </div>
 
-      <label className="flex items-start gap-3 text-[15px] leading-snug text-[#6e6e73] pt-2">
+      <label className="flex items-start gap-3 pt-2 text-[15px] leading-snug text-[#6e6e73]">
         <input
           type="checkbox"
           checked={form.consent}
           onChange={(e) => setForm((f) => ({ ...f, consent: e.target.checked }))}
-          className="focus-ring mt-1 rounded border-black/20 shrink-0"
+          className="focus-ring mt-1 shrink-0 rounded border-black/20"
         />
         <span>
           Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung der Anfrage verwendet werden. Hinweise zur Datenverarbeitung finden sich in der{" "}
@@ -196,10 +229,10 @@ export function VacancyApplicationForm({
           disabled={status === "sending" || !isTurnstileConfigured()}
           className="focus-ring rounded-full bg-[#26337c] px-6 py-2.5 text-[13px] font-semibold uppercase tracking-[0.15em] text-white transition hover:bg-[#324891] disabled:opacity-50"
         >
-          {status === "sending" ? "Wird gesendet…" : "Bewerbung einreichen"}
+          {status === "sending" ? "Wird gesendet…" : resolvedSubmit}
         </button>
         {status === "error" && (
-          <p className="text-[13px] text-[#e02424] font-medium">{errorMessage}</p>
+          <p className="text-[13px] font-medium text-[#e02424]">{errorMessage}</p>
         )}
       </div>
     </motion.form>
@@ -207,26 +240,27 @@ export function VacancyApplicationForm({
 }
 
 function Field({
+  id,
   label,
   value,
   onChange,
   type = "text",
   required,
 }: {
+  id: string;
   label: string;
   value: string;
   onChange: (v: string) => void;
   type?: string;
   required?: boolean;
 }) {
-  const fid = label.replace(/\s+/g, "-").toLowerCase();
   return (
     <div>
-      <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]" htmlFor={fid}>
+      <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]" htmlFor={id}>
         {label} {required && <span className="text-red-400">*</span>}
       </label>
       <input
-        id={fid}
+        id={id}
         type={type}
         value={value}
         required={required}

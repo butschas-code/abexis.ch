@@ -23,6 +23,8 @@ export type VacancyUpsertInput = {
   sector: string;
   location: string;
   employmentType: string;
+  jobType: "vacancy" | "spontanbewerbung";
+  isSpontaneous: boolean;
   hook: string;
   body: string;
   files: VacancyFile[];
@@ -62,6 +64,8 @@ export async function saveVacancy(input: VacancyUpsertInput): Promise<void> {
     sector: input.sector,
     location: input.location,
     employmentType: input.employmentType,
+    jobType: input.jobType,
+    isSpontaneous: input.isSpontaneous,
     hook: input.hook,
     body: input.body,
     files: input.files,
@@ -104,6 +108,8 @@ export function vacancyListItemToUpsert(v: VacancyListItem): VacancyUpsertInput 
     sector: v.sector,
     location: v.location,
     employmentType: v.employmentType,
+    jobType: v.jobType,
+    isSpontaneous: v.isSpontaneous,
     hook: v.hook,
     body: v.body,
     files: v.files,
