@@ -65,8 +65,7 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
     },
     "additionalType": "https://de.wikipedia.org/wiki/Unternehmensberatung",
     "sameAs": [
-      siteConfig.linkedin,
-      siteConfig.xing
+      siteConfig.linkedin
     ].filter(Boolean)
   };
 

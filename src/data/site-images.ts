@@ -16,8 +16,8 @@ export const homeTextureBar = HOME[1];
 
 /** Kachel-Bilder der sechs Fokusthemen, Reihenfolge wie auf der alten Startseite */
 export const serviceCardImages = {
-  projectfitcheck: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=82",
-  "executive-search": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=82",
+  projectfitcheck: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Feditorial-insights.jpg?alt=media",
+  "executive-search": "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Feditorial-executive.jpg?alt=media",
   "digitale-transformation": HOME[2],
   unternehmensstrategie: HOME[3],
   vertriebmarketing: HOME[4],

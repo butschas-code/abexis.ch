@@ -20,7 +20,7 @@ export function ExecutiveSearchClosingSection() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
               <Link
-                href="/kontakt"
+                href="#suchmandat"
                 className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-brand-900 px-7 text-[17px] font-medium text-white shadow-lg shadow-brand-900/35 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl sm:w-auto sm:min-h-[48px] sm:px-8"
               >
                 Suchmandat anfragen

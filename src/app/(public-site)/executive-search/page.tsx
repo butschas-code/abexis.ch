@@ -15,6 +15,7 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
 import { InsightPostCard } from "@/components/public-site/insights/InsightPostCard";
+import { SearchBriefContactForm } from "@/components/site/search/SearchBriefContactForm";
 import { listSearchSitePublishedPosts } from "@/public-site/cms";
 
 const HERO_LEAD =
@@ -72,6 +73,29 @@ export default async function ExecutiveSearchPage() {
         secondaryHref="/kontakt"
         secondaryLabel="Kontakt aufnehmen"
       />
+
+      <section className="bg-white py-14 sm:py-16">
+        <PublicContentWidth>
+          <p className="mb-9 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+            Unsere Branchenschwerpunkte
+          </p>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-5 lg:gap-x-8">
+            {[
+              "Informationstechnologie & Digitalisierung",
+              "Industrie",
+              "Finanzen, Banking & Risk Management",
+              "Öffentlicher Sektor & Verwaltung",
+              "Beratung",
+            ].map((sector) => (
+              <div key={sector} className="border-t-2 border-[#26337c] pt-4">
+                <p className="text-[15px] font-medium leading-[1.35] tracking-[-0.01em] text-[#1d1d1f]">
+                  {sector}
+                </p>
+              </div>
+            ))}
+          </div>
+        </PublicContentWidth>
+      </section>
 
       <ParallaxBlock yRange={[32, -32]}>
         <HomeIntroBand
@@ -158,6 +182,26 @@ export default async function ExecutiveSearchPage() {
           </section>
         </MotionSection>
       )}
+
+      <MotionSection>
+        <section id="suchmandat" className="scroll-mt-28 bg-[#f5f5f7] py-16 sm:py-20 md:py-24">
+          <PublicContentWidth>
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+              <div className="max-w-xl">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Suchmandat</p>
+                <h2 className="mt-3 text-[28px] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f] sm:text-[34px]">
+                  Besetzung vertraulich anfragen
+                </h2>
+                <p className="mt-5 text-[17px] leading-relaxed text-[#6e6e73]">
+                  Skizzieren Sie Rolle, Kontext und Zeitrahmen. Wir prüfen Ihre Anfrage vertraulich und melden uns mit
+                  einer ersten Einschätzung zum passenden Suchvorgehen.
+                </p>
+              </div>
+              <SearchBriefContactForm />
+            </div>
+          </PublicContentWidth>
+        </section>
+      </MotionSection>
 
       <ExecutiveSearchClosingSection />
     </InteriorPageRoot>
