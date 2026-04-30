@@ -11,6 +11,6 @@ export const homeImagery = {
   sectors:        img("editorial-hero"),
   projectFitCheck: img("editorial-insights"),
   process:        img("editorial-team"),
-  trust:          img("editorial-executive"),
+  trust:          img("executive-unsplash"),
   contact:        img("editorial-contact"),
 } as const;

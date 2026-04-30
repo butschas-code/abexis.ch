@@ -6,8 +6,7 @@ import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PageHero } from "@/components/site/PageHero";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
 import { ConfidentialMandatesNotice } from "@/components/executive-search/ConfidentialMandatesNotice";
-import { SpontaneousApplicationSection } from "@/components/executive-search/SpontaneousApplicationSection";
-import { listPublishedVacancies, getPublishedSpontaneousVacancy } from "@/public-site/cms/vacancy";
+import { listPublishedVacancies } from "@/public-site/cms/vacancy";
 import { unsplash } from "@/executive-search/lib/images/unsplash";
 
 export const revalidate = 120;
@@ -23,7 +22,6 @@ export const metadata: Metadata = {
 
 export default async function ExecutiveSearchVakanzenPage() {
   const vacancies = await listPublishedVacancies(20);
-  const cmsSpontaneous = await getPublishedSpontaneousVacancy();
 
   return (
     <InteriorPageRoot>
@@ -140,9 +138,8 @@ export default async function ExecutiveSearchVakanzenPage() {
         </section>
       </MotionSection>
 
-      <ConfidentialMandatesNotice variant="vakanzen" />
+      <ConfidentialMandatesNotice />
 
-      <SpontaneousApplicationSection cmsVacancy={cmsSpontaneous} applicationFormIdPrefix="spontan-vakanzen" />
 
       {/* CTA strip */}
       <MotionSection className="border-t border-black/[0.05] bg-[#f5f5f7] py-16 md:py-20">

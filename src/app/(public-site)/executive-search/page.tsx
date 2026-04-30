@@ -9,7 +9,6 @@ import { HeroPanel } from "@/components/executive-search/HeroPanel";
 import { HomeIntroBand } from "@/components/executive-search/HomeIntroBand";
 import { ParallaxBlock } from "@/components/executive-search/ParallaxBlock";
 import { SectionShell } from "@/components/executive-search/SectionShell";
-import { SpontaneousApplicationSection } from "@/components/executive-search/SpontaneousApplicationSection";
 import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
@@ -19,7 +18,6 @@ import { PublicContentWidth } from "@/components/site/PublicContentWidth";
 import { legacySiteImages } from "@/executive-search/data/legacy-site-images";
 import { homeImagery } from "@/executive-search/lib/images/homeImagery";
 import { listSearchSitePublishedPosts } from "@/public-site/cms";
-import { getPublishedSpontaneousVacancy } from "@/public-site/cms/vacancy";
 
 const HERO_LEAD =
   "Abexis SEARCH besetzt Führungs- und Schlüsselpositionen diskret, präzise und mit echter Beratungskompetenz. Viele unserer Mandate werden bewusst nicht öffentlich ausgeschrieben. Deshalb arbeiten wir mit vertraulicher Direktansprache, einem klar geführten Suchprozess und einem tiefen Verständnis für Rolle, Markt und Organisation. Wir bringen Unternehmen mit Persönlichkeiten zusammen, die fachlich überzeugen, menschlich passen und strategisch Wirkung entfalten.";
@@ -64,7 +62,6 @@ export const metadata: Metadata = {
 
 export default async function ExecutiveSearchPage() {
   const searchPosts = await listSearchSitePublishedPosts(6);
-  const cmsSpontaneous = await getPublishedSpontaneousVacancy();
 
   return (
     <InteriorPageRoot>
@@ -154,9 +151,9 @@ export default async function ExecutiveSearchPage() {
         </SectionShell>
       </MotionSection>
 
-      <ConfidentialMandatesNotice />
-
       <HomeVacancyTeasers />
+
+      <ConfidentialMandatesNotice />
 
       {searchPosts.length > 0 && (
         <MotionSection>
@@ -191,8 +188,6 @@ export default async function ExecutiveSearchPage() {
           </section>
         </MotionSection>
       )}
-
-      <SpontaneousApplicationSection cmsVacancy={cmsSpontaneous} />
 
       <ExecutiveSearchClosingSection />
     </InteriorPageRoot>

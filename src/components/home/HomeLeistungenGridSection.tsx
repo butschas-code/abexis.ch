@@ -17,7 +17,7 @@ const SERVICE_KEYS = [
 const LEISTUNG_IMAGES: readonly string[] = [
   homeImagery.projectFitCheck,
   ...SERVICE_KEYS.map((k) => serviceCardImages[k]),
-  homeImagery.trust,
+  serviceCardImages["executive-search"],
 ];
 
 export function HomeLeistungenGridSection() {
