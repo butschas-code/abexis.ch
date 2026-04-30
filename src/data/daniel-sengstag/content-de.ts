@@ -32,7 +32,7 @@ export const danielSengstagContent: SiteContent = {
   },
   intro: {
     kicker: "Positionierung",
-    title: "Seniorität ohne Lautstärke",
+    title: "Strategisch denken.\nKlar entscheiden.\nKonsequent umsetzen.",
     body: [
       "Ich arbeite an Schnittstellen: Transformation und Alltag, Technologie und Wirtschaft, Menschen und Organisation. Dabei verbinde ich technisches Verständnis mit P&L-Verantwortung und einem klaren Sinn für Governance.",
       "Meine Laufbahn führt von Konstruktion und Software über Professional Services und globale Vertriebsführung bis zu Geschäftsführung und Gründung. Diese Breite prägt, wie ich Situationen lese: diskret, präzise, belastbar.",

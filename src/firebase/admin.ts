@@ -52,6 +52,8 @@ export function getFirebaseAdminApp(): App | null {
     process.env.GCP_PROJECT?.trim();
 
   const rawJson = process.env.FIREBASE_SERVICE_ACCOUNT_JSON?.trim();
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL?.trim();
+  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.trim()?.replace(/\\n/g, "\n");
 
   try {
     if (rawJson) {
@@ -62,6 +64,18 @@ export function getFirebaseAdminApp(): App | null {
       initializeApp({
         credential: cert(credentials),
         projectId,
+      });
+      return getApps()[0]!;
+    }
+
+    if (clientEmail && privateKey && envProjectId) {
+      initializeApp({
+        credential: cert({
+          projectId: envProjectId,
+          clientEmail,
+          privateKey,
+        }),
+        projectId: envProjectId,
       });
       return getApps()[0]!;
     }

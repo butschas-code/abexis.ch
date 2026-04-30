@@ -180,7 +180,7 @@ export function DanielSengstagProfilePage({ copy, images }: { copy: SiteContent;
             </div>
             <div className="md:col-span-7 md:pl-2">
               <Eyebrow>{copy.intro.kicker}</Eyebrow>
-              <h2 className="mt-4 text-[clamp(1.75rem,3.5vw,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f]">
+              <h2 className="mt-4 whitespace-pre-line text-[clamp(1.75rem,3.5vw,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f]">
                 {copy.intro.title}
               </h2>
               <div className="mt-6 space-y-5 text-[15px] leading-relaxed text-[#6e6e73] sm:text-[16px]">
