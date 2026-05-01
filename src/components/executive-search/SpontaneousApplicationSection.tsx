@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
+import { getPublishedSpontaneousVacancy } from "@/public-site/cms/vacancy";
 
 const ROLE_AREAS = [
   "Sales Director",
@@ -14,7 +15,12 @@ const ROLE_AREAS = [
   "Beratung",
 ] as const;
 
-export function SpontaneousApplicationSection() {
+export async function SpontaneousApplicationSection() {
+  const spontaneous = await getPublishedSpontaneousVacancy();
+  const spontanHref = spontaneous
+    ? `/executive-search/vakanzen/${spontaneous.slug}`
+    : "/executive-search/vakanzen/spontanbewerbung";
+
   return (
     <MotionSection className="border-b border-black/[0.06] bg-[#fbfbfd] py-14 sm:py-16 md:py-20">
       <PublicContentWidth>
@@ -45,7 +51,7 @@ export function SpontaneousApplicationSection() {
 
           <div className="mt-10">
             <Link
-              href="/executive-search/vakanzen/spontanbewerbung"
+              href={spontanHref}
               className="inline-flex items-center gap-2 rounded-full bg-brand-900 px-6 py-3 text-[15px] font-medium text-white shadow-sm transition-opacity hover:opacity-90"
             >
               Spontanbewerbung einreichen

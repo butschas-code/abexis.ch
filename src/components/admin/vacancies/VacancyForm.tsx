@@ -271,7 +271,7 @@ export function VacancyForm({ mode, vacancyId }: Props) {
                   };
                   if (on) {
                     if (!prev.title.trim()) next.title = "Spontanbewerbung";
-                    if (!prev.slug.trim()) next.slug = "spontan";
+                    if (!prev.slug.trim()) next.slug = "spontanbewerbung";
                   }
                   return next;
                 });
