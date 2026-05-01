@@ -229,6 +229,7 @@ async function getVacancyBySlugUncached(slug: string, deployment: PublicDeployme
 
     const q = query(
       collection(webDb, COLLECTIONS.vacancies),
+      where("status", "==", "published"),
       where("slug", "==", slug),
       limit(5)
     );
