@@ -416,6 +416,17 @@ body {
       linear-gradient(180deg, rgba(4, 6, 12, 0.22) 0%, transparent 45%);
   }
 
+  /**
+   * Hero accent line (`BrandGrad` dark): gradient is painted across the whole multi-line box.
+   * On narrow viewports the block is tall, so wrapped lines sit on the cyan tail and sink into the scrim.
+   * Stay in light stops (same angle / icy palette as desktop) + drop-shadow because `text-shadow` does not
+   * reliably paint on `background-clip: text` fills.
+   */
+  .text-gradient-brand-hero {
+    background-image: linear-gradient(105deg, #ffffff 0%, #eef4ff 28%, #d2f1fc 58%, #f5fcff 100%);
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.42)) drop-shadow(0 2px 14px rgba(0, 0, 0, 0.28));
+  }
+
   .hero-home-title-shadow {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 2px 16px rgba(0, 0, 0, 0.35);
   }
