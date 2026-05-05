@@ -3,7 +3,7 @@ import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { PageHero } from "@/components/site/PageHero";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
-import { BrandGrad } from "@/components/ui/BrandGrad";
+import { HeroHeadlineBrandAccent } from "@/components/site/HeroHeadlineBrandAccent";
 import { homeHeroImage, prcChallengesInfographic, prcDimensionenModell, prcAblaufTimeline } from "@/data/site-images";
 import { siteConfig } from "@/data/pages";
 
@@ -194,9 +194,7 @@ export function ProjectFitCheck() {
         <h1 className="mt-3 max-w-[22rem] text-[clamp(1.75rem,6vw+0.35rem,3.5rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-balance sm:max-w-[28ch] sm:leading-[1.06]">
           <span className="text-white">Projekte laufen selten falsch</span>
           <br />
-          <BrandGrad variant="dark" className="text-balance">
-            aber oft in die falsche Richtung
-          </BrandGrad>
+          <HeroHeadlineBrandAccent>aber oft in die falsche Richtung</HeroHeadlineBrandAccent>
         </h1>
         <p className="mt-5 max-w-[52ch] text-[clamp(0.9375rem,2.8vw+0.35rem,1.175rem)] leading-[1.55] text-white/88 text-balance sm:mt-6 sm:leading-relaxed">
           Der Abexis Project Reality Check zeigt in kurzer Zeit, wo Ihr Projekt wirklich steht und was jetzt entschieden

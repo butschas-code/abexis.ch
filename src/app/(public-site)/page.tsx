@@ -14,7 +14,7 @@ import { WelcomeSection } from "@/components/home/WelcomeSection";
 import { PartnershipsMarquee } from "@/components/home/PartnershipsMarquee";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { MotionSection } from "@/components/motion/MotionSection";
-import { BrandGrad } from "@/components/ui/BrandGrad";
+import { HeroHeadlineBrandAccent } from "@/components/site/HeroHeadlineBrandAccent";
 import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
 import { homeHeroContent } from "@/data/home-page-content";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
@@ -41,9 +41,7 @@ export default function HomePage() {
           <h1 className="hero-home-title-shadow mt-3 text-[clamp(1.6rem,5.2vw+0.4rem,2.5rem)] font-semibold leading-none tracking-[-0.03em] text-balance break-words sm:text-[38px] md:text-[52px]">
             <span className="text-white">{h.titleLines[0]}</span>
             <br />
-            <BrandGrad variant="dark" className="text-balance">
-              {h.titleLines[1]}
-            </BrandGrad>
+            <HeroHeadlineBrandAccent>{h.titleLines[1]}</HeroHeadlineBrandAccent>
           </h1>
           <p className="hero-home-body-shadow mt-5 text-[17px] font-medium leading-relaxed text-white/92 sm:mt-6 sm:text-[20px] md:text-[22px]">
             Abexis schafft Klarheit, wenn sie fehlt.
