@@ -138,19 +138,47 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
     });
   } else if (type === "JobPosting" && data) {
     webPageSchema.mainEntity = { "@id": entityId };
+
+    // Map free-form employmentType strings to Google's allowed values.
+    const rawEmployment = String(data.employmentType || "").toLowerCase();
+    const employmentType =
+      rawEmployment.includes("teil") || rawEmployment.includes("part")
+        ? "PART_TIME"
+        : rawEmployment.includes("contract") || rawEmployment.includes("freelance") || rawEmployment.includes("interim")
+          ? "CONTRACTOR"
+          : rawEmployment.includes("temp")
+            ? "TEMPORARY"
+            : rawEmployment.includes("intern")
+              ? "INTERN"
+              : "FULL_TIME";
+
+    // validThrough is required-non-critical: Google recommends 6 months after datePosted when no explicit deadline exists.
+    const datePosted = data.publishedAt || data.createdAt || new Date().toISOString();
+    const validThrough = new Date(new Date(datePosted).getTime() + 1000 * 60 * 60 * 24 * 180).toISOString();
+
     schemas.push({
       "@type": "JobPosting",
       "@id": entityId,
       "title": data.title || name,
       "description": data.excerpt || data.hook || description,
-      "datePosted": data.publishedAt || data.createdAt,
-      "employmentType": data.employmentType || "FULL_TIME",
-      "hiringOrganization": { "@id": ORG_ID },
+      "datePosted": datePosted,
+      "validThrough": validThrough,
+      "employmentType": employmentType,
+      // Google requires hiringOrganization to be an Organization (not a LocalBusiness reference).
+      "hiringOrganization": {
+        "@type": "Organization",
+        "name": siteConfig.company,
+        "sameAs": BASE_URL,
+        "logo": logoUrl
+      },
       "jobLocation": {
         "@type": "Place",
         "address": {
           "@type": "PostalAddress",
-          "addressLocality": data.location || "Schweiz",
+          "streetAddress": "Zihlstrasse 25",
+          "addressLocality": data.location || "Hinwil",
+          "addressRegion": "ZH",
+          "postalCode": "8340",
           "addressCountry": "CH"
         }
       }
