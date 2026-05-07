@@ -31,11 +31,10 @@ const initial = {
 type KontaktPageFormProps = {
   /** Outlook / Buchungs-URL : vom Server übergeben, damit der Client nicht `pages.ts` bundelt. */
   bookingUrl: string;
-  site?: "abexis" | "search";
 };
 
 /** Kontaktformular für `/kontakt` (ohne Datei-Upload). */
-export function KontaktPageForm({ bookingUrl, site = "abexis" }: KontaktPageFormProps) {
+export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
   const formId = useId();
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState<Partial<Record<keyof Values | "privacyAccepted", string>>>({});
@@ -93,9 +92,9 @@ export function KontaktPageForm({ bookingUrl, site = "abexis" }: KontaktPageForm
 
     try {
       await submitPublicForm({
-        site,
+        site: "abexis",
         type: "contact",
-        formId: site === "search" ? "kontakt-page-search" : "kontakt-page",
+        formId: "kontakt-page",
         payload: {
           ...payload,
           extra: { privacyConsent: "true" },

@@ -2,9 +2,15 @@
 
 import { collection, getDocs, limit, orderBy, query, where, type QueryConstraint } from "firebase/firestore";
 import { getCmsFirestore } from "@/firebase/firestore";
+import { POST_SITE_FIRESTORE_IN } from "@/public-site/site/filters";
 import { COLLECTIONS } from "../firestore/collections";
 import type { Vacancy, VacancyFile } from "../types/vacancy";
 import type { PostStatus } from "../types/enums";
+import type { SiteKey } from "../types/site";
+
+function normalizeVacancySite(_raw: unknown): SiteKey {
+  return "abexis";
+}
 
 export type VacancyListItem = Vacancy & { id: string };
 
@@ -50,7 +56,7 @@ export function mapVacancyClientDoc(id: string, d: Record<string, unknown>): Vac
     body: String(d.body ?? ""),
     files: readFiles(d.files),
     apply: String(d.apply ?? ""),
-    site: d.site === "search" || d.site === "both" || d.site === "abexis" ? d.site : "search",
+    site: normalizeVacancySite(d.site),
     status: readStatus(d.status),
     publishedAt: toIso(d.publishedAt),
     createdAt: toIso(d.createdAt) ?? new Date().toISOString(),
@@ -68,16 +74,14 @@ export async function listVacanciesForAdmin(max = 100): Promise<VacancyListItem[
   return snap.docs.map((doc) => mapVacancyClientDoc(doc.id, doc.data() as Record<string, unknown>));
 }
 
-/** Published vacancies for public listing (site-scoped). */
+/** Published vacancies for public listing (`site` is `abexis` in Firestore). */
 export async function listPublishedVacanciesForCurrentSite(max = 20): Promise<VacancyListItem[]> {
   const db = getCmsFirestore();
   if (!db) return [];
-  const siteId = process.env.NEXT_PUBLIC_CMS_SITE_ID === "search" ? "search" : "abexis";
-  const sites = siteId === "search" ? (["search", "both"] as const) : (["abexis", "both"] as const);
   const q = query(
     collection(db, COLLECTIONS.vacancies),
     where("status", "==", "published"),
-    where("site", "in", [...sites]),
+    where("site", "in", [...POST_SITE_FIRESTORE_IN]),
     orderBy("publishedAt", "desc"),
     limit(max),
   );

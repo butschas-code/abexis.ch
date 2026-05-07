@@ -7,6 +7,7 @@ import { getAdminFirestore } from "@/firebase/server";
 import { parseFirebaseWebEnv } from "@/firebase/env.schema";
 import type { Vacancy, VacancyFile } from "@/cms/types/vacancy";
 import type { PostStatus } from "@/cms/types/enums";
+import type { SiteKey } from "@/cms/types/site";
 import { getResolvedPublicDeploymentSite, isPostVisibleOnDeployment } from "@/public-site/site";
 import type { PublicDeploymentSite } from "@/public-site/site";
 
@@ -60,7 +61,9 @@ export function isSpontaneousVacancy(v: Pick<PublishedVacancy, "jobType" | "isSp
   return v.isSpontaneous === true || v.jobType === "spontanbewerbung";
 }
 
-/** Staging / placeholder rows that stay in CMS but must not show on the public site. */
+function normalizeVacancySite(_raw: unknown): SiteKey {
+  return "abexis";
+}
 function isVacancyHiddenFromPublic(v: Pick<PublishedVacancy, "slug" | "title">): boolean {
   const s = v.slug.trim().toLowerCase();
   const t = v.title.trim().toLowerCase();
@@ -84,7 +87,7 @@ function mapVacancyDoc(id: string, d: Record<string, unknown>): PublishedVacancy
     body: String(d.body ?? ""),
     files: readFiles(d.files),
     apply: String(d.apply ?? ""),
-    site: d.site === "search" || d.site === "both" || d.site === "abexis" ? d.site : "both",
+    site: normalizeVacancySite(d.site),
     status: readStatus(d.status),
     publishedAt: toIso(d.publishedAt),
     createdAt: toIso(d.createdAt) ?? new Date().toISOString(),

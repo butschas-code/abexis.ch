@@ -87,8 +87,7 @@ export function AdminSubmissionsManager() {
         tLabel.toLowerCase().includes(s) ||
         r.type.toLowerCase().includes(s) ||
         r.id.toLowerCase().includes(s) ||
-        (r.summary ?? "").toLowerCase().includes(s) ||
-        r.site.toLowerCase().includes(s)
+        (r.summary ?? "").toLowerCase().includes(s)
       );
     });
   }, [rows, filterStatus, q]);
@@ -222,7 +221,6 @@ export function AdminSubmissionsManager() {
               <thead className="border-b border-black/[0.07] bg-[color-mix(in_srgb,var(--apple-bg-subtle)_65%,white)] text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--apple-text-tertiary)]">
                 <tr>
                   <th className="px-4 py-3.5 pl-5">Typ / Kurzinfo</th>
-                  <th className="px-4 py-3.5">Site</th>
                   <th className="hidden px-4 py-3.5 md:table-cell">Zeit</th>
                   <th className="px-4 py-3.5 pr-5">Status</th>
                 </tr>
@@ -230,7 +228,7 @@ export function AdminSubmissionsManager() {
               <tbody className="divide-y divide-black/[0.06]">
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-5 py-14 text-center">
+                    <td colSpan={3} className="px-5 py-14 text-center">
                       <p className="font-serif text-[1.1rem] font-medium text-[var(--apple-text)]">Keine Treffer</p>
                       <p className="mt-2 text-[14px] text-[var(--apple-text-secondary)]">
                         Suche oder Statusfilter anpassen.
@@ -258,7 +256,6 @@ export function AdminSubmissionsManager() {
                         ) : null}
                         <div className="font-mono text-xs text-[var(--apple-text-tertiary)]">{r.id}</div>
                       </td>
-                      <td className="px-4 py-3.5 text-[var(--apple-text-secondary)]">{r.site}</td>
                       <td className="hidden px-4 py-3.5 text-[var(--apple-text-secondary)] md:table-cell">
                         {r.createdAt ? new Date(r.createdAt).toLocaleString("de-CH") : ","}
                       </td>

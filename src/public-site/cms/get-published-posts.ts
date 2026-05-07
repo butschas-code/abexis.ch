@@ -57,7 +57,7 @@ export async function listPublishedPostsFromDb(
     .filter((p): p is PublishedPostWithId => p != null && p.status === "published");
 }
 
-/** Unified Insights: every published post regardless of `site` (abexis / search / both). */
+/** Unified Insights: every published post (`site` is `abexis` in Firestore). */
 export async function listPublishedPostsFromDbAllSites(
   db: Firestore,
   limit = 20,
@@ -137,41 +137,10 @@ const getPublishedCmsPostsAllSitesCached = unstable_cache(
   { revalidate: CMS_POST_LIST_REVALIDATE, tags: ["published-posts"] },
 );
 
-async function listSearchSitePostsUncached(limit: number): Promise<PublishedPostWithId[]> {
+/** @deprecated Prefer {@link getPublishedCmsPostsAllSites}. Executive Search surfaces use the same Insights feed. */
+export const listSearchSitePublishedPosts = cache(async (limit = 20) => {
   const lim = Math.min(200, Math.max(1, limit));
-  const db = getAdminFirestore();
-  if (db) {
-    try {
-      const snap = await db
-        .collection(COLLECTIONS.posts)
-        .where("status", "==", "published")
-        .where("site", "==", "search")
-        .orderBy("publishedAt", "desc")
-        .limit(lim)
-        .get();
-      return snap.docs
-        .map((doc) => {
-          const post = mapPostDoc(doc.id, doc);
-          return post ? { id: doc.id, ...post } : null;
-        })
-        .filter((p): p is PublishedPostWithId => p != null && p.status === "published");
-    } catch (err) {
-      console.error("[cms] Admin Firestore search-site posts failed; falling back to in-memory filter.", err);
-    }
-  }
-  const all = await getPublishedCmsPostsAllSitesUncached(lim * 5);
-  return all.filter((p) => p.site === "search").slice(0, lim);
-}
-
-const listSearchSitePostsCached = unstable_cache(
-  async (limit: number) => listSearchSitePostsUncached(limit),
-  ["search-site-published-posts"],
-  { revalidate: CMS_POST_LIST_REVALIDATE, tags: ["published-posts"] },
-);
-
-/** Published posts with `site: "search"` : surfaced on the Executive Search section of abexis.ch. */
-export const listSearchSitePublishedPosts = cache(async (limit = 20): Promise<PublishedPostWithId[]> => {
-  return listSearchSitePostsCached(Math.min(200, Math.max(1, limit)));
+  return getPublishedCmsPostsAllSitesCached(lim);
 });
 
 async function getPublishedCmsPostsImpl(limit = 20): Promise<PublishedPostWithId[]> {
@@ -190,8 +159,8 @@ async function getPublishedCmsPostsImpl(limit = 20): Promise<PublishedPostWithId
 export const getPublishedCmsPosts = cache(getPublishedCmsPostsImpl);
 
 /**
- * All published posts for the unified Insights experience (abexis + search + both),
- * used by `/blog` and sitemap. Cached separately from deployment-scoped {@link getPublishedCmsPosts}.
+ * All published posts for `/blog`, sitemap, and Executive Search teasers.
+ * Cached separately from deployment-scoped {@link getPublishedCmsPosts}.
  */
 export const getPublishedCmsPostsAllSites = cache(async (limit = 20) => {
   const lim = Math.min(200, Math.max(1, limit));
@@ -244,7 +213,7 @@ async function getPublishedPostBySlugImpl(slug: string): Promise<PublishedPostWi
 }
 
 /**
- * Single published post by public slug, including `site` abexis, search, or both (unified `/blog` surface).
+ * Single published post by public slug (unified `/blog` surface).
  * Wrapped in `cache()` so `generateMetadata` + article body share one in-flight fetch per request,
  * and `unstable_cache` so repeat traffic is served from the data cache for a short TTL.
  */

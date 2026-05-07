@@ -1,16 +1,22 @@
 import { unstable_cache } from "next/cache";
 import { COLLECTIONS } from "@/cms/firestore/collections";
-import type { CategorySiteKey } from "@/cms/types/category-site";
 import { getAdminFirestore } from "@/firebase/server";
-import { normalizeCategorySite } from "@/lib/cms/normalize-category-site";
-import { getResolvedPublicDeploymentSite, visibleCategorySiteKeysForDeployment } from "@/public-site/site";
+import { getResolvedPublicDeploymentSite, visibleCategorySitesFirestoreInClause } from "@/public-site/site";
 
 export type PublicCategoryOption = { id: string; name: string; slug: string };
 
-/** Category `site` values visible for the current public deployment (host-aware when resolved async). */
-export async function getVisibleCategorySitesAsync(): Promise<CategorySiteKey[]> {
-  const d = await getResolvedPublicDeploymentSite();
-  return visibleCategorySiteKeysForDeployment(d);
+/** Map stored category row to a key used with {@link visibleCategorySitesFirestoreInClause}. */
+function categoryFirestoreSiteKey(data: { site?: string; siteScope?: string }): string {
+  const raw = String(data.site ?? data.siteScope ?? "abexis").trim().toLowerCase();
+  if (raw === "both") return "shared";
+  if (raw === "abexis" || raw === "search" || raw === "shared") return raw;
+  return "abexis";
+}
+
+/** Category `site` values that may still exist in Firestore pre-migration. */
+export async function getVisibleCategorySitesAsync(): Promise<string[]> {
+  await getResolvedPublicDeploymentSite();
+  return [...visibleCategorySitesFirestoreInClause()];
 }
 
 /** Cached category list : `allowedSites` passed as arg so no `headers()` runs inside the cache callback. */
@@ -25,8 +31,8 @@ const _listCategoriesCached = async (allowedSites: string[]): Promise<PublicCate
         const rows: PublicCategoryOption[] = [];
         for (const doc of snap.docs) {
           const data = doc.data() as { name?: string; slug?: string; site?: string; siteScope?: string };
-          const site = normalizeCategorySite(data.site ?? data.siteScope);
-          if (!allow.has(site)) continue;
+          const key = categoryFirestoreSiteKey(data);
+          if (!allow.has(key)) continue;
           rows.push({
             id: doc.id,
             name: String(data.name ?? doc.id),
@@ -46,18 +52,17 @@ const _listCategoriesCached = async (allowedSites: string[]): Promise<PublicCate
   return getCached();
 };
 
-/** Categories that can be used to filter published posts on this site. */
+/**
+ * Categories used on the public site (legacy `site` / `siteScope` until migration).
+ */
 export async function listPublicCategoriesForDeployment(): Promise<PublicCategoryOption[]> {
-  const d = await getResolvedPublicDeploymentSite();
-  const allowedSites = visibleCategorySiteKeysForDeployment(d);
-  return _listCategoriesCached(allowedSites);
+  await getResolvedPublicDeploymentSite();
+  return _listCategoriesCached([...visibleCategorySitesFirestoreInClause()]);
 }
 
-const UNIFIED_INSIGHTS_CATEGORY_SITES: CategorySiteKey[] = ["abexis", "search", "shared"];
-
 /**
- * All category surfaces for `/blog` when listing unified posts (abexis + search + shared), so labels resolve for every post.
+ * All categories needed to label posts on `/blog` (same allow-list as deployment).
  */
 export async function listPublicCategoriesForInsights(): Promise<PublicCategoryOption[]> {
-  return _listCategoriesCached(UNIFIED_INSIGHTS_CATEGORY_SITES);
+  return _listCategoriesCached([...visibleCategorySitesFirestoreInClause()]);
 }

@@ -24,13 +24,6 @@ export const SEED_SAMPLE_SITE_SETTINGS: Pick<SiteSettings, "contactBySite" | "fo
       addressLines: ["Musterstrasse 1", "8000 Zürich", "Schweiz"],
       headline: "Kontakt",
     },
-    search: {
-      businessName: "Abexis Executive Search (Beispiel)",
-      email: "search-placeholder@example.com",
-      phone: "+41 43 000 00 01",
-      addressLines: ["Musterstrasse 1", "8000 Zürich", "Schweiz"],
-      headline: "Kontakt Executive Search",
-    },
   },
   footer: {
     copyrightHtml: "© {year} Abexis GmbH : Beispieltext".replace("{year}", String(new Date().getFullYear())),
@@ -48,14 +41,8 @@ export const SEED_SAMPLE_SITE_SETTINGS: Pick<SiteSettings, "contactBySite" | "fo
   seoBySite: {
     abexis: {
       defaultTitle: "Abexis : Managementberatung (Beispiel)",
-      defaultMetaDescription: "Platzhalter Meta-Beschreibung für die Beratungsseite.",
+      defaultMetaDescription: "Platzhalter Meta-Beschreibung für die Website.",
       titleSuffix: " | Abexis",
-      ogType: "website",
-    },
-    search: {
-      defaultTitle: "Executive Search : Beispiel",
-      defaultMetaDescription: "Platzhalter für die Search-Auffindbarkeit.",
-      titleSuffix: " | Abexis Search",
       ogType: "website",
     },
   },
@@ -64,6 +51,6 @@ export const SEED_SAMPLE_SITE_SETTINGS: Pick<SiteSettings, "contactBySite" | "fo
   ],
   switchBarLinks: [
     { label: "Leistungen", href: "/leistungen", site: "abexis", order: 1 },
-    { label: "Kontakt", href: "/kontakt", site: "both", order: 2 },
+    { label: "Kontakt", href: "/kontakt", site: "abexis", order: 2 },
   ],
 };

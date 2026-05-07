@@ -5,7 +5,7 @@
  * - `getDeploymentSite()` = env-only (`NEXT_PUBLIC_CMS_SITE_ID`), for sync / build.
  * - For hostname-aware resolution use `getResolvedPublicDeploymentSite()` from `@/public-site/site`.
  */
-import type { CmsDeploymentSite } from "@/cms/types/site";
+import type { CmsDeploymentSite, SiteKey } from "@/cms/types/site";
 import {
   getDeploymentSiteFromEnv,
   getResolvedPublicDeploymentSite,
@@ -18,8 +18,8 @@ export function getDeploymentSite(): CmsDeploymentSite {
 }
 
 /** @deprecated Prefer `visiblePostSitesInClause(getDeploymentSiteFromEnv())` or async resolution. */
-export function getVisiblePostSites(): Array<"abexis" | "search" | "both"> {
-  return visiblePostSitesInClause(getDeploymentSiteFromEnv());
+export function getVisiblePostSites(): SiteKey[] {
+  return [...visiblePostSitesInClause(getDeploymentSiteFromEnv())];
 }
 
 export { getDeploymentSiteFromEnv, getResolvedPublicDeploymentSite };

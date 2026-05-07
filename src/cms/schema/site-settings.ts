@@ -54,12 +54,10 @@ const switchLink = z.object({
 
 const contactBySite = z.object({
   abexis: contactBlock.optional(),
-  search: contactBlock.optional(),
 });
 
 const seoBySite = z.object({
   abexis: seoBlock.optional(),
-  search: seoBlock.optional(),
 });
 
 /** Full replace of settings document (admin save). */

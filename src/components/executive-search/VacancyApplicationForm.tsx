@@ -65,7 +65,7 @@ export function VacancyApplicationForm({
 
     try {
       await submitPublicForm({
-        site: "search",
+        site: "abexis",
         type: "application",
         formId: isSpontaneous ? `${formIdPrefix}-spontanbewerbung` : `${formIdPrefix}-${vacancyId}`,
         payload: {

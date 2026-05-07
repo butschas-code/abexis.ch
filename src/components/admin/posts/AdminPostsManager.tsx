@@ -14,7 +14,6 @@ import {
 } from "@/cms/services/post-write-client";
 import { listPostsForAdmin, type CmsPostListItem } from "@/cms/services/posts-client";
 import type { PostStatus } from "@/cms/types/enums";
-import type { SiteKey } from "@/cms/types/site";
 import { parsePostUpsert } from "@/cms/schema";
 import { filterAndSortPosts, type PostsAdminFilterState } from "@/lib/cms/posts-admin-filter";
 import {
@@ -31,12 +30,6 @@ import { AdminLoading } from "@/components/admin/AdminLoading";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
 import { PostsDeleteDialog } from "./PostsDeleteDialog";
 import { PostsRowMenu } from "./PostsRowMenu";
-
-const siteLabel: Record<SiteKey, string> = {
-  abexis: "abexis.ch",
-  search: "Search",
-  both: "Beide",
-};
 
 const statusLabel: Record<PostStatus, string> = {
   draft: "Entwurf",
@@ -64,11 +57,6 @@ function parseStatus(v: string | null): PostStatus | "all" {
   return "all";
 }
 
-function parseSite(v: string | null): SiteKey | "all" {
-  if (v === "abexis" || v === "search" || v === "both") return v;
-  return "all";
-}
-
 function parseSort(v: string | null): PostsAdminFilterState["sort"] {
   if (v === "publishedAt" || v === "title") return v;
   return "updatedAt";
@@ -82,7 +70,6 @@ function buildFilterFromParams(searchParams: URLSearchParams, qLocal: string): P
   return {
     q: qLocal,
     status: parseStatus(searchParams.get("status")),
-    site: parseSite(searchParams.get("site")),
     categoryId: searchParams.get("category")?.trim() || "all",
     sort: parseSort(searchParams.get("sort")),
     order: parseOrder(searchParams.get("order")),
@@ -226,11 +213,10 @@ export function AdminPostsManager() {
   }
 
   const statusFilter = parseStatus(searchParams.get("status"));
-  const siteFilter = parseSite(searchParams.get("site"));
   const categoryFilter = searchParams.get("category")?.trim() || "all";
 
   const description =
-    statusFilter !== "all" || siteFilter !== "all" || categoryFilter !== "all" || qLocal.trim()
+    statusFilter !== "all" || categoryFilter !== "all" || qLocal.trim()
       ? "Gefilterte und sortierte Liste : bis zu 500 zuletzt bearbeitete Beiträge aus der Datenbank."
       : "Bis zu 500 zuletzt bearbeitete Beiträge. Suche und Filter wirken auf diese Auswahl.";
 
@@ -247,7 +233,6 @@ export function AdminPostsManager() {
       />
 
       {(statusFilter !== "all" ||
-        siteFilter !== "all" ||
         categoryFilter !== "all" ||
         searchParams.get("sort") ||
         searchParams.get("order") ||
@@ -293,18 +278,6 @@ export function AdminPostsManager() {
                 <option value="draft">Entwurf</option>
                 <option value="published">Live</option>
                 <option value="archived">Archiv</option>
-              </select>
-            </label>
-            <label className="block w-full min-w-[140px] sm:w-40">
-              <span className="mb-1.5 block text-[13px] font-medium text-[var(--apple-text)]">Website</span>
-              <select className={adminInput}
-                value={siteFilter}
-                onChange={(e) => syncUrl({ site: e.target.value === "all" ? null : e.target.value })}
-              >
-                <option value="all">Alle</option>
-                <option value="abexis">abexis.ch</option>
-                <option value="search">Search</option>
-                <option value="both">Beide</option>
               </select>
             </label>
             <label className="block w-full min-w-[180px] sm:min-w-[200px] sm:flex-1">
@@ -383,11 +356,10 @@ export function AdminPostsManager() {
           </div>
         ) : (
           <div className={adminTableWrap}>
-            <table className="w-full min-w-[880px] text-left text-[15px]">
+            <table className="w-full min-w-[720px] text-left text-[15px]">
               <thead className="border-b border-black/[0.07] bg-[color-mix(in_srgb,var(--apple-bg-subtle)_70%,white)] text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--apple-text-tertiary)]">
                 <tr>
                   <th className="px-4 py-3.5 pl-5">Titel</th>
-                  <th className="px-4 py-3.5">Website</th>
                   <th className="px-4 py-3.5">Status</th>
                   <th className="hidden px-4 py-3.5 lg:table-cell">Autor:in</th>
                   <th className="hidden px-4 py-3.5 md:table-cell">Bearbeitet</th>
@@ -413,9 +385,6 @@ export function AdminPostsManager() {
                         {p.title || "(ohne Titel)"}
                       </Link>
                       <div className="mt-0.5 font-mono text-[11px] text-[var(--apple-text-tertiary)]">{p.slug}</div>
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3.5 text-[var(--apple-text-secondary)]">
-                      {siteLabel[p.site]}
                     </td>
                     <td className="px-4 py-3.5">
                       <span className={`${adminPill} whitespace-nowrap`}>{statusLabel[p.status]}</span>

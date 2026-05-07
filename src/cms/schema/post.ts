@@ -31,7 +31,7 @@ export const postCreateInputSchema = z.object({
   authorId: idString,
   categoryIds: z.array(idString).max(50).default([]),
   tags: z.array(z.string().trim().min(1).max(80)).max(50).default([]),
-  site: siteKeySchema,
+  site: siteKeySchema.default("abexis"),
   status: postStatusSchema.default("draft"),
   seoTitle: z.union([z.string().max(320), z.null()]).default(null),
   seoDescription: z.union([z.string().max(2000), z.null()]).default(null),

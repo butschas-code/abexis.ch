@@ -7,7 +7,6 @@ import { CMS_PATHS } from "@/admin/paths";
 import { getVacancyForAdmin, saveVacancy, type VacancyUpsertInput } from "@/cms/services/vacancy-write-client";
 import type { VacancyFile } from "@/cms/types/vacancy";
 import type { PostStatus } from "@/cms/types/enums";
-import type { SiteKey } from "@/cms/types/site";
 import { parsePostBody, serializePostBody } from "@/lib/cms/post-body-storage";
 import { slugFromTitle } from "@/lib/cms/slug-from-title";
 import {
@@ -54,7 +53,7 @@ function blankForm(id: string): VacancyUpsertInput {
     body: serializePostBody(""),
     files: [],
     apply: "",
-    site: "both",
+    site: "abexis",
     status: "draft",
   };
 }
@@ -124,6 +123,7 @@ export function VacancyForm({ mode, vacancyId }: Props) {
       const payload: VacancyUpsertInput = {
         ...(newStatus ? { ...form, status: newStatus } : form),
         files: validFiles,
+        site: "abexis",
       };
       await saveVacancy(payload);
       if (newStatus) setForm((prev) => ({ ...prev, status: newStatus }));
@@ -144,7 +144,7 @@ export function VacancyForm({ mode, vacancyId }: Props) {
     <div className="space-y-6">
       <AdminPageHeader
         title={mode === "new" ? "Neue Vakanz" : form.title || "Vakanz bearbeiten"}
-        description={mode === "new" ? "Neues Executive Search Mandat erfassen." : `Slug: ${form.slug}`}
+        description={mode === "new" ? "Neue Stellenausschreibung erfassen." : `Slug: ${form.slug}`}
         actions={
           <div className="flex flex-wrap items-center gap-3">
             <button type="button" onClick={() => router.push(CMS_PATHS.adminVacancies)} className={adminBtnGhost}>
@@ -236,24 +236,14 @@ export function VacancyForm({ mode, vacancyId }: Props) {
             </label>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block">
-              <span className="mb-1.5 block text-[13px] font-medium text-[var(--apple-text)]">Website</span>
-              <select value={form.site} onChange={(e) => set("site", e.target.value as SiteKey)} className={adminInput}>
-                <option value="search">abexis-search.ch</option>
-                <option value="abexis">abexis.ch</option>
-                <option value="both">Beide</option>
-              </select>
-            </label>
-            <label className="block">
-              <span className="mb-1.5 block text-[13px] font-medium text-[var(--apple-text)]">Status</span>
-              <select value={form.status} onChange={(e) => set("status", e.target.value as PostStatus)} className={adminInput}>
-                <option value="draft">Entwurf</option>
-                <option value="published">Veröffentlicht</option>
-                <option value="archived">Archiviert</option>
-              </select>
-            </label>
-          </div>
+          <label className="block max-w-md">
+            <span className="mb-1.5 block text-[13px] font-medium text-[var(--apple-text)]">Status</span>
+            <select value={form.status} onChange={(e) => set("status", e.target.value as PostStatus)} className={adminInput}>
+              <option value="draft">Entwurf</option>
+              <option value="published">Veröffentlicht</option>
+              <option value="archived">Archiviert</option>
+            </select>
+          </label>
 
           <div className="mt-2 border-t border-black/[0.06] pt-5">
             <p className={`mb-3 ${adminSectionLabel}`}>Typ</p>

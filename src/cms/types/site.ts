@@ -1,13 +1,13 @@
 /**
- * **SiteKey** : where editorial content is routed in the shared CMS (`posts.site`, `categories.site`, …).
- * **DeploymentSiteKey** : which *single* public deployment a runtime build serves (`NEXT_PUBLIC_CMS_SITE_ID`).
+ * **SiteKey** : editorial routing in the CMS (`posts.site`, `categories.site`, vacancies, switch-bar metadata).
+ * **DeploymentSiteKey** : the public deployment this build serves (`NEXT_PUBLIC_CMS_SITE_ID`).
  *
- * Public filtering rules (two domains, one backend) live in **`@/public-site/site`** (`PublicDeploymentSite`,
- * `visiblePostSitesInClause`, `getResolvedPublicDeploymentSite`, …).
+ * Legacy documents may still contain `search`, `both`, or `shared` until the one-shot migration runs;
+ * readers normalize those values to `abexis` in mappers.
  */
-export type SiteKey = "abexis" | "search" | "both";
+export type SiteKey = "abexis";
 
-export type DeploymentSiteKey = "abexis" | "search";
+export type DeploymentSiteKey = "abexis";
 
 /** @deprecated Prefer `SiteKey` in new code : identical union. */
 export type CmsSiteId = SiteKey;

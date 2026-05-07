@@ -6,8 +6,15 @@
 import { collection, getDocs, limit, orderBy, query, where, type QueryConstraint } from "firebase/firestore";
 import { COLLECTIONS } from "../firestore/collections";
 import { getCmsFirestore } from "@/firebase/firestore";
+import { POST_SITE_FIRESTORE_IN } from "@/public-site/site/filters";
 import type { CmsPost } from "../types/post";
 import type { PostStatus } from "../types/enums";
+import type { SiteKey } from "../types/site";
+
+function normalizePostSiteForClient(_raw: unknown): SiteKey {
+  return "abexis";
+}
+
 export type CmsPostListItem = CmsPost & { id: string };
 
 function readHeroPath(d: Record<string, unknown>): string | null {
@@ -39,7 +46,7 @@ export function mapClientDoc(id: string, d: Record<string, unknown>): CmsPostLis
     authorId: String(d.authorId ?? ""),
     categoryIds: Array.isArray(d.categoryIds) ? d.categoryIds.map(String) : [],
     tags: Array.isArray(d.tags) ? d.tags.map(String) : [],
-    site: d.site === "search" || d.site === "both" || d.site === "abexis" ? d.site : "abexis",
+    site: normalizePostSiteForClient(d.site),
     status,
     seoTitle: d.seoTitle != null ? String(d.seoTitle) : null,
     seoDescription: d.seoDescription != null ? String(d.seoDescription) : null,
@@ -69,16 +76,14 @@ export async function listRecentPostsForDashboard(max = 6): Promise<CmsPostListI
   return rows.map((r) => ({ ...r, body: "", excerpt: "" }));
 }
 
-/** Published posts visible on the current deployment’s public site (abexis vs search). */
+/** Published posts for the public site (`site` is `abexis` in Firestore). */
 export async function listPublishedPostsForCurrentSite(max = 20): Promise<CmsPostListItem[]> {
   const db = getCmsFirestore();
   if (!db) return [];
-  const siteId = process.env.NEXT_PUBLIC_CMS_SITE_ID === "search" ? "search" : "abexis";
-  const sites = siteId === "search" ? (["search", "both"] as const) : (["abexis", "both"] as const);
   const q = query(
     collection(db, COLLECTIONS.posts),
     where("status", "==", "published"),
-    where("site", "in", [...sites]),
+    where("site", "in", [...POST_SITE_FIRESTORE_IN]),
     orderBy("publishedAt", "desc"),
     limit(max),
   );

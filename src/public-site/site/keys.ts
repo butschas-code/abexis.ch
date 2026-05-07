@@ -1,20 +1,20 @@
 /**
- * Central vocabulary for **two public deployments** (abexis.ch vs search) sharing one CMS.
+ * Single public deployment (**abexis.ch**) sharing one CMS with Firebase.
  *
- * | Layer | Field | Allowed values | Meaning |
- * |-------|--------|----------------|---------|
- * | **Posts** (`posts.site`) | `SiteKey` | `abexis` \| `search` \| `both` | `both` = visible on **both** public sites. |
- * | **Categories** (`categories.site`) | `CategorySiteKey` | `abexis` \| `search` \| `shared` | `shared` = both sites (`both` is normalized to `shared` on read). |
- * | **This build** | `PublicDeploymentSite` | `abexis` \| `search` | Exactly one per running app / Vercel project. |
+ * | Layer | Field | Value | Meaning |
+ * |-------|--------|-------|---------|
+ * | **Posts** (`posts.site`) | `SiteKey` | `abexis` | New writes; legacy rows normalized on read. |
+ * | **Categories** (`categories.site`) | `CategorySiteKey` | `abexis` | Same. |
+ * | **This build** | `PublicDeploymentSite` | `abexis` | The marketing site served by this app. |
  *
- * Always filter public reads with the helpers in `./filters` : never hand-roll `where('site', …)` without them.
+ * Use `visiblePostSitesInClause` for Firestore `where('site','in',…)` (`["abexis"]` after migration).
  */
 
-/** Which **single** marketing site this server/runtime instance serves (two possible values). */
-export type PublicDeploymentSite = "abexis" | "search";
+/** Single marketing site this runtime serves. */
+export type PublicDeploymentSite = "abexis";
 
-/** Post collection `site` field : includes cross-posting. Re-exported for convenience. */
+/** Post collection `site` field. */
 export type { SiteKey } from "@/cms/types/site";
 
-/** Category taxonomy `site` : `shared` is the cross-site sentinel (see CMS). */
+/** Category taxonomy `site`. */
 export type { CategorySiteKey } from "@/cms/types/category-site";

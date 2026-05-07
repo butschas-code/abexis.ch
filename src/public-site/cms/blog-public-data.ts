@@ -15,7 +15,7 @@ export type ListInsightsOptions = {
 };
 
 /**
- * Latest published posts across abexis, search, and shared (`both`) surfaces : unified Insights index.
+ * Latest published posts for the unified Insights index (`site` is `abexis` in Firestore).
  * Optionally filtered by category (in-memory filter).
  */
 export async function listInsightsPublishedPosts(options: ListInsightsOptions = {}): Promise<PublishedPostWithId[]> {

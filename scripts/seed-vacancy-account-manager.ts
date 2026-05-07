@@ -125,7 +125,7 @@ async function main() {
       },
     ],
     apply: "Interesse geweckt? Sende uns Deine aussagekräftigen Unterlagen an contact@abexis.ch : oder nimm unverbindlich Kontakt auf: +41 43 535 84 34",
-    site: "search",
+    site: "abexis",
     status: "published",
     publishedAt: FieldValue.serverTimestamp(),
     createdAt: FieldValue.serverTimestamp(),

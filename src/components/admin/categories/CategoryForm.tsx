@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CMS_PATHS } from "@/admin/paths";
 import { getCategoryForAdmin, saveCategory, type CategoryUpsertInput } from "@/cms/services/categories-admin-client";
-import type { CategorySiteKey } from "@/cms/types/category-site";
 import { slugFromTitle } from "@/lib/cms/slug-from-title";
 import { AdminLoading } from "@/components/admin/AdminLoading";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
@@ -66,7 +65,7 @@ export function CategoryForm({ mode, categoryId }: { mode: Mode; categoryId: str
       try {
         if (!input.name.trim()) throw new Error("Name ist erforderlich.");
         if (!input.slug.trim()) throw new Error("Slug ist erforderlich.");
-        await saveCategory(input);
+        await saveCategory({ ...input, site: "abexis" });
         router.push(CMS_PATHS.adminCategories);
         router.refresh();
       } catch (err) {
@@ -90,7 +89,7 @@ export function CategoryForm({ mode, categoryId }: { mode: Mode; categoryId: str
     <AdminPageContainer>
       <AdminPageHeader
         title={mode === "new" ? "Neue Kategorie" : "Kategorie bearbeiten"}
-        description="Name, URL-Slug und Zuordnung zu einer Website."
+        description="Name und URL-Slug für die Kategorie."
         actions={
           <Link
             href={CMS_PATHS.adminCategories}
@@ -137,21 +136,6 @@ export function CategoryForm({ mode, categoryId }: { mode: Mode; categoryId: str
                 setInput((s) => ({ ...s, slug: e.target.value.toLowerCase().replace(/\s+/g, "-") }));
               }}
             />
-          </label>
-
-          <label className="block space-y-1.5">
-            <span className="text-sm font-medium text-[var(--apple-text)]">Website</span>
-            <select
-              className="w-full rounded-xl border border-black/10 bg-white px-3 py-2.5 text-sm outline-none ring-[var(--brand-500)]/20 focus:ring-4"
-              value={input.site}
-              onChange={(e) =>
-                setInput((s) => ({ ...s, site: e.target.value as CategorySiteKey }))
-              }
-            >
-              <option value="abexis">abexis</option>
-              <option value="search">search</option>
-              <option value="shared">shared (beide Auftritte)</option>
-            </select>
           </label>
 
           <div className="flex flex-wrap gap-2">

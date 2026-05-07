@@ -63,13 +63,6 @@ export const mockSettingsSample: CmsSettings = {
       addressLines: ["Musterstrasse 1", "8000 Zürich"],
       headline: "Kontakt",
     },
-    search: {
-      businessName: "Abexis Executive Search",
-      email: "talent@abexis-search.ch",
-      phone: "+41 44 000 00 01",
-      addressLines: ["Musterstrasse 1", "8000 Zürich"],
-      headline: null,
-    },
   },
   footer: {
     copyrightHtml: "© 2026 Abexis AG",
@@ -91,19 +84,13 @@ export const mockSettingsSample: CmsSettings = {
       titleSuffix: " | Abexis",
       ogType: "website",
     },
-    search: {
-      defaultTitle: "Executive Search",
-      defaultMetaDescription: "Führungskräfte finden und binden.",
-      titleSuffix: " | Abexis Search",
-      ogType: "website",
-    },
   },
   socialLinks: [
     { label: "LinkedIn", href: "https://www.linkedin.com/company/example", order: 0 },
   ],
   switchBarLinks: [
     { label: "Executive Search", href: "/leistungen/executive-search", site: "abexis", order: 1 },
-    { label: "Kontakt", href: "/kontakt", site: "both", order: 2 },
+    { label: "Kontakt", href: "/kontakt", site: "abexis", order: 2 },
   ],
   createdAt: "2026-01-01T00:00:00.000Z",
   updatedAt: "2026-01-01T00:00:00.000Z",

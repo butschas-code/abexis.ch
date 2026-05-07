@@ -1,13 +1,10 @@
 /**
- * ## Public site context (two domains, one CMS)
+ * ## Public site context (single deployment: abexis.ch)
  *
- * **Resolve deployment:** `await getResolvedPublicDeploymentSite()` (hostname hints + env).
+ * **Resolve deployment:** `await getResolvedPublicDeploymentSite()` (always `abexis`).
  *
- * **Query posts:** build Firestore constraints with `visiblePostSitesInClause(site)` from `./filters`
- * or call helpers in `@/public-site/cms/get-published-posts` which already use resolution internally.
- *
- * **Query categories:** `visibleCategorySiteKeysForDeployment(site)` (+ normalize legacy `both` → `shared` via
- * `@/lib/cms/normalize-category-site`).
+ * **Query posts / categories:** `visiblePostSitesInClause` / `visibleCategorySitesFirestoreInClause` use `site in ["abexis"]`
+ * (adjust if you reintroduce multi-site content).
  *
  * @example Server page : use resolved site (already wired in CMS loaders):
  * ```tsx
@@ -38,9 +35,14 @@ export {
 } from "./resolve";
 
 export {
+  CATEGORY_SITE_FIRESTORE_IN,
+  POST_SITE_FIRESTORE_IN,
+  LEGACY_CATEGORY_SITE_FIRESTORE_IN,
+  LEGACY_POST_SITE_FIRESTORE_IN,
   isCategoryVisibleOnDeployment,
   isPostVisibleOnDeployment,
   visibleCategorySiteKeysForDeployment,
+  visibleCategorySitesFirestoreInClause,
   visiblePostSiteKeysForDeployment,
   visiblePostSitesInClause,
   allInsightsPostSitesInClause,

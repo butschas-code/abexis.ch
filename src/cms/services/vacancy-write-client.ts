@@ -13,6 +13,7 @@ import {
 import { getCmsFirestore } from "@/firebase/firestore";
 import { COLLECTIONS } from "../firestore/collections";
 import type { VacancyFile } from "../types/vacancy";
+import type { SiteKey } from "../types/site";
 import { mapVacancyClientDoc, type VacancyListItem } from "./vacancies-client";
 
 export type VacancyUpsertInput = {
@@ -29,7 +30,7 @@ export type VacancyUpsertInput = {
   body: string;
   files: VacancyFile[];
   apply: string;
-  site: "abexis" | "search" | "both";
+  site: SiteKey;
   status: "draft" | "published" | "archived";
   publishedAt?: string | null;
 };

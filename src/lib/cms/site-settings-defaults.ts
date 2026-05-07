@@ -1,6 +1,5 @@
 import { siteSettingsReplaceInputSchema } from "@/cms/schema/site-settings";
 import type { SiteSettingsReplaceInput } from "@/cms/types/dto";
-import type { DeploymentSiteKey } from "@/cms/types/site";
 import type {
   SiteContactDetails,
   SiteFooterData,
@@ -38,7 +37,7 @@ export function createDefaultSiteSettings(): SiteSettingsReplaceInput {
   });
 }
 
-/** Full form model with both deployment sites materialized (easier field bindings). */
+/** Full form model with abexis blocks materialized (easier field bindings). */
 export function mergeSiteSettingsForForm(loaded: SiteSettingsReplaceInput | null): SiteSettingsReplaceInput {
   const base = createDefaultSiteSettings();
   if (!loaded) {
@@ -46,11 +45,9 @@ export function mergeSiteSettingsForForm(loaded: SiteSettingsReplaceInput | null
       ...base,
       contactBySite: {
         abexis: emptyContact(),
-        search: emptyContact(),
       },
       seoBySite: {
         abexis: emptySeoBlock(),
-        search: emptySeoBlock(),
       },
     });
   }
@@ -63,16 +60,17 @@ export function mergeSiteSettingsForForm(loaded: SiteSettingsReplaceInput | null
 
   const contactBySite: SiteSettingsReplaceInput["contactBySite"] = {
     abexis: { ...emptyContact(), ...loaded.contactBySite?.abexis },
-    search: { ...emptyContact(), ...loaded.contactBySite?.search },
   };
 
   const seoBySite: SiteSettingsReplaceInput["seoBySite"] = {
     abexis: { ...emptySeoBlock(), ...loaded.seoBySite?.abexis },
-    search: { ...emptySeoBlock(), ...loaded.seoBySite?.search },
   };
 
   const socialLinks: SiteSocialLink[] = [...(loaded.socialLinks ?? [])];
-  const switchBarLinks: SiteSwitchBarLink[] = [...(loaded.switchBarLinks ?? [])];
+  const switchBarLinks: SiteSwitchBarLink[] = (loaded.switchBarLinks ?? []).map((l) => ({
+    ...l,
+    site: "abexis" as const,
+  }));
 
   return siteSettingsReplaceInputSchema.parse({
     contactBySite,
@@ -84,6 +82,7 @@ export function mergeSiteSettingsForForm(loaded: SiteSettingsReplaceInput | null
   });
 }
 
-export function deploymentSiteLabel(site: DeploymentSiteKey): string {
-  return site === "abexis" ? "abexis.ch" : "Executive Search";
+/** Human label for the single public site. */
+export function deploymentSiteLabel(): string {
+  return "abexis.ch";
 }

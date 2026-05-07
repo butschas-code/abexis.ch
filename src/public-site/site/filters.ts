@@ -3,39 +3,52 @@ import type { SiteKey } from "@/cms/types/site";
 import type { PublicDeploymentSite } from "./keys";
 
 /**
- * Firestore `posts.site` values included when querying for this deployment (`both` = both audiences).
+ * Values for `where('site', 'in', …)` on **posts** / **vacancies** (published lists).
+ * After `scripts/migrate-cms-sites-to-abexis.ts`, only `abexis` remains in Firestore.
  */
-export function visiblePostSiteKeysForDeployment(deployment: PublicDeploymentSite): Array<SiteKey> {
-  if (deployment === "search") return ["search", "both"];
-  return ["abexis", "both"];
-}
+export const POST_SITE_FIRESTORE_IN = ["abexis"] as const;
 
 /**
- * Same as {@link visiblePostSiteKeysForDeployment} : stable array for `where('site', 'in', …)` (max 10 entries).
+ * Values for `where('site', 'in', …)` on **categories** (public listings).
  */
-export function visiblePostSitesInClause(deployment: PublicDeploymentSite): Array<"abexis" | "search" | "both"> {
-  return visiblePostSiteKeysForDeployment(deployment);
-}
+export const CATEGORY_SITE_FIRESTORE_IN = ["abexis"] as const;
+
+/** @deprecated Use {@link POST_SITE_FIRESTORE_IN}. Kept for any external imports; same value. */
+export const LEGACY_POST_SITE_FIRESTORE_IN = POST_SITE_FIRESTORE_IN;
+
+/** @deprecated Use {@link CATEGORY_SITE_FIRESTORE_IN}. */
+export const LEGACY_CATEGORY_SITE_FIRESTORE_IN = CATEGORY_SITE_FIRESTORE_IN;
 
 /**
- * Category `site` values visible on this deployment (`shared` = both listings).
+ * After normalization, every post row behaves as `abexis` in app types.
  */
-export function visibleCategorySiteKeysForDeployment(deployment: PublicDeploymentSite): CategorySiteKey[] {
-  if (deployment === "search") return ["search", "shared"];
-  return ["abexis", "shared"];
+export function visiblePostSiteKeysForDeployment(_deployment: PublicDeploymentSite): SiteKey[] {
+  return ["abexis"];
 }
 
-/** All `posts.site` values : for unified Insights (`/blog`) listing and slug resolution across surfaces. */
-export function allInsightsPostSitesInClause(): Array<"abexis" | "search" | "both"> {
-  return ["abexis", "search", "both"];
+/** Stable tuple for `where('site', 'in', …)` on posts (max 10 entries in Firestore). */
+export function visiblePostSitesInClause(_deployment: PublicDeploymentSite): typeof POST_SITE_FIRESTORE_IN {
+  return POST_SITE_FIRESTORE_IN;
 }
 
-/** Row-level check (e.g. after a broad read). */
-export function isPostVisibleOnDeployment(postSite: SiteKey, deployment: PublicDeploymentSite): boolean {
-  return visiblePostSiteKeysForDeployment(deployment).includes(postSite);
+export function visibleCategorySiteKeysForDeployment(_deployment: PublicDeploymentSite): CategorySiteKey[] {
+  return ["abexis"];
 }
 
-/** Row-level check for category rows. */
-export function isCategoryVisibleOnDeployment(categorySite: CategorySiteKey, deployment: PublicDeploymentSite): boolean {
-  return visibleCategorySiteKeysForDeployment(deployment).includes(categorySite);
+/** Firestore `in` for category reads. */
+export function visibleCategorySitesFirestoreInClause(): typeof CATEGORY_SITE_FIRESTORE_IN {
+  return CATEGORY_SITE_FIRESTORE_IN;
+}
+
+/** Unified Insights (`/blog`) : same post `site` constraints as deployment-scoped listings. */
+export function allInsightsPostSitesInClause(): typeof POST_SITE_FIRESTORE_IN {
+  return POST_SITE_FIRESTORE_IN;
+}
+
+export function isPostVisibleOnDeployment(postSite: SiteKey, _deployment: PublicDeploymentSite): boolean {
+  return postSite === "abexis";
+}
+
+export function isCategoryVisibleOnDeployment(categorySite: CategorySiteKey, _deployment: PublicDeploymentSite): boolean {
+  return categorySite === "abexis";
 }

@@ -1,13 +1,10 @@
-# Shared CMS (Firebase) : Abexis + Abexis Search
+# CMS (Firebase) : Abexis
 
-Two **public** properties, one **editorial** backend:
+**One** marketing site (**abexis.ch**), **one** Firebase project, **one** admin surface and editorial pipeline.
 
-| Public site            | Domain (example)   | This repo (current)     |
-| ---------------------- | ------------------ | ----------------------- |
-| Consulting / advisory  | `abexis.ch`        | Yes : primary Next app  |
-| Executive search       | `abexis-search.ch` | Separate deploy / app   |
+Legacy Firestore documents may still contain multi-site `site` values (`search`, `both`, `shared`) until you run the one-shot script:
 
-Strategy: **distinct** marketing sites; **shared** Firebase project for posts, media, leads, and admin.
+`npm run cms:migrate:single-site` (see `scripts/migrate-cms-sites-to-abexis.ts`).
 
 ---
 
@@ -44,22 +41,18 @@ storage.rules
 .env.example
 ```
 
-Future (second app): duplicate **only** the Next public app (or use monorepo `apps/abexis`, `apps/search`) pointing at the **same** Firebase project and `NEXT_PUBLIC_CMS_SITE_ID`.
-
----
-
 ## 2) Data architecture (high level)
 
 - **Authors** : people who can be attributed on posts; optional link to Auth `uid`.
-- **Categories** : taxonomy; each category may be scoped to `abexis`, `search`, or `both` so each site’s editor sees a sane list.
-- **Posts** : main editorial unit: workflow, SEO, hero, body, **site** (`abexis` | `search` | `both`), timestamps.
-- **Form submissions** : normalized inbox for contact / search forms (`site`, `formId`, fields map, spam metadata later).
+- **Categories** : taxonomy; `site` is always **`abexis`** in types (legacy `search` / `shared` / `siteScope` rows are merged to **`abexis`** on read and by the migration script).
+- **Posts** : main editorial unit: workflow, SEO, hero, body, **`site`** (always **`abexis`** for new writes), timestamps.
+- **Form submissions** : normalized inbox for contact / lead forms (`site` stored as **`abexis`**, `formId`, fields map, spam metadata later).
 - **Media** : **Firebase Storage**; posts store `heroImageUrl` + `heroImagePath` (legacy `heroStoragePath` is read until migrated).
 
 Public reads should filter:
 
 - `status == "published"`
-- `site in ["abexis", "both"]` when serving **abexis.ch** (and `["search", "both"]` for **search**).
+- `site in ["abexis"]` on **posts** / **categories** in Firestore queries (expand here if multi-site returns).
 
 ---
 
@@ -91,7 +84,7 @@ See `src/cms/types/*.ts` : single source of truth aligned with Firestore fields 
 | `/admin/login`     | Email/password (Firebase Auth); canonical CMS sign-in |
 | `/login`           | Redirects to `/admin/login` |
 | `/admin`           | Dashboard (counts, shortcuts) |
-| `/admin/posts`     | List / filter / site badge |
+| `/admin/posts`     | List / filter |
 | `/admin/posts/new` | Create (later) |
 | `/admin/posts/[id]`| Edit (later) |
 | `/admin/submissions` | Form inbox (later) |
@@ -104,7 +97,7 @@ v1 pass: **login + dashboard stub + posts list** (read-only list when configured
 
 **Recommended (production):** Server API using **Admin SDK** so rules stay strict and the public site never needs a “public write” rule for posts.
 
-- `GET /api/cms/v1/posts?site=abexis&limit=20` : returns published posts for that site (includes `both`).
+- `GET /api/cms/v1/posts?site=abexis&limit=20` : returns published posts (query may still match pre-migration `site` values; response rows normalize to **`abexis`**).
 - Optional: `GET /api/cms/v1/posts/[slug]` for detail.
 
 **This repo today:** blog still uses static `blog-posts.json`. Swapping the blog data source to the API is a follow-up step once content is migrated.

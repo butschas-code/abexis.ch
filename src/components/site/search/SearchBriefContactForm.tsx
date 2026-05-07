@@ -109,7 +109,7 @@ export function SearchBriefContactForm() {
       const companyTrim = parsed.data.company.trim();
       const phoneTrim = parsed.data.phone.trim();
       await submitPublicForm({
-        site: "search",
+        site: "abexis",
         type: "executive_search",
         formId: "search-brief-contact",
         payload: {

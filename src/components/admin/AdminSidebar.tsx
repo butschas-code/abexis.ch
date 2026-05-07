@@ -72,8 +72,7 @@ export function AdminSidebar({ onNavigate, className = "" }: AdminSidebarProps) 
       <div className="mt-auto border-t border-black/[0.05] px-5 py-5">
         <p className="text-[11px] leading-[1.55] text-[var(--apple-text-tertiary)]">
           Publikation für{" "}
-          <span className="font-medium text-[var(--apple-text-secondary)]">abexis.ch</span> und{" "}
-          <span className="font-medium text-[var(--apple-text-secondary)]">abexis-search.ch</span>
+          <span className="font-medium text-[var(--apple-text-secondary)]">abexis.ch</span>
         </p>
       </div>
     </aside>

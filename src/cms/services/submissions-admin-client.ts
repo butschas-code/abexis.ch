@@ -47,13 +47,17 @@ function parseType(raw: unknown): CmsSubmissionType {
   return "generic";
 }
 
+function normalizeSubmissionSite(_raw: unknown): "abexis" {
+  return "abexis";
+}
+
 function mapDetail(id: string, data: Record<string, unknown>): SubmissionDetail {
   const payload = data[SUBMISSION_DOCUMENT_FIELDS.payload];
   const fileUrls = data[SUBMISSION_DOCUMENT_FIELDS.fileUrls];
   return {
     id,
     type: parseType(data[SUBMISSION_DOCUMENT_FIELDS.type]),
-    site: data[SUBMISSION_DOCUMENT_FIELDS.site] === "search" ? "search" : "abexis",
+    site: normalizeSubmissionSite(data[SUBMISSION_DOCUMENT_FIELDS.site]),
     payload:
       payload && typeof payload === "object" && !Array.isArray(payload)
         ? Object.fromEntries(
@@ -92,7 +96,7 @@ export async function listSubmissionsForAdmin(max = 150): Promise<SubmissionList
     return {
       id: d.id,
       type: String(data.type ?? ""),
-      site: String(data.site ?? ""),
+      site: normalizeSubmissionSite(data.site),
       status: normalizeSubmissionStatus(data.status),
       createdAt: toIso(data.createdAt),
       summary: payloadSummary(payload),

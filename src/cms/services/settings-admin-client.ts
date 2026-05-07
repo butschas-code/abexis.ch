@@ -33,8 +33,9 @@ function migrateFirestoreSettings(rest: Record<string, unknown>): Record<string,
   if (!Array.isArray(o.socialLinks)) o.socialLinks = [];
   if (!Array.isArray(o.switchBarLinks)) o.switchBarLinks = [];
 
-  const seoBy = o.seoBySite as Record<string, unknown> | undefined;
-  const hasSeo = seoBy && (seoBy.abexis != null || seoBy.search != null);
+  const seoSiteRaw = (o.seoBySite ?? {}) as Record<string, unknown>;
+  const seoBy = seoSiteRaw && typeof seoSiteRaw === "object" ? seoSiteRaw : {};
+  const hasSeo = seoBy.abexis != null || seoBy.search != null;
   if (!hasSeo && o.defaultSeo && typeof o.defaultSeo === "object") {
     const ds = o.defaultSeo as Record<string, unknown>;
     const block = {
@@ -43,28 +44,36 @@ function migrateFirestoreSettings(rest: Record<string, unknown>): Record<string,
       titleSuffix: ds.titleSuffix ?? null,
       ogType: ds.ogType === "article" ? ("article" as const) : ("website" as const),
     };
-    o.seoBySite = { abexis: { ...block }, search: { ...block } };
+    o.seoBySite = { abexis: { ...EMPTY_SEO, ...block } };
+  } else {
+    const searchBlk = seoBy.search != null && typeof seoBy.search === "object" ? seoBy.search : null;
+    const abexisBlk = seoBy.abexis != null && typeof seoBy.abexis === "object" ? seoBy.abexis : null;
+    o.seoBySite = {
+      abexis: {
+        ...EMPTY_SEO,
+        ...(searchBlk as object),
+        ...(abexisBlk as object),
+      },
+    };
   }
-  if (!o.seoBySite || typeof o.seoBySite !== "object") o.seoBySite = {};
 
-  const seoSite = o.seoBySite as Record<string, unknown>;
-  const nextSeo: Record<string, unknown> = {};
-  for (const k of ["abexis", "search"] as const) {
-    const block = seoSite[k];
-    if (block != null && typeof block === "object") {
-      nextSeo[k] = { ...EMPTY_SEO, ...(block as object) };
-    }
-  }
-  o.seoBySite = nextSeo;
+  const cbsRaw = (o.contactBySite ?? {}) as Record<string, unknown>;
+  const searchContact = cbsRaw.search != null && typeof cbsRaw.search === "object" ? cbsRaw.search : null;
+  const abexisContact = cbsRaw.abexis != null && typeof cbsRaw.abexis === "object" ? cbsRaw.abexis : null;
+  o.contactBySite = {
+    abexis: {
+      ...EMPTY_CONTACT,
+      ...(searchContact as object),
+      ...(abexisContact as object),
+    },
+  };
 
-  const cbs = { ...((o.contactBySite ?? {}) as Record<string, unknown>) };
-  for (const k of ["abexis", "search"] as const) {
-    const block = cbs[k];
-    if (block != null && typeof block === "object") {
-      cbs[k] = { ...EMPTY_CONTACT, ...(block as object) };
+  o.switchBarLinks = (o.switchBarLinks as unknown[]).map((row) => {
+    if (row && typeof row === "object" && "site" in row) {
+      return { ...(row as object), site: "abexis" };
     }
-  }
-  o.contactBySite = cbs;
+    return row;
+  });
 
   return o;
 }
@@ -85,24 +94,22 @@ function coerceContactEmailAndNulls(input: SiteSettingsReplaceInput): SiteSettin
     return t === "" ? null : t;
   };
 
-  for (const site of ["abexis", "search"] as const) {
-    const b = next.contactBySite?.[site];
-    if (b) {
-      b.businessName = trimOrNull(b.businessName);
-      b.email = trimOrNull(b.email);
-      b.phone = trimOrNull(b.phone);
-      b.headline = trimOrNull(b.headline);
-      b.addressLines = (b.addressLines ?? []).map((line) => line.trim()).filter((line) => line.length > 0);
-    }
+  const abexisContact = next.contactBySite?.abexis;
+  if (abexisContact) {
+    abexisContact.businessName = trimOrNull(abexisContact.businessName);
+    abexisContact.email = trimOrNull(abexisContact.email);
+    abexisContact.phone = trimOrNull(abexisContact.phone);
+    abexisContact.headline = trimOrNull(abexisContact.headline);
+    abexisContact.addressLines = (abexisContact.addressLines ?? [])
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0);
   }
 
-  for (const site of ["abexis", "search"] as const) {
-    const s = next.seoBySite?.[site];
-    if (s) {
-      s.defaultTitle = trimOrNull(s.defaultTitle);
-      s.defaultMetaDescription = trimOrNull(s.defaultMetaDescription);
-      s.titleSuffix = trimOrNull(s.titleSuffix);
-    }
+  const abexisSeo = next.seoBySite?.abexis;
+  if (abexisSeo) {
+    abexisSeo.defaultTitle = trimOrNull(abexisSeo.defaultTitle);
+    abexisSeo.defaultMetaDescription = trimOrNull(abexisSeo.defaultMetaDescription);
+    abexisSeo.titleSuffix = trimOrNull(abexisSeo.titleSuffix);
   }
 
   if (next.footer) {
@@ -126,7 +133,7 @@ function coerceContactEmailAndNulls(input: SiteSettingsReplaceInput): SiteSettin
   next.switchBarLinks = (next.switchBarLinks ?? []).map((l, i) => ({
     label: l.label.trim(),
     href: l.href.trim(),
-    site: l.site,
+    site: "abexis" as const,
     order: typeof l.order === "number" ? l.order : i,
   }));
 

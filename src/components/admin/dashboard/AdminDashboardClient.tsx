@@ -6,7 +6,6 @@ import {
   loadAdminDashboardAggregates,
   loadAdminDashboardLists,
   type AdminDashboardCounts,
-  type AdminDashboardSitePostCounts,
 } from "@/cms/services/dashboard-client";
 import type { CmsPostListItem } from "@/cms/services/posts-client";
 import type { SubmissionRow } from "@/cms/services/submissions-client";
@@ -18,7 +17,6 @@ import {
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
 import { DashboardQuickActions } from "./DashboardQuickActions";
 import { DashboardRecentLists } from "./DashboardRecentLists";
-import { DashboardSiteSplit } from "./DashboardSiteSplit";
 import { DashboardSummaryCards } from "./DashboardSummaryCards";
 
 function deferToNextPaint(): Promise<void> {
@@ -31,22 +29,24 @@ function deferToNextPaint(): Promise<void> {
 
 type DashState = {
   counts: AdminDashboardCounts | null;
-  postsBySite: AdminDashboardSitePostCounts | null;
   recentPosts: CmsPostListItem[] | null;
   recentSubmissions: SubmissionRow[] | null;
   listError: string | null;
   aggError: string | null;
 };
 const EMPTY_STATE: DashState = {
-  counts: null, postsBySite: null, recentPosts: null,
-  recentSubmissions: null, listError: null, aggError: null,
+  counts: null,
+  recentPosts: null,
+  recentSubmissions: null,
+  listError: null,
+  aggError: null,
 };
 
 export function AdminDashboardClient() {
   const { roleReady, hasPermission } = useCmsAuth();
   const canManageSubmissions = hasPermission("manage_submissions");
   const [dash, setDash] = useState<DashState>(EMPTY_STATE);
-  const { counts, postsBySite, recentPosts, recentSubmissions, listError, aggError } = dash;
+  const { counts, recentPosts, recentSubmissions, listError, aggError } = dash;
 
   useEffect(() => {
     if (!roleReady) return;
@@ -80,7 +80,7 @@ export function AdminDashboardClient() {
       aggP
         .then((agg) => {
           if (cancelled) return;
-          setDash((prev) => ({ ...prev, counts: agg.counts, postsBySite: agg.postsBySite }));
+          setDash((prev) => ({ ...prev, counts: agg.counts }));
         })
         .catch(() => {
           if (cancelled) return;
@@ -94,14 +94,14 @@ export function AdminDashboardClient() {
   }, [roleReady, canManageSubmissions]);
 
   const listsReady = recentPosts !== null && recentSubmissions !== null;
-  const aggReady = counts !== null && postsBySite !== null;
+  const aggReady = counts !== null;
   const showFullSkeleton = !listsReady && !aggReady && !listError && !aggError;
 
   return (
     <AdminPageContainer>
       <AdminPageHeader
         title="Übersicht"
-        description="Kurzüberblick über Beiträge, Themen und Eingänge : gemeinsames CMS für abexis.ch und abexis-search.ch."
+        description="Kurzüberblick über Beiträge, Themen und Eingänge : ein gemeinsames CMS für abexis.ch."
       />
 
       {listError ? (
@@ -122,13 +122,8 @@ export function AdminDashboardClient() {
       ) : (
         <>
           <AdminPageSection>
-            {aggReady && counts && postsBySite ? (
-              <>
-                <DashboardSummaryCards counts={counts} showSubmissions={canManageSubmissions} />
-                <div className="mt-8">
-                  <DashboardSiteSplit postsBySite={postsBySite} />
-                </div>
-              </>
+            {aggReady && counts ? (
+              <DashboardSummaryCards counts={counts} showSubmissions={canManageSubmissions} />
             ) : aggError ? (
               <p className="text-sm text-[var(--apple-text-secondary)]">
                 Kennzahlen sind vorübergehend nicht verfügbar. Die Navigation oben bleibt nutzbar.
@@ -137,9 +132,6 @@ export function AdminDashboardClient() {
               <>
                 <AdminDashboardSummarySkeleton />
                 <div className="mt-8">
-                  <AdminContentSkeleton lines={2} />
-                </div>
-                <div className="mt-8 opacity-70">
                   <AdminContentSkeleton lines={2} />
                 </div>
               </>

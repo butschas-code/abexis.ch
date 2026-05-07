@@ -21,7 +21,7 @@ export type SubmissionPayloadInput = {
 };
 
 export type SubmitFormOptions = {
-  site: "abexis" | "search";
+  site: "abexis";
   type: "contact" | "executive_search" | "application" | "newsletter" | "generic";
   payload: SubmissionPayloadInput;
   files?: File[];

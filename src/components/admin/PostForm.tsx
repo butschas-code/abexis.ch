@@ -16,7 +16,6 @@ import type { CmsPostListItem } from "@/cms/services/posts-client";
 import { commaTextFromTags, tagsFromCommaText } from "@/cms/types/admin-forms";
 import { defaultPostUpsertDraft } from "@/cms/types/defaults";
 import type { PostUpsertInput } from "@/cms/types/dto";
-import type { SiteKey } from "@/cms/types/site";
 import {
   normalizePostBodyForPersistence,
   parsePostBody,
@@ -197,6 +196,7 @@ const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
       void (async () => {
         const draft: PostUpsertInput = {
           ...input,
+          site: "abexis",
           status: "draft",
           body: normalizePostBodyForPersistence(input.body),
           publishedAt: undefined,
@@ -269,6 +269,7 @@ const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
 
       const payload: PostUpsertInput = {
         ...input,
+        site: "abexis",
         status,
         authorId: input.authorId.trim() || "_",
         publishedAt,
@@ -575,18 +576,6 @@ const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
                 Beim Veröffentlichen: leer lassen für «jetzt», oder Datum für eine Planung.
               </p>
               {fieldErrors.publishedAt ? <p className="text-xs text-red-600">{fieldErrors.publishedAt}</p> : null}
-            </label>
-
-            <label className="block space-y-2">
-              <span className="text-[14px] font-medium text-[var(--apple-text)]">Website</span>
-              <select className={adminInput}
-                value={input.site}
-                onChange={(e) => setInput((s) => ({ ...s, site: e.target.value as SiteKey }))}
-              >
-                <option value="abexis">abexis.ch</option>
-                <option value="search">Executive Search</option>
-                <option value="both">Beide</option>
-              </select>
             </label>
 
             <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-black/[0.06] bg-[color-mix(in_srgb,var(--apple-bg-subtle)_88%,white)] px-3 py-3">

@@ -18,8 +18,10 @@ type Body = {
   turnstileToken?: unknown;
 };
 
-function isDeploymentSite(v: unknown): v is "abexis" | "search" {
-  return v === "abexis" || v === "search";
+function normalizeSubmissionSiteFromRequest(v: unknown): "abexis" | null {
+  if (v === "abexis") return "abexis";
+  if (v === "search") return "abexis";
+  return null;
 }
 
 function sanitizePayload(raw: unknown): Record<string, string> | null {
@@ -80,7 +82,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "INVALID_JSON" }, { status: 400 });
   }
 
-  if (!isDeploymentSite(json.site)) {
+  const site = normalizeSubmissionSiteFromRequest(json.site);
+  if (!site) {
     return NextResponse.json({ error: "INVALID_SITE" }, { status: 400 });
   }
 
@@ -103,7 +106,7 @@ export async function POST(req: Request) {
 
   const candidate = {
     type,
-    site: json.site,
+    site,
     payload: { ...payload, formId },
     fileUrls,
     status: "new" as const,

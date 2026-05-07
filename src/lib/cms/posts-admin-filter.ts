@@ -1,6 +1,5 @@
 import type { CmsPostListItem } from "@/cms/services/posts-client";
 import type { PostStatus } from "@/cms/types/enums";
-import type { SiteKey } from "@/cms/types/site";
 
 export type PostsAdminSortKey = "updatedAt" | "publishedAt" | "title";
 export type PostsAdminSortOrder = "asc" | "desc";
@@ -8,7 +7,6 @@ export type PostsAdminSortOrder = "asc" | "desc";
 export type PostsAdminFilterState = {
   q: string;
   status: PostStatus | "all";
-  site: SiteKey | "all";
   categoryId: string | "all";
   sort: PostsAdminSortKey;
   order: PostsAdminSortOrder;
@@ -28,9 +26,6 @@ export function filterAndSortPosts(items: CmsPostListItem[], f: PostsAdminFilter
   }
   if (f.status !== "all") {
     rows = rows.filter((p) => p.status === f.status);
-  }
-  if (f.site !== "all") {
-    rows = rows.filter((p) => p.site === f.site);
   }
   if (f.categoryId !== "all") {
     rows = rows.filter((p) => p.categoryIds.includes(f.categoryId));

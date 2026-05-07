@@ -1,5 +1,5 @@
 /**
- * Category taxonomy is scoped to a surface (`categories.site`).
- * `shared` replaces legacy `both` in stored documents where applicable.
+ * Category taxonomy is scoped with `categories.site`.
+ * Legacy `search` / `shared` / `both` are normalized to `abexis` at read time until migrated.
  */
-export type CategorySiteKey = "abexis" | "search" | "shared";
+export type CategorySiteKey = "abexis";

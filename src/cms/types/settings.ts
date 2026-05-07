@@ -1,7 +1,6 @@
-import type { DeploymentSiteKey } from "./site";
 import type { SiteKey } from "./site";
 
-/** Contact block for one deployment; all keys explicit when the block exists. */
+/** Contact block for the site; all keys explicit when the block exists. */
 export type SiteContactDetails = {
   businessName: string | null;
   email: string | null;
@@ -34,7 +33,7 @@ export type SiteDefaultSeo = {
   ogType: "website" | "article";
 };
 
-/** Per-deployment SEO defaults (`abexis` / `search`). */
+/** SEO defaults for abexis.ch. */
 export type SiteSeoBlock = {
   defaultTitle: string | null;
   defaultMetaDescription: string | null;
@@ -59,11 +58,11 @@ export type SiteSwitchBarLink = {
  * `settings/{docId}` : singleton-style document (`CMS_SETTINGS_GLOBAL_DOC_ID`).
  */
 export type SiteSettings = {
-  contactBySite: Partial<Record<DeploymentSiteKey, SiteContactDetails>>;
+  contactBySite: { abexis?: SiteContactDetails };
   footer: SiteFooterData;
   /** @deprecated Prefer `seoBySite`; still read for migration. */
   defaultSeo?: SiteDefaultSeo;
-  seoBySite: Partial<Record<DeploymentSiteKey, SiteSeoBlock>>;
+  seoBySite: { abexis?: SiteSeoBlock };
   switchBarLinks: SiteSwitchBarLink[];
   socialLinks: SiteSocialLink[];
   createdAt: string;

@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-export const siteKeySchema = z.enum(["abexis", "search", "both"]);
-/** `categories.site` : cross-site uses `shared` (legacy `both` normalized at read time). */
-export const categorySiteKeySchema = z.enum(["abexis", "search", "shared"]);
-export const deploymentSiteKeySchema = z.enum(["abexis", "search"]);
+export const siteKeySchema = z.literal("abexis");
+/** `categories.site` : always `abexis` for new writes. */
+export const categorySiteKeySchema = z.literal("abexis");
+export const deploymentSiteKeySchema = z.literal("abexis");
 
 export const postStatusSchema = z.enum(["draft", "published", "archived"]);
 export const submissionStatusSchema = z.enum(["new", "reviewed", "archived", "spam"]);

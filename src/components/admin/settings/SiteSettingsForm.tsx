@@ -13,9 +13,7 @@ import type {
   SiteSocialLink,
   SiteSwitchBarLink,
 } from "@/cms/types/settings";
-import type { DeploymentSiteKey, SiteKey } from "@/cms/types/site";
 import {
-  deploymentSiteLabel,
   emptyContact,
   emptySeoBlock,
   mergeSiteSettingsForForm,
@@ -42,7 +40,6 @@ export function SiteSettingsForm() {
   const [error, setError] = useState<string | null>(null);
   const [hadExistingDoc, setHadExistingDoc] = useState(false);
   const [updatedAt, setUpdatedAt] = useState<string | null>(null);
-  const [activeSite, setActiveSite] = useState<DeploymentSiteKey>("abexis");
   const [form, setForm] = useState<SiteSettingsReplaceInput | null>(null);
 
   const load = useCallback(async () => {
@@ -68,29 +65,29 @@ export function SiteSettingsForm() {
     });
   }, [load]);
 
-  const patchContact = useCallback((site: DeploymentSiteKey, patch: Partial<SiteContactDetails>) => {
+  const patchContact = useCallback((patch: Partial<SiteContactDetails>) => {
     setForm((s) => {
       if (!s) return s;
-      const prev = { ...emptyContact(), ...s.contactBySite?.[site] };
+      const prev = { ...emptyContact(), ...s.contactBySite?.abexis };
       return {
         ...s,
         contactBySite: {
           ...s.contactBySite,
-          [site]: { ...prev, ...patch },
+          abexis: { ...prev, ...patch },
         },
       };
     });
   }, []);
 
-  const patchSeo = useCallback((site: DeploymentSiteKey, patch: Partial<SiteSeoBlock>) => {
+  const patchSeo = useCallback((patch: Partial<SiteSeoBlock>) => {
     setForm((s) => {
       if (!s) return s;
-      const prev = { ...emptySeoBlock(), ...s.seoBySite?.[site] };
+      const prev = { ...emptySeoBlock(), ...s.seoBySite?.abexis };
       return {
         ...s,
         seoBySite: {
           ...s.seoBySite,
-          [site]: { ...prev, ...patch },
+          abexis: { ...prev, ...patch },
         },
       };
     });
@@ -120,13 +117,13 @@ export function SiteSettingsForm() {
 
   const contact = useMemo(() => {
     if (!form) return null;
-    return form.contactBySite?.[activeSite] ?? null;
-  }, [form, activeSite]);
+    return form.contactBySite?.abexis ?? null;
+  }, [form]);
 
   const seo = useMemo(() => {
     if (!form) return null;
-    return form.seoBySite?.[activeSite] ?? null;
-  }, [form, activeSite]);
+    return form.seoBySite?.abexis ?? null;
+  }, [form]);
 
   if (loading || !form) {
     return (
@@ -141,7 +138,7 @@ export function SiteSettingsForm() {
       <AdminPageContainer>
         <AdminPageHeader
           title="Website-Einstellungen"
-          description="Kontakt, Footer, SEO und die Leiste oben : je nach Website einstellbar. Änderungen wirken auf der Live-Website, sobald Sie speichern."
+          description="Kontakt, Footer, SEO und die obere Link-Leiste für abexis.ch. Änderungen wirken auf der Live-Website, sobald Sie speichern."
           actions={
             <div className="flex max-w-full flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
               <p className="text-center text-[12px] text-[var(--apple-text-tertiary)] sm:text-right">
@@ -167,23 +164,10 @@ export function SiteSettingsForm() {
         ) : null}
 
         <AdminPageSection>
-          <h2 className={adminSectionLabel}>Pro Website</h2>
-          <div className="flex flex-wrap gap-2">
-            {(["abexis", "search"] as const).map((site) => (
-              <button
-                key={site}
-                type="button"
-                onClick={() => setActiveSite(site)}
-                className={`rounded-full px-4 py-2 text-[13px] font-medium transition ${
-                  activeSite === site
-                    ? "bg-[var(--brand-900)] text-white shadow-sm shadow-[var(--brand-900)]/15"
-                    : "border border-black/[0.09] bg-white text-[var(--apple-text-secondary)] hover:border-black/14 hover:bg-[var(--apple-bg-subtle)]"
-                }`}
-              >
-                {deploymentSiteLabel(site)}
-              </button>
-            ))}
-          </div>
+          <h2 className={adminSectionLabel}>Kontakt & SEO</h2>
+          <p className="mb-4 max-w-prose text-[15px] leading-relaxed text-[var(--apple-text-secondary)]">
+            Alle Felder gelten für die Website abexis.ch.
+          </p>
 
           <div className={`grid gap-8 md:grid-cols-2 ${adminPanel} p-6 sm:p-7`}>
             <div className="space-y-5">
@@ -193,7 +177,7 @@ export function SiteSettingsForm() {
                 <input
                   className={adminInput}
                   value={contact?.businessName ?? ""}
-                  onChange={(e) => patchContact(activeSite, { businessName: e.target.value || null })}
+                  onChange={(e) => patchContact( { businessName: e.target.value || null })}
                 />
               </label>
               <label className="block space-y-1.5">
@@ -201,7 +185,7 @@ export function SiteSettingsForm() {
                 <input
                   className={adminInput}
                   value={contact?.headline ?? ""}
-                  onChange={(e) => patchContact(activeSite, { headline: e.target.value || null })}
+                  onChange={(e) => patchContact( { headline: e.target.value || null })}
                   placeholder="z. B. Kontakt"
                 />
               </label>
@@ -211,7 +195,7 @@ export function SiteSettingsForm() {
                   type="email"
                   className={adminInput}
                   value={contact?.email ?? ""}
-                  onChange={(e) => patchContact(activeSite, { email: e.target.value || null })}
+                  onChange={(e) => patchContact( { email: e.target.value || null })}
                 />
               </label>
               <label className="block space-y-1.5">
@@ -219,7 +203,7 @@ export function SiteSettingsForm() {
                 <input
                   className={adminInput}
                   value={contact?.phone ?? ""}
-                  onChange={(e) => patchContact(activeSite, { phone: e.target.value || null })}
+                  onChange={(e) => patchContact( { phone: e.target.value || null })}
                 />
               </label>
               <label className="block space-y-1.5">
@@ -230,7 +214,7 @@ export function SiteSettingsForm() {
                   className={`${adminInput} resize-y`}
                   value={(contact?.addressLines ?? []).join("\n")}
                   onChange={(e) =>
-                    patchContact(activeSite, {
+                    patchContact( {
                       addressLines: e.target.value
                         .split("\n")
                         .map((l) => l.trim())
@@ -248,7 +232,7 @@ export function SiteSettingsForm() {
                 <input
                   className={adminInput}
                   value={seo?.defaultTitle ?? ""}
-                  onChange={(e) => patchSeo(activeSite, { defaultTitle: e.target.value || null })}
+                  onChange={(e) => patchSeo( { defaultTitle: e.target.value || null })}
                 />
               </label>
               <label className="block space-y-1.5">
@@ -257,7 +241,7 @@ export function SiteSettingsForm() {
                   rows={4}
                   className={`${adminInput} resize-y`}
                   value={seo?.defaultMetaDescription ?? ""}
-                  onChange={(e) => patchSeo(activeSite, { defaultMetaDescription: e.target.value || null })}
+                  onChange={(e) => patchSeo( { defaultMetaDescription: e.target.value || null })}
                 />
               </label>
               <label className="block space-y-1.5">
@@ -265,7 +249,7 @@ export function SiteSettingsForm() {
                 <input
                   className={adminInput}
                   value={seo?.titleSuffix ?? ""}
-                  onChange={(e) => patchSeo(activeSite, { titleSuffix: e.target.value || null })}
+                  onChange={(e) => patchSeo( { titleSuffix: e.target.value || null })}
                   placeholder="z. B.  | Abexis"
                 />
               </label>
@@ -275,7 +259,7 @@ export function SiteSettingsForm() {
                   className={adminInput}
                   value={seo?.ogType ?? "website"}
                   onChange={(e) =>
-                    patchSeo(activeSite, { ogType: e.target.value === "article" ? "article" : "website" })
+                    patchSeo( { ogType: e.target.value === "article" ? "article" : "website" })
                   }
                 >
                   <option value="website">website</option>
@@ -364,9 +348,9 @@ export function SiteSettingsForm() {
         </AdminPageSection>
 
         <AdminPageSection>
-          <h2 className={adminSectionLabel}>Switch-Leiste</h2>
+          <h2 className={adminSectionLabel}>Kopfzeilen-Links</h2>
           <p className="max-w-prose text-[15px] leading-relaxed text-[var(--apple-text-secondary)]">
-            Links zwischen den Auftritten: Text, Zieladresse, welche Website, Reihenfolge.
+            Zusätzliche Links in der oberen Leiste : Text, Zieladresse und Reihenfolge (z. B. zu Ankern oder internen Seiten).
           </p>
           <div className="overflow-hidden rounded-[1.15rem] border border-black/[0.06] bg-[var(--apple-bg-elevated)] shadow-[0_1px_0_rgba(0,0,0,0.04)]">
             <table className="w-full text-left text-[15px]">
@@ -374,7 +358,6 @@ export function SiteSettingsForm() {
                 <tr>
                   <th className="px-3 py-2">Label</th>
                   <th className="px-3 py-2">URL</th>
-                  <th className="px-3 py-2">Site</th>
                   <th className="px-3 py-2">Sort</th>
                   <th className="w-[1%] px-3 py-2" />
                 </tr>
@@ -409,7 +392,7 @@ export function SiteSettingsForm() {
                       ...s,
                       switchBarLinks: [
                         ...(s.switchBarLinks ?? []),
-                        { label: "Neuer Link", href: "/", site: "both" as SiteKey, order: (s.switchBarLinks?.length ?? 0) },
+                        { label: "Neuer Link", href: "/", site: "abexis", order: (s.switchBarLinks?.length ?? 0) },
                       ],
                     }
                   : s,
@@ -558,28 +541,17 @@ function SwitchBarRow({
   return (
     <tr>
       <td className="px-3 py-2">
-        <input className={adminInput} value={row.label} onChange={(e) => onChange({ ...row, label: e.target.value })} />
+        <input className={adminInput} value={row.label} onChange={(e) => onChange({ ...row, label: e.target.value, site: "abexis" })} />
       </td>
       <td className="px-3 py-2">
-        <input className={adminInput} value={row.href} onChange={(e) => onChange({ ...row, href: e.target.value })} />
-      </td>
-      <td className="px-3 py-2">
-        <select
-          className={adminInput}
-          value={row.site}
-          onChange={(e) => onChange({ ...row, site: e.target.value as SiteKey })}
-        >
-          <option value="abexis">abexis.ch</option>
-          <option value="search">Executive Search</option>
-          <option value="both">Beide</option>
-        </select>
+        <input className={adminInput} value={row.href} onChange={(e) => onChange({ ...row, href: e.target.value, site: "abexis" })} />
       </td>
       <td className="px-3 py-2">
         <input
           type="number"
           className={adminInput}
           value={row.order}
-          onChange={(e) => onChange({ ...row, order: Number(e.target.value) || 0 })}
+          onChange={(e) => onChange({ ...row, order: Number(e.target.value) || 0, site: "abexis" })}
         />
       </td>
       <td className="px-3 py-2">

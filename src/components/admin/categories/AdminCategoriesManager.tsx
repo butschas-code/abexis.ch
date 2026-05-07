@@ -5,8 +5,6 @@ import { useEffect, useMemo, useState } from "react";
 import { CMS_PATHS } from "@/admin/paths";
 import { deleteCategory, listCategoriesAdmin } from "@/cms/services/categories-admin-client";
 import type { Category } from "@/cms/types/category";
-import type { CategorySiteKey } from "@/cms/types/category-site";
-import { categorySiteLabel } from "@/lib/cms/normalize-category-site";
 import { AdminDeleteDialog } from "@/components/admin/AdminDeleteDialog";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminLoading } from "@/components/admin/AdminLoading";
@@ -19,7 +17,6 @@ export function AdminCategoriesManager() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [q, setQ] = useState("");
-  const [siteFilter, setSiteFilter] = useState<CategorySiteKey | "all">("all");
   const [deleteTarget, setDeleteTarget] = useState<Row | null>(null);
   const [deleteWorking, setDeleteWorking] = useState(false);
 
@@ -43,16 +40,10 @@ export function AdminCategoriesManager() {
   }, []);
 
   const filtered = useMemo(() => {
-    const bySite = siteFilter === "all" ? rows : rows.filter((r) => r.site === siteFilter);
     const s = q.trim().toLowerCase();
-    if (!s) return bySite;
-    return bySite.filter(
-      (r) =>
-        r.name.toLowerCase().includes(s) ||
-        r.slug.toLowerCase().includes(s) ||
-        categorySiteLabel(r.site).toLowerCase().includes(s),
-    );
-  }, [rows, q, siteFilter]);
+    if (!s) return rows;
+    return rows.filter((r) => r.name.toLowerCase().includes(s) || r.slug.toLowerCase().includes(s));
+  }, [rows, q]);
 
   const confirmDelete = async () => {
     if (!deleteTarget) return;
@@ -72,7 +63,7 @@ export function AdminCategoriesManager() {
     <AdminPageContainer>
       <AdminPageHeader
         title="Kategorien"
-        description="Themen und Navigation : pro Website oder für beide Auftritte."
+        description="Themen und Navigation für Beiträge."
         actions={
           <Link
             href={CMS_PATHS.adminCategoryNew}
@@ -93,24 +84,11 @@ export function AdminCategoriesManager() {
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
           <input
             type="search"
-            placeholder="Suche nach Name, Slug oder Site…"
+            placeholder="Suche nach Name oder Slug…"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             className="w-full max-w-md rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none ring-[var(--brand-500)]/20 focus:ring-4 sm:max-w-sm"
           />
-          <label className="flex items-center gap-2 text-sm text-[var(--apple-text-secondary)]">
-            <span className="shrink-0">Site</span>
-            <select
-              value={siteFilter}
-              onChange={(e) => setSiteFilter(e.target.value as CategorySiteKey | "all")}
-              className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none ring-[var(--brand-500)]/20 focus:ring-4"
-            >
-              <option value="all">Alle</option>
-              <option value="abexis">abexis</option>
-              <option value="search">search</option>
-              <option value="shared">shared</option>
-            </select>
-          </label>
         </div>
 
         {error ? (
@@ -133,14 +111,13 @@ export function AdminCategoriesManager() {
                 <tr>
                   <th className="px-4 py-3">Name</th>
                   <th className="hidden px-4 py-3 sm:table-cell">Slug</th>
-                  <th className="px-4 py-3">Site</th>
                   <th className="w-[1%] px-4 py-3 text-right">Aktionen</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-black/10">
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-4 py-8 text-center text-[var(--apple-text-secondary)]">
+                    <td colSpan={3} className="px-4 py-8 text-center text-[var(--apple-text-secondary)]">
                       Keine Treffer für diese Suche.
                     </td>
                   </tr>
@@ -154,7 +131,6 @@ export function AdminCategoriesManager() {
                       <td className="hidden px-4 py-3 font-mono text-[var(--apple-text-secondary)] sm:table-cell">
                         {r.slug}
                       </td>
-                      <td className="px-4 py-3 text-[var(--apple-text-secondary)]">{categorySiteLabel(r.site)}</td>
                       <td className="whitespace-nowrap px-4 py-3 text-right">
                         <Link
                           href={CMS_PATHS.adminCategoryEdit(r.id)}

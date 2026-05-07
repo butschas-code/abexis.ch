@@ -133,7 +133,6 @@ export function SubmissionDetailDrawer({ submissionId, open, onClose, onStatusCh
               </div>
 
               <MetaLine label="Typ" value={row.type} />
-              <MetaLine label="Website" value={row.site} />
               <MetaLine
                 label="Eingang"
                 value={row.createdAt ? new Date(row.createdAt).toLocaleString("de-CH") : ","}

@@ -39,7 +39,7 @@ export {
 } from "./post-detail";
 export { buildCmsPostMetadata } from "./post-metadata";
 
-/** Central two-site resolution + filters : prefer importing from `@/public-site/site` directly. */
+/** Central deployment resolution + filters : prefer `@/public-site/site`. */
 export {
   type PublicDeploymentSite,
   visiblePostSitesInClause,

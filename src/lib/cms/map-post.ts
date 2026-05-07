@@ -1,6 +1,11 @@
 import type { DocumentSnapshot } from "firebase-admin/firestore";
 import type { PostStatus } from "@/cms/types/enums";
 import type { CmsPost } from "@/cms/types/post";
+import type { SiteKey } from "@/cms/types/site";
+
+function normalizePostSite(_raw: unknown): SiteKey {
+  return "abexis";
+}
 
 function readHeroPath(d: Record<string, unknown>): string | null {
   if (d.heroImagePath != null) return String(d.heroImagePath);
@@ -46,7 +51,7 @@ export function mapPostDocData(id: string, d: Record<string, unknown>): CmsPost 
     authorId: String(d.authorId ?? ""),
     categoryIds: Array.isArray(d.categoryIds) ? d.categoryIds.map(String) : [],
     tags: readTags(d),
-    site: d.site === "search" || d.site === "both" || d.site === "abexis" ? d.site : "abexis",
+    site: normalizePostSite(d.site),
     status: readStatus(d),
     seoTitle: d.seoTitle != null ? String(d.seoTitle) : null,
     seoDescription: d.seoDescription != null ? String(d.seoDescription) : null,

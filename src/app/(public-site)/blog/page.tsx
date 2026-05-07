@@ -4,7 +4,6 @@ import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import {
   buildCategoryLabelLookup,
   getAuthorNameMap,
-  getResolvedPublicDeploymentSite,
   listInsightsPublishedPosts,
   listPublicCategoriesForInsights,
   partitionFeaturedForGrid,
@@ -24,11 +23,9 @@ export const metadata = {
 /** Cache briefly so client navigations feel instant; `loading.tsx` covers the first paint. */
 export const revalidate = 120;
 export default async function BlogIndexPage() {
-  const [posts, categories, deploymentSite] = await Promise.all([
+  const [posts, categories] = await Promise.all([
     listInsightsPublishedPosts({}),
     listPublicCategoriesForInsights(),
-    /** Hostname hints (`NEXT_PUBLIC_SEARCH_SITE_HOST_HINTS`) + `NEXT_PUBLIC_CMS_SITE_ID` : drives Firestore filters. */
-    getResolvedPublicDeploymentSite(),
   ]);
 
   const catMap = buildCategoryLabelLookup(categories);
@@ -53,18 +50,9 @@ export default async function BlogIndexPage() {
       heroPriority
       description={
         <p className="max-w-xl text-[17px] leading-relaxed text-white/78">
-          {deploymentSite === "search" ? (
-            <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50">
-              Executive Search
-            </span>
-          ) : (
-            <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50">
-              abexis.ch
-            </span>
-          )}
+          <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50">abexis.ch</span>
           <span className="mt-3 block">
-            Strategie, Transformation und Führung : kompakt aufbereitet. Hier finden Sie alle veröffentlichten
-            Beiträge aus abexis.ch und der Executive-Search-Oberfläche (sowie geteilte Inhalte).
+            Strategie, Transformation und Führung : kompakt aufbereitet. Hier finden Sie alle veröffentlichten Beiträge.
           </span>
         </p>
       }
