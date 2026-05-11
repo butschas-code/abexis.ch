@@ -13,6 +13,18 @@ export const COLLECTIONS = {
   media: "media",
   /** Executive Search job postings : each doc is one vacancy/mandate. */
   vacancies: "vacancies",
+  /** Singleton-style automation prefs for the blog pipeline (`blogAutomationSettings/default`). */
+  blogAutomationSettings: "blogAutomationSettings",
+  /** Editorial queue for automated blog research/drafts (cron pipeline). */
+  blogTopics: "blogTopics",
+  /** AI-generated article drafts pending human review (never auto-published). */
+  blogDrafts: "blogDrafts",
+  /** AI-generated social copy linked to a draft; pending human review. */
+  blogSocialPosts: "blogSocialPosts",
+  /** One record per cron/manual pipeline batch for auditing. */
+  blogPipelineRuns: "blogPipelineRuns",
+  /** Structured log lines linked to {@link COLLECTIONS.blogPipelineRuns}. */
+  blogPipelineLogs: "blogPipelineLogs",
 } as const;
 
 export type CmsCollectionId = (typeof COLLECTIONS)[keyof typeof COLLECTIONS];

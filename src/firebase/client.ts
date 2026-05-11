@@ -33,6 +33,9 @@
  * 6) **Emulators (optional, local dev)** : see `.env.example` for
  *    `NEXT_PUBLIC_USE_FIREBASE_EMULATORS` and emulator host vars.
  *
+ * **Blog automation / hero images:** OpenAI and Unsplash keys are server-only (`OPENAI_API_KEY`,
+ * `UNSPLASH_ACCESS_KEY`); see `.env.example`. Do not expose Unsplash credentials as `NEXT_PUBLIC_*`.
+ *
  * -----------------------------------------------------------------------------
  */
 

@@ -17,6 +17,20 @@ const heroImageAltSchema = z.preprocess((v) => {
   return t === "" ? null : t;
 }, z.union([z.null(), z.string().max(500)]));
 
+const optionalHeroAttributionUrlSchema = z.preprocess((v) => {
+  if (v == null) return null;
+  if (typeof v !== "string") return v;
+  const t = v.trim();
+  return t === "" ? null : t;
+}, z.union([z.null(), z.string().url({ message: "Bitte eine gültige URL eingeben." }).max(2000)]));
+
+const optionalHeroAttributionTextSchema = z.preprocess((v) => {
+  if (v == null) return null;
+  if (typeof v !== "string") return v;
+  const t = v.trim();
+  return t === "" ? null : t;
+}, z.union([z.null(), z.string().max(500)]));
+
 /** Create a new post (no Firestore id yet : assign client-side id before first write). */
 export const postCreateInputSchema = z.object({
   title: z.string().trim().min(1).max(500),
@@ -28,6 +42,11 @@ export const postCreateInputSchema = z.object({
   heroImageAlt: heroImageAltSchema,
   /** Legacy Storage object path; editor leaves this unset (null). */
   heroImagePath: z.union([z.string().max(1024), z.null()]).default(null),
+  /** Unsplash / editorial attribution (optional). */
+  heroImageCredit: optionalHeroAttributionTextSchema.default(null),
+  heroImagePhotographerName: optionalHeroAttributionTextSchema.default(null),
+  heroImagePhotographerUrl: optionalHeroAttributionUrlSchema.default(null),
+  heroImageUnsplashUrl: optionalHeroAttributionUrlSchema.default(null),
   authorId: idString,
   categoryIds: z.array(idString).max(50).default([]),
   tags: z.array(z.string().trim().min(1).max(80)).max(50).default([]),

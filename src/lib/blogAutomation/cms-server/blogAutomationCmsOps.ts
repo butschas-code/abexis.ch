@@ -1,0 +1,733 @@
+import "server-only";
+
+import { FieldValue, Timestamp } from "firebase-admin/firestore";
+import { DateTime } from "luxon";
+
+import { parsePostUpsert } from "@/cms/schema";
+import { COLLECTIONS } from "@/cms/firestore/collections";
+import type { PostUpsertInput } from "@/cms/types/dto";
+import type { BlogDraftEditableFields } from "@/cms/types/blog-draft-pipeline";
+import {
+  DEFAULT_BLOG_AUTOMATION_FORM,
+  mapFirestoreRecordToBlogAutomationForm,
+  type BlogAutomationFormState,
+} from "@/lib/blogAutomation/editorForm";
+import {
+  BLOG_AUTOMATION_SETTINGS_DOC_ID,
+  type BlogAutomationArticleLength,
+  type BlogAutomationTopicMode,
+} from "@/lib/blogAutomation/types";
+import {
+  findNextLikelyDraftAt,
+  nextUtcHourBoundary,
+  type AutomationScheduleSettings,
+  type RunAggRow,
+} from "@/lib/blogAutomation/schedulingSimulation";
+import { serializePostBody } from "@/lib/cms/post-body-storage";
+import {
+  applyUnsplashPhotoToHeroFields,
+  getUnsplashPhotoById,
+  searchUnsplashLandscapePhotos,
+} from "@/lib/blogAutomation/findUnsplashImage";
+import type { UnsplashPhotoBrief } from "@/lib/blogAutomation/unsplash-photo-types";
+import { adminDb } from "@/lib/firebaseAdmin";
+import { POST_SITE_FIRESTORE_IN } from "@/public-site/site/filters";
+
+import type {
+  BlogDraftDetail,
+  BlogDraftListItem,
+  BlogSocialListItem,
+  BlogTopicListItem,
+} from "@/cms/services/blog-pipeline-types";
+import type {
+  BlogAutomationDashboardSnapshot,
+  BlogPipelineLogDashboardRow,
+  BlogPipelineRunDashboardRow,
+} from "@/lib/blogAutomation/cms-dashboard-types";
+import type { AddBlogTopicInput, QueuedBlogTopicRow } from "@/lib/blogAutomation/blogTopicQueue";
+
+function toIso(v: unknown): string | null {
+  if (v && typeof v === "object" && "toDate" in v && typeof (v as Timestamp).toDate === "function") {
+    return (v as Timestamp).toDate().toISOString();
+  }
+  if (typeof v === "string") return v;
+  return null;
+}
+
+function mapRun(id: string, d: Record<string, unknown>): BlogPipelineRunDashboardRow {
+  return {
+    id,
+    trigger: String(d.trigger ?? ""),
+    status: String(d.status ?? ""),
+    startedAt: toIso(d.startedAt),
+    completedAt: toIso(d.completedAt),
+    topicsProcessed: typeof d.topicsProcessed === "number" ? d.topicsProcessed : 0,
+    draftsCreated: typeof d.draftsCreated === "number" ? d.draftsCreated : 0,
+    socialPostsCreated: typeof d.socialPostsCreated === "number" ? d.socialPostsCreated : 0,
+    errorCount: typeof d.errorCount === "number" ? d.errorCount : 0,
+    lastErrorMessage: typeof d.lastErrorMessage === "string" ? d.lastErrorMessage : null,
+  };
+}
+
+function mapLog(id: string, d: Record<string, unknown>): BlogPipelineLogDashboardRow {
+  return {
+    id,
+    pipelineRunId: String(d.pipelineRunId ?? ""),
+    createdAt: toIso(d.createdAt),
+    level: String(d.level ?? ""),
+    message: String(d.message ?? ""),
+  };
+}
+
+function mapDraftList(id: string, d: Record<string, unknown>): BlogDraftListItem {
+  return {
+    id,
+    topicId: String(d.topicId ?? ""),
+    status: String(d.status ?? ""),
+    title: String(d.title ?? ""),
+    slug: String(d.slug ?? ""),
+    excerpt: String(d.excerpt ?? ""),
+    createdAt: toIso(d.createdAt),
+  };
+}
+
+function mapDraftDetail(id: string, d: Record<string, unknown>): BlogDraftDetail {
+  const sourcesRaw = d.sources;
+  const sources = Array.isArray(sourcesRaw)
+    ? sourcesRaw.map((row) => {
+        const o = row as Record<string, unknown>;
+        return { title: String(o.title ?? ""), url: String(o.url ?? "") };
+      })
+    : [];
+  const base = mapDraftList(id, d);
+  const nu = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : null);
+  return {
+    ...base,
+    metaTitle: String(d.metaTitle ?? ""),
+    metaDescription: String(d.metaDescription ?? ""),
+    articleHtml: String(d.articleHtml ?? ""),
+    researchSummary: String(d.researchSummary ?? ""),
+    sources,
+    openaiResponseId: d.openaiResponseId != null ? String(d.openaiResponseId) : null,
+    pipelineModel: d.pipelineModel != null ? String(d.pipelineModel) : null,
+    approvedAt: toIso(d.approvedAt),
+    publishedAt: toIso(d.publishedAt),
+    publishedPostId: typeof d.publishedPostId === "string" ? d.publishedPostId : null,
+    heroImageUrl: nu(d.heroImageUrl),
+    heroImageAlt: nu(d.heroImageAlt),
+    heroImageCredit: nu(d.heroImageCredit),
+    heroImagePhotographerName: nu(d.heroImagePhotographerName),
+    heroImagePhotographerUrl: nu(d.heroImagePhotographerUrl),
+    heroImageUnsplashUrl: nu(d.heroImageUnsplashUrl),
+    imageSearchQuery: nu(d.imageSearchQuery),
+  };
+}
+
+async function allocateUniquePublishedSlug(baseSlug: string): Promise<{ slug: string; adjusted: boolean }> {
+  const normalized = baseSlug.trim().toLowerCase() || `post-${Date.now().toString(36)}`;
+  const existing = await adminDb.collection(COLLECTIONS.posts).where("slug", "==", normalized).limit(1).get();
+  if (existing.empty) return { slug: normalized, adjusted: false };
+  return { slug: `${normalized}-${Date.now().toString(36)}`, adjusted: true };
+}
+
+// ——— Settings ———
+
+export async function cmsReadBlogAutomationSettings(): Promise<{ form: BlogAutomationFormState; docExists: boolean }> {
+  const snap = await adminDb.doc(`${COLLECTIONS.blogAutomationSettings}/${BLOG_AUTOMATION_SETTINGS_DOC_ID}`).get();
+  if (!snap.exists) {
+    return { form: { ...DEFAULT_BLOG_AUTOMATION_FORM }, docExists: false };
+  }
+  return {
+    form: mapFirestoreRecordToBlogAutomationForm(snap.data() as Record<string, unknown>),
+    docExists: true,
+  };
+}
+
+export async function cmsWriteBlogAutomationSettings(
+  form: BlogAutomationFormState,
+  opts: { docExists: boolean },
+): Promise<void> {
+  const ref = adminDb.doc(`${COLLECTIONS.blogAutomationSettings}/${BLOG_AUTOMATION_SETTINGS_DOC_ID}`);
+  const payload: Record<string, unknown> = {
+    enabled: form.enabled,
+    articlesPerWeek: form.articlesPerWeek,
+    preferredDays: form.preferredDays,
+    preferredTime: form.preferredTime,
+    timezone: form.timezone,
+    targetAudience: form.targetAudience.trim(),
+    tone: form.tone,
+    defaultLanguage: form.defaultLanguage,
+    topicMode: form.topicMode,
+    requireHumanApproval: form.requireHumanApproval,
+    autoPublish: form.autoPublish,
+    createSocialPosts: form.createSocialPosts,
+    socialPlatforms: form.socialPlatforms,
+    articleLength: form.articleLength,
+    brandInstructions: form.brandInstructions,
+    forbiddenTopics: form.forbiddenTopics,
+    updatedAt: FieldValue.serverTimestamp(),
+  };
+  if (!opts.docExists) {
+    payload.createdAt = FieldValue.serverTimestamp();
+  }
+  await ref.set(payload, { merge: true });
+}
+
+// ——— Topics ———
+
+export async function cmsListQueuedBlogTopics(max = 80): Promise<QueuedBlogTopicRow[]> {
+  const snap = await adminDb
+    .collection(COLLECTIONS.blogTopics)
+    .where("status", "==", "queued")
+    .orderBy("priority", "asc")
+    .limit(max)
+    .get();
+  return snap.docs.map((d) => {
+    const x = d.data() as Record<string, unknown>;
+    return {
+      id: d.id,
+      title: String(x.title ?? ""),
+      targetKeyword: String(x.targetKeyword ?? ""),
+      angle: String(x.angle ?? ""),
+      notes: String(x.notes ?? ""),
+      priority: typeof x.priority === "number" ? x.priority : 0,
+      status: String(x.status ?? ""),
+    };
+  });
+}
+
+export async function cmsListBlogTopicsForAdmin(max = 80): Promise<BlogTopicListItem[]> {
+  const snap = await adminDb.collection(COLLECTIONS.blogTopics).orderBy("createdAt", "desc").limit(max).get();
+  return snap.docs.map((d) => {
+    const x = d.data() as Record<string, unknown>;
+    return {
+      id: d.id,
+      title: String(x.title ?? ""),
+      brief: typeof x.brief === "string" ? x.brief : null,
+      status: String(x.status ?? ""),
+      lastPipelineError: typeof x.lastPipelineError === "string" ? x.lastPipelineError : null,
+      lastDraftId: typeof x.lastDraftId === "string" ? x.lastDraftId : null,
+      createdAt: toIso(x.createdAt),
+    };
+  });
+}
+
+export async function cmsCreateBlogTopic(input: AddBlogTopicInput): Promise<{ id: string }> {
+  if (!input.title.trim()) throw new Error("Bitte einen Titel eingeben.");
+  const ref = adminDb.collection(COLLECTIONS.blogTopics).doc();
+  await ref.set({
+    title: input.title.trim(),
+    targetKeyword: input.targetKeyword.trim(),
+    audience: input.audienceFallback.trim(),
+    angle: input.angle.trim(),
+    notes: input.notes.trim(),
+    priority: Number.isFinite(input.priority) ? Math.floor(input.priority) : 50,
+    status: "queued",
+    scheduledFor: null,
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+  });
+  return { id: ref.id };
+}
+
+export type BlogTopicPatch = Partial<{
+  title: string;
+  targetKeyword: string;
+  angle: string;
+  notes: string;
+  priority: number;
+  status: string;
+  audience: string;
+}>;
+
+export async function cmsUpdateBlogTopic(topicId: string, patch: BlogTopicPatch): Promise<void> {
+  const ref = adminDb.collection(COLLECTIONS.blogTopics).doc(topicId.trim());
+  const snap = await ref.get();
+  if (!snap.exists) throw new Error("Thema nicht gefunden.");
+
+  const row: Record<string, unknown> = { updatedAt: FieldValue.serverTimestamp() };
+  if (patch.title !== undefined) row.title = String(patch.title).trim();
+  if (patch.targetKeyword !== undefined) row.targetKeyword = String(patch.targetKeyword).trim();
+  if (patch.angle !== undefined) row.angle = String(patch.angle).trim();
+  if (patch.notes !== undefined) row.notes = String(patch.notes).trim();
+  if (patch.audience !== undefined) row.audience = String(patch.audience).trim();
+  if (patch.priority !== undefined && Number.isFinite(patch.priority)) row.priority = Math.floor(patch.priority);
+  if (patch.status !== undefined && String(patch.status).trim()) row.status = String(patch.status).trim();
+
+  await ref.update(row);
+}
+
+export async function cmsDeleteBlogTopic(topicId: string): Promise<void> {
+  const ref = adminDb.collection(COLLECTIONS.blogTopics).doc(topicId.trim());
+  const snap = await ref.get();
+  if (!snap.exists) throw new Error("Thema nicht gefunden.");
+  await ref.delete();
+}
+
+// ——— Drafts ———
+
+export async function cmsListBlogDraftsForAdmin(max = 120): Promise<BlogDraftListItem[]> {
+  const snap = await adminDb.collection(COLLECTIONS.blogDrafts).orderBy("createdAt", "desc").limit(max).get();
+  return snap.docs.map((d) => mapDraftList(d.id, d.data() as Record<string, unknown>));
+}
+
+export async function cmsGetBlogDraftForAdmin(id: string): Promise<BlogDraftDetail | null> {
+  const snap = await adminDb.collection(COLLECTIONS.blogDrafts).doc(id.trim()).get();
+  if (!snap.exists) return null;
+  return mapDraftDetail(snap.id, snap.data() as Record<string, unknown>);
+}
+
+export async function cmsUpdateBlogDraftFields(draftId: string, fields: BlogDraftEditableFields): Promise<void> {
+  const ref = adminDb.collection(COLLECTIONS.blogDrafts).doc(draftId.trim());
+  const snap = await ref.get();
+  if (!snap.exists) throw new Error("Entwurf nicht gefunden.");
+
+  const baseArticle: Record<string, unknown> = {
+    title: fields.title.trim(),
+    slug: fields.slug.trim(),
+    excerpt: fields.excerpt,
+    metaTitle: fields.metaTitle.trim(),
+    metaDescription: fields.metaDescription.trim(),
+    articleHtml: fields.articleHtml,
+    researchSummary: fields.researchSummary,
+    sources: fields.sources.map((s) => ({ title: s.title.trim(), url: s.url.trim() })),
+    updatedAt: FieldValue.serverTimestamp(),
+  };
+
+  if (fields.heroImageClear === true) {
+    await ref.update({
+      ...baseArticle,
+      heroImageUrl: FieldValue.delete(),
+      heroImageAlt: FieldValue.delete(),
+      heroImageCredit: FieldValue.delete(),
+      heroImagePhotographerName: FieldValue.delete(),
+      heroImagePhotographerUrl: FieldValue.delete(),
+      heroImageUnsplashUrl: FieldValue.delete(),
+      heroImageDownloadLocation: FieldValue.delete(),
+      imageSearchQuery: FieldValue.delete(),
+    });
+    return;
+  }
+
+  const patch: Record<string, unknown> = { ...baseArticle };
+  if (fields.heroImageAlt !== undefined) {
+    patch.heroImageAlt = fields.heroImageAlt.trim() || null;
+  }
+  if (fields.heroImageCredit !== undefined) {
+    patch.heroImageCredit = fields.heroImageCredit.trim() || null;
+  }
+  await ref.update(patch);
+}
+
+export async function cmsSetBlogDraftApproved(draftId: string): Promise<void> {
+  const ref = adminDb.collection(COLLECTIONS.blogDrafts).doc(draftId.trim());
+  const snap = await ref.get();
+  if (!snap.exists) throw new Error("Entwurf nicht gefunden.");
+  await ref.update({
+    status: "approved",
+    approvedAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+  });
+}
+
+export async function cmsSetBlogDraftSendBack(draftId: string): Promise<void> {
+  const ref = adminDb.collection(COLLECTIONS.blogDrafts).doc(draftId.trim());
+  const snap = await ref.get();
+  if (!snap.exists) throw new Error("Entwurf nicht gefunden.");
+  await ref.update({
+    status: "needs_review",
+    approvedAt: FieldValue.delete(),
+    updatedAt: FieldValue.serverTimestamp(),
+  });
+}
+
+export async function cmsDeleteBlogDraft(draftId: string): Promise<void> {
+  const ref = adminDb.collection(COLLECTIONS.blogDrafts).doc(draftId.trim());
+  const snap = await ref.get();
+  if (!snap.exists) throw new Error("Entwurf nicht gefunden.");
+  await ref.delete();
+}
+
+/** Server-side Unsplash search for draft hero picker (access key stays on server). */
+export async function cmsSearchUnsplashPhotosForDraft(query: string): Promise<UnsplashPhotoBrief[]> {
+  const q = query.trim();
+  if (!q) throw new Error("Bitte einen Suchbegriff eingeben.");
+  return searchUnsplashLandscapePhotos(q);
+}
+
+export async function cmsApplyUnsplashPhotoToBlogDraft(
+  draftId: string,
+  photoId: string,
+  imageSearchQuery: string,
+): Promise<void> {
+  const ref = adminDb.collection(COLLECTIONS.blogDrafts).doc(draftId.trim());
+  const snap = await ref.get();
+  if (!snap.exists) throw new Error("Entwurf nicht gefunden.");
+  const d = snap.data() as Record<string, unknown>;
+  if (String(d.status ?? "") === "published") {
+    throw new Error("Dieser Entwurf ist bereits veröffentlicht.");
+  }
+
+  const photo = await getUnsplashPhotoById(photoId.trim());
+  if (!photo) throw new Error("Bild nicht gefunden.");
+
+  const openAiAlt = typeof d.heroImageAlt === "string" ? d.heroImageAlt : "";
+  const hero = await applyUnsplashPhotoToHeroFields(photo, {
+    openAiAlt,
+    imageSearchQuery: imageSearchQuery.trim() || "CMS",
+  });
+  if (!hero) throw new Error("Bildmetadaten unvollständig.");
+
+  await ref.update({
+    heroImageUrl: hero.heroImageUrl,
+    heroImageAlt: hero.heroImageAlt,
+    heroImageCredit: hero.heroImageCredit,
+    heroImagePhotographerName: hero.heroImagePhotographerName,
+    heroImagePhotographerUrl: hero.heroImagePhotographerUrl,
+    heroImageUnsplashUrl: hero.heroImageUnsplashUrl,
+    heroImageDownloadLocation: hero.heroImageDownloadLocation,
+    imageSearchQuery: hero.imageSearchQuery,
+    updatedAt: FieldValue.serverTimestamp(),
+  });
+}
+
+export type PublishBlogDraftServerParams = BlogDraftEditableFields & {
+  draftId: string;
+  authorId: string;
+  categoryIds?: string[];
+  tags?: string[];
+};
+
+export type PublishBlogDraftServerResult = {
+  postId: string;
+  slugUsed: string;
+  slugAdjusted: boolean;
+};
+
+function readPublishedHeroFromDraft(d: Record<string, unknown>): Pick<
+  PostUpsertInput,
+  | "heroImageUrl"
+  | "heroImageAlt"
+  | "heroImageCredit"
+  | "heroImagePhotographerName"
+  | "heroImagePhotographerUrl"
+  | "heroImageUnsplashUrl"
+> {
+  const nu = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : null);
+  return {
+    heroImageUrl: nu(d.heroImageUrl),
+    heroImageAlt: nu(d.heroImageAlt),
+    heroImageCredit: nu(d.heroImageCredit),
+    heroImagePhotographerName: nu(d.heroImagePhotographerName),
+    heroImagePhotographerUrl: nu(d.heroImagePhotographerUrl),
+    heroImageUnsplashUrl: nu(d.heroImageUnsplashUrl),
+  };
+}
+
+export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerParams): Promise<PublishBlogDraftServerResult> {
+  const draftRef = adminDb.collection(COLLECTIONS.blogDrafts).doc(params.draftId.trim());
+  const draftSnap = await draftRef.get();
+  if (!draftSnap.exists) throw new Error("Entwurf nicht gefunden.");
+
+  const draftData = draftSnap.data() as Record<string, unknown>;
+  if (draftData.status === "published") {
+    throw new Error("Dieser Entwurf ist bereits veröffentlicht.");
+  }
+
+  const { slug: uniqueSlug, adjusted } = await allocateUniquePublishedSlug(params.slug);
+
+  const postId = adminDb.collection(COLLECTIONS.posts).doc().id;
+  const postRef = adminDb.collection(COLLECTIONS.posts).doc(postId);
+
+  const seoTitle = params.metaTitle.trim() ? params.metaTitle.trim() : null;
+  const seoDescription = params.metaDescription.trim() ? params.metaDescription.trim() : null;
+
+  const upsert: PostUpsertInput = {
+    id: postId,
+    title: params.title.trim(),
+    slug: uniqueSlug,
+    excerpt: params.excerpt,
+    body: serializePostBody(params.articleHtml),
+    heroImagePath: null,
+    ...readPublishedHeroFromDraft(draftData),
+    authorId: params.authorId.trim(),
+    categoryIds: params.categoryIds ?? [],
+    tags: params.tags ?? [],
+    site: "abexis",
+    status: "published",
+    seoTitle,
+    seoDescription,
+    featured: false,
+    publishedAt: new Date().toISOString(),
+  };
+
+  const parsed = parsePostUpsert(upsert);
+  if (!parsed.success) {
+    const msg = parsed.error.issues.map((i) => i.message).join(" · ");
+    throw new Error(msg || "Beitrag konnte nicht validiert werden.");
+  }
+
+  const ts = FieldValue.serverTimestamp();
+  const payload: Record<string, unknown> = {
+    title: parsed.data.title.trim(),
+    slug: parsed.data.slug.trim(),
+    status: "published",
+    site: parsed.data.site,
+    authorId: parsed.data.authorId,
+    categoryIds: parsed.data.categoryIds,
+    tags: parsed.data.tags,
+    featured: parsed.data.featured,
+    heroImageUrl: parsed.data.heroImageUrl,
+    heroImageAlt: parsed.data.heroImageAlt,
+    heroImagePath: parsed.data.heroImagePath,
+    heroImageCredit: parsed.data.heroImageCredit,
+    heroImagePhotographerName: parsed.data.heroImagePhotographerName,
+    heroImagePhotographerUrl: parsed.data.heroImagePhotographerUrl,
+    heroImageUnsplashUrl: parsed.data.heroImageUnsplashUrl,
+    body: parsed.data.body,
+    excerpt: parsed.data.excerpt,
+    seoTitle: parsed.data.seoTitle,
+    seoDescription: parsed.data.seoDescription,
+    updatedAt: ts,
+    createdAt: ts,
+    publishedAt: ts,
+    heroStoragePath: FieldValue.delete(),
+  };
+
+  const sourcesClean = params.sources.map((s) => ({ title: s.title.trim(), url: s.url.trim() }));
+
+  const batch = adminDb.batch();
+  batch.set(postRef, payload);
+  batch.update(draftRef, {
+    title: params.title.trim(),
+    slug: uniqueSlug,
+    excerpt: params.excerpt,
+    metaTitle: params.metaTitle.trim(),
+    metaDescription: params.metaDescription.trim(),
+    articleHtml: params.articleHtml,
+    researchSummary: params.researchSummary,
+    sources: sourcesClean,
+    status: "published",
+    publishedPostId: postId,
+    publishedAt: ts,
+    updatedAt: ts,
+  });
+
+  await batch.commit();
+
+  return { postId, slugUsed: uniqueSlug, slugAdjusted: adjusted };
+}
+
+// ——— Social ———
+
+export async function cmsListBlogSocialPostsForDraft(draftId: string): Promise<BlogSocialListItem[]> {
+  const trimmed = draftId.trim();
+  if (!trimmed) return [];
+  const snap = await adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "==", trimmed).get();
+  const rows = snap.docs.map((docSnap) => {
+    const d = docSnap.data() as Record<string, unknown>;
+    return {
+      id: docSnap.id,
+      topicId: String(d.topicId ?? ""),
+      blogDraftId: String(d.blogDraftId ?? ""),
+      status: String(d.status ?? ""),
+      linkedinPost: String(d.linkedinPost ?? ""),
+      shortLinkedinPost: String(d.shortLinkedinPost ?? ""),
+      xPost: String(d.xPost ?? ""),
+      createdAt: toIso(d.createdAt),
+      usedAt: toIso(d.usedAt),
+    };
+  });
+  rows.sort((a, b) => {
+    const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    return tb - ta;
+  });
+  return rows;
+}
+
+export async function cmsListBlogSocialPostsForAdmin(max = 80): Promise<BlogSocialListItem[]> {
+  const snap = await adminDb.collection(COLLECTIONS.blogSocialPosts).orderBy("createdAt", "desc").limit(max).get();
+  return snap.docs.map((docSnap) => {
+    const d = docSnap.data() as Record<string, unknown>;
+    return {
+      id: docSnap.id,
+      topicId: String(d.topicId ?? ""),
+      blogDraftId: String(d.blogDraftId ?? ""),
+      status: String(d.status ?? ""),
+      linkedinPost: String(d.linkedinPost ?? ""),
+      shortLinkedinPost: String(d.shortLinkedinPost ?? ""),
+      xPost: String(d.xPost ?? ""),
+      createdAt: toIso(d.createdAt),
+      usedAt: toIso(d.usedAt),
+    };
+  });
+}
+
+export async function cmsPatchBlogSocialPost(
+  socialPostId: string,
+  patch: Partial<{ linkedinPost: string; shortLinkedinPost: string; xPost: string; markUsed: boolean }>,
+): Promise<void> {
+  const ref = adminDb.collection(COLLECTIONS.blogSocialPosts).doc(socialPostId.trim());
+  const snap = await ref.get();
+  if (!snap.exists) throw new Error("Social-Beitrag nicht gefunden.");
+
+  const row: Record<string, unknown> = { updatedAt: FieldValue.serverTimestamp() };
+  if (patch.linkedinPost !== undefined) row.linkedinPost = patch.linkedinPost;
+  if (patch.shortLinkedinPost !== undefined) row.shortLinkedinPost = patch.shortLinkedinPost;
+  if (patch.xPost !== undefined) row.xPost = patch.xPost;
+  if (patch.markUsed === true) {
+    row.usedAt = FieldValue.serverTimestamp();
+  }
+  await ref.update(row);
+}
+
+// ——— Dashboard snapshot ———
+
+function formToScheduleSettings(form: BlogAutomationFormState): AutomationScheduleSettings {
+  return {
+    enabled: form.enabled,
+    articlesPerWeek: form.articlesPerWeek,
+    preferredDays: form.preferredDays,
+    preferredTime: form.preferredTime,
+    timezone: form.timezone,
+  };
+}
+
+async function fetchBlogPipelineRuns(limitRows: number): Promise<BlogPipelineRunDashboardRow[]> {
+  const snap = await adminDb
+    .collection(COLLECTIONS.blogPipelineRuns)
+    .orderBy("startedAt", "desc")
+    .limit(limitRows)
+    .get();
+  return snap.docs.map((d) => mapRun(d.id, d.data() as Record<string, unknown>));
+}
+
+async function listRecentBlogPipelineLogs(maxRows: number): Promise<BlogPipelineLogDashboardRow[]> {
+  const snap = await adminDb.collection(COLLECTIONS.blogPipelineLogs).orderBy("createdAt", "desc").limit(maxRows).get();
+  return snap.docs.map((d) => mapLog(d.id, d.data() as Record<string, unknown>));
+}
+
+async function countDraftsAwaitingReview(): Promise<number> {
+  const agg = await adminDb
+    .collection(COLLECTIONS.blogDrafts)
+    .where("status", "in", ["needs_review", "draft_created"])
+    .count()
+    .get();
+  return agg.data().count;
+}
+
+async function countPublishedPostsThisCalendarMonth(monthTz: string): Promise<number> {
+  const zone = monthTz?.trim() || "Europe/Zurich";
+  const start = DateTime.now().setZone(zone).startOf("month");
+  const monthStart = Timestamp.fromDate(start.toJSDate());
+
+  const agg = await adminDb
+    .collection(COLLECTIONS.posts)
+    .where("status", "==", "published")
+    .where("site", "in", [...POST_SITE_FIRESTORE_IN])
+    .where("publishedAt", ">=", monthStart)
+    .count()
+    .get();
+
+  return agg.data().count;
+}
+
+export async function cmsBuildBlogAutomationDashboardSnapshot(form: BlogAutomationFormState): Promise<BlogAutomationDashboardSnapshot> {
+  const monthTz = form.timezone?.trim() || "Europe/Zurich";
+
+  const [runsForEstimate, logs, draftsAwaitingReview, publishedThisMonth] = await Promise.all([
+    fetchBlogPipelineRuns(120),
+    listRecentBlogPipelineLogs(48),
+    countDraftsAwaitingReview(),
+    countPublishedPostsThisCalendarMonth(monthTz),
+  ]);
+
+  const runs = runsForEstimate.slice(0, 18);
+
+  const runAgg: RunAggRow[] = runsForEstimate
+    .map((r) => ({
+      startedAt: r.startedAt ? new Date(r.startedAt) : null,
+      draftsCreated: r.draftsCreated,
+    }))
+    .filter((row): row is RunAggRow => row.startedAt != null && !Number.isNaN(row.startedAt.getTime()));
+
+  const now = new Date();
+  const schedule = formToScheduleSettings(form);
+  const nextCheck = nextUtcHourBoundary(now);
+  const nextDraft = form.enabled ? findNextLikelyDraftAt(schedule, runAgg, now) : null;
+
+  return {
+    runs,
+    logs,
+    draftsAwaitingReview,
+    publishedThisMonth,
+    nextAutomaticCheckAt: nextCheck.toISOString(),
+    nextLikelyDraftAt: nextDraft?.toISOString() ?? null,
+  };
+}
+
+/** Validates automation settings payload from JSON (settings PUT). */
+export function parseBlogAutomationFormFromJson(body: unknown): BlogAutomationFormState {
+  if (!body || typeof body !== "object") throw new Error("Ungültige JSON-Nutzlast.");
+  const o = body as Record<string, unknown>;
+
+  const topicMode: BlogAutomationTopicMode = o.topicMode === "ai_suggested" ? "ai_suggested" : "topic_queue";
+  const articleLengthRaw = o.articleLength;
+  const articleLength: BlogAutomationArticleLength =
+    articleLengthRaw === "short" || articleLengthRaw === "long" ? articleLengthRaw : "medium";
+
+  const preferredDays = Array.isArray(o.preferredDays) ? o.preferredDays.map(String) : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays;
+  const socialPlatforms = Array.isArray(o.socialPlatforms) ? o.socialPlatforms.map(String) : [];
+
+  return {
+    enabled: !!o.enabled,
+    articlesPerWeek: Math.min(3, Math.max(1, Math.floor(Number(o.articlesPerWeek)) || 1)),
+    preferredDays,
+    preferredTime: typeof o.preferredTime === "string" ? o.preferredTime : DEFAULT_BLOG_AUTOMATION_FORM.preferredTime,
+    timezone: typeof o.timezone === "string" ? o.timezone : DEFAULT_BLOG_AUTOMATION_FORM.timezone,
+    targetAudience: typeof o.targetAudience === "string" ? o.targetAudience : "",
+    tone: typeof o.tone === "string" ? o.tone : DEFAULT_BLOG_AUTOMATION_FORM.tone,
+    defaultLanguage: typeof o.defaultLanguage === "string" ? o.defaultLanguage : DEFAULT_BLOG_AUTOMATION_FORM.defaultLanguage,
+    topicMode,
+    requireHumanApproval: o.requireHumanApproval !== false,
+    autoPublish: !!o.autoPublish,
+    createSocialPosts: !!o.createSocialPosts,
+    socialPlatforms,
+    articleLength,
+    brandInstructions: typeof o.brandInstructions === "string" ? o.brandInstructions : "",
+    forbiddenTopics: typeof o.forbiddenTopics === "string" ? o.forbiddenTopics : "",
+  };
+}
+
+export function parseBlogDraftEditableFields(body: unknown): BlogDraftEditableFields {
+  if (!body || typeof body !== "object") throw new Error("Ungültige JSON-Nutzlast.");
+  const o = body as Record<string, unknown>;
+  const sourcesRaw = o.sources;
+  const sources = Array.isArray(sourcesRaw)
+    ? sourcesRaw.map((row) => {
+        const x = row as Record<string, unknown>;
+        return { title: String(x.title ?? ""), url: String(x.url ?? "") };
+      })
+    : [];
+  const base: BlogDraftEditableFields = {
+    title: String(o.title ?? ""),
+    slug: String(o.slug ?? ""),
+    excerpt: String(o.excerpt ?? ""),
+    metaTitle: String(o.metaTitle ?? ""),
+    metaDescription: String(o.metaDescription ?? ""),
+    articleHtml: String(o.articleHtml ?? ""),
+    researchSummary: String(o.researchSummary ?? ""),
+    sources,
+  };
+  if (typeof o.heroImageAlt === "string") {
+    base.heroImageAlt = o.heroImageAlt;
+  }
+  if (typeof o.heroImageCredit === "string") {
+    base.heroImageCredit = o.heroImageCredit;
+  }
+  if (o.heroImageClear === true) {
+    base.heroImageClear = true;
+  }
+  return base;
+}

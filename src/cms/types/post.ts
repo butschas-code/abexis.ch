@@ -16,6 +16,11 @@ export type Post = {
   /** Alt text for {@link heroImageUrl} (optional). */
   heroImageAlt: string | null;
   heroImagePath: string | null;
+  /** Full line e.g. «Photo by … on Unsplash». */
+  heroImageCredit: string | null;
+  heroImagePhotographerName: string | null;
+  heroImagePhotographerUrl: string | null;
+  heroImageUnsplashUrl: string | null;
   authorId: string;
   categoryIds: string[];
   tags: string[];

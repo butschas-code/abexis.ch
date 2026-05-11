@@ -27,4 +27,14 @@ export const CMS_PATHS = {
   adminVacancies: "/admin/vacancies",
   adminVacancyNew: "/admin/vacancies/new",
   adminVacancyEdit: (id: string) => `/admin/vacancies/${id}` as const,
+  /** Blog automation setup (schedule, topics, safety). */
+  adminBlogAutomation: "/admin/blog-automation",
+  /** KI-Entwürfe prüfen und veröffentlichen (Blog-Automation). */
+  adminBlogAutomationDrafts: "/admin/blog-automation/drafts",
+  adminBlogAutomationDraft: (id: string) => `/admin/blog-automation/drafts/${id}` as const,
+  /** AI blog drafts (Responses API); human review only — never auto-published. */
+  adminBlogPipelineDrafts: "/admin/blog-pipeline/drafts",
+  adminBlogPipelineDraft: (id: string) => `/admin/blog-pipeline/drafts/${id}` as const,
+  adminBlogPipelineSocial: "/admin/blog-pipeline/social",
+  adminBlogPipelineTopics: "/admin/blog-pipeline/topics",
 } as const;
