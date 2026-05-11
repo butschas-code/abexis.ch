@@ -28,3 +28,11 @@ export function subscribeCmsAuth(callback: (user: User | null) => void): Unsubsc
   }
   return onAuthStateChanged(auth, callback);
 }
+
+/**
+ * Returns a fresh ID token so server verification sees up-to-date claims
+ * (notably `email_verified` right after the confirmation link).
+ */
+export async function getCmsAuthIdTokenFresh(user: User): Promise<string> {
+  return user.getIdToken(true);
+}

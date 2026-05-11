@@ -8,7 +8,7 @@ import { CMS_PATHS } from "@/admin/paths";
 import { fetchCmsMfaState, postCmsMfaVerify } from "@/cms/auth/cms-mfa-client";
 import { mapFirebaseAuthErrorToMessage } from "@/cms/auth/map-auth-error";
 import { FirebaseWebEnvMissingPanel } from "@/components/cms/FirebaseWebEnvMissingPanel";
-import { getCmsAuth } from "@/firebase/auth";
+import { getCmsAuth, getCmsAuthIdTokenFresh } from "@/firebase/auth";
 import { isFirebaseClientConfigured } from "@/firebase/client";
 
 type LoginPhase = "credentials" | "totp";
@@ -30,7 +30,7 @@ export function CmsLoginForm() {
       if (!u || phase !== "credentials") return;
       queueMicrotask(() => {
         void (async () => {
-          const token = await u.getIdToken();
+          const token = await getCmsAuthIdTokenFresh(u);
           const state = await fetchCmsMfaState(token);
           if (state?.enrolled && !state.sessionTrusted) {
             setEmail(u.email ?? "");
@@ -75,7 +75,7 @@ export function CmsLoginForm() {
     }
     try {
       const cred = await signInWithEmailAndPassword(auth, email.trim(), password);
-      const token = await cred.user.getIdToken();
+      const token = await getCmsAuthIdTokenFresh(cred.user);
       const state = await fetchCmsMfaState(token);
       if (!state) {
         setError(
@@ -114,7 +114,7 @@ export function CmsLoginForm() {
     setBusy(true);
     setError(null);
     try {
-      const token = await u.getIdToken();
+      const token = await getCmsAuthIdTokenFresh(u);
       const ok = await postCmsMfaVerify(token, trimmed);
       if (!ok) {
         setError("Der Code ist ungültig oder abgelaufen. Bitte erneut versuchen.");

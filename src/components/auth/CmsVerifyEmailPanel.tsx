@@ -7,7 +7,7 @@ import { useCallback, useState } from "react";
 import { CMS_PATHS } from "@/admin/paths";
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
 import { mapFirebaseAuthErrorToMessage } from "@/cms/auth/map-auth-error";
-import { getCmsAuth } from "@/firebase/auth";
+import { getCmsAuth, getCmsAuthIdTokenFresh } from "@/firebase/auth";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
 import { adminBtnPrimary, adminBtnSecondary } from "@/components/admin/admin-ui";
 import { LogoutButton } from "@/components/admin/LogoutButton";
@@ -47,6 +47,7 @@ export function CmsVerifyEmailPanel() {
     setError(null);
     try {
       await reload(u);
+      await getCmsAuthIdTokenFresh(u);
       if (u.emailVerified) {
         router.replace(CMS_PATHS.adminMfaSetup);
         router.refresh();

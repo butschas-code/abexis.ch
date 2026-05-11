@@ -11,10 +11,28 @@ import {
   postCmsMfaEnrollStart,
 } from "@/cms/auth/cms-mfa-client";
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
-import { getCmsAuth } from "@/firebase/auth";
+import { getCmsAuth, getCmsAuthIdTokenFresh } from "@/firebase/auth";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
 import { adminBtnPrimary, adminInput } from "@/components/admin/admin-ui";
 import { LogoutButton } from "@/components/admin/LogoutButton";
+
+function messageForEnrollStartFailure(errorCode: string): string {
+  const known: Record<string, string> = {
+    email_not_verified:
+      "Die E-Mail-Bestätigung ist für den Server noch nicht sichtbar (veraltetes Anmelde-Ticket). Bitte «QR-Code anzeigen» erneut klicken oder die Seite neu laden. Falls das weiter nicht hilft: auf «E-Mail bestätigen» zurück und «Status prüfen».",
+    admin_not_configured:
+      "Server-Konfiguration unvollständig (Firebase Admin). Bitte Administrator:in kontaktieren.",
+    mfa_secret_missing:
+      "Server-Konfiguration unvollständig (CMS_MFA_COOKIE_SECRET). Bitte Administrator:in kontaktieren.",
+    persist_failed:
+      "Die Einrichtung konnte nicht gespeichert werden (Firestore). Bitte Administrator:in kontaktieren.",
+    unauthorized: "Sitzung ungültig. Bitte abmelden und erneut anmelden.",
+  };
+  return (
+    known[errorCode] ??
+    "Einrichtung konnte nicht gestartet werden. Bitte später erneut versuchen oder Administrator:in kontaktieren."
+  );
+}
 
 /**
  * One-time TOTP enrollment (custom server verification + Firestore secret; no Firebase Identity Platform).
@@ -32,8 +50,8 @@ export function CmsTotpEnrollment() {
     void (async () => {
       const auth = getCmsAuth();
       const u = auth?.currentUser ?? user ?? null;
-      if (!u) return;
-      const token = await u.getIdToken();
+      if (!u || !u.emailVerified) return;
+      const token = await getCmsAuthIdTokenFresh(u);
       const st = await fetchCmsMfaState(token);
       setServerEnrolled(!!st?.enrolled);
     })();
@@ -49,7 +67,7 @@ export function CmsTotpEnrollment() {
     setBusy(true);
     setError(null);
     try {
-      const token = await u.getIdToken();
+      const token = await getCmsAuthIdTokenFresh(u);
       const res = await postCmsMfaEnrollStart(token);
       if (!res.ok) {
         if (res.errorCode === "already_enrolled") {
@@ -57,7 +75,7 @@ export function CmsTotpEnrollment() {
           setError(null);
           return;
         }
-        setError("Einrichtung konnte nicht gestartet werden. Bitte später erneut versuchen oder Administrator:in kontaktieren.");
+        setError(messageForEnrollStartFailure(res.errorCode));
         return;
       }
       setPayload({ otpauthUrl: res.otpauthUrl, manualKey: res.manualKey });
@@ -78,7 +96,7 @@ export function CmsTotpEnrollment() {
     setBusy(true);
     setError(null);
     try {
-      const token = await u.getIdToken();
+      const token = await getCmsAuthIdTokenFresh(u);
       const ok = await postCmsMfaEnrollComplete(token, trimmed);
       if (!ok) {
         setError("Der Code ist ungültig. Bitte erneut eingeben oder neuen QR-Code anfordern.");
@@ -117,6 +135,11 @@ export function CmsTotpEnrollment() {
               <p className="text-sm text-[var(--apple-text-secondary)]">
                 Sie erhalten einen QR-Code und einen Einrichtungscode. Danach geben Sie zum Abschluss einen Einmalcode aus der App ein.
               </p>
+              {error ? (
+                <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800" role="alert">
+                  {error}
+                </div>
+              ) : null}
               <button type="button" disabled={busy} className={adminBtnPrimary} onClick={() => void startEnrollment()}>
                 {busy ? "Wird vorbereitet…" : "QR-Code anzeigen"}
               </button>

@@ -6,7 +6,7 @@ import { CMS_PATHS } from "@/admin/paths";
 import { fetchCmsMfaState } from "@/cms/auth/cms-mfa-client";
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
 import { canAccessCmsDashboard } from "@/cms/auth/permissions";
-import { getCmsAuth } from "@/firebase/auth";
+import { getCmsAuth, getCmsAuthIdTokenFresh } from "@/firebase/auth";
 import { FirebaseWebEnvMissingPanel } from "@/components/cms/FirebaseWebEnvMissingPanel";
 import { AdminLayout } from "./AdminLayout";
 import { AdminProtectedBootSkeleton } from "./AdminLoading";
@@ -70,7 +70,7 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
       const u = auth?.currentUser;
       if (!u) return;
       try {
-        const token = await u.getIdToken();
+        const token = await getCmsAuthIdTokenFresh(u);
         const data = await fetchCmsMfaState(token);
         if (cancelled) return;
         if (!data) {

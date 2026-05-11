@@ -6,7 +6,7 @@ import { useState } from "react";
 import { CMS_PATHS } from "@/admin/paths";
 import { postCmsMfaVerify } from "@/cms/auth/cms-mfa-client";
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
-import { getCmsAuth } from "@/firebase/auth";
+import { getCmsAuth, getCmsAuthIdTokenFresh } from "@/firebase/auth";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
 import { adminBtnPrimary, adminInput } from "@/components/admin/admin-ui";
 import { LogoutButton } from "@/components/admin/LogoutButton";
@@ -35,7 +35,7 @@ export function CmsMfaChallengeForm() {
     setBusy(true);
     setError(null);
     try {
-      const token = await u.getIdToken();
+      const token = await getCmsAuthIdTokenFresh(u);
       const ok = await postCmsMfaVerify(token, trimmed);
       if (!ok) {
         setError("Der Code ist ungültig oder abgelaufen. Bitte erneut versuchen.");
