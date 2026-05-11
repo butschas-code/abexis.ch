@@ -17,6 +17,7 @@ export function LogoutButton({ label = "Abmelden", variant = "secondary" }: Prop
   const router = useRouter();
 
   async function logout() {
+    await fetch("/api/cms/mfa/session", { method: "DELETE", credentials: "include" }).catch(() => undefined);
     const auth = getCmsAuth();
     if (auth) await signOut(auth);
     router.replace(CMS_PATHS.authLogin);

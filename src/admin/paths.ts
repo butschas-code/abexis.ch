@@ -2,6 +2,12 @@
 export const CMS_PATHS = {
   /** CMS sign-in (outside the protected admin shell). */
   authLogin: "/admin/login",
+  /** Verify Firebase Auth email (required before TOTP enrollment). */
+  adminVerifyEmail: "/admin/verify-email",
+  /** Register Authenticator (TOTP) as second factor. */
+  adminMfaSetup: "/admin/mfa-setup",
+  /** App-code step when already enrolled but MFA cookie expired (custom TOTP). */
+  adminMfaChallenge: "/admin/mfa-challenge",
   adminHome: "/admin",
   adminPosts: "/admin/posts",
   adminPostNew: "/admin/posts/new",

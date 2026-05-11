@@ -1,4 +1,5 @@
 import { applicationDefault, cert, getApps, initializeApp, type App, type ServiceAccount } from "firebase-admin/app";
+import { getAuth, type Auth } from "firebase-admin/auth";
 import { getFirestore, type Firestore } from "firebase-admin/firestore";
 import { getStorage, type Storage } from "firebase-admin/storage";
 
@@ -98,6 +99,13 @@ export function getAdminFirestore(): Firestore | null {
   const app = getFirebaseAdminApp();
   if (!app) return null;
   return getFirestore(app);
+}
+
+/** Firebase Auth Admin (verify ID tokens in Route Handlers). */
+export function getAdminAuth(): Auth | null {
+  const app = getFirebaseAdminApp();
+  if (!app) return null;
+  return getAuth(app);
 }
 
 /** Admin Storage (signed URLs, server-side uploads, bucket operations). */

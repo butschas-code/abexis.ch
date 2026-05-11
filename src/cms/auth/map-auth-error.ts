@@ -18,6 +18,10 @@ export function mapFirebaseAuthErrorToMessage(error: unknown): string {
     "auth/operation-not-allowed": "E-Mail/Passwort-Anmeldung ist nicht aktiviert. Bitte Administrator:in kontaktieren.",
     "auth/invalid-api-key": "Die Anwendung ist nicht korrekt konfiguriert (API-Schlüssel). Bitte Administrator:in kontaktieren.",
     "auth/internal-error": "Ein technischer Fehler ist aufgetreten. Bitte später erneut versuchen.",
+    "auth/invalid-verification-code":
+      "Der Sicherheitscode ist ungültig oder abgelaufen. Bitte einen neuen Code aus der Authenticator-App eingeben.",
+    "auth/requires-recent-login":
+      "Aus Sicherheitsgründen bitte erneut anmelden und den Vorgang wiederholen.",
   };
 
   return table[code] ?? "Anmeldung nicht möglich. Bitte E-Mail und Passwort prüfen oder Administrator:in kontaktieren.";

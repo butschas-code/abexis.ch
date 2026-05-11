@@ -13,7 +13,8 @@
     "scrape:images": "node scripts/scrape-images.mjs",
     "cms:seed:dev": "tsx scripts/cms-seed-dev.ts",
     "cms:migrate:single-site": "tsx scripts/migrate-cms-sites-to-abexis.ts",
-    "cms:import:legacy": "tsx scripts/import-legacy-blog-posts.ts"
+    "cms:import:legacy": "tsx scripts/import-legacy-blog-posts.ts",
+    "cms:check-mfa-env": "tsx scripts/check-cms-mfa-env.ts"
   },
   "dependencies": {
     "@tiptap/extension-image": "^2.27.2",
@@ -27,8 +28,10 @@
     "firebase-admin": "^13.8.0",
     "framer-motion": "^12.38.0",
     "next": "16.2.4",
+    "otplib": "^13.4.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-qr-code": "^2.0.21",
     "sanitize-html": "^2.17.3",
     "zod": "^3.25.76"
   },

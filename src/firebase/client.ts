@@ -17,6 +17,13 @@
  *    Google/OIDC later). Authorized domains: add `localhost` and production
  *    hostnames (e.g. `www.abexis.ch`, your Vercel preview domain if needed).
  *
+ *    **Multi-factor (TOTP / Authenticator):** Implemented **without** Firebase Identity
+ *    Platform (free Auth tier): secrets live in Firestore (`cms_totp` — Admin-only writes,
+ *    deny-all rules for clients). Server verifies codes (`otplib`) and sets an HTTP-only
+ *    cookie (`CMS_MFA_COOKIE_SECRET` in `.env`). Editors verify email, enroll once under
+ *    `/admin/mfa-setup`, then enter an app code after the password when the MFA cookie
+ *    expired (`/admin/mfa-challenge`).
+ *
  * 4) **Firestore** → Create database → choose region → deploy rules from repo
  *    (`firestore.rules`). Add composite indexes from `firestore.indexes.json`.
  *
