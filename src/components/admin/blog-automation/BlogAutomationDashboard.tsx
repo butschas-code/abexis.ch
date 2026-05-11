@@ -107,7 +107,7 @@ export function BlogAutomationDashboard(props: Props) {
         <StatCard
           title="Nächste Planprüfung"
           value={formatDateTime(snapshot?.nextAutomaticCheckAt ?? null, displayTimezone)}
-          hint="Ab diesem Zeitpunkt kann ein neuer Entwurf entstehen — wenn Tag, Uhrzeit und Obergrenze passen."
+          hint="Einmal täglich wird geprüft. Ab diesem Zeitpunkt kann ein Entwurf entstehen — wenn Schreibtag, Uhrzeit und Obergrenze passen."
         />
 
         <StatCard

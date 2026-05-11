@@ -19,7 +19,7 @@ import {
 } from "@/lib/blogAutomation/types";
 import {
   findNextLikelyDraftAt,
-  nextUtcHourBoundary,
+  nextBlogAutomationCronUtc,
   type AutomationScheduleSettings,
   type RunAggRow,
 } from "@/lib/blogAutomation/schedulingSimulation";
@@ -654,7 +654,7 @@ export async function cmsBuildBlogAutomationDashboardSnapshot(form: BlogAutomati
 
   const now = new Date();
   const schedule = formToScheduleSettings(form);
-  const nextCheck = nextUtcHourBoundary(now);
+  const nextCheck = nextBlogAutomationCronUtc(now);
   const nextDraft = form.enabled ? findNextLikelyDraftAt(schedule, runAgg, now) : null;
 
   return {

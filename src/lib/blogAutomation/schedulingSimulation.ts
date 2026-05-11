@@ -81,26 +81,38 @@ export function wouldAutomationRunCreateDraftAt(settings: AutomationScheduleSett
   return true;
 }
 
-/** Next hourly boundary (matches `0 * * * *` cron cadence in UTC). */
-export function nextUtcHourBoundary(from: Date): Date {
+/**
+ * UTC hour for the production cron schedule (`vercel.json`).
+ * Hobby accounts allow at most **one** cron invocation per day — keep this aligned with that file.
+ * 14:00 UTC ≈ afternoon CH/EU so typical morning `preferredTime` values have usually passed.
+ */
+export const BLOG_AUTOMATION_CRON_UTC_HOUR = 14;
+
+/** Next scheduled cron run instant in UTC (daily at {@link BLOG_AUTOMATION_CRON_UTC_HOUR}:00). */
+export function nextBlogAutomationCronUtc(from: Date): Date {
   const dt = DateTime.fromJSDate(from, { zone: "utc" });
-  let boundary = dt.startOf("hour");
-  if (boundary.toMillis() <= dt.toMillis()) {
-    boundary = boundary.plus({ hours: 1 });
+  let target = dt.set({
+    hour: BLOG_AUTOMATION_CRON_UTC_HOUR,
+    minute: 0,
+    second: 0,
+    millisecond: 0,
+  });
+  if (target.toMillis() <= dt.toMillis()) {
+    target = target.plus({ days: 1 });
   }
-  return boundary.toJSDate();
+  return target.toJSDate();
 }
 
-/** Next UTC hour when a draft might be created, scanning up to `maxDaysAhead`. */
+/** Next instant when a draft might be created (walks daily cron fires up to `maxDaysAhead`). */
 export function findNextLikelyDraftAt(settings: AutomationScheduleSettings, runs: RunAggRow[], from: Date, maxDaysAhead = 14): Date | null {
-  let candidate = nextUtcHourBoundary(from);
+  let candidate = nextBlogAutomationCronUtc(from);
   const end = DateTime.fromJSDate(from, { zone: "utc" }).plus({ days: maxDaysAhead }).toMillis();
 
   while (candidate.getTime() <= end) {
     if (wouldAutomationRunCreateDraftAt(settings, candidate, runs)) {
       return candidate;
     }
-    candidate = new Date(candidate.getTime() + 60 * 60 * 1000);
+    candidate = DateTime.fromJSDate(candidate, { zone: "utc" }).plus({ days: 1 }).toJSDate();
   }
   return null;
 }
