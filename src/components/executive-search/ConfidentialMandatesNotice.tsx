@@ -2,15 +2,15 @@ import Link from "next/link";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
 import { getPublishedSpontaneousVacancy } from "@/public-site/cms/vacancy";
 
-const ROLE_AREAS = [
-  "Sales Positionen",
-  "Projekt-/Programmleitung",
-  "Executive Positionen",
-  "Digital- und Innovationsverantwortliche",
-  "Bereichsleitungen",
-] as const;
-
 export async function ConfidentialMandatesNotice() {
+  const ROLE_AREAS = [
+    "Sales Positionen",
+    "Projekt-/Programmleitung",
+    "Executive Positionen",
+    "Digital- und Innovationsverantwortliche",
+    "Bereichsleitungen",
+  ] as const;
+
   const spontaneous = await getPublishedSpontaneousVacancy();
   const spontanHref = spontaneous
     ? `/executive-search/vakanzen/${spontaneous.slug}`
