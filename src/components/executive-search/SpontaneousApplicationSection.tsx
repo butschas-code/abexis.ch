@@ -4,15 +4,11 @@ import { PublicContentWidth } from "@/components/site/PublicContentWidth";
 import { getPublishedSpontaneousVacancy } from "@/public-site/cms/vacancy";
 
 const ROLE_AREAS = [
-  "Sales Director",
-  "Projektleiter",
-  "Projekt-/Programmleiter",
-  "Executive Positions",
-  "IT & Digitalisierung",
-  "Industrie",
-  "Finanzen, Banking & Risk Management",
-  "Öffentlicher Sektor",
-  "Beratung",
+  "Sales Positionen",
+  "Projekt-/Programmleitung",
+  "Executive Positionen",
+  "Digital- und Innovationsverantwortliche",
+  "Bereichsleitungen",
 ] as const;
 
 export async function SpontaneousApplicationSection() {
