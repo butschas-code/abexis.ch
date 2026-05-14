@@ -54,6 +54,13 @@ function toIso(v: unknown): string | null {
   return null;
 }
 
+function toTime(v: unknown): number | null {
+  const iso = toIso(v);
+  if (!iso) return null;
+  const t = new Date(iso).getTime();
+  return Number.isFinite(t) ? t : null;
+}
+
 function mapRun(id: string, d: Record<string, unknown>): BlogPipelineRunDashboardRow {
   return {
     id,
@@ -176,24 +183,22 @@ export async function cmsWriteBlogAutomationSettings(
 // ——— Topics ———
 
 export async function cmsListQueuedBlogTopics(max = 80): Promise<QueuedBlogTopicRow[]> {
-  const snap = await adminDb
-    .collection(COLLECTIONS.blogTopics)
-    .where("status", "==", "queued")
-    .orderBy("priority", "asc")
-    .limit(max)
-    .get();
-  return snap.docs.map((d) => {
-    const x = d.data() as Record<string, unknown>;
-    return {
-      id: d.id,
-      title: String(x.title ?? ""),
-      targetKeyword: String(x.targetKeyword ?? ""),
-      angle: String(x.angle ?? ""),
-      notes: String(x.notes ?? ""),
-      priority: typeof x.priority === "number" ? x.priority : 0,
-      status: String(x.status ?? ""),
-    };
-  });
+  const snap = await adminDb.collection(COLLECTIONS.blogTopics).where("status", "==", "queued").get();
+  return snap.docs
+    .map((d) => {
+      const x = d.data() as Record<string, unknown>;
+      return {
+        id: d.id,
+        title: String(x.title ?? ""),
+        targetKeyword: String(x.targetKeyword ?? ""),
+        angle: String(x.angle ?? ""),
+        notes: String(x.notes ?? ""),
+        priority: typeof x.priority === "number" ? x.priority : 0,
+        status: String(x.status ?? ""),
+      };
+    })
+    .sort((a, b) => a.priority - b.priority || a.title.localeCompare(b.title, "de-CH"))
+    .slice(0, max);
 }
 
 export async function cmsListBlogTopicsForAdmin(max = 80): Promise<BlogTopicListItem[]> {
@@ -620,17 +625,15 @@ async function countDraftsAwaitingReview(): Promise<number> {
 async function countPublishedPostsThisCalendarMonth(monthTz: string): Promise<number> {
   const zone = monthTz?.trim() || "Europe/Zurich";
   const start = DateTime.now().setZone(zone).startOf("month");
-  const monthStart = Timestamp.fromDate(start.toJSDate());
+  const monthStartMs = start.toMillis();
 
-  const agg = await adminDb
-    .collection(COLLECTIONS.posts)
-    .where("status", "==", "published")
-    .where("site", "in", [...POST_SITE_FIRESTORE_IN])
-    .where("publishedAt", ">=", monthStart)
-    .count()
-    .get();
-
-  return agg.data().count;
+  const snap = await adminDb.collection(COLLECTIONS.posts).where("status", "==", "published").get();
+  return snap.docs.filter((docSnap) => {
+    const d = docSnap.data() as Record<string, unknown>;
+    if (!POST_SITE_FIRESTORE_IN.includes(String(d.site) as (typeof POST_SITE_FIRESTORE_IN)[number])) return false;
+    const publishedAtMs = toTime(d.publishedAt);
+    return publishedAtMs != null && publishedAtMs >= monthStartMs;
+  }).length;
 }
 
 export async function cmsBuildBlogAutomationDashboardSnapshot(form: BlogAutomationFormState): Promise<BlogAutomationDashboardSnapshot> {

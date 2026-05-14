@@ -137,8 +137,9 @@ export function BlogAutomationClient() {
     try {
       const token = await getIdToken();
       setQueuedTopics(await apiListQueuedBlogTopics(token));
-    } catch {
-      /* ignore */
+    } catch (err) {
+      setQueuedTopics([]);
+      setError(err instanceof Error ? err.message : "Die Themenliste konnte nicht geladen werden.");
     } finally {
       setTopicsLoading(false);
     }

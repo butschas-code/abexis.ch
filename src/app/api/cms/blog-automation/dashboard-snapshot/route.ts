@@ -22,6 +22,7 @@ export async function POST(req: Request) {
     return NextResponse.json(snapshot);
   } catch (e) {
     const message = e instanceof Error ? e.message : "Dashboard konnte nicht berechnet werden.";
-    return NextResponse.json({ error: "BAD_REQUEST", message }, { status: 400 });
+    const status = message === "Ungültige JSON-Nutzlast." ? 400 : 500;
+    return NextResponse.json({ error: status === 400 ? "BAD_REQUEST" : "SERVER_ERROR", message }, { status });
   }
 }
