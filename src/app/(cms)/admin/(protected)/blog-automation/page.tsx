@@ -6,6 +6,8 @@ import { BlogAutomationClient } from "@/components/admin/blog-automation/BlogAut
 import { AdminLoading } from "@/components/admin/AdminLoading";
 import { AdminPageContainer } from "@/components/admin/AdminPageContainer";
 
+export const dynamic = "force-dynamic";
+
 function Fallback() {
   return (
     <AdminPageContainer>
