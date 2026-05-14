@@ -21,6 +21,7 @@ type NuelinkCreatePostBody = {
   link?: string;
   title?: string;
   alt?: string;
+  media?: Array<{ url: string }>;
 };
 
 function readRequiredEnv(name: string): string {
@@ -91,6 +92,7 @@ export async function createNuelinkSocialPost(params: {
   link?: string | null;
   title?: string | null;
   alt?: string | null;
+  mediaUrl?: string | null;
 }): Promise<NuelinkCreatePostResult> {
   const apiKey = readRequiredEnv("NUELINK_API_KEY");
   const brandId = readRequiredIntEnv("NUELINK_BRAND_ID");
@@ -108,6 +110,7 @@ export async function createNuelinkSocialPost(params: {
   if (params.link?.trim()) body.link = params.link.trim();
   if (params.title?.trim()) body.title = params.title.trim().slice(0, 255);
   if (params.alt?.trim()) body.alt = params.alt.trim().slice(0, 255);
+  if (params.mediaUrl?.trim()) body.media = [{ url: params.mediaUrl.trim() }];
 
   const response = await fetch(`${NUELINK_API_BASE}/brands/${brandId}/collections/${collectionId}/posts`, {
     method: "POST",

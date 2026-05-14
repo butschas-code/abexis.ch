@@ -6,11 +6,6 @@ import { z } from "zod";
 import { BLOG_PIPELINE_JSON_SCHEMA } from "@/lib/blog-pipeline/openai-json-schema";
 import type { BlogAutomationSettings, BlogTopic } from "@/lib/blogAutomation/types";
 
-const blogDraftSourceSchema = z.object({
-  title: z.string(),
-  url: z.string(),
-});
-
 /** Strict output shape after OpenAI Responses + web_search (matches structured JSON schema). */
 export const blogAutomationDraftOutputSchema = z.object({
   title: z.string().min(1),
@@ -20,10 +15,7 @@ export const blogAutomationDraftOutputSchema = z.object({
   metaDescription: z.string(),
   articleHtml: z.string(),
   researchSummary: z.string(),
-  sources: z.array(blogDraftSourceSchema),
   linkedinPost: z.string(),
-  shortLinkedinPost: z.string(),
-  xPost: z.string(),
   imageSearchQueries: z.array(z.string().min(1)).min(1).max(8),
   heroImageAlt: z.string(),
 });
@@ -80,13 +72,15 @@ Research & honesty:
 - Use the web_search tool to ground non-obvious or time-sensitive facts where helpful.
 - Never invent statistics, surveys, regulations, or quotations.
 - Never fabricate citations or URLs.
-- Every URL in "sources" must be a real URL returned from web_search results (or clearly tied to retrieved sources). If you did not use web search, sources may be empty.
+- Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", or external source URLs to articleHtml.
+- Do not include source links in the JSON output.
 - If something cannot be verified, omit it or phrase carefully without numeric precision.
 
 Output:
 - Respond with exactly one JSON object matching the schema (no markdown outside JSON).
 - articleHtml: semantic HTML fragments for a CMS body (headings, paragraphs, lists, links) — no outer <html> document.
 - Draft quality must be suitable for human editorial review before any publishing step.
+- linkedinPost: one substantial German LinkedIn post for Daniel Sengstag's LinkedIn profile. Make it longer and more useful than a short teaser, include a calm executive point of view, and include the placeholder {{BLOG_URL}} exactly once where the published blog link should appear.
 
 Hero imagery (no URLs — server selects licensed photos separately):
 - imageSearchQueries: 3–6 short English phrases suitable for stock photo search (Unsplash). Aim for calm Swiss-editorial mood: architecture detail, natural texture, lakes/alps restraint, minimal workspace still-life — never literal handshakes, grinning «teams», laptop dashboards, or skyscraper hero clichés.

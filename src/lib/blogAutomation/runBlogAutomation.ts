@@ -8,6 +8,7 @@ import { COLLECTIONS } from "@/cms/firestore/collections";
 import { parsePostUpsert } from "@/cms/schema";
 import type { PostUpsertInput } from "@/cms/types/dto";
 import { serializePostBody } from "@/lib/cms/post-body-storage";
+import { sanitizeGeneratedBlogHtmlWithoutLinks } from "@/lib/cms/sanitize-blog-html";
 import {
   generateBlogDraft,
   type BlogAutomationDraftOutput,
@@ -530,7 +531,7 @@ export async function runBlogAutomation(
             title: draftOutput.title.trim(),
             slug,
             excerpt: draftOutput.excerpt,
-            body: serializePostBody(draftOutput.articleHtml),
+            body: serializePostBody(sanitizeGeneratedBlogHtmlWithoutLinks(draftOutput.articleHtml)),
             heroImagePath: null,
             ...postHeroFieldsFromUnsplash(unsplashHero),
             authorId,
@@ -604,9 +605,9 @@ export async function runBlogAutomation(
       excerpt: draftOutput.excerpt,
       metaTitle: draftOutput.metaTitle,
       metaDescription: draftOutput.metaDescription,
-      articleHtml: draftOutput.articleHtml,
+      articleHtml: sanitizeGeneratedBlogHtmlWithoutLinks(draftOutput.articleHtml),
       researchSummary: draftOutput.researchSummary,
-      sources: draftOutput.sources,
+      sources: [],
       status: draftStatus,
       topicId,
       automationRunId: runId,
@@ -628,8 +629,8 @@ export async function runBlogAutomation(
         status: draftStatus === "published" ? "published" : "needs_review",
         platforms: settings.socialPlatforms,
         linkedinPost: draftOutput.linkedinPost,
-        shortLinkedinPost: draftOutput.shortLinkedinPost,
-        xPost: draftOutput.xPost,
+        socialImageUrl: unsplashHero?.heroImageUrl ?? null,
+        socialImageAlt: unsplashHero?.heroImageAlt ?? null,
         createdAt: FieldValue.serverTimestamp(),
         updatedAt: FieldValue.serverTimestamp(),
       });

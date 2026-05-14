@@ -6,6 +6,7 @@ import { CMS_PATHS } from "@/admin/paths";
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
 import {
   apiListBlogSocialPostsForAdmin,
+  apiPatchBlogSocialPost,
   apiSendBlogSocialPostToNuelink,
 } from "@/cms/services/blog-automation-cms-api-client";
 import type { BlogSocialListItem } from "@/cms/services/blog-pipeline-types";
@@ -14,8 +15,10 @@ import { AdminLoading } from "@/components/admin/AdminLoading";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
 import {
   adminBtnPrimary,
+  adminBtnSecondary,
   adminFeedbackError,
   adminFeedbackSuccess,
+  adminInput,
   adminPanelInset,
   adminPill,
 } from "@/components/admin/admin-ui";
@@ -40,7 +43,6 @@ export function AdminBlogSocialList() {
   const [rows, setRows] = useState<BlogSocialListItem[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [flash, setFlash] = useState<string | null>(null);
-  const [busyId, setBusyId] = useState<string | null>(null);
 
   async function loadRows(currentUser: typeof user) {
     if (!currentUser) return;
@@ -68,26 +70,6 @@ export function AdminBlogSocialList() {
       cancelled = true;
     };
   }, [ready, user]);
-
-  async function sendToNuelink(row: BlogSocialListItem) {
-    if (!user) return;
-    setBusyId(row.id);
-    setError(null);
-    setFlash(null);
-    try {
-      const token = await user.getIdToken();
-      const { result } = await apiSendBlogSocialPostToNuelink(token, row.id, {
-        target: "linkedin",
-        caption: row.linkedinPost,
-      });
-      setFlash(`LinkedIn-Post wurde an Nuelink übergeben (${result.publishMode}).`);
-      await loadRows(user);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Nuelink-Verbindung fehlgeschlagen.");
-    } finally {
-      setBusyId(null);
-    }
-  }
 
   if (!ready || !user) {
     return (
@@ -127,41 +109,13 @@ export function AdminBlogSocialList() {
         ) : (
           <div className="space-y-10">
             {rows.map((r) => (
-              <article key={r.id} className={`rounded-2xl ${adminPanelInset} shadow-[0_1px_0_rgba(0,0,0,0.04)]`}>
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] pb-4">
-                  <div className="text-sm text-[var(--apple-text-secondary)]">
-                    {formatWhen(r.createdAt)}
-                    <span className="mx-2 text-[var(--apple-text-tertiary)]">·</span>
-                    <span className={adminPill}>{r.status}</span>
-                  </div>
-                  <Link
-                    href={CMS_PATHS.adminBlogPipelineDraft(r.blogDraftId)}
-                    className="text-sm font-medium text-[var(--brand-900)] underline-offset-4 hover:underline"
-                  >
-                    Zugehöriger Blog-Entwurf
-                  </Link>
-                </div>
-                {r.nuelinkLastSentAt ? (
-                  <p className="mt-4 text-sm font-medium text-emerald-900">An Nuelink übergeben · {formatWhen(r.nuelinkLastSentAt)}</p>
-                ) : null}
-                <div className="mt-5 grid gap-6 lg:grid-cols-1">
-                  <PostBlock label="LinkedIn" body={r.linkedinPost} />
-                  <PostBlock label="LinkedIn (kurz)" body={r.shortLinkedinPost} />
-                  <div className="flex flex-wrap items-center justify-between gap-3 border-t border-black/[0.06] pt-5">
-                    <p className="max-w-xl text-sm leading-relaxed text-[var(--apple-text-secondary)]">
-                      Sendet den LinkedIn-Text an die Abexis Collection «Global Queue» in Nuelink.
-                    </p>
-                    <button
-                      type="button"
-                      className={`${adminBtnPrimary} text-[13px]`}
-                      disabled={busyId === r.id || !r.linkedinPost.trim()}
-                      onClick={() => void sendToNuelink(r)}
-                    >
-                      {busyId === r.id ? "Wird übergeben…" : "LinkedIn an Nuelink"}
-                    </button>
-                  </div>
-                </div>
-              </article>
+              <SocialRowCard
+                key={r.id}
+                row={r}
+                onRefresh={() => loadRows(user)}
+                onError={setError}
+                onFlash={setFlash}
+              />
             ))}
           </div>
         )}
@@ -170,14 +124,143 @@ export function AdminBlogSocialList() {
   );
 }
 
-function PostBlock({ label, body }: { label: string; body: string }) {
+function SocialRowCard(props: {
+  row: BlogSocialListItem;
+  onRefresh: () => Promise<void>;
+  onFlash: (message: string | null) => void;
+  onError: (message: string | null) => void;
+}) {
+  const { row, onRefresh, onFlash, onError } = props;
+  const { user } = useCmsAuth();
+  const [linkedinPost, setLinkedinPost] = useState(row.linkedinPost);
+  const [socialImageUrl, setSocialImageUrl] = useState(row.socialImageUrl ?? "");
+  const [socialImageAlt, setSocialImageAlt] = useState(row.socialImageAlt ?? "");
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      setLinkedinPost(row.linkedinPost);
+      setSocialImageUrl(row.socialImageUrl ?? "");
+      setSocialImageAlt(row.socialImageAlt ?? "");
+    });
+  }, [row.id, row.linkedinPost, row.socialImageUrl, row.socialImageAlt]);
+
+  async function save() {
+    if (!user) return;
+    setBusy(true);
+    onError(null);
+    onFlash(null);
+    try {
+      const token = await user.getIdToken();
+      await apiPatchBlogSocialPost(token, row.id, {
+        linkedinPost,
+        socialImageUrl: socialImageUrl.trim() || null,
+        socialImageAlt: socialImageAlt.trim() || null,
+      });
+      onFlash("LinkedIn-Post gespeichert.");
+      await onRefresh();
+    } catch (e) {
+      onError(e instanceof Error ? e.message : "Speichern fehlgeschlagen.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function sendToNuelink() {
+    if (!user) return;
+    setBusy(true);
+    onError(null);
+    onFlash(null);
+    try {
+      const token = await user.getIdToken();
+      const { result } = await apiSendBlogSocialPostToNuelink(token, row.id, {
+        target: "linkedin",
+        caption: linkedinPost,
+        socialImageUrl: socialImageUrl.trim() || null,
+        socialImageAlt: socialImageAlt.trim() || null,
+      });
+      onFlash(`LinkedIn-Post wurde an Nuelink übergeben (${result.publishMode}).`);
+      await onRefresh();
+    } catch (e) {
+      onError(e instanceof Error ? e.message : "Nuelink-Verbindung fehlgeschlagen.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <article className={`rounded-2xl ${adminPanelInset} shadow-[0_1px_0_rgba(0,0,0,0.04)]`}>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] pb-4">
+        <div className="text-sm text-[var(--apple-text-secondary)]">
+          {formatWhen(row.createdAt)}
+          <span className="mx-2 text-[var(--apple-text-tertiary)]">·</span>
+          <span className={adminPill}>{row.status}</span>
+        </div>
+        <Link
+          href={CMS_PATHS.adminBlogPipelineDraft(row.blogDraftId)}
+          className="text-sm font-medium text-[var(--brand-900)] underline-offset-4 hover:underline"
+        >
+          Zugehöriger Blog-Entwurf
+        </Link>
+      </div>
+      {row.nuelinkLastSentAt ? (
+        <p className="mt-4 text-sm font-medium text-emerald-900">An Nuelink übergeben · {formatWhen(row.nuelinkLastSentAt)}</p>
+      ) : null}
+      <div className="mt-5 grid gap-6">
+        <PostBlock label="LinkedIn" body={linkedinPost} onChange={setLinkedinPost} />
+        <div className="grid gap-4 rounded-xl border border-black/[0.06] bg-white/70 p-4 md:grid-cols-[minmax(220px,320px)_1fr]">
+          <div className="overflow-hidden rounded-lg border border-black/[0.08] bg-[var(--apple-bg-subtle)]">
+            {socialImageUrl.trim() ? (
+              // eslint-disable-next-line @next/next/no-img-element -- CMS preview for editor-selected remote image URL
+              <img src={socialImageUrl} alt={socialImageAlt || ""} className="aspect-[1.91/1] h-full w-full object-cover" />
+            ) : (
+              <div className="flex aspect-[1.91/1] items-center justify-center px-4 text-center text-sm text-[var(--apple-text-secondary)]">
+                Kein LinkedIn-Bild ausgewählt
+              </div>
+            )}
+          </div>
+          <div className="space-y-3">
+            <label className="block space-y-1.5">
+              <span className="text-[13px] font-medium text-[var(--apple-text)]">Bild-URL für LinkedIn</span>
+              <input className={adminInput} value={socialImageUrl} onChange={(e) => setSocialImageUrl(e.target.value)} placeholder="https://…" />
+            </label>
+            <label className="block space-y-1.5">
+              <span className="text-[13px] font-medium text-[var(--apple-text)]">Alt-Text</span>
+              <input className={adminInput} value={socialImageAlt} onChange={(e) => setSocialImageAlt(e.target.value)} />
+            </label>
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-black/[0.06] pt-5">
+          <p className="max-w-xl text-sm leading-relaxed text-[var(--apple-text-secondary)]">
+            Sendet Text, Blog-Link und Bild an die Abexis Collection «Global Queue» in Nuelink.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" className={`${adminBtnSecondary} text-[13px]`} disabled={busy} onClick={() => void save()}>
+              Speichern
+            </button>
+            <button
+              type="button"
+              className={`${adminBtnPrimary} text-[13px]`}
+              disabled={busy || !linkedinPost.trim()}
+              onClick={() => void sendToNuelink()}
+            >
+              {busy ? "Wird verarbeitet…" : "LinkedIn an Nuelink"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function PostBlock({ label, body, onChange }: { label: string; body: string; onChange: (value: string) => void }) {
   return (
     <div>
       <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--apple-text-tertiary)]">{label}</p>
       <textarea
-        readOnly
-        className="mt-2 min-h-[120px] w-full resize-y rounded-xl border border-black/[0.08] bg-[var(--apple-bg)] p-3 text-sm leading-relaxed text-[var(--apple-text)]"
+        className="mt-2 min-h-[180px] w-full resize-y rounded-xl border border-black/[0.08] bg-[var(--apple-bg)] p-3 text-sm leading-relaxed text-[var(--apple-text)]"
         value={body}
+        onChange={(e) => onChange(e.target.value)}
       />
     </div>
   );

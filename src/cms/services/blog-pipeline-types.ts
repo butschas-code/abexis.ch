@@ -34,8 +34,10 @@ export type BlogSocialListItem = {
   blogDraftId: string;
   status: string;
   linkedinPost: string;
-  shortLinkedinPost: string;
-  xPost: string;
+  shortLinkedinPost?: string;
+  xPost?: string;
+  socialImageUrl: string | null;
+  socialImageAlt: string | null;
   createdAt: string | null;
   /** Set when an editor marks the copy as manually posted (never triggers API posting). */
   usedAt: string | null;

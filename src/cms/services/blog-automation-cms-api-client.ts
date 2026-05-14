@@ -206,7 +206,7 @@ export async function apiListBlogSocialPostsForAdmin(idToken: string, max = 80):
 export async function apiPatchBlogSocialPost(
   idToken: string,
   socialPostId: string,
-  patch: Partial<{ linkedinPost: string; shortLinkedinPost: string; xPost: string; markUsed: boolean }>,
+  patch: Partial<{ linkedinPost: string; socialImageUrl: string | null; socialImageAlt: string | null; markUsed: boolean }>,
 ): Promise<void> {
   await cmsBlogAutomationFetch(idToken, `/social/${encodeURIComponent(socialPostId)}`, {
     method: "PATCH",
@@ -217,7 +217,7 @@ export async function apiPatchBlogSocialPost(
 export async function apiSendBlogSocialPostToNuelink(
   idToken: string,
   socialPostId: string,
-  body: { target: "linkedin" | "x"; caption: string },
+  body: { target: "linkedin"; caption: string; socialImageUrl?: string | null; socialImageAlt?: string | null },
 ): Promise<{ result: { postId: string; publishMode: string; collectionId: number; sentAt: string } }> {
   return cmsBlogAutomationFetch(idToken, `/social/${encodeURIComponent(socialPostId)}/nuelink`, {
     method: "POST",

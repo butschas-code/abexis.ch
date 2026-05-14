@@ -21,12 +21,14 @@ export async function POST(req: Request, ctx: RouteContext) {
     const body = (await req.json().catch(() => null)) as Record<string, unknown> | null;
     const target = readTarget(body?.target);
     const caption = typeof body?.caption === "string" ? body.caption : "";
+    const socialImageUrl = typeof body?.socialImageUrl === "string" ? body.socialImageUrl : null;
+    const socialImageAlt = typeof body?.socialImageAlt === "string" ? body.socialImageAlt : null;
 
     if (!target) {
       return NextResponse.json({ error: "BAD_REQUEST", message: "Bitte LinkedIn auswählen." }, { status: 400 });
     }
 
-    const result = await cmsSendBlogSocialPostToNuelink(id, { target, caption });
+    const result = await cmsSendBlogSocialPostToNuelink(id, { target, caption, socialImageUrl, socialImageAlt });
     return NextResponse.json({ ok: true, result }, { headers: { "Cache-Control": "no-store" } });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Nuelink-Verbindung fehlgeschlagen.";

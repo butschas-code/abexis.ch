@@ -5,6 +5,7 @@ import { adminDb } from "@/lib/firebaseAdmin";
 import { generateBlogDraftFromTopic } from "@/lib/blog-pipeline/generate-blog-draft";
 import { getOpenAiBlogModel } from "@/lib/blog-pipeline/openai-blog-model";
 import { findUnsplashImage } from "@/lib/blogAutomation/findUnsplashImage";
+import { sanitizeGeneratedBlogHtmlWithoutLinks } from "@/lib/cms/sanitize-blog-html";
 
 export type BlogPipelineRunResult =
   | { status: "skipped"; reason: "no_queued_topics" | "claim_lost" }
@@ -118,9 +119,9 @@ export async function runBlogPipelineOnce(): Promise<BlogPipelineRunResult> {
       excerpt: output.excerpt,
       metaTitle: output.metaTitle,
       metaDescription: output.metaDescription,
-      articleHtml: output.articleHtml,
+      articleHtml: sanitizeGeneratedBlogHtmlWithoutLinks(output.articleHtml),
       researchSummary: output.researchSummary,
-      sources: output.sources,
+      sources: [],
       openaiResponseId: responseId,
       pipelineModel: getOpenAiBlogModel(),
       createdAt: FieldValue.serverTimestamp(),
@@ -133,8 +134,8 @@ export async function runBlogPipelineOnce(): Promise<BlogPipelineRunResult> {
       blogDraftId: draftRef.id,
       status: "needs_review",
       linkedinPost: output.linkedinPost,
-      shortLinkedinPost: output.shortLinkedinPost,
-      xPost: output.xPost,
+      socialImageUrl: typeof draftHeroFirestore.heroImageUrl === "string" ? draftHeroFirestore.heroImageUrl : null,
+      socialImageAlt: typeof draftHeroFirestore.heroImageAlt === "string" ? draftHeroFirestore.heroImageAlt : null,
       openaiResponseId: responseId,
       createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),

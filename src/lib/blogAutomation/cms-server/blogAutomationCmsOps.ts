@@ -24,6 +24,7 @@ import {
   type RunAggRow,
 } from "@/lib/blogAutomation/schedulingSimulation";
 import { serializePostBody } from "@/lib/cms/post-body-storage";
+import { sanitizeGeneratedBlogHtmlWithoutLinks } from "@/lib/cms/sanitize-blog-html";
 import {
   applyUnsplashPhotoToHeroFields,
   getUnsplashPhotoById,
@@ -100,13 +101,6 @@ function mapDraftList(id: string, d: Record<string, unknown>): BlogDraftListItem
 }
 
 function mapDraftDetail(id: string, d: Record<string, unknown>): BlogDraftDetail {
-  const sourcesRaw = d.sources;
-  const sources = Array.isArray(sourcesRaw)
-    ? sourcesRaw.map((row) => {
-        const o = row as Record<string, unknown>;
-        return { title: String(o.title ?? ""), url: String(o.url ?? "") };
-      })
-    : [];
   const base = mapDraftList(id, d);
   const nu = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : null);
   return {
@@ -115,7 +109,7 @@ function mapDraftDetail(id: string, d: Record<string, unknown>): BlogDraftDetail
     metaDescription: String(d.metaDescription ?? ""),
     articleHtml: String(d.articleHtml ?? ""),
     researchSummary: String(d.researchSummary ?? ""),
-    sources,
+    sources: [],
     openaiResponseId: d.openaiResponseId != null ? String(d.openaiResponseId) : null,
     pipelineModel: d.pipelineModel != null ? String(d.pipelineModel) : null,
     approvedAt: toIso(d.approvedAt),
@@ -294,9 +288,9 @@ export async function cmsUpdateBlogDraftFields(draftId: string, fields: BlogDraf
     excerpt: fields.excerpt,
     metaTitle: fields.metaTitle.trim(),
     metaDescription: fields.metaDescription.trim(),
-    articleHtml: fields.articleHtml,
+    articleHtml: sanitizeGeneratedBlogHtmlWithoutLinks(fields.articleHtml),
     researchSummary: fields.researchSummary,
-    sources: fields.sources.map((s) => ({ title: s.title.trim(), url: s.url.trim() })),
+    sources: [],
     updatedAt: FieldValue.serverTimestamp(),
   };
 
@@ -453,7 +447,7 @@ export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerPa
     title: params.title.trim(),
     slug: uniqueSlug,
     excerpt: params.excerpt,
-    body: serializePostBody(params.articleHtml),
+    body: serializePostBody(sanitizeGeneratedBlogHtmlWithoutLinks(params.articleHtml)),
     heroImagePath: null,
     ...readPublishedHeroFromDraft(draftData),
     authorId: params.authorId.trim(),
@@ -499,8 +493,6 @@ export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerPa
     publishedAt: ts,
   };
 
-  const sourcesClean = params.sources.map((s) => ({ title: s.title.trim(), url: s.url.trim() }));
-
   const batch = adminDb.batch();
   batch.set(postRef, payload);
   batch.update(draftRef, {
@@ -509,9 +501,9 @@ export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerPa
     excerpt: params.excerpt,
     metaTitle: params.metaTitle.trim(),
     metaDescription: params.metaDescription.trim(),
-    articleHtml: params.articleHtml,
+    articleHtml: sanitizeGeneratedBlogHtmlWithoutLinks(params.articleHtml),
     researchSummary: params.researchSummary,
-    sources: sourcesClean,
+    sources: [],
     status: "published",
     publishedPostId: postId,
     publishedAt: ts,
@@ -525,27 +517,49 @@ export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerPa
 
 // ——— Social ———
 
+function mapSocialListItem(
+  id: string,
+  d: Record<string, unknown>,
+  draft?: Record<string, unknown> | null,
+): BlogSocialListItem {
+  const nu = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : null);
+  const draftSlug = nu(draft?.slug);
+  const blogUrl = draftSlug ? `https://www.abexis.ch/blog/${encodeURIComponent(draftSlug)}` : "";
+  const linkedinPostRaw = String(d.linkedinPost ?? "");
+  return {
+    id,
+    topicId: String(d.topicId ?? ""),
+    blogDraftId: String(d.blogDraftId ?? ""),
+    status: String(d.status ?? ""),
+    linkedinPost: blogUrl && linkedinPostRaw.includes("{{BLOG_URL}}") ? linkedinPostRaw.replace("{{BLOG_URL}}", blogUrl) : linkedinPostRaw,
+    shortLinkedinPost: typeof d.shortLinkedinPost === "string" ? d.shortLinkedinPost : "",
+    xPost: typeof d.xPost === "string" ? d.xPost : "",
+    socialImageUrl: nu(d.socialImageUrl) ?? nu(draft?.heroImageUrl),
+    socialImageAlt: nu(d.socialImageAlt) ?? nu(draft?.heroImageAlt),
+    createdAt: toIso(d.createdAt),
+    usedAt: toIso(d.usedAt),
+    nuelinkLastSentAt: toIso(d.nuelinkLastSentAt),
+    nuelinkLastTarget: typeof d.nuelinkLastTarget === "string" ? d.nuelinkLastTarget : null,
+    nuelinkLastPostId: typeof d.nuelinkLastPostId === "string" ? d.nuelinkLastPostId : null,
+  };
+}
+
+async function readDraftForSocial(d: Record<string, unknown>): Promise<Record<string, unknown> | null> {
+  const draftId = typeof d.blogDraftId === "string" ? d.blogDraftId.trim() : "";
+  if (!draftId) return null;
+  const snap = await adminDb.collection(COLLECTIONS.blogDrafts).doc(draftId).get();
+  return snap.exists ? (snap.data() as Record<string, unknown>) : null;
+}
+
 export async function cmsListBlogSocialPostsForDraft(draftId: string): Promise<BlogSocialListItem[]> {
   const trimmed = draftId.trim();
   if (!trimmed) return [];
-  const snap = await adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "==", trimmed).get();
-  const rows = snap.docs.map((docSnap) => {
-    const d = docSnap.data() as Record<string, unknown>;
-    return {
-      id: docSnap.id,
-      topicId: String(d.topicId ?? ""),
-      blogDraftId: String(d.blogDraftId ?? ""),
-      status: String(d.status ?? ""),
-      linkedinPost: String(d.linkedinPost ?? ""),
-      shortLinkedinPost: String(d.shortLinkedinPost ?? ""),
-      xPost: String(d.xPost ?? ""),
-      createdAt: toIso(d.createdAt),
-      usedAt: toIso(d.usedAt),
-      nuelinkLastSentAt: toIso(d.nuelinkLastSentAt),
-      nuelinkLastTarget: typeof d.nuelinkLastTarget === "string" ? d.nuelinkLastTarget : null,
-      nuelinkLastPostId: typeof d.nuelinkLastPostId === "string" ? d.nuelinkLastPostId : null,
-    };
-  });
+  const [snap, draftSnap] = await Promise.all([
+    adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "==", trimmed).get(),
+    adminDb.collection(COLLECTIONS.blogDrafts).doc(trimmed).get(),
+  ]);
+  const draft = draftSnap.exists ? (draftSnap.data() as Record<string, unknown>) : null;
+  const rows = snap.docs.map((docSnap) => mapSocialListItem(docSnap.id, docSnap.data() as Record<string, unknown>, draft));
   rows.sort((a, b) => {
     const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
     const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
@@ -556,28 +570,20 @@ export async function cmsListBlogSocialPostsForDraft(draftId: string): Promise<B
 
 export async function cmsListBlogSocialPostsForAdmin(max = 80): Promise<BlogSocialListItem[]> {
   const snap = await adminDb.collection(COLLECTIONS.blogSocialPosts).orderBy("createdAt", "desc").limit(max).get();
-  return snap.docs.map((docSnap) => {
+  return Promise.all(snap.docs.map(async (docSnap) => {
     const d = docSnap.data() as Record<string, unknown>;
-    return {
-      id: docSnap.id,
-      topicId: String(d.topicId ?? ""),
-      blogDraftId: String(d.blogDraftId ?? ""),
-      status: String(d.status ?? ""),
-      linkedinPost: String(d.linkedinPost ?? ""),
-      shortLinkedinPost: String(d.shortLinkedinPost ?? ""),
-      xPost: String(d.xPost ?? ""),
-      createdAt: toIso(d.createdAt),
-      usedAt: toIso(d.usedAt),
-      nuelinkLastSentAt: toIso(d.nuelinkLastSentAt),
-      nuelinkLastTarget: typeof d.nuelinkLastTarget === "string" ? d.nuelinkLastTarget : null,
-      nuelinkLastPostId: typeof d.nuelinkLastPostId === "string" ? d.nuelinkLastPostId : null,
-    };
-  });
+    return mapSocialListItem(docSnap.id, d, await readDraftForSocial(d));
+  }));
 }
 
 export async function cmsPatchBlogSocialPost(
   socialPostId: string,
-  patch: Partial<{ linkedinPost: string; shortLinkedinPost: string; xPost: string; markUsed: boolean }>,
+  patch: Partial<{
+    linkedinPost: string;
+    socialImageUrl: string | null;
+    socialImageAlt: string | null;
+    markUsed: boolean;
+  }>,
 ): Promise<void> {
   const ref = adminDb.collection(COLLECTIONS.blogSocialPosts).doc(socialPostId.trim());
   const snap = await ref.get();
@@ -585,8 +591,8 @@ export async function cmsPatchBlogSocialPost(
 
   const row: Record<string, unknown> = { updatedAt: FieldValue.serverTimestamp() };
   if (patch.linkedinPost !== undefined) row.linkedinPost = patch.linkedinPost;
-  if (patch.shortLinkedinPost !== undefined) row.shortLinkedinPost = patch.shortLinkedinPost;
-  if (patch.xPost !== undefined) row.xPost = patch.xPost;
+  if (patch.socialImageUrl !== undefined) row.socialImageUrl = patch.socialImageUrl?.trim() || FieldValue.delete();
+  if (patch.socialImageAlt !== undefined) row.socialImageAlt = patch.socialImageAlt?.trim() || FieldValue.delete();
   if (patch.markUsed === true) {
     row.usedAt = FieldValue.serverTimestamp();
   }
@@ -595,7 +601,7 @@ export async function cmsPatchBlogSocialPost(
 
 export async function cmsSendBlogSocialPostToNuelink(
   socialPostId: string,
-  params: { target: NuelinkSocialTarget; caption: string },
+  params: { target: NuelinkSocialTarget; caption: string; socialImageUrl?: string | null; socialImageAlt?: string | null },
 ): Promise<{
   postId: string;
   publishMode: string;
@@ -605,13 +611,30 @@ export async function cmsSendBlogSocialPostToNuelink(
   const ref = adminDb.collection(COLLECTIONS.blogSocialPosts).doc(socialPostId.trim());
   const snap = await ref.get();
   if (!snap.exists) throw new Error("Social-Beitrag nicht gefunden.");
+  const row = snap.data() as Record<string, unknown>;
+  const draft = await readDraftForSocial(row);
 
-  const caption = params.caption.trim();
+  const draftSlug = typeof draft?.slug === "string" ? draft.slug.trim() : "";
+  const blogUrl = draftSlug ? `https://www.abexis.ch/blog/${encodeURIComponent(draftSlug)}` : "";
+  const baseCaption = params.caption.trim();
+  const caption = blogUrl
+    ? baseCaption.includes("{{BLOG_URL}}")
+      ? baseCaption.replace("{{BLOG_URL}}", blogUrl)
+      : baseCaption.includes(blogUrl)
+        ? baseCaption
+        : `${baseCaption}\n\nZum Beitrag: ${blogUrl}`
+    : baseCaption;
   if (!caption) throw new Error("Bitte zuerst einen Social-Text erfassen.");
+  const socialImageUrl = params.socialImageUrl?.trim() || (typeof row.socialImageUrl === "string" ? row.socialImageUrl.trim() : "") || (typeof draft?.heroImageUrl === "string" ? draft.heroImageUrl.trim() : "");
+  const socialImageAlt = params.socialImageAlt?.trim() || (typeof row.socialImageAlt === "string" ? row.socialImageAlt.trim() : "") || (typeof draft?.heroImageAlt === "string" ? draft.heroImageAlt.trim() : "");
 
   const result = await createNuelinkSocialPost({
     target: params.target,
     caption,
+    link: blogUrl || undefined,
+    title: typeof draft?.title === "string" ? draft.title : undefined,
+    alt: socialImageAlt || undefined,
+    mediaUrl: socialImageUrl || undefined,
   });
   const sentAt = Timestamp.now();
   const update: Record<string, unknown> = {
@@ -619,6 +642,8 @@ export async function cmsSendBlogSocialPostToNuelink(
     nuelinkLastSentAt: sentAt,
     nuelinkLastTarget: params.target,
     nuelinkLastPostId: result.postId,
+    socialImageUrl: socialImageUrl || FieldValue.delete(),
+    socialImageAlt: socialImageAlt || FieldValue.delete(),
     nuelinkSends: FieldValue.arrayUnion({
       target: params.target,
       postId: result.postId,
@@ -629,7 +654,6 @@ export async function cmsSendBlogSocialPostToNuelink(
     }),
   };
   if (params.target === "linkedin") update.linkedinPost = caption;
-  if (params.target === "x") update.xPost = caption;
   await ref.update(update);
 
   return {

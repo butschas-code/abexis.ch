@@ -106,29 +106,6 @@ export function CmsBlogPostView({ data, related, backHref = "/blog", backLabel =
         </p>
       ) : null}
 
-      {post.heroImagePhotographerName && post.heroImageUnsplashUrl ? (
-        <p className="mt-5 max-w-3xl text-[12px] leading-relaxed text-[#86868b]">
-          Photo by{" "}
-          <a
-            href={post.heroImagePhotographerUrl ?? post.heroImageUnsplashUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="font-medium text-[var(--brand-900)] underline-offset-2 hover:underline"
-          >
-            {post.heroImagePhotographerName}
-          </a>{" "}
-          on{" "}
-          <a
-            href={post.heroImageUnsplashUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="font-medium text-[var(--brand-900)] underline-offset-2 hover:underline"
-          >
-            Unsplash
-          </a>
-        </p>
-      ) : null}
-
       <MotionSection className={post.excerpt?.trim() ? "mt-10 border-t border-black/[0.06] pt-10" : "mt-8 border-t border-black/[0.06] pt-10"}>
         <ArticleBody storedBody={post.body} />
       </MotionSection>

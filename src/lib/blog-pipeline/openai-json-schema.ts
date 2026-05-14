@@ -13,10 +13,7 @@ export const BLOG_PIPELINE_JSON_SCHEMA = {
     "metaDescription",
     "articleHtml",
     "researchSummary",
-    "sources",
     "linkedinPost",
-    "shortLinkedinPost",
-    "xPost",
     "imageSearchQueries",
     "heroImageAlt",
   ],
@@ -31,21 +28,11 @@ export const BLOG_PIPELINE_JSON_SCHEMA = {
       type: "string",
       description: "Short internal summary of what was researched and what is supported by sources.",
     },
-    sources: {
-      type: "array",
-      items: {
-        type: "object",
-        additionalProperties: false,
-        required: ["title", "url"],
-        properties: {
-          title: { type: "string" },
-          url: { type: "string" },
-        },
-      },
+    linkedinPost: {
+      type: "string",
+      description:
+        "One substantial German LinkedIn post for Daniel Sengstag's profile. It must be longer than a short teaser, useful on its own, and include the final blog URL placeholder: {{BLOG_URL}}.",
     },
-    linkedinPost: { type: "string" },
-    shortLinkedinPost: { type: "string" },
-    xPost: { type: "string" },
     imageSearchQueries: {
       type: "array",
       description:

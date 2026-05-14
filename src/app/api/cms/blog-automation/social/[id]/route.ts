@@ -18,8 +18,10 @@ export async function PATCH(req: Request, ctx: RouteContext) {
     }
     await cmsPatchBlogSocialPost(id, {
       linkedinPost: typeof body.linkedinPost === "string" ? body.linkedinPost : undefined,
-      shortLinkedinPost: typeof body.shortLinkedinPost === "string" ? body.shortLinkedinPost : undefined,
-      xPost: typeof body.xPost === "string" ? body.xPost : undefined,
+      socialImageUrl:
+        typeof body.socialImageUrl === "string" || body.socialImageUrl === null ? body.socialImageUrl : undefined,
+      socialImageAlt:
+        typeof body.socialImageAlt === "string" || body.socialImageAlt === null ? body.socialImageAlt : undefined,
       markUsed: body.markUsed === true,
     });
     return NextResponse.json({ ok: true });

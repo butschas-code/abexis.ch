@@ -117,15 +117,13 @@ function BlogSocialPostCard(props: {
   const { row, onRefresh, onFlashSuccess, onFlashError } = props;
   const { user } = useCmsAuth();
   const [linkedinPost, setLinkedinPost] = useState(row.linkedinPost);
-  const [shortLinkedinPost, setShortLinkedinPost] = useState(row.shortLinkedinPost);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     queueMicrotask(() => {
       setLinkedinPost(row.linkedinPost);
-      setShortLinkedinPost(row.shortLinkedinPost);
     });
-  }, [row.id, row.linkedinPost, row.shortLinkedinPost, row.usedAt]);
+  }, [row.id, row.linkedinPost, row.usedAt]);
 
   const getToken = useCallback(async () => {
     if (!user) throw new Error("Bitte melden Sie sich an.");
@@ -148,7 +146,7 @@ function BlogSocialPostCard(props: {
     setBusy(true);
     try {
       const token = await getToken();
-      await apiPatchBlogSocialPost(token, row.id, { linkedinPost, shortLinkedinPost });
+      await apiPatchBlogSocialPost(token, row.id, { linkedinPost });
       onFlashSuccess("Social-Texte gespeichert.");
       await onRefresh();
     } catch (e) {
@@ -156,7 +154,7 @@ function BlogSocialPostCard(props: {
     } finally {
       setBusy(false);
     }
-  }, [getToken, linkedinPost, onFlashError, onFlashSuccess, onRefresh, row.id, shortLinkedinPost]);
+  }, [getToken, linkedinPost, onFlashError, onFlashSuccess, onRefresh, row.id]);
 
   const onMarkUsed = useCallback(async () => {
     setBusy(true);
@@ -173,11 +171,16 @@ function BlogSocialPostCard(props: {
   }, [getToken, onFlashError, onFlashSuccess, onRefresh, row.id]);
 
   const onSendToNuelink = useCallback(
-    async (target: "linkedin" | "x", caption: string) => {
+    async (target: "linkedin", caption: string) => {
       setBusy(true);
       try {
         const token = await getToken();
-        const { result } = await apiSendBlogSocialPostToNuelink(token, row.id, { target, caption });
+        const { result } = await apiSendBlogSocialPostToNuelink(token, row.id, {
+          target,
+          caption,
+          socialImageUrl: row.socialImageUrl,
+          socialImageAlt: row.socialImageAlt,
+        });
         onFlashSuccess(`${formatNuelinkTarget(target)} wurde an Nuelink übergeben (${result.publishMode}).`);
         await onRefresh();
       } catch (e) {
@@ -186,7 +189,7 @@ function BlogSocialPostCard(props: {
         setBusy(false);
       }
     },
-    [getToken, onFlashError, onFlashSuccess, onRefresh, row.id],
+    [getToken, onFlashError, onFlashSuccess, onRefresh, row.id, row.socialImageAlt, row.socialImageUrl],
   );
 
   return (
@@ -218,9 +221,6 @@ function BlogSocialPostCard(props: {
         <button type="button" className={`${adminBtnGhost} text-[13px]`} disabled={busy} onClick={() => void doCopy("LinkedIn-Text", linkedinPost)}>
           LinkedIn kopieren
         </button>
-        <button type="button" className={`${adminBtnGhost} text-[13px]`} disabled={busy} onClick={() => void doCopy("Kurz-LinkedIn", shortLinkedinPost)}>
-          Kurz-LinkedIn kopieren
-        </button>
         <button
           type="button"
           className={`${adminBtnSecondary} text-[13px]`}
@@ -235,12 +235,6 @@ function BlogSocialPostCard(props: {
         <span className="text-[14px] font-medium text-[var(--apple-text)]">LinkedIn</span>
         <textarea className={`${adminInput} min-h-[140px]`} value={linkedinPost} onChange={(e) => setLinkedinPost(e.target.value)} />
       </label>
-
-      <label className="block space-y-2">
-        <span className="text-[14px] font-medium text-[var(--apple-text)]">Kurz-LinkedIn</span>
-        <textarea className={`${adminInput} min-h-[100px]`} value={shortLinkedinPost} onChange={(e) => setShortLinkedinPost(e.target.value)} />
-      </label>
-
     </div>
   );
 }

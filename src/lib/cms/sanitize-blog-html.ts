@@ -63,3 +63,27 @@ export function sanitizeBlogHtml(html: string): string {
     return "";
   }
 }
+
+/** Generated articles should not carry source/citation links into the public post. */
+export function sanitizeGeneratedBlogHtmlWithoutLinks(html: string): string {
+  const input = typeof html === "string" ? html : String(html ?? "");
+  try {
+    return sanitizeHtmlLib(input, {
+      allowedTags: ALLOWED_TAGS.filter((tag) => tag !== "a"),
+      allowedAttributes: {
+        img: ALLOWED_ATTR.img,
+        span: ALLOWED_ATTR.span,
+        "*": ALLOWED_ATTR["*"],
+      },
+      allowedSchemes: ALLOWED_SCHEMES,
+      allowedSchemesByTag: ALLOWED_SCHEMES_BY_TAG,
+      allowProtocolRelative: true,
+      disallowedTagsMode: "recursiveEscape",
+      transformTags: {
+        a: "span",
+      },
+    });
+  } catch {
+    return "";
+  }
+}

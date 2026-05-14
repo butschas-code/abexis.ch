@@ -129,8 +129,8 @@ export type BlogSocialPost = {
   /** Subset of platforms this row covers (mirrors settings granularity). */
   platforms: string[];
   linkedinPost: string;
-  shortLinkedinPost: string;
-  xPost: string;
+  socialImageUrl?: string | null;
+  socialImageAlt?: string | null;
   /** Manual editorial flag (CMS only): marked when copy was posted elsewhere. */
   usedAt?: Timestamp | null;
   /** Append-only summary of successful Nuelink handoffs. */

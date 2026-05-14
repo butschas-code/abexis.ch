@@ -14,7 +14,8 @@ Quality rules:
 - Never invent statistics, surveys, regulations, or quotations.
 - Never fabricate citations or URLs.
 - Use the web_search tool when fresh or external facts materially strengthen the piece; otherwise rely on established general knowledge without pretending it is cited.
-- When web_search is used, every non-obvious factual claim tied to that research must be reflected honestly in researchSummary and any concrete pages you relied on must appear in sources with real URLs from the tool results.
+- Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", or external source URLs to articleHtml.
+- Do not include source links in the JSON output.
 - If you cannot verify something, omit it or phrase it carefully as context/opinion without numeric precision.
 
 Output must match the JSON schema exactly. articleHtml should be semantic HTML fragments suitable inside a CMS body (headings, paragraphs, lists, links)—no <html> wrapper.
@@ -24,9 +25,7 @@ Hero imagery fields:
 - heroImageAlt: concise German alt text for accessibility.
 
 Social copy:
-- linkedinPost: thoughtful LinkedIn post in German, suitable for Abexis leadership voice.
-- shortLinkedinPost: shorter variant (still complete sentences).
-- xPost: concise post; respect typical length constraints without stuffing hashtags.`;
+- linkedinPost: one substantial German LinkedIn post for Daniel Sengstag's profile. Make it longer and more useful than a short teaser, include a calm executive point of view, and include the placeholder {{BLOG_URL}} exactly once where the published blog link should appear.`;
 
 function buildUserPrompt(topic: { title: string; brief?: string | null }): string {
   const brief = topic.brief?.trim() || "(Keine zusätzliche Briefing-Zusammenfassung.)";
