@@ -574,7 +574,6 @@ export async function runBlogAutomation(
             updatedAt: ts,
             createdAt: ts,
             publishedAt: ts,
-            heroStoragePath: FieldValue.delete(),
           });
           draftStatus = "published";
           approvedAt = Timestamp.now();

@@ -496,7 +496,6 @@ export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerPa
     updatedAt: ts,
     createdAt: ts,
     publishedAt: ts,
-    heroStoragePath: FieldValue.delete(),
   };
 
   const sourcesClean = params.sources.map((s) => ({ title: s.title.trim(), url: s.url.trim() }));
