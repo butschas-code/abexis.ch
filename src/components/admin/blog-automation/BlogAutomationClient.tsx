@@ -14,6 +14,7 @@ import {
   apiCreateBlogTopic,
   apiListQueuedBlogTopics,
   apiLoadBlogAutomationSettings,
+  apiRunBlogAutomationNow,
   apiSaveBlogAutomationSettings,
 } from "@/cms/services/blog-automation-cms-api-client";
 import {
@@ -117,6 +118,7 @@ export function BlogAutomationClient() {
   const [queuedTopics, setQueuedTopics] = useState<QueuedBlogTopicRow[]>([]);
   const [dashboard, setDashboard] = useState<BlogAutomationDashboardSnapshot | null>(null);
   const [dashboardBusy, setDashboardBusy] = useState(false);
+  const [runNowBusy, setRunNowBusy] = useState(false);
 
   const [newTopic, setNewTopic] = useState({
     title: "",
@@ -242,6 +244,41 @@ export function BlogAutomationClient() {
     [form, docExists, loadAll, getIdToken],
   );
 
+  const onRunNow = useCallback(async () => {
+    if (!form) return;
+    setRunNowBusy(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const token = await getIdToken();
+      const toSave: BlogAutomationFormState = {
+        ...form,
+        enabled: true,
+        articlesPerWeek: Math.min(3, Math.max(1, Math.floor(form.articlesPerWeek) || 1)),
+      };
+      await apiSaveBlogAutomationSettings(token, toSave, docExists);
+      setForm(toSave);
+      setDocExists(true);
+
+      const result = await apiRunBlogAutomationNow(token);
+      await Promise.all([refreshTopics(), refreshDashboard(toSave)]);
+
+      if (result.action === "draft_created") {
+        setSuccess("Ein neuer Entwurf wurde vorbereitet. Sie finden ihn unter «Entwürfe prüfen».");
+        return;
+      }
+      if (result.action === "published") {
+        setSuccess("Ein neuer Beitrag wurde vorbereitet und veröffentlicht.");
+        return;
+      }
+      setSuccess(result.reason || "Der manuelle Lauf ist abgeschlossen.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Sofortige Vorbereitung fehlgeschlagen.");
+    } finally {
+      setRunNowBusy(false);
+    }
+  }, [form, docExists, getIdToken, refreshTopics, refreshDashboard]);
+
   const onAddTopic = useCallback(async () => {
     setAddingTopic(true);
     setError(null);
@@ -300,6 +337,9 @@ export function BlogAutomationClient() {
               <Link href={CMS_PATHS.adminBlogAutomationDrafts} className={`${adminBtnSecondary} !min-h-[42px] text-center text-[14px]`}>
                 Entwürfe prüfen
               </Link>
+              <button type="button" disabled={runNowBusy || saving} onClick={() => void onRunNow()} className={`${adminBtnSecondary} !min-h-[42px] text-[14px]`}>
+                {runNowBusy ? "Wird vorbereitet…" : "Jetzt Entwurf vorbereiten"}
+              </button>
               <button type="submit" disabled={saving} className={`${adminBtnPrimary} !min-h-[42px] text-[14px]`}>
                 {saving ? "Speichern…" : "Änderungen sichern"}
               </button>
@@ -378,6 +418,9 @@ export function BlogAutomationClient() {
                 <input type="time" className={adminInput} value={form.preferredTime} onChange={(e) => patch({ preferredTime: e.target.value })} />
                 <span className={`${adminBody} text-[13px]`}>Am gewählten Tag erst nach dieser Zeit (lokal).</span>
               </label>
+              <div className="rounded-2xl border border-[var(--brand-900)]/12 bg-[color-mix(in_srgb,var(--brand-900)_6%,white)] px-5 py-4 text-[14px] leading-relaxed text-[var(--apple-text-secondary)] md:col-span-2">
+                Der Zeitplan steuert die automatische Tagesprüfung. Für einen sofortigen Entwurf nutzen Sie oben «Jetzt Entwurf vorbereiten».
+              </div>
               <div className="space-y-3 md:col-span-2">
                 <span className="block text-[14px] font-medium text-[var(--apple-text)]">Schreibtage</span>
                 <div className="flex flex-wrap gap-2">
@@ -575,9 +618,14 @@ export function BlogAutomationClient() {
             <p className={adminBody}>
               Sobald ein Entwurf erstellt wurde, finden Sie ihn unter «Entwürfe prüfen». Dort bearbeiten Sie Texte, geben sie frei oder veröffentlichen sie bewusst auf der Website — ohne die Finger zu lassen.
             </p>
-            <Link href={CMS_PATHS.adminBlogAutomationDrafts} className={`${adminBtnSecondary} inline-flex !min-h-[46px] items-center justify-center text-[15px]`}>
-              Zu den Entwürfen
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <button type="button" disabled={runNowBusy || saving} onClick={() => void onRunNow()} className={`${adminBtnPrimary} !min-h-[46px] px-7 text-[15px]`}>
+                {runNowBusy ? "Wird vorbereitet…" : "Jetzt Entwurf vorbereiten"}
+              </button>
+              <Link href={CMS_PATHS.adminBlogAutomationDrafts} className={`${adminBtnSecondary} inline-flex !min-h-[46px] items-center justify-center text-[15px]`}>
+                Zu den Entwürfen
+              </Link>
+            </div>
           </BlogAutomationNoticeCard>
         </AdminPageSection>
 

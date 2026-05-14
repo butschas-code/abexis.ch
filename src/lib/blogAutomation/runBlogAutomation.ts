@@ -39,6 +39,11 @@ export type RunBlogAutomationResult = {
   publishedPostId?: string;
 };
 
+export type RunBlogAutomationOptions = {
+  /** CMS action: create one draft immediately, without waiting for the daily cron/time gate. */
+  bypassScheduleGate?: boolean;
+};
+
 function resolveOpenAiModel(): string {
   return process.env.OPENAI_BLOG_MODEL?.trim() || "gpt-4.1-mini";
 }
@@ -266,14 +271,16 @@ async function claimNextQueuedTopic(topicRefPath: string): Promise<{ id: string;
 }
 
 async function pickNextQueuedTopicRef(): Promise<string | null> {
-  const snap = await adminDb
-    .collection(COLLECTIONS.blogTopics)
-    .where("status", "==", "queued")
-    .orderBy("priority", "asc")
-    .limit(1)
-    .get();
+  const snap = await adminDb.collection(COLLECTIONS.blogTopics).where("status", "==", "queued").get();
   if (snap.empty) return null;
-  return snap.docs[0].ref.path;
+  const [next] = snap.docs.sort((a, b) => {
+    const ap = typeof a.get("priority") === "number" ? a.get("priority") : 0;
+    const bp = typeof b.get("priority") === "number" ? b.get("priority") : 0;
+    const byPriority = ap - bp;
+    if (byPriority !== 0) return byPriority;
+    return String(a.get("title") ?? "").localeCompare(String(b.get("title") ?? ""), "de-CH");
+  });
+  return next?.ref.path ?? null;
 }
 
 async function allocateUniquePostSlug(baseSlug: string): Promise<string> {
@@ -286,7 +293,10 @@ async function allocateUniquePostSlug(baseSlug: string): Promise<string> {
 /**
  * Main cron entry: schedules via {@link shouldRunAutomation}, claims a topic, generates a draft, audits in `blogPipelineRuns` / `blogPipelineLogs`.
  */
-export async function runBlogAutomation(trigger: BlogPipelineRunTrigger = "cron"): Promise<RunBlogAutomationResult> {
+export async function runBlogAutomation(
+  trigger: BlogPipelineRunTrigger = "cron",
+  options: RunBlogAutomationOptions = {},
+): Promise<RunBlogAutomationResult> {
   const runRef = adminDb.collection(COLLECTIONS.blogPipelineRuns).doc();
   const runId = runRef.id;
   const startedAt = Timestamp.now();
@@ -354,17 +364,26 @@ export async function runBlogAutomation(trigger: BlogPipelineRunTrigger = "cron"
       );
     }
 
-    const gate = await shouldRunAutomation(settings, new Date());
-    if (!gate.shouldRun) {
-      return await finishSkipped(gate.reason);
-    }
+    if (options.bypassScheduleGate) {
+      await appendPipelineLog({
+        pipelineRunId: runId,
+        level: "info",
+        message: "Manual CMS run requested: schedule gate bypassed for one immediate draft attempt.",
+        context: { phase: "schedule_gate", bypassed: true },
+      });
+    } else {
+      const gate = await shouldRunAutomation(settings, new Date());
+      if (!gate.shouldRun) {
+        return await finishSkipped(gate.reason);
+      }
 
-    await appendPipelineLog({
-      pipelineRunId: runId,
-      level: "info",
-      message: `Schedule gate passed: ${gate.reason}`,
-      context: { phase: "schedule_gate" },
-    });
+      await appendPipelineLog({
+        pipelineRunId: runId,
+        level: "info",
+        message: `Schedule gate passed: ${gate.reason}`,
+        context: { phase: "schedule_gate" },
+      });
+    }
 
     let topicPath = await pickNextQueuedTopicRef();
 

@@ -67,6 +67,20 @@ export async function apiLoadBlogAutomationDashboardSnapshot(
   });
 }
 
+export type RunBlogAutomationNowResult = {
+  success: boolean;
+  action: "draft_created" | "published" | "skipped" | "failed" | "error";
+  reason: string;
+  runId: string | null;
+  topicId: string | null;
+  draftId: string | null;
+  publishedPostId: string | null;
+};
+
+export async function apiRunBlogAutomationNow(idToken: string): Promise<RunBlogAutomationNowResult> {
+  return cmsBlogAutomationFetch<RunBlogAutomationNowResult>(idToken, "/run-now", { method: "POST" });
+}
+
 export async function apiListQueuedBlogTopics(idToken: string): Promise<QueuedBlogTopicRow[]> {
   const j = await cmsBlogAutomationFetch<{ topics: QueuedBlogTopicRow[] }>(idToken, "/topics?queued=true");
   return j.topics;
