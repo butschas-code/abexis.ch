@@ -3,7 +3,10 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
-import { apiPatchBlogSocialPost } from "@/cms/services/blog-automation-cms-api-client";
+import {
+  apiPatchBlogSocialPost,
+  apiSendBlogSocialPostToNuelink,
+} from "@/cms/services/blog-automation-cms-api-client";
 import type { BlogSocialListItem } from "@/cms/services/blog-pipeline-types";
 import {
   adminBody,
@@ -53,6 +56,12 @@ function formatUsedWhen(iso: string | null): string {
   }
 }
 
+function formatNuelinkTarget(target: string | null): string {
+  if (target === "linkedin") return "LinkedIn";
+  if (target === "x") return "X";
+  return "Nuelink";
+}
+
 type Props = {
   rows: BlogSocialListItem[];
   onRefresh: () => Promise<void>;
@@ -80,8 +89,7 @@ export function BlogAutomationDraftSocialPosts(props: Props) {
       <div>
         <h2 className={adminSectionLabel}>Social-Posts</h2>
         <p className={`mt-1 max-w-[52rem] ${adminBody}`}>
-          Texte nur zum Kopieren — keine automatische Veröffentlichung auf LinkedIn oder X. Nutzen Sie «Als verwendet markieren», wenn Sie die Inhalte manuell gepostet
-          haben.
+          Texte prüfen, bei Bedarf anpassen und dann an Nuelink übergeben. Nuelink nutzt die dort konfigurierte Collection und Queue.
         </p>
       </div>
 
@@ -110,16 +118,14 @@ function BlogSocialPostCard(props: {
   const { user } = useCmsAuth();
   const [linkedinPost, setLinkedinPost] = useState(row.linkedinPost);
   const [shortLinkedinPost, setShortLinkedinPost] = useState(row.shortLinkedinPost);
-  const [xPost, setXPost] = useState(row.xPost);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     queueMicrotask(() => {
       setLinkedinPost(row.linkedinPost);
       setShortLinkedinPost(row.shortLinkedinPost);
-      setXPost(row.xPost);
     });
-  }, [row.id, row.linkedinPost, row.shortLinkedinPost, row.xPost, row.usedAt]);
+  }, [row.id, row.linkedinPost, row.shortLinkedinPost, row.usedAt]);
 
   const getToken = useCallback(async () => {
     if (!user) throw new Error("Bitte melden Sie sich an.");
@@ -142,7 +148,7 @@ function BlogSocialPostCard(props: {
     setBusy(true);
     try {
       const token = await getToken();
-      await apiPatchBlogSocialPost(token, row.id, { linkedinPost, shortLinkedinPost, xPost });
+      await apiPatchBlogSocialPost(token, row.id, { linkedinPost, shortLinkedinPost });
       onFlashSuccess("Social-Texte gespeichert.");
       await onRefresh();
     } catch (e) {
@@ -150,7 +156,7 @@ function BlogSocialPostCard(props: {
     } finally {
       setBusy(false);
     }
-  }, [getToken, linkedinPost, onFlashError, onFlashSuccess, onRefresh, row.id, shortLinkedinPost, xPost]);
+  }, [getToken, linkedinPost, onFlashError, onFlashSuccess, onRefresh, row.id, shortLinkedinPost]);
 
   const onMarkUsed = useCallback(async () => {
     setBusy(true);
@@ -166,6 +172,23 @@ function BlogSocialPostCard(props: {
     }
   }, [getToken, onFlashError, onFlashSuccess, onRefresh, row.id]);
 
+  const onSendToNuelink = useCallback(
+    async (target: "linkedin" | "x", caption: string) => {
+      setBusy(true);
+      try {
+        const token = await getToken();
+        const { result } = await apiSendBlogSocialPostToNuelink(token, row.id, { target, caption });
+        onFlashSuccess(`${formatNuelinkTarget(target)} wurde an Nuelink übergeben (${result.publishMode}).`);
+        await onRefresh();
+      } catch (e) {
+        onFlashError(e instanceof Error ? e.message : "Nuelink-Verbindung fehlgeschlagen.");
+      } finally {
+        setBusy(false);
+      }
+    },
+    [getToken, onFlashError, onFlashSuccess, onRefresh, row.id],
+  );
+
   return (
     <div className={`space-y-4 ${adminPanel} p-6 sm:p-7`}>
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -173,6 +196,10 @@ function BlogSocialPostCard(props: {
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--apple-text-tertiary)]">Vorschlag für Social Media</p>
           {row.usedAt ? (
             <p className={`mt-2 text-[13px] font-medium text-emerald-900`}>Verwendet · {formatUsedWhen(row.usedAt)}</p>
+          ) : row.nuelinkLastSentAt ? (
+            <p className={`mt-2 text-[13px] font-medium text-emerald-900`}>
+              An Nuelink übergeben · {formatNuelinkTarget(row.nuelinkLastTarget)} · {formatUsedWhen(row.nuelinkLastSentAt)}
+            </p>
           ) : (
             <p className={`mt-2 ${adminBody} text-[13px]`}>Noch nicht als verwendet markiert.</p>
           )}
@@ -194,8 +221,13 @@ function BlogSocialPostCard(props: {
         <button type="button" className={`${adminBtnGhost} text-[13px]`} disabled={busy} onClick={() => void doCopy("Kurz-LinkedIn", shortLinkedinPost)}>
           Kurz-LinkedIn kopieren
         </button>
-        <button type="button" className={`${adminBtnGhost} text-[13px]`} disabled={busy} onClick={() => void doCopy("X-Text", xPost)}>
-          X kopieren
+        <button
+          type="button"
+          className={`${adminBtnSecondary} text-[13px]`}
+          disabled={busy || !user || !linkedinPost.trim()}
+          onClick={() => void onSendToNuelink("linkedin", linkedinPost)}
+        >
+          LinkedIn an Nuelink
         </button>
       </div>
 
@@ -209,10 +241,6 @@ function BlogSocialPostCard(props: {
         <textarea className={`${adminInput} min-h-[100px]`} value={shortLinkedinPost} onChange={(e) => setShortLinkedinPost(e.target.value)} />
       </label>
 
-      <label className="block space-y-2">
-        <span className="text-[14px] font-medium text-[var(--apple-text)]">X / Twitter</span>
-        <textarea className={`${adminInput} min-h-[100px]`} value={xPost} onChange={(e) => setXPost(e.target.value)} />
-      </label>
     </div>
   );
 }

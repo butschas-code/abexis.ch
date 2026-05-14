@@ -213,3 +213,14 @@ export async function apiPatchBlogSocialPost(
     body: JSON.stringify(patch),
   });
 }
+
+export async function apiSendBlogSocialPostToNuelink(
+  idToken: string,
+  socialPostId: string,
+  body: { target: "linkedin" | "x"; caption: string },
+): Promise<{ result: { postId: string; publishMode: string; collectionId: number; sentAt: string } }> {
+  return cmsBlogAutomationFetch(idToken, `/social/${encodeURIComponent(socialPostId)}/nuelink`, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}

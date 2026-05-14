@@ -39,6 +39,10 @@ export type BlogSocialListItem = {
   createdAt: string | null;
   /** Set when an editor marks the copy as manually posted (never triggers API posting). */
   usedAt: string | null;
+  /** Last successful CMS handoff to Nuelink for audit/status display. */
+  nuelinkLastSentAt: string | null;
+  nuelinkLastTarget: string | null;
+  nuelinkLastPostId: string | null;
 };
 
 export type BlogTopicListItem = {

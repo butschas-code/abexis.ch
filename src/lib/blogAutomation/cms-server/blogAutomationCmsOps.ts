@@ -31,6 +31,7 @@ import {
 } from "@/lib/blogAutomation/findUnsplashImage";
 import type { UnsplashPhotoBrief } from "@/lib/blogAutomation/unsplash-photo-types";
 import { adminDb } from "@/lib/firebaseAdmin";
+import { createNuelinkSocialPost, type NuelinkSocialTarget } from "@/lib/nuelink/client";
 import { POST_SITE_FIRESTORE_IN } from "@/public-site/site/filters";
 
 import type {
@@ -540,6 +541,9 @@ export async function cmsListBlogSocialPostsForDraft(draftId: string): Promise<B
       xPost: String(d.xPost ?? ""),
       createdAt: toIso(d.createdAt),
       usedAt: toIso(d.usedAt),
+      nuelinkLastSentAt: toIso(d.nuelinkLastSentAt),
+      nuelinkLastTarget: typeof d.nuelinkLastTarget === "string" ? d.nuelinkLastTarget : null,
+      nuelinkLastPostId: typeof d.nuelinkLastPostId === "string" ? d.nuelinkLastPostId : null,
     };
   });
   rows.sort((a, b) => {
@@ -564,6 +568,9 @@ export async function cmsListBlogSocialPostsForAdmin(max = 80): Promise<BlogSoci
       xPost: String(d.xPost ?? ""),
       createdAt: toIso(d.createdAt),
       usedAt: toIso(d.usedAt),
+      nuelinkLastSentAt: toIso(d.nuelinkLastSentAt),
+      nuelinkLastTarget: typeof d.nuelinkLastTarget === "string" ? d.nuelinkLastTarget : null,
+      nuelinkLastPostId: typeof d.nuelinkLastPostId === "string" ? d.nuelinkLastPostId : null,
     };
   });
 }
@@ -584,6 +591,53 @@ export async function cmsPatchBlogSocialPost(
     row.usedAt = FieldValue.serverTimestamp();
   }
   await ref.update(row);
+}
+
+export async function cmsSendBlogSocialPostToNuelink(
+  socialPostId: string,
+  params: { target: NuelinkSocialTarget; caption: string },
+): Promise<{
+  postId: string;
+  publishMode: string;
+  collectionId: number;
+  sentAt: string;
+}> {
+  const ref = adminDb.collection(COLLECTIONS.blogSocialPosts).doc(socialPostId.trim());
+  const snap = await ref.get();
+  if (!snap.exists) throw new Error("Social-Beitrag nicht gefunden.");
+
+  const caption = params.caption.trim();
+  if (!caption) throw new Error("Bitte zuerst einen Social-Text erfassen.");
+
+  const result = await createNuelinkSocialPost({
+    target: params.target,
+    caption,
+  });
+  const sentAt = Timestamp.now();
+  const update: Record<string, unknown> = {
+    updatedAt: FieldValue.serverTimestamp(),
+    nuelinkLastSentAt: sentAt,
+    nuelinkLastTarget: params.target,
+    nuelinkLastPostId: result.postId,
+    nuelinkSends: FieldValue.arrayUnion({
+      target: params.target,
+      postId: result.postId,
+      brandId: result.brandId,
+      collectionId: result.collectionId,
+      publishMode: result.publishMode,
+      sentAt,
+    }),
+  };
+  if (params.target === "linkedin") update.linkedinPost = caption;
+  if (params.target === "x") update.xPost = caption;
+  await ref.update(update);
+
+  return {
+    postId: result.postId,
+    publishMode: result.publishMode,
+    collectionId: result.collectionId,
+    sentAt: sentAt.toDate().toISOString(),
+  };
 }
 
 // ——— Dashboard snapshot ———

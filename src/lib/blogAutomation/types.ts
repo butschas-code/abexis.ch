@@ -133,6 +133,18 @@ export type BlogSocialPost = {
   xPost: string;
   /** Manual editorial flag (CMS only): marked when copy was posted elsewhere. */
   usedAt?: Timestamp | null;
+  /** Append-only summary of successful Nuelink handoffs. */
+  nuelinkSends?: Array<{
+    target: string;
+    postId: string;
+    brandId: number;
+    collectionId: number;
+    publishMode: string;
+    sentAt: Timestamp;
+  }>;
+  nuelinkLastSentAt?: Timestamp | null;
+  nuelinkLastTarget?: string | null;
+  nuelinkLastPostId?: string | null;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 };

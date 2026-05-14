@@ -33,8 +33,10 @@
  * 6) **Emulators (optional, local dev)** : see `.env.example` for
  *    `NEXT_PUBLIC_USE_FIREBASE_EMULATORS` and emulator host vars.
  *
- * **Blog automation / hero images:** OpenAI and Unsplash keys are server-only (`OPENAI_API_KEY`,
- * `UNSPLASH_ACCESS_KEY`); see `.env.example`. Do not expose Unsplash credentials as `NEXT_PUBLIC_*`.
+ * **Blog automation / social handoff:** OpenAI, Unsplash, and Nuelink keys are server-only
+ * (`OPENAI_API_KEY`, `UNSPLASH_ACCESS_KEY`, `NUELINK_API_KEY`, Nuelink brand/collection ids).
+ * The Nuelink collection must contain Daniel Sengstag's LinkedIn profile; see `.env.example`.
+ * Do not expose these credentials as `NEXT_PUBLIC_*`.
  *
  * -----------------------------------------------------------------------------
  */

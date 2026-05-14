@@ -4,12 +4,21 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CMS_PATHS } from "@/admin/paths";
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
-import { apiListBlogSocialPostsForAdmin } from "@/cms/services/blog-automation-cms-api-client";
+import {
+  apiListBlogSocialPostsForAdmin,
+  apiSendBlogSocialPostToNuelink,
+} from "@/cms/services/blog-automation-cms-api-client";
 import type { BlogSocialListItem } from "@/cms/services/blog-pipeline-types";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminLoading } from "@/components/admin/AdminLoading";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
-import { adminPanelInset, adminPill } from "@/components/admin/admin-ui";
+import {
+  adminBtnPrimary,
+  adminFeedbackError,
+  adminFeedbackSuccess,
+  adminPanelInset,
+  adminPill,
+} from "@/components/admin/admin-ui";
 
 function formatWhen(iso: string | null) {
   if (!iso) return "—";
@@ -30,6 +39,15 @@ export function AdminBlogSocialList() {
   const { user, ready } = useCmsAuth();
   const [rows, setRows] = useState<BlogSocialListItem[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [flash, setFlash] = useState<string | null>(null);
+  const [busyId, setBusyId] = useState<string | null>(null);
+
+  async function loadRows(currentUser: typeof user) {
+    if (!currentUser) return;
+    const token = await currentUser.getIdToken();
+    const list = await apiListBlogSocialPostsForAdmin(token, 80);
+    setRows(list);
+  }
 
   useEffect(() => {
     if (!ready || !user) return;
@@ -38,7 +56,10 @@ export function AdminBlogSocialList() {
       try {
         const token = await user.getIdToken();
         const list = await apiListBlogSocialPostsForAdmin(token, 80);
-        if (!cancelled) setRows(list);
+        if (!cancelled) {
+          setRows(list);
+          setError(null);
+        }
       } catch {
         if (!cancelled) setError("Social-Entwürfe konnten nicht geladen werden.");
       }
@@ -48,6 +69,26 @@ export function AdminBlogSocialList() {
     };
   }, [ready, user]);
 
+  async function sendToNuelink(row: BlogSocialListItem) {
+    if (!user) return;
+    setBusyId(row.id);
+    setError(null);
+    setFlash(null);
+    try {
+      const token = await user.getIdToken();
+      const { result } = await apiSendBlogSocialPostToNuelink(token, row.id, {
+        target: "linkedin",
+        caption: row.linkedinPost,
+      });
+      setFlash(`LinkedIn-Post wurde an Nuelink übergeben (${result.publishMode}).`);
+      await loadRows(user);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Nuelink-Verbindung fehlgeschlagen.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+
   if (!ready || !user) {
     return (
       <AdminPageContainer>
@@ -56,7 +97,7 @@ export function AdminBlogSocialList() {
     );
   }
 
-  if (error) {
+  if (error && rows === null) {
     return (
       <AdminPageContainer>
         <AdminPageHeader title="Social (KI)" description={error} />
@@ -76,8 +117,10 @@ export function AdminBlogSocialList() {
     <AdminPageContainer>
       <AdminPageHeader
         title="Social (KI)"
-        description="LinkedIn- und X-Texte zum Abgleich mit dem jeweiligen Blog-Entwurf. Keine automatische Veröffentlichung."
+        description="LinkedIn-Texte für Daniel Sengstags Profil prüfen und an Nuelink übergeben."
       />
+      {flash ? <div className={adminFeedbackSuccess}>{flash}</div> : null}
+      {error ? <div className={adminFeedbackError}>{error}</div> : null}
       <AdminPageSection>
         {rows.length === 0 ? (
           <AdminEmptyState title="Keine Social-Entwürfe" description="Entstehen zusammen mit einem neuen KI-Blogentwurf nach Cron-Lauf." />
@@ -98,10 +141,25 @@ export function AdminBlogSocialList() {
                     Zugehöriger Blog-Entwurf
                   </Link>
                 </div>
+                {r.nuelinkLastSentAt ? (
+                  <p className="mt-4 text-sm font-medium text-emerald-900">An Nuelink übergeben · {formatWhen(r.nuelinkLastSentAt)}</p>
+                ) : null}
                 <div className="mt-5 grid gap-6 lg:grid-cols-1">
                   <PostBlock label="LinkedIn" body={r.linkedinPost} />
                   <PostBlock label="LinkedIn (kurz)" body={r.shortLinkedinPost} />
-                  <PostBlock label="X" body={r.xPost} />
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-t border-black/[0.06] pt-5">
+                    <p className="max-w-xl text-sm leading-relaxed text-[var(--apple-text-secondary)]">
+                      Sendet den LinkedIn-Text an die Abexis Collection «Global Queue» in Nuelink.
+                    </p>
+                    <button
+                      type="button"
+                      className={`${adminBtnPrimary} text-[13px]`}
+                      disabled={busyId === r.id || !r.linkedinPost.trim()}
+                      onClick={() => void sendToNuelink(r)}
+                    >
+                      {busyId === r.id ? "Wird übergeben…" : "LinkedIn an Nuelink"}
+                    </button>
+                  </div>
                 </div>
               </article>
             ))}

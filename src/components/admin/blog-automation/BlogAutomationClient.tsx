@@ -206,14 +206,14 @@ export function BlogAutomationClient() {
   }, []);
 
   const linkedinOn = useMemo(() => form?.socialPlatforms.includes("linkedin") ?? false, [form?.socialPlatforms]);
-  const xOn = useMemo(() => form?.socialPlatforms.includes("x") ?? false, [form?.socialPlatforms]);
 
-  const setPlatform = useCallback((platform: "linkedin" | "x", on: boolean) => {
+  const setLinkedinPlatform = useCallback((on: boolean) => {
     setForm((s) => {
       if (!s) return s;
       const next = new Set(s.socialPlatforms);
-      if (on) next.add(platform);
-      else next.delete(platform);
+      if (on) next.add("linkedin");
+      else next.delete("linkedin");
+      next.delete("x");
       return { ...s, socialPlatforms: [...next] };
     });
   }, []);
@@ -230,6 +230,7 @@ export function BlogAutomationClient() {
         const toSave: BlogAutomationFormState = {
           ...form,
           articlesPerWeek: Math.min(3, Math.max(1, Math.floor(form.articlesPerWeek) || 1)),
+          socialPlatforms: form.createSocialPosts ? ["linkedin"] : [],
         };
         await apiSaveBlogAutomationSettings(token, toSave, docExists);
         setDocExists(true);
@@ -255,6 +256,7 @@ export function BlogAutomationClient() {
         ...form,
         enabled: true,
         articlesPerWeek: Math.min(3, Math.max(1, Math.floor(form.articlesPerWeek) || 1)),
+        socialPlatforms: form.createSocialPosts ? ["linkedin"] : [],
       };
       await apiSaveBlogAutomationSettings(token, toSave, docExists);
       setForm(toSave);
@@ -647,13 +649,15 @@ export function BlogAutomationClient() {
             <div className={`${adminPanel} space-y-5 p-7 sm:p-8`}>
               <div>
                 <h3 className="font-serif text-[1.2rem] font-medium text-[var(--apple-text)]">Kurztexte für soziale Netzwerke</h3>
-                <p className={`mt-2 max-w-prose ${adminBody}`}>Optional: passende Kurzfassungen zum Kopieren — ohne automatische Veröffentlichung.</p>
+                <p className={`mt-2 max-w-prose ${adminBody}`}>
+                  Optional: passende LinkedIn-Fassung für Daniel Sengstags Profil — zur Übergabe an Nuelink.
+                </p>
               </div>
               <ChoiceCard
                 checked={form.createSocialPosts}
-                onChange={(v) => patch({ createSocialPosts: v })}
-                title="Kurztexte mit erzeugen"
-                description="Liegen Entwürfe vor, können ergänzend Textvorschläge für LinkedIn und X erstellt werden. Es wird nichts automatisch gepostet."
+                onChange={(v) => patch({ createSocialPosts: v, socialPlatforms: v ? ["linkedin"] : [] })}
+                title="LinkedIn-Text mit erzeugen"
+                description="Liegen Entwürfe vor, wird ein LinkedIn-Text für Daniel Sengstags Profil vorbereitet. Veröffentlichung läuft über Nuelink."
               />
               <div className="flex flex-wrap gap-6">
                 <label className="flex cursor-pointer items-center gap-2 text-[14px] text-[var(--apple-text)]">
@@ -661,20 +665,10 @@ export function BlogAutomationClient() {
                     type="checkbox"
                     checked={linkedinOn}
                     disabled={!form.createSocialPosts}
-                    onChange={(e) => setPlatform("linkedin", e.target.checked)}
+                    onChange={(e) => setLinkedinPlatform(e.target.checked)}
                     className="h-4 w-4 rounded border-black/18 text-[var(--brand-900)]"
                   />
-                  LinkedIn
-                </label>
-                <label className="flex cursor-pointer items-center gap-2 text-[14px] text-[var(--apple-text)]">
-                  <input
-                    type="checkbox"
-                    checked={xOn}
-                    disabled={!form.createSocialPosts}
-                    onChange={(e) => setPlatform("x", e.target.checked)}
-                    className="h-4 w-4 rounded border-black/18 text-[var(--brand-900)]"
-                  />
-                  X
+                  Daniel Sengstag auf LinkedIn
                 </label>
               </div>
               <p className={`${adminBody} text-[13px]`}>
