@@ -13,7 +13,7 @@ const SECTION_MESH_LIGHT =
 
 // ─── Static data ──────────────────────────────────────────────────────────────
 
-/** Entspricht [abexis.ch/projectfitcheck](https://abexis.ch/projectfitcheck); Punkt 4 dort widerspricht «Was wir häufig sehen» : hier konsistent mit Unklarheit formuliert. */
+/** Entspricht [abexis.ch/projectrealitycheck](https://abexis.ch/projectrealitycheck); Punkt 4 dort widerspricht «Was wir häufig sehen» : hier konsistent mit Unklarheit formuliert. */
 const warnsignale = [
   "Entscheidungen werden vertagt",
   "Statusberichte werden «optimistisch»",
@@ -111,7 +111,7 @@ const empfehlungen = [
 
 /**
  * Drei aufeinander aufbauende Phasen eines Project Reality Check : ein zusammenhängender Ablauf, keine isolierten «Produkte».
- * Inhalt gemäss [abexis.ch/projectfitcheck](https://abexis.ch/projectfitcheck).
+ * Inhalt gemäss [abexis.ch/projectrealitycheck](https://abexis.ch/projectrealitycheck).
  */
 const prcPipelinePhasen = [
   {

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { fokusthemenMeta, getAllBlogPosts, teamOrder } from "@/data/pages";
+import { englishTopics } from "@/data/english-site";
 import { getPublishedCmsPostsAllSites, listPublicCategoriesForInsights } from "@/public-site/cms";
 
 const base = "https://www.abexis.ch";
@@ -13,10 +14,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/blog",
     "/ueber-uns",
     "/kontakt",
-    "/projectfitcheck",
+    "/projectrealitycheck",
     "/legal-policy",
     "/privacy-policy",
     "/en/home",
+    "/en/services",
+    "/en/projectrealitycheck",
+    "/en/about",
+    "/en/contact",
+    "/en/executive-search",
+    "/en/executive-search/vacancies",
     "/executive-search/vakanzen",
   ].map((path) => ({
     url: `${base}${path}`,
@@ -30,6 +37,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.75,
+  }));
+
+  const englishFokus = englishTopics.map((f) => ({
+    url: `${base}/en/topics/${f.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
   }));
 
   const team = teamOrder.map((p) => ({
@@ -92,5 +106,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     byUrl.set(row.url, row);
   }
 
-  return [...staticRoutes, ...fokus, ...team, ...byUrl.values()];
+  return [...staticRoutes, ...fokus, ...englishFokus, ...team, ...byUrl.values()];
 }

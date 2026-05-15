@@ -22,6 +22,7 @@ export const siteConfig = {
   company: "Abexis GmbH",
   /** Wie auf der bisherigen Startseite / Kontaktbereich ausgewiesen */
   footerAddressHinwil: "Zihlstrasse 25, 8340 Hinwil, Schweiz",
+  footerAddressZurich: "Bahnhofquai 11, 8001 Zürich, Schweiz",
   emailPrimary: "contact@abexis.ch",
   phoneDisplay: "+41 43 535 84 34",
   phoneTel: "+41435358434",
@@ -54,7 +55,7 @@ export const mainNav: MainNavItem[] = [
     parentIsLink: false,
     children: [
       { href: "/leistungen", label: "Überblick" },
-      { href: "/projectfitcheck", label: "Project Reality Check" },
+      { href: "/projectrealitycheck", label: "Project Reality Check" },
       { href: "/fokusthemen/digitale-transformation", label: "Digitale Transformation" },
       { href: "/fokusthemen/unternehmensstrategie", label: "Unternehmensstrategie" },
       { href: "/fokusthemen/vertriebmarketing", label: "Vertrieb & Marketing" },
@@ -75,6 +76,36 @@ export const mainNav: MainNavItem[] = [
   { href: "/blog", label: "Insights" },
   { href: "/ueber-uns", label: "Über uns" },
   { href: "/kontakt", label: "Kontakt" },
+];
+
+export const mainNavEn: MainNavItem[] = [
+  {
+    href: "/en/services",
+    label: "Services",
+    parentIsLink: false,
+    children: [
+      { href: "/en/services", label: "Overview" },
+      { href: "/en/projectrealitycheck", label: "Project Reality Check" },
+      { href: "/en/topics/digital-transformation", label: "Digital Transformation" },
+      { href: "/en/topics/corporate-strategy", label: "Corporate Strategy" },
+      { href: "/en/topics/sales-marketing", label: "Sales & Marketing" },
+      { href: "/en/topics/change-management", label: "Change Management" },
+      { href: "/en/topics/process-optimization", label: "Process Optimization" },
+      { href: "/en/topics/project-management", label: "Project Management" },
+    ],
+  },
+  {
+    href: "/en/executive-search",
+    label: "Executive Search",
+    parentIsLink: false,
+    children: [
+      { href: "/en/executive-search", label: "Overview" },
+      { href: "/en/executive-search/vacancies", label: "Vacancies" },
+    ],
+  },
+  { href: "/blog", label: "Insights" },
+  { href: "/en/about", label: "About" },
+  { href: "/en/contact", label: "Contact" },
 ];
 
 const PARTNERS_BASE = "https://storage.googleapis.com/abexis-cms.firebasestorage.app/site/partners";
@@ -292,8 +323,8 @@ Erfahrung & Projekte (Auszug):
 
 export const fokusthemenMeta = [
   {
-    slug: "projectfitcheck",
-    href: "/projectfitcheck",
+    slug: "projectrealitycheck",
+    href: "/projectrealitycheck",
     title: "Project Reality Check",
     subtitle: "Klarheit schaffen",
     excerpt:

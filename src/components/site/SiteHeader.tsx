@@ -5,8 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { type MainNavItem, mainNav } from "@/data/pages";
+import { type MainNavItem, mainNav, mainNavEn } from "@/data/pages";
 import { logoUrl } from "@/data/site-images";
+import { isEnglishPath, localizedPath } from "@/lib/i18n/routes";
 
 function isExternalNavHref(href: string) {
   return href.startsWith("http://") || href.startsWith("https://");
@@ -257,11 +258,47 @@ function navSubPanelId(href: string) {
   return `m-nav-sub-${href.replace(/^\//, "").replaceAll("/", "-")}`;
 }
 
+function LanguageSwitcher({
+  pathname,
+  onNavigate,
+}: {
+  pathname: string;
+  onNavigate?: () => void;
+}) {
+  const english = isEnglishPath(pathname);
+  const baseClass =
+    "inline-flex h-8 min-w-9 items-center justify-center rounded-full px-2 text-[12px] font-semibold transition-colors";
+
+  return (
+    <div className="flex shrink-0 items-center gap-1 rounded-full border border-black/10 bg-black/[0.025] p-1">
+      <Link
+        href={localizedPath(pathname, "de")}
+        onClick={onNavigate}
+        className={`${baseClass} ${!english ? "bg-brand-900 text-white" : "text-[#6e6e73] hover:bg-white hover:text-brand-900"}`}
+        aria-current={!english ? "page" : undefined}
+      >
+        DE
+      </Link>
+      <Link
+        href={localizedPath(pathname, "en")}
+        onClick={onNavigate}
+        className={`${baseClass} ${english ? "bg-brand-900 text-white" : "text-[#6e6e73] hover:bg-white hover:text-brand-900"}`}
+        aria-current={english ? "page" : undefined}
+      >
+        EN
+      </Link>
+    </div>
+  );
+}
+
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [mobileSubOpenHref, setMobileSubOpenHref] = useState<string | null>(null);
   const isHome = pathname === "/";
+  const navItems = isEnglishPath(pathname) ? mainNavEn : mainNav;
+  const contactHref = isEnglishPath(pathname) ? "/en/contact" : "/kontakt";
+  const contactLabel = isEnglishPath(pathname) ? "Book a call" : "Termin buchen";
   const [mobileTopWash, setMobileTopWash] = useState(!isHome);
   const reduce = useReducedMotion();
 
@@ -306,7 +343,7 @@ export function SiteHeader() {
             </Link>
 
             <nav className="hidden flex-1 items-center justify-center gap-0.5 md:flex" aria-label="Hauptnavigation">
-              {mainNav.map((item) => {
+              {navItems.map((item) => {
                 const groupActive = isNavItemActive(item, pathname);
                 if ("children" in item && item.children) {
                   return (
@@ -338,11 +375,15 @@ export function SiteHeader() {
             </nav>
 
             <Link
-              href="/kontakt"
+              href={contactHref}
               className="hidden shrink-0 items-center rounded-full bg-brand-900 px-5 py-2 text-[14px] font-medium text-white transition-colors duration-200 hover:bg-[#324891] md:flex"
             >
-              Termin buchen
+              {contactLabel}
             </Link>
+
+            <div className="hidden md:block">
+              <LanguageSwitcher pathname={pathname} />
+            </div>
 
             <button
               type="button"
@@ -363,7 +404,7 @@ export function SiteHeader() {
                 className="pointer-events-auto mx-auto mt-2 w-full max-w-[1068px] overflow-hidden rounded-2xl border border-black/[0.07] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.08)] md:hidden"
               >
                 <nav className="flex flex-col p-3 text-[18px] font-medium" aria-label="Hauptnavigation mobil">
-                  {mainNav.map((item) => {
+                  {navItems.map((item) => {
                     if ("children" in item && item.children) {
                       const gActive = isNavItemActive(item, pathname);
                       const subOpen = mobileSubOpenHref === item.href;
@@ -453,12 +494,15 @@ export function SiteHeader() {
                     );
                   })}
                   <div className="my-2 border-t border-black/[0.06]" />
+                  <div className="mx-1 mb-3">
+                    <LanguageSwitcher pathname={pathname} onNavigate={() => setOpen(false)} />
+                  </div>
                   <Link
-                    href="/kontakt"
+                    href={contactHref}
                     className="mx-1 rounded-full bg-brand-900 px-5 py-3 text-center text-[16px] font-medium text-white transition-colors duration-200 hover:bg-[#324891]"
                     onClick={() => setOpen(false)}
                   >
-                    Termin buchen
+                    {contactLabel}
                   </Link>
                 </nav>
               </motion.div>

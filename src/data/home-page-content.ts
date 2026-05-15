@@ -12,7 +12,7 @@ export const homeHeroContent = {
   ] as const,
   sub: "Abexis schafft Klarheit, wenn sie fehlt.",
   body: "Viele Projekte scheitern nicht an einem einzelnen Fehler. Sie verlieren schrittweise die Orientierung und das bleibt oft lange unklar.",
-  primaryCta: { href: "/projectfitcheck" as const, label: "Project Reality Check anfragen" },
+  primaryCta: { href: "/projectrealitycheck" as const, label: "Project Reality Check anfragen" },
   secondaryCta: { href: "/kontakt" as const, label: "Unverbindliches Gespräch" },
 } as const;
 
@@ -126,7 +126,7 @@ export const homePrcContent = {
       outcome: "Gesamtbild, klare Prioritäten und umsetzbare Roadmap",
     },
   ] as const,
-  secondaryCta: { href: "/projectfitcheck" as const, label: "Mehr erfahren" },
+  secondaryCta: { href: "/projectrealitycheck" as const, label: "Mehr erfahren" },
   /** Primär-CTA = Outlook Booking; `href` in UI aus {@link siteConfig.bookingUrlDe} */
   primaryCtaLabel: "Unverbindlichen Termin vereinbaren",
 } as const;
@@ -159,7 +159,7 @@ export const homeLeistungenBlock = {
     {
       title: "Project Reality Check",
       body: "Unabhängige Beurteilung Ihres Projekts: Risiken, Lücken und konkrete Handlungsempfehlungen in kompakter Form.",
-      href: "/projectfitcheck",
+      href: "/projectrealitycheck",
     },
     {
       title: "Digitale Transformation",

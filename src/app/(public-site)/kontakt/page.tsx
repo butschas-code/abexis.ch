@@ -43,13 +43,19 @@ export default async function KontaktPage() {
               <div>
                 <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Anschrift</dt>
                 <dd className="mt-2 leading-relaxed text-[#1d1d1f]">
-                  Abexis GmbH
+                  {siteConfig.company}
                   <br />
-                  Zihlstrasse 25
+                  {siteConfig.footerAddressHinwil}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">
+                  Weiterer Standort
+                </dt>
+                <dd className="mt-2 leading-relaxed text-[#1d1d1f]">
+                  {siteConfig.company}
                   <br />
-                  8340 Hinwil
-                  <br />
-                  Schweiz
+                  {siteConfig.footerAddressZurich}
                 </dd>
               </div>
               <div>

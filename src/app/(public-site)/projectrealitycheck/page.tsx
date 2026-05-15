@@ -7,17 +7,17 @@ export const metadata = {
     "Projekte laufen selten falsch : aber oft in die falsche Richtung. Der Abexis Project Reality Check zeigt in kurzer Zeit, wo Ihr Projekt steht und was jetzt entschieden werden muss. Modular: Light, Core, Deep Dive.",
 };
 
-export default function ProjectFitCheckPage() {
+export default function ProjectRealityCheckPage() {
   return (
     <>
       <SchemaMarkup
         type="Service"
-        path="/projectfitcheck"
+        path="/projectrealitycheck"
         name="Project Reality Check | Abexis"
         description="Der Abexis Project Reality Check zeigt in kurzer Zeit, wo Ihr Projekt steht und was jetzt entschieden werden muss."
         breadcrumbs={[
           { name: "Startseite", url: "/" },
-          { name: "Project Reality Check", url: "/projectfitcheck" },
+          { name: "Project Reality Check", url: "/projectrealitycheck" },
         ]}
       />
       <ProjectFitCheck />

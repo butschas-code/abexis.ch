@@ -1,9 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { mainNav, siteConfig } from "@/data/pages";
+import { usePathname } from "next/navigation";
+import { siteConfig } from "@/data/pages";
 import { logoUrl } from "@/data/site-images";
-
-const FOOTER_NAV = mainNav;
+import { isEnglishPath, localizedPath } from "@/lib/i18n/routes";
 
 function FooterNavColumn({ label, items }: { label: string; items: { href: string; label: string }[] }) {
   return (
@@ -27,6 +29,44 @@ function FooterNavColumn({ label, items }: { label: string; items: { href: strin
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
+  const pathname = usePathname();
+  const english = isEnglishPath(pathname);
+  const servicesLinks = english
+    ? [
+        { href: "/en/services", label: "Overview" },
+        { href: "/en/projectrealitycheck", label: "Project Reality Check" },
+        { href: "/en/topics/digital-transformation", label: "Digital Transformation" },
+        { href: "/en/topics/corporate-strategy", label: "Corporate Strategy" },
+        { href: "/en/topics/sales-marketing", label: "Sales & Marketing" },
+        { href: "/en/topics/change-management", label: "Change Management" },
+        { href: "/en/topics/process-optimization", label: "Process Optimization" },
+        { href: "/en/topics/project-management", label: "Project Management" },
+      ]
+    : [
+        { href: "/leistungen", label: "Überblick" },
+        { href: "/projectrealitycheck", label: "Project Reality Check" },
+        { href: "/fokusthemen/digitale-transformation", label: "Digitale Transformation" },
+        { href: "/fokusthemen/unternehmensstrategie", label: "Unternehmensstrategie" },
+        { href: "/fokusthemen/vertriebmarketing", label: "Vertrieb & Marketing" },
+        { href: "/fokusthemen/veränderungsmanagement", label: "Veränderungsmanagement" },
+        { href: "/fokusthemen/prozessoptimierung", label: "Prozessoptimierung" },
+        { href: "/fokusthemen/projektmanagement", label: "Projektmanagement" },
+      ];
+  const companyLinks = english
+    ? [
+        { href: "/en/executive-search", label: "Executive Search" },
+        { href: "/en/executive-search/vacancies", label: "Vacancies" },
+        { href: "/blog", label: "Insights" },
+        { href: "/en/about", label: "About" },
+        { href: "/en/contact", label: "Contact" },
+      ]
+    : [
+        { href: "/executive-search", label: "Executive Search" },
+        { href: "/executive-search/vakanzen", label: "Vakanzen" },
+        { href: "/blog", label: "Insights" },
+        { href: "/ueber-uns", label: "Über uns" },
+        { href: "/kontakt", label: "Kontakt" },
+      ];
 
   return (
     <footer className="relative mt-auto overflow-hidden bg-[#1a2460]">
@@ -55,7 +95,7 @@ export function SiteFooter() {
           {/* Brand column */}
           <div className="flex flex-col gap-8">
             {/* Logo with white-background container */}
-            <Link href="/" className="inline-block self-start">
+            <Link href={english ? "/en/home" : "/"} className="inline-block self-start">
               <span className="block rounded-xl bg-white px-5 py-3 shadow-[0_2px_16px_rgba(0,0,0,0.18)]">
                 <Image
                   src={logoUrl}
@@ -68,7 +108,9 @@ export function SiteFooter() {
             </Link>
 
             <p className="max-w-[22rem] text-[14px] leading-relaxed text-white/55">
-              Managementberatung für Strategie, Digitalisierung, Vertrieb und Veränderung : Schweizer Präzision mit messbaren Resultaten.
+              {english
+                ? "Management consulting for strategy, digitalization, sales and change : Swiss precision with measurable results."
+                : "Managementberatung für Strategie, Digitalisierung, Vertrieb und Veränderung : Schweizer Präzision mit messbaren Resultaten."}
             </p>
 
             {/* Social links */}
@@ -91,36 +133,30 @@ export function SiteFooter() {
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr]">
             {/* Column: Leistungen */}
             <FooterNavColumn
-              label="Leistungen"
-              items={[
-                { href: "/leistungen", label: "Überblick" },
-                { href: "/projectfitcheck", label: "Project Reality Check" },
-                { href: "/fokusthemen/digitale-transformation", label: "Digitale Transformation" },
-                { href: "/fokusthemen/unternehmensstrategie", label: "Unternehmensstrategie" },
-                { href: "/fokusthemen/vertriebmarketing", label: "Vertrieb & Marketing" },
-                { href: "/fokusthemen/veränderungsmanagement", label: "Veränderungsmanagement" },
-                { href: "/fokusthemen/prozessoptimierung", label: "Prozessoptimierung" },
-                { href: "/fokusthemen/projektmanagement", label: "Projektmanagement" },
-              ]}
+              label={english ? "Services" : "Leistungen"}
+              items={servicesLinks}
             />
 
             {/* Column: Unternehmen */}
             <FooterNavColumn
-              label="Unternehmen"
-              items={[
-                { href: "/executive-search", label: "Executive Search" },
-                { href: "/executive-search/vakanzen", label: "Vakanzen" },
-                { href: "/blog", label: "Insights" },
-                { href: "/ueber-uns", label: "Über uns" },
-                { href: "/kontakt", label: "Kontakt" },
-              ]}
+              label={english ? "Company" : "Unternehmen"}
+              items={companyLinks}
             />
 
             {/* Column: Kontakt */}
             <div>
-              <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">Kontakt</p>
+              <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">
+                {english ? "Contact" : "Kontakt"}
+              </p>
               <div className="space-y-3 text-[14px] leading-snug text-white/70">
-                <p>{siteConfig.footerAddressHinwil}</p>
+                <div>
+                  <p className="text-white/40">{english ? "Head office" : "Hauptsitz"}</p>
+                  <p>{siteConfig.footerAddressHinwil}</p>
+                </div>
+                <div>
+                  <p className="text-white/40">{english ? "Additional location" : "Weiterer Standort"}</p>
+                  <p>{siteConfig.footerAddressZurich}</p>
+                </div>
                 <a
                   href={`mailto:${siteConfig.emailPrimary}`}
                   className="block transition-colors duration-150 hover:text-white"
@@ -136,7 +172,7 @@ export function SiteFooter() {
               </div>
 
               <a
-                href={siteConfig.bookingUrlDe}
+                href={english ? siteConfig.bookingUrlEn : siteConfig.bookingUrlDe}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#c9a96e]/40 bg-[#c9a96e]/10 px-4 py-2 text-[13px] font-medium text-[#c9a96e] transition-all duration-200 hover:border-[#c9a96e]/70 hover:bg-[#c9a96e]/20"
@@ -146,7 +182,7 @@ export function SiteFooter() {
                   <path d="M1 6h12" stroke="currentColor" strokeWidth="1.3" />
                   <path d="M4 1v2M10 1v2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
                 </svg>
-                Termin buchen
+                {english ? "Book a call" : "Termin buchen"}
               </a>
             </div>
           </div>
@@ -155,13 +191,14 @@ export function SiteFooter() {
         {/* ── Bottom bar ── */}
         <div className="flex flex-col gap-3 border-t border-white/[0.09] py-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-[12px] text-white/35">
-            © {year} {siteConfig.company} · Alle Rechte vorbehalten
+            © {year} {siteConfig.company} · {english ? "All rights reserved" : "Alle Rechte vorbehalten"}
           </p>
-          <nav aria-label="Rechtliches" className="flex flex-wrap gap-x-5 gap-y-1">
+          <nav aria-label={english ? "Footer links" : "Rechtliches"} className="flex flex-wrap gap-x-5 gap-y-1">
             {[
-              { href: "/legal-policy", label: "Impressum" },
-              { href: "/privacy-policy", label: "Datenschutz" },
-              { href: "/en/home", label: "English" },
+              { href: "/legal-policy", label: english ? "Legal notice" : "Impressum" },
+              { href: "/privacy-policy", label: english ? "Privacy" : "Datenschutz" },
+              { href: localizedPath(pathname, "de"), label: "DE" },
+              { href: localizedPath(pathname, "en"), label: "EN" },
             ].map(({ href, label }) => (
               <Link
                 key={href}

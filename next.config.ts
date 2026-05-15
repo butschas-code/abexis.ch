@@ -8,6 +8,16 @@ const nextConfig: NextConfig = {
         destination: "/executive-search",
         permanent: true,
       },
+      {
+        source: "/projectfitcheck",
+        destination: "/projectrealitycheck",
+        statusCode: 301,
+      },
+      {
+        source: "/en/projectfitcheck",
+        destination: "/en/projectrealitycheck",
+        statusCode: 301,
+      },
     ];
   },
   images: {
