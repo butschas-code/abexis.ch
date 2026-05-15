@@ -414,6 +414,16 @@ export function AdminPostsManager() {
                           onPublish={() => void handlePublish(p)}
                           onUnpublish={() => void handleUnpublish(p)}
                         />
+                        {p.status === "published" ? (
+                          <button
+                            type="button"
+                            disabled={busyId === p.id}
+                            onClick={() => void handleUnpublish(p)}
+                            className="hidden rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-[12px] font-medium text-[var(--brand-900)] shadow-[0_1px_0_rgba(0,0,0,0.03)] transition hover:bg-[var(--apple-bg-subtle)] disabled:opacity-50 md:inline-flex md:items-center"
+                          >
+                            Zurückziehen
+                          </button>
+                        ) : null}
                         <button
                           type="button"
                           disabled={busyId === p.id}
