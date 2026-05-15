@@ -399,7 +399,7 @@ export function AdminPostsManager() {
                       {formatWhen(p.publishedAt)}
                     </td>
                     <td className="px-4 py-3.5 pr-5 text-right">
-                      <div className="flex justify-end gap-2">
+                      <div className="flex flex-wrap justify-end gap-2">
                         <Link
                           href={CMS_PATHS.adminPostEdit(p.id)}
                           className="hidden rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-[12px] font-medium text-[var(--brand-900)] shadow-[0_1px_0_rgba(0,0,0,0.03)] transition hover:bg-[var(--apple-bg-subtle)] sm:inline-flex sm:items-center"
@@ -419,7 +419,7 @@ export function AdminPostsManager() {
                             type="button"
                             disabled={busyId === p.id}
                             onClick={() => void handleUnpublish(p)}
-                            className="hidden rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-[12px] font-medium text-[var(--brand-900)] shadow-[0_1px_0_rgba(0,0,0,0.03)] transition hover:bg-[var(--apple-bg-subtle)] disabled:opacity-50 md:inline-flex md:items-center"
+                            className="inline-flex items-center rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-[12px] font-medium text-[var(--brand-900)] shadow-[0_1px_0_rgba(0,0,0,0.03)] transition hover:bg-[var(--apple-bg-subtle)] disabled:opacity-50"
                           >
                             Zurückziehen
                           </button>
@@ -428,7 +428,7 @@ export function AdminPostsManager() {
                           type="button"
                           disabled={busyId === p.id}
                           onClick={() => setDeleteTarget({ id: p.id, title: p.title })}
-                          className="hidden rounded-full border border-red-200 bg-white px-3 py-1.5 text-[12px] font-medium text-red-700 shadow-[0_1px_0_rgba(0,0,0,0.03)] transition hover:border-red-300 hover:bg-red-50 disabled:opacity-50 md:inline-flex md:items-center"
+                          className="inline-flex items-center rounded-full border border-red-200 bg-white px-3 py-1.5 text-[12px] font-medium text-red-700 shadow-[0_1px_0_rgba(0,0,0,0.03)] transition hover:border-red-300 hover:bg-red-50 disabled:opacity-50"
                         >
                           Löschen
                         </button>
