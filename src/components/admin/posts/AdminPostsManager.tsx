@@ -414,6 +414,14 @@ export function AdminPostsManager() {
                           onPublish={() => void handlePublish(p)}
                           onUnpublish={() => void handleUnpublish(p)}
                         />
+                        <button
+                          type="button"
+                          disabled={busyId === p.id}
+                          onClick={() => setDeleteTarget({ id: p.id, title: p.title })}
+                          className="hidden rounded-full border border-red-200 bg-white px-3 py-1.5 text-[12px] font-medium text-red-700 shadow-[0_1px_0_rgba(0,0,0,0.03)] transition hover:border-red-300 hover:bg-red-50 disabled:opacity-50 md:inline-flex md:items-center"
+                        >
+                          Löschen
+                        </button>
                       </div>
                     </td>
                   </tr>
