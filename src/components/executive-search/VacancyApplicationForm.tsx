@@ -77,6 +77,7 @@ export function VacancyApplicationForm({
   submitButtonLabel,
   copy,
   formIdPrefix = "bewerbung",
+  privacyHref = "/privacy-policy",
 }: {
   vacancyId: string;
   vacancyTitle: string;
@@ -88,6 +89,7 @@ export function VacancyApplicationForm({
   copy?: Partial<VacancyApplicationFormCopy>;
   /** Keeps field ids unique when multiple forms appear on one page. */
   formIdPrefix?: string;
+  privacyHref?: string;
 }) {
   const [form, setForm] = useState(initial);
   const [file, setFile] = useState<File | null>(null);
@@ -265,7 +267,7 @@ export function VacancyApplicationForm({
         />
         <span>
           {texts.consentPrefix}{" "}
-          <Link href="/privacy-policy" className="font-medium text-brand-900 underline-offset-4 hover:underline">
+          <Link href={privacyHref} className="font-medium text-brand-900 underline-offset-4 hover:underline">
             {texts.privacyLinkLabel}
           </Link>
           {texts.consentSuffix}

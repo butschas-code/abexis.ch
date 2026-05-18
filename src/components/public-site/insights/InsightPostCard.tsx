@@ -9,14 +9,23 @@ type Props = {
   categoryLine?: string | null;
   authorName?: string | null;
   sizes?: string;
+  dateLocale?: string;
   /** Slightly denser variant for secondary grid columns */
   density?: "comfortable" | "compact";
 };
 
-export function InsightPostCard({ post, href, categoryLine, authorName, sizes, density = "comfortable" }: Props) {
+export function InsightPostCard({
+  post,
+  href,
+  categoryLine,
+  authorName,
+  sizes,
+  dateLocale = "de-CH",
+  density = "comfortable",
+}: Props) {
   const img = resolvePostHeroImageUrl(post);
   const dateStr = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString("de-CH", {
+    ? new Date(post.publishedAt).toLocaleDateString(dateLocale, {
         day: "numeric",
         month: "long",
         year: "numeric",

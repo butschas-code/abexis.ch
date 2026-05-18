@@ -215,7 +215,7 @@ export default async function EnglishExecutiveSearchPage() {
                     Perspectives & articles
                   </h2>
                 </div>
-                <Link href="/blog" className="shrink-0 text-[14px] font-medium text-brand-900 hover:underline">
+                <Link href="/en/blog" className="shrink-0 text-[14px] font-medium text-brand-900 hover:underline">
                   All insights →
                 </Link>
               </div>
@@ -226,6 +226,7 @@ export default async function EnglishExecutiveSearchPage() {
                       post={post}
                       href={`/executive-search/blog/${encodeURIComponent(post.slug)}`}
                       density="compact"
+                      dateLocale="en-GB"
                     />
                   </li>
                 ))}

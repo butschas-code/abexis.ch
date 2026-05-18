@@ -95,7 +95,7 @@ export default function EnglishHomePage() {
 
       <HomeLeistungenGridSection content={homeLeistungenBlockEn} startLabel="Start here" moreLabel="Learn more" />
 
-      <HomeBlogTeasers heading="From the blog" allLabel="All articles" dateLocale="en-GB" />
+      <HomeBlogTeasers heading="From the blog" allLabel="All articles" allHref="/en/blog" dateLocale="en-GB" />
 
       <HomeVacancyTeasers
         heading="Current vacancies"

@@ -9,12 +9,29 @@ type Props = {
   hrefFor: (post: PublishedPostWithId) => string;
   categoryLine?: string | null;
   authorName?: string | null;
+  locale?: "de" | "en";
 };
 
-export function InsightsFeatured({ primary, secondary = [], hrefFor, categoryLine, authorName }: Props) {
+const copy = {
+  de: {
+    dateLocale: "de-CH",
+    shortDateLocale: "de-CH",
+    eyebrow: "Empfehlung",
+    heading: "Herausgehoben",
+  },
+  en: {
+    dateLocale: "en-GB",
+    shortDateLocale: "en-GB",
+    eyebrow: "Recommendation",
+    heading: "Featured",
+  },
+} as const;
+
+export function InsightsFeatured({ primary, secondary = [], hrefFor, categoryLine, authorName, locale = "de" }: Props) {
+  const texts = copy[locale];
   const hero = resolvePostHeroImageUrl(primary);
   const dateStr = primary.publishedAt
-    ? new Date(primary.publishedAt).toLocaleDateString("de-CH", {
+    ? new Date(primary.publishedAt).toLocaleDateString(texts.dateLocale, {
         day: "numeric",
         month: "long",
         year: "numeric",
@@ -25,9 +42,9 @@ export function InsightsFeatured({ primary, secondary = [], hrefFor, categoryLin
     <section className="mb-14 md:mb-20">
       <div className="mb-5 flex items-end justify-between gap-4">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Empfehlung</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">{texts.eyebrow}</p>
           <h2 className="mt-1.5 font-serif text-[22px] font-medium tracking-[-0.02em] text-[#1d1d1f] md:text-[26px]">
-            Herausgehoben
+            {texts.heading}
           </h2>
         </div>
         <div className="hidden h-px flex-1 translate-y-[-10px] bg-gradient-to-r from-transparent via-black/[0.12] to-transparent md:block" />
@@ -76,7 +93,7 @@ export function InsightsFeatured({ primary, secondary = [], hrefFor, categoryLin
             {secondary.map((post) => {
               const smImg = resolvePostHeroImageUrl(post);
               const smDate = post.publishedAt
-                ? new Date(post.publishedAt).toLocaleDateString("de-CH", {
+                ? new Date(post.publishedAt).toLocaleDateString(texts.shortDateLocale, {
                     day: "numeric",
                     month: "short",
                     year: "numeric",

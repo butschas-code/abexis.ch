@@ -59,10 +59,14 @@ export async function getHomeBlogTeasers(): Promise<HomeBlogTeaser[]> {
 export async function HomeBlogTeasers({
   heading = "Aus dem Blog",
   allLabel = "Alle Beiträge",
+  allHref = "/blog",
+  itemBaseHref = "/blog",
   dateLocale = "de-CH",
 }: {
   heading?: string;
   allLabel?: string;
+  allHref?: string;
+  itemBaseHref?: string;
   dateLocale?: string;
 } = {}) {
   const posts = await getHomeBlogTeasers();
@@ -78,7 +82,7 @@ export async function HomeBlogTeasers({
             </h2>
           </div>
           <Link
-            href="/blog"
+            href={allHref}
             className="min-h-11 shrink-0 self-start text-[15px] font-medium text-brand-900 transition-colors duration-200 hover:text-brand-500 hover:underline md:self-auto"
           >
             {allLabel}
@@ -88,7 +92,7 @@ export async function HomeBlogTeasers({
           {posts.map((p) => (
             <Link
               key={p.slug}
-              href={`/blog/${p.slug}`}
+              href={`${itemBaseHref}/${p.slug}`}
               className="group overflow-hidden rounded-[22px] bg-white shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] transition hover:-translate-y-0.5 hover:shadow-[var(--apple-shadow-lg)] sm:rounded-[28px] active:scale-[0.99]"
             >
               <div className="relative isolate aspect-[16/9] w-full overflow-hidden bg-[#f5f5f7]">

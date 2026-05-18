@@ -6,7 +6,11 @@ const germanToEnglish: Record<string, string> = {
   "/projectfitcheck": "/en/projectrealitycheck",
   "/projectrealitycheck": "/en/projectrealitycheck",
   "/kontakt": "/en/kontakt",
+  "/termin": "/en/termin",
   "/ueber-uns": "/en/ueber-uns",
+  "/blog": "/en/blog",
+  "/legal-policy": "/en/legal-policy",
+  "/privacy-policy": "/en/privacy-policy",
   "/executive-search": "/en/executive-search",
   "/executive-search/vakanzen": "/en/executive-search/vakanzen",
   "/leistungen/executive-search": "/en/leistungen/executive-search",
@@ -23,6 +27,9 @@ const englishAliasesToCanonical: Record<string, string> = {
   "/en/services": "/en/leistungen",
   "/en/contact": "/en/kontakt",
   "/en/about": "/en/ueber-uns",
+  "/en/insights": "/en/blog",
+  "/en/legal": "/en/legal-policy",
+  "/en/privacy": "/en/privacy-policy",
   "/en/executive-search/vacancies": "/en/executive-search/vakanzen",
   "/en/services/executive-search": "/en/leistungen/executive-search",
   "/en/topics/digital-transformation": "/en/fokusthemen/digitale-transformation",
@@ -52,6 +59,13 @@ englishToGerman["/en/home"] = "/";
 englishToGerman["/en/services"] = "/leistungen";
 englishToGerman["/en/contact"] = "/kontakt";
 englishToGerman["/en/about"] = "/ueber-uns";
+englishToGerman["/en/termin"] = "/termin";
+englishToGerman["/en/blog"] = "/blog";
+englishToGerman["/en/insights"] = "/blog";
+englishToGerman["/en/legal-policy"] = "/legal-policy";
+englishToGerman["/en/privacy-policy"] = "/privacy-policy";
+englishToGerman["/en/legal"] = "/legal-policy";
+englishToGerman["/en/privacy"] = "/privacy-policy";
 englishToGerman["/en/executive-search/vacancies"] = "/executive-search/vakanzen";
 englishToGerman["/en/services/executive-search"] = "/leistungen/executive-search";
 englishToGerman["/en/topics/digital-transformation"] = "/fokusthemen/digitale-transformation";

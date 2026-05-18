@@ -84,9 +84,7 @@ function makeSchema(copy: (typeof formCopy)["de" | "en"]) {
   });
 }
 
-const schema = makeSchema(formCopy.de);
-
-type Values = z.infer<typeof schema>;
+type Values = z.infer<ReturnType<typeof makeSchema>>;
 
 const initial = {
   name: "",
@@ -107,6 +105,7 @@ type KontaktPageFormProps = {
 export function KontaktPageForm({ bookingUrl, locale = "de" }: KontaktPageFormProps) {
   const copy = formCopy[locale];
   const activeSchema = makeSchema(copy);
+  const privacyHref = locale === "en" ? "/en/privacy-policy" : "/privacy-policy";
   const formId = useId();
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState<Partial<Record<keyof Values | "privacyAccepted", string>>>({});
@@ -316,7 +315,7 @@ export function KontaktPageForm({ bookingUrl, locale = "de" }: KontaktPageFormPr
             <span>
               {copy.privacyBefore}{" "}
               <Link
-                href="/privacy-policy"
+                href={privacyHref}
                 className="font-medium text-brand-900 underline-offset-4 hover:text-brand-500 hover:underline"
                 target="_blank"
                 rel="noopener noreferrer"

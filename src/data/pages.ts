@@ -103,7 +103,7 @@ export const mainNavEn: MainNavItem[] = [
       { href: "/en/executive-search/vakanzen", label: "Vacancies" },
     ],
   },
-  { href: "/blog", label: "Insights" },
+  { href: "/en/blog", label: "Insights" },
   { href: "/en/ueber-uns", label: "About" },
   { href: "/en/kontakt", label: "Contact" },
 ];

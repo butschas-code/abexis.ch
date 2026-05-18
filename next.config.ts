@@ -39,6 +39,26 @@ const nextConfig: NextConfig = {
         statusCode: 301,
       },
       {
+        source: "/en/insights",
+        destination: "/en/blog",
+        statusCode: 301,
+      },
+      {
+        source: "/en/legal",
+        destination: "/en/legal-policy",
+        statusCode: 301,
+      },
+      {
+        source: "/en/privacy",
+        destination: "/en/privacy-policy",
+        statusCode: 301,
+      },
+      {
+        source: "/en/blog/:slug",
+        destination: "/blog/:slug",
+        statusCode: 301,
+      },
+      {
         source: "/en/executive-search/vacancies",
         destination: "/en/executive-search/vakanzen",
         statusCode: 301,

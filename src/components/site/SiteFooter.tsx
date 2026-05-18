@@ -56,7 +56,7 @@ export function SiteFooter() {
     ? [
         { href: "/en/executive-search", label: "Executive Search" },
         { href: "/en/executive-search/vakanzen", label: "Vacancies" },
-        { href: "/blog", label: "Insights" },
+        { href: "/en/blog", label: "Insights" },
         { href: "/en/ueber-uns", label: "About" },
         { href: "/en/kontakt", label: "Contact" },
       ]
@@ -195,8 +195,8 @@ export function SiteFooter() {
           </p>
           <nav aria-label={english ? "Footer links" : "Rechtliches"} className="flex flex-wrap gap-x-5 gap-y-1">
             {[
-              { href: "/legal-policy", label: english ? "Legal notice" : "Impressum" },
-              { href: "/privacy-policy", label: english ? "Privacy" : "Datenschutz" },
+              { href: english ? "/en/legal-policy" : "/legal-policy", label: english ? "Legal notice" : "Impressum" },
+              { href: english ? "/en/privacy-policy" : "/privacy-policy", label: english ? "Privacy" : "Datenschutz" },
               { href: localizedPath(pathname, "de"), label: "DE" },
               { href: localizedPath(pathname, "en"), label: "EN" },
             ].map(({ href, label }) => (

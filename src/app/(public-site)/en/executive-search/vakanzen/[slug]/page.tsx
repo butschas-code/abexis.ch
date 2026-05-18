@@ -204,6 +204,7 @@ export default async function EnglishVacancyDetailPage({ params }: Props) {
                   submitButtonLabel={spontaneous ? "Submit profile" : undefined}
                   copy={APPLICATION_FORM_COPY}
                   formIdPrefix={`vacancy-${v.slug.replace(/[^a-z0-9-]+/gi, "-")}`}
+                  privacyHref="/en/privacy-policy"
                 />
               </div>
             </div>
