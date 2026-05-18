@@ -4,6 +4,7 @@ import { MotionSection } from "@/components/motion/MotionSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
+import { danielSengstagContentEn } from "@/data/daniel-sengstag";
 import { homeTestimonialsEn } from "@/data/home-testimonials";
 import { footerPartners, teamOrder, teamProfiles } from "@/data/pages";
 import { teamProfilesEn } from "@/data/team-profiles-en";
@@ -55,6 +56,8 @@ export default function EnglishAboutPage() {
             const p = teamProfiles[slug];
             const english = teamProfilesEn[slug];
             const isDaniel = slug === "danielsengstag";
+            const profileTitle = isDaniel ? danielSengstagContentEn.hero.credentials : english.title;
+            const profileBody = isDaniel ? danielSengstagContentEn.hero.lead : english.body;
             return isDaniel ? (
               <article
                 key={slug}
@@ -83,10 +86,10 @@ export default function EnglishAboutPage() {
                         {p.name}
                       </Link>
                     </h3>
-                    <p className="mt-1.5 text-[13px] font-medium leading-snug text-[#86868b]">{english.title}</p>
+                    <p className="mt-1.5 text-[13px] font-medium leading-snug text-[#86868b]">{profileTitle}</p>
                   </div>
 
-                  <p className="mt-4 line-clamp-4 text-[15px] leading-relaxed text-[#6e6e73]">{english.body}</p>
+                  <p className="mt-4 line-clamp-4 text-[15px] leading-relaxed text-[#6e6e73]">{profileBody}</p>
 
                   <div className="mt-auto flex flex-wrap items-center gap-3 border-t border-black/[0.06] pt-5">
                     <Link
@@ -127,11 +130,11 @@ export default function EnglishAboutPage() {
                       </Link>
                     </h3>
                     <p className="mt-1 line-clamp-2 text-[12.5px] font-medium leading-snug text-[#86868b]">
-                      {english.title}
+                      {profileTitle}
                     </p>
                   </div>
                 </div>
-                <p className="mt-4 line-clamp-3 text-[14.5px] leading-relaxed text-[#6e6e73]">{english.body}</p>
+                <p className="mt-4 line-clamp-3 text-[14.5px] leading-relaxed text-[#6e6e73]">{profileBody}</p>
                 <div className="mt-auto border-t border-black/[0.06] pt-4">
                   <Link
                     href={`/en/${slug}`}
