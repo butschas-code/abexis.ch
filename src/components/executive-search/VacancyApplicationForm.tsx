@@ -14,6 +14,59 @@ const initial = {
   consent: false,
 };
 
+type VacancyApplicationFormCopy = {
+  defaultHeading: string;
+  spontaneousHeading: string;
+  submitButton: string;
+  consentError: string;
+  turnstileError: string;
+  sendError: string;
+  spontaneousSuccessTitle: string;
+  successTitle: string;
+  spontaneousSuccessMessage: string;
+  successMessage: string;
+  positionLabel: string;
+  nameLabel: string;
+  emailLabel: string;
+  phoneLabel: string;
+  messageLabel: string;
+  messagePlaceholder: string;
+  filesLabel: string;
+  filesHint: string;
+  consentPrefix: string;
+  privacyLinkLabel: string;
+  consentSuffix: string;
+  sendingLabel: string;
+};
+
+const DEFAULT_COPY: VacancyApplicationFormCopy = {
+  defaultHeading: "Jetzt bewerben",
+  spontaneousHeading: "Spontanbewerbung",
+  submitButton: "Bewerbung einreichen",
+  consentError: "Bitte bestätigen Sie die Datenschutzerklärung.",
+  turnstileError: "Bitte bestätigen Sie den Bot-Schutz.",
+  sendError: "Es gab ein Problem beim Senden. Bitte versuchen Sie es erneut.",
+  spontaneousSuccessTitle: "Spontanbewerbung eingegangen",
+  successTitle: "Bewerbung erfolgreich gesendet",
+  spontaneousSuccessMessage:
+    "Vielen Dank — wir prüfen Ihre Unterlagen vertraulich und melden uns, sobald sich eine Passung zu einem Mandat ergibt.",
+  successMessage:
+    "Vielen Dank für das Interesse an der Position als {vacancyTitle}. Wir werden uns in Kürze mit Ihnen in Verbindung setzen.",
+  positionLabel: "Position",
+  nameLabel: "Name",
+  emailLabel: "E-Mail",
+  phoneLabel: "Telefon",
+  messageLabel: "Nachricht / Motivation",
+  messagePlaceholder: "Ihre Nachricht oder Kurzmotivation an uns...",
+  filesLabel: "Lebenslauf & Dokumente hochladen",
+  filesHint: "Erlaubt: PDF, Word oder Bild. Max 10MB.",
+  consentPrefix:
+    "Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung der Anfrage verwendet werden. Hinweise zur Datenverarbeitung finden sich in der",
+  privacyLinkLabel: "Datenschutzerklärung",
+  consentSuffix: ".",
+  sendingLabel: "Wird gesendet…",
+};
+
 export function VacancyApplicationForm({
   vacancyId,
   vacancyTitle,
@@ -22,6 +75,7 @@ export function VacancyApplicationForm({
   heading,
   intro,
   submitButtonLabel,
+  copy,
   formIdPrefix = "bewerbung",
 }: {
   vacancyId: string;
@@ -31,6 +85,7 @@ export function VacancyApplicationForm({
   heading?: string;
   intro?: string;
   submitButtonLabel?: string;
+  copy?: Partial<VacancyApplicationFormCopy>;
   /** Keeps field ids unique when multiple forms appear on one page. */
   formIdPrefix?: string;
 }) {
@@ -41,22 +96,24 @@ export function VacancyApplicationForm({
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [turnstileResetSignal, setTurnstileResetSignal] = useState(0);
   const reduce = useReducedMotion();
+  const texts = { ...DEFAULT_COPY, ...copy };
+  const spontaneousMode = jobType === "spontanbewerbung" || isSpontaneous;
 
   const resolvedHeading =
-    heading ?? (jobType === "spontanbewerbung" || isSpontaneous ? "Spontanbewerbung" : "Jetzt bewerben");
-  const resolvedSubmit = submitButtonLabel ?? "Bewerbung einreichen";
+    heading ?? (spontaneousMode ? texts.spontaneousHeading : texts.defaultHeading);
+  const resolvedSubmit = submitButtonLabel ?? texts.submitButton;
 
   const hp = formIdPrefix.replace(/\s+/g, "-").toLowerCase();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.consent) {
-      setErrorMessage("Bitte bestätigen Sie die Datenschutzerklärung.");
+      setErrorMessage(texts.consentError);
       setStatus("error");
       return;
     }
     if (!turnstileToken) {
-      setErrorMessage("Bitte bestätigen Sie den Bot-Schutz.");
+      setErrorMessage(texts.turnstileError);
       setStatus("error");
       return;
     }
@@ -91,7 +148,7 @@ export function VacancyApplicationForm({
     } catch (err) {
       console.error(err);
       setStatus("error");
-      setErrorMessage("Es gab ein Problem beim Senden. Bitte versuchen Sie es erneut.");
+      setErrorMessage(texts.sendError);
       setTurnstileToken(null);
       setTurnstileResetSignal((n) => n + 1);
     }
@@ -113,12 +170,12 @@ export function VacancyApplicationForm({
           ✓
         </div>
         <h3 className="text-[19px] font-medium text-[#1d1d1f]">
-          {isSpontaneous || jobType === "spontanbewerbung" ? "Spontanbewerbung eingegangen" : "Bewerbung erfolgreich gesendet"}
+          {spontaneousMode ? texts.spontaneousSuccessTitle : texts.successTitle}
         </h3>
         <p className="mt-2 text-[15px] text-[#6e6e73]">
-          {isSpontaneous || jobType === "spontanbewerbung"
-            ? `Vielen Dank — wir prüfen Ihre Unterlagen vertraulich und melden uns, sobald sich eine Passung zu einem Mandat ergibt.`
-            : `Vielen Dank für das Interesse an der Position als ${vacancyTitle}. Wir werden uns in Kürze mit Ihnen in Verbindung setzen.`}
+          {spontaneousMode
+            ? texts.spontaneousSuccessMessage
+            : texts.successMessage.replace("{vacancyTitle}", vacancyTitle)}
         </p>
       </div>
     );
@@ -139,21 +196,21 @@ export function VacancyApplicationForm({
         {intro ? (
           <p className="mt-2 text-[14px] leading-relaxed text-[#6e6e73]">{intro}</p>
         ) : (
-          <p className="mt-1 text-[13px] text-[#86868b]">Position: {vacancyTitle}</p>
+          <p className="mt-1 text-[13px] text-[#86868b]">{texts.positionLabel}: {vacancyTitle}</p>
         )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field
           id={`${hp}-name`}
-          label="Name"
+          label={texts.nameLabel}
           value={form.name}
           onChange={(v) => setForm((f) => ({ ...f, name: v }))}
           required
         />
         <Field
           id={`${hp}-email`}
-          label="E-Mail"
+          label={texts.emailLabel}
           type="email"
           value={form.email}
           onChange={(v) => setForm((f) => ({ ...f, email: v }))}
@@ -162,7 +219,7 @@ export function VacancyApplicationForm({
         <div className="sm:col-span-2">
           <Field
             id={`${hp}-phone`}
-            label="Telefon"
+            label={texts.phoneLabel}
             type="tel"
             value={form.phone}
             onChange={(v) => setForm((f) => ({ ...f, phone: v }))}
@@ -172,7 +229,7 @@ export function VacancyApplicationForm({
 
       <div>
         <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]" htmlFor={`${hp}-msg`}>
-          Nachricht / Motivation
+          {texts.messageLabel}
         </label>
         <textarea
           id={`${hp}-msg`}
@@ -180,13 +237,13 @@ export function VacancyApplicationForm({
           value={form.message}
           onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
           className="focus-ring mt-2 w-full rounded-xl border border-black/[0.08] bg-[#f5f5f7] px-3 py-2 text-[15px] text-[#1d1d1f] placeholder:text-[#86868b]"
-          placeholder="Ihre Nachricht oder Kurzmotivation an uns..."
+          placeholder={texts.messagePlaceholder}
         />
       </div>
 
       <div>
         <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]" htmlFor={`${hp}-cv`}>
-          Lebenslauf & Dokumente hochladen
+          {texts.filesLabel}
         </label>
         <input
           id={`${hp}-cv`}
@@ -196,7 +253,7 @@ export function VacancyApplicationForm({
           required
           className="w-full text-[13px] text-[#6e6e73] file:mr-4 file:rounded-full file:border-0 file:bg-brand-900/[0.08] file:px-4 file:py-2 file:text-[13px] file:font-semibold file:text-brand-900 hover:file:bg-brand-900/[0.12] transition file:cursor-pointer custom-file-input"
         />
-        <p className="mt-1.5 text-[11px] text-[#86868b]">Erlaubt: PDF, Word oder Bild. Max 10MB.</p>
+        <p className="mt-1.5 text-[11px] text-[#86868b]">{texts.filesHint}</p>
       </div>
 
       <label className="flex items-start gap-3 pt-2 text-[15px] leading-snug text-[#6e6e73]">
@@ -207,11 +264,11 @@ export function VacancyApplicationForm({
           className="focus-ring mt-1 shrink-0 rounded border-black/20"
         />
         <span>
-          Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung der Anfrage verwendet werden. Hinweise zur Datenverarbeitung finden sich in der{" "}
+          {texts.consentPrefix}{" "}
           <Link href="/privacy-policy" className="font-medium text-brand-900 underline-offset-4 hover:underline">
-            Datenschutzerklärung
+            {texts.privacyLinkLabel}
           </Link>
-          .
+          {texts.consentSuffix}
         </span>
       </label>
 
@@ -219,7 +276,7 @@ export function VacancyApplicationForm({
         resetSignal={turnstileResetSignal}
         onVerify={(token) => {
           setTurnstileToken(token);
-          if (token && errorMessage === "Bitte bestätigen Sie den Bot-Schutz.") setErrorMessage("");
+          if (token && errorMessage === texts.turnstileError) setErrorMessage("");
         }}
       />
 
@@ -229,7 +286,7 @@ export function VacancyApplicationForm({
           disabled={status === "sending" || !isTurnstileConfigured()}
           className="focus-ring rounded-full bg-[#26337c] px-6 py-2.5 text-[13px] font-semibold uppercase tracking-[0.15em] text-white transition hover:bg-[#324891] disabled:opacity-50"
         >
-          {status === "sending" ? "Wird gesendet…" : resolvedSubmit}
+          {status === "sending" ? texts.sendingLabel : resolvedSubmit}
         </button>
         {status === "error" && (
           <p className="text-[13px] font-medium text-[#e02424]">{errorMessage}</p>

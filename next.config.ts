@@ -44,6 +44,11 @@ const nextConfig: NextConfig = {
         statusCode: 301,
       },
       {
+        source: "/en/executive-search/vacancies/:slug",
+        destination: "/en/executive-search/vakanzen/:slug",
+        statusCode: 301,
+      },
+      {
         source: "/en/topics/digital-transformation",
         destination: "/en/fokusthemen/digitale-transformation",
         statusCode: 301,

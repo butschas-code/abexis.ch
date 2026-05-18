@@ -78,12 +78,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const { listPublishedVacancies } = await import("@/public-site/cms/vacancy");
     const published = await listPublishedVacancies(100);
-    vacancies = published.map((v) => ({
-      url: `${base}/executive-search/vakanzen/${encodeURIComponent(v.slug)}`,
-      lastModified: v.publishedAt ? new Date(v.publishedAt) : new Date(v.updatedAt),
-      changeFrequency: "weekly" as const,
-      priority: 0.65,
-    }));
+    vacancies = published.flatMap((v) => {
+      const lastModified = v.publishedAt ? new Date(v.publishedAt) : new Date(v.updatedAt);
+      return [
+        {
+          url: `${base}/executive-search/vakanzen/${encodeURIComponent(v.slug)}`,
+          lastModified,
+          changeFrequency: "weekly" as const,
+          priority: 0.65,
+        },
+        {
+          url: `${base}/en/executive-search/vakanzen/${encodeURIComponent(v.slug)}`,
+          lastModified,
+          changeFrequency: "weekly" as const,
+          priority: 0.65,
+        },
+      ];
+    });
   } catch (err) {
     console.error("[sitemap] Failed to fetch vacancies", err);
   }

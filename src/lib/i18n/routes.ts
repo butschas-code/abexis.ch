@@ -59,12 +59,24 @@ export function localizedPath(pathname: string, locale: SiteLocale) {
   const cleanPath = normalizePath(pathname);
 
   if (locale === "en") {
-    if (isEnglishPath(cleanPath)) return englishAliasesToCanonical[cleanPath] ?? cleanPath;
+    if (isEnglishPath(cleanPath)) return canonicalEnglishPath(cleanPath);
+    if (cleanPath.startsWith("/executive-search/vakanzen/")) return `/en${cleanPath}`;
     return germanToEnglish[cleanPath] ?? "/en/home";
   }
 
   if (!isEnglishPath(cleanPath)) return cleanPath === "/projectfitcheck" ? "/projectrealitycheck" : cleanPath;
+  if (cleanPath.startsWith("/en/executive-search/vakanzen/")) return cleanPath.replace(/^\/en/, "");
+  if (cleanPath.startsWith("/en/executive-search/vacancies/")) {
+    return cleanPath.replace(/^\/en\/executive-search\/vacancies/, "/executive-search/vakanzen");
+  }
   return englishToGerman[cleanPath] ?? "/";
+}
+
+function canonicalEnglishPath(pathname: string) {
+  if (pathname.startsWith("/en/executive-search/vacancies/")) {
+    return pathname.replace(/^\/en\/executive-search\/vacancies/, "/en/executive-search/vakanzen");
+  }
+  return englishAliasesToCanonical[pathname] ?? pathname;
 }
 
 function normalizePath(pathname: string) {
