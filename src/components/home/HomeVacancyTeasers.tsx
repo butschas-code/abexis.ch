@@ -7,11 +7,13 @@ export async function HomeVacancyTeasers({
   allLabel = "Alle Vakanzen",
   allHref = "/executive-search/vakanzen",
   actionLabel = "Position ansehen",
+  itemBaseHref = "/executive-search/vakanzen",
 }: {
   heading?: string;
   allLabel?: string;
   allHref?: string;
   actionLabel?: string;
+  itemBaseHref?: string;
 } = {}) {
   let vacancies: Awaited<ReturnType<typeof listPublishedVacancies>> = [];
   try {
@@ -44,7 +46,7 @@ export async function HomeVacancyTeasers({
           {vacancies.map((v) => (
             <Link
               key={v.id}
-              href={`/executive-search/vakanzen/${v.slug}`}
+              href={`${itemBaseHref}/${v.slug}`}
               className="group flex flex-col justify-between overflow-hidden rounded-[1.25rem] border border-black/[0.05] bg-white p-5 shadow-[var(--apple-shadow)] ring-1 ring-transparent transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--apple-shadow-lg)] hover:ring-brand-500/20 sm:rounded-[1.5rem] sm:p-6 active:scale-[0.99]"
             >
               <div>

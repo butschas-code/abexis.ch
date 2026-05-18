@@ -11,6 +11,13 @@ const SECTORS = [
   "Beratung",
 ] as const;
 
+const DEFAULT_COPY = {
+  eyebrow: "Unsere Branchenschwerpunkte",
+  title: "Wo Tiefe auf Markt trifft",
+  body: "Klare Schwerpunkte helfen uns, Rollen präzise einzuordnen — ohne den Blick für individuelle Kontexte zu verlieren.",
+  sectors: SECTORS,
+} as const;
+
 function SectorTile({ label, index, reduce }: { label: string; index: number; reduce: boolean }) {
   return (
     <motion.div
@@ -33,10 +40,20 @@ function SectorTile({ label, index, reduce }: { label: string; index: number; re
 /**
  * Five-column industry overview — matches Executive Search visual rhythm (same tile language as HomeSectorsGrid).
  */
-export function ExecutiveSearchIndustryStrip() {
+export function ExecutiveSearchIndustryStrip({
+  eyebrow = DEFAULT_COPY.eyebrow,
+  title = DEFAULT_COPY.title,
+  body = DEFAULT_COPY.body,
+  sectors = DEFAULT_COPY.sectors,
+}: {
+  eyebrow?: string;
+  title?: string;
+  body?: string;
+  sectors?: readonly string[];
+} = {}) {
   const reduce = Boolean(useReducedMotion());
-  const firstRow = SECTORS.slice(0, 3);
-  const secondRow = SECTORS.slice(3);
+  const firstRow = sectors.slice(0, 3);
+  const secondRow = sectors.slice(3);
 
   return (
     <section id="branchenschwerpunkte" className="relative overflow-hidden border-b border-black/[0.06] py-16 sm:py-20 md:py-24">
@@ -52,12 +69,12 @@ export function ExecutiveSearchIndustryStrip() {
           transition={{ duration: 0.65, ease: [0.25, 0.1, 0.25, 1] }}
           className="mx-auto max-w-3xl text-center"
         >
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Unsere Branchenschwerpunkte</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">{eyebrow}</p>
           <h2 className="mt-3 text-[26px] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f] sm:text-[32px] md:text-[36px]">
-            Wo Tiefe auf Markt trifft
+            {title}
           </h2>
           <p className="mx-auto mt-5 max-w-[52ch] text-[16px] leading-relaxed text-[#6e6e73] sm:text-[17px]">
-            Klare Schwerpunkte helfen uns, Rollen präzise einzuordnen — ohne den Blick für individuelle Kontexte zu verlieren.
+            {body}
           </p>
         </motion.div>
 

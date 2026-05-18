@@ -2,19 +2,42 @@ import Link from "next/link";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
 import { getPublishedSpontaneousVacancy } from "@/public-site/cms/vacancy";
 
-export async function ConfidentialMandatesNotice() {
-  const ROLE_AREAS = [
+const DEFAULT_COPY = {
+  eyebrow: "Spontanbewerbung",
+  title: "Nicht jede passende Position ist öffentlich sichtbar.",
+  paragraphs: [
+    "Abexis SEARCH arbeitet regelmässig an vertraulichen Suchmandaten, die nicht auf der Website veröffentlicht werden. Wenn Sie offen für eine neue Führungs- oder Schlüsselposition sind, können Sie uns Ihr Profil auch ohne konkrete Vakanz übermitteln.",
+    "Wir prüfen vertraulich, ob Ihr Hintergrund zu aktuellen oder künftigen Mandaten passt — insbesondere in folgenden Bereichen:",
+  ],
+  roleAreas: [
     "Sales Positionen",
     "Projekt-/Programmleitung",
     "Executive Positionen",
     "Digital- und Innovationsverantwortliche",
     "Bereichsleitungen",
-  ] as const;
+  ],
+  ctaLabel: "Spontanbewerbung einreichen",
+} as const;
 
+export async function ConfidentialMandatesNotice({
+  copy = DEFAULT_COPY,
+  spontaneousFallbackHref = "/executive-search/vakanzen/spontanbewerbung",
+  linkToSpontaneousVacancy = true,
+}: {
+  copy?: {
+    eyebrow: string;
+    title: string;
+    paragraphs: readonly string[];
+    roleAreas: readonly string[];
+    ctaLabel: string;
+  };
+  spontaneousFallbackHref?: string;
+  linkToSpontaneousVacancy?: boolean;
+} = {}) {
   const spontaneous = await getPublishedSpontaneousVacancy();
-  const spontanHref = spontaneous
+  const spontanHref = linkToSpontaneousVacancy && spontaneous
     ? `/executive-search/vakanzen/${spontaneous.slug}`
-    : "/executive-search/vakanzen/spontanbewerbung";
+    : spontaneousFallbackHref;
 
   return (
     <section aria-labelledby="spontan-heading" className="border-b border-black/[0.06] bg-gradient-to-b from-[#f8faff] via-white to-[#fbfbfd] py-12 sm:py-14 md:py-16">
@@ -25,20 +48,17 @@ export async function ConfidentialMandatesNotice() {
             aria-hidden
           />
           <div className="relative max-w-3xl">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#26337c]/85">Spontanbewerbung</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#26337c]/85">{copy.eyebrow}</p>
             <h2 id="spontan-heading" className="mt-3 text-[21px] font-semibold leading-snug tracking-[-0.025em] text-[#1d1d1f] sm:text-[24px]">
-              Nicht jede passende Position ist öffentlich sichtbar.
+              {copy.title}
             </h2>
             <div className="mt-5 space-y-4 text-[15px] leading-relaxed text-[#6e6e73] sm:text-[16px]">
-              <p>
-                Abexis SEARCH arbeitet regelmässig an vertraulichen Suchmandaten, die nicht auf der Website veröffentlicht werden. Wenn Sie offen für eine neue Führungs- oder Schlüsselposition sind, können Sie uns Ihr Profil auch ohne konkrete Vakanz übermitteln.
-              </p>
-              <p>
-                Wir prüfen vertraulich, ob Ihr Hintergrund zu aktuellen oder künftigen Mandaten passt — insbesondere in folgenden Bereichen:
-              </p>
+              {copy.paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
             </div>
             <div className="mt-5 flex flex-wrap gap-x-3 gap-y-2">
-              {ROLE_AREAS.map((area) => (
+              {copy.roleAreas.map((area) => (
                 <span
                   key={area}
                   className="text-[13px] font-medium text-[#6e6e73] before:mr-2 before:text-[#b0b0b5] before:content-['·']"
@@ -52,7 +72,7 @@ export async function ConfidentialMandatesNotice() {
                 href={spontanHref}
                 className="inline-flex items-center gap-2 rounded-full bg-brand-900 px-6 py-3 text-[15px] font-medium text-white shadow-sm transition-opacity hover:opacity-90"
               >
-                Spontanbewerbung einreichen
+                {copy.ctaLabel}
                 <span aria-hidden>→</span>
               </Link>
             </div>
