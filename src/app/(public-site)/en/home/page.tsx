@@ -88,8 +88,8 @@ export default function EnglishHomePage() {
 
       <HomeWhoWeAreSection
         content={homeWhoWeAreContentEn}
-        profileHref="/en/ueber-uns"
-        profileLabel="About Abexis"
+        profileHref="/en/danielsengstag"
+        profileLabel="Profile"
         teamProfileLabel="Profile"
       />
 
