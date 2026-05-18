@@ -3,9 +3,20 @@ import type { TeamSlug } from "@/data/pages";
 export const teamProfilesEn: Record<TeamSlug, { title: string; body: string }> = {
   danielsengstag: {
     title:
-      "Troubleshooter for business units and projects, digital transformation, project leadership, interim management and change",
-    body:
-      "Daniel Sengstag combines more than 20 years of leadership experience in multinational and smaller organizations with a strong technical and business background. His work connects strategy, technology, sales, operations and implementation. He supports transformation projects, process optimization and leadership situations where a pragmatic, experienced view is needed.",
+      "Troubleshooter for business units and projects, digital transformation, project leadership, interim manager, change agent",
+    body: `Daniel Sengstag has more than 20 years of experience in corporate and business unit management in both multinational and smaller companies. He also brings broad technical experience, gathered across various industries, including the software and IT sector.
+
+With his engineering and IT background, he combines his technical expertise with his business administration experience in order to understand different situations in companies quickly and holistically.
+
+Daniel Sengstag has held roles including Country Manager and Sales Director at Siemens Industry Software, Dassault Systèmes and Ansys, and brings broad experience to his work. Based on his many years of experience in process management, PLM, CAx, Industry 4.0, Digital Twin, CRM, platforms, cloud and more, he supports transformation projects, helps companies optimize processes and contributes to margin improvement.
+
+With a pragmatic approach, implementation-oriented solutions are developed, targets are achieved and then consistently followed through. Daniel Sengstag does not work only from theory, but draws on many years of practical experience as managing director, sales director, board member, aftersales manager, project manager, developer and consultant in small and large companies.
+
+Daniel Sengstag is an engineer and has earned an Executive MBA. He is also strongly interested in sustainability topics and cybersecurity.
+
+Certifications: HERMES 2022, PRINCE2, ITIL 4, SCRUM Master
+
+Further information about Daniel Sengstag can be found at: https://sengstag.ch/`,
   },
   christophwainig: {
     title: "Sales, growth and business development",
