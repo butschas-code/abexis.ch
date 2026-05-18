@@ -5,8 +5,25 @@ import { homeWhoWeAreContent } from "@/data/home-page-content";
 import { teamProfiles } from "@/data/pages";
 import { MotionSection } from "@/components/motion/MotionSection";
 
-export function HomeWhoWeAreSection() {
-  const c = homeWhoWeAreContent;
+type WhoWeAreCopy = {
+  eyebrow: string;
+  headline: string;
+  intro: readonly string[];
+  daniel: { name: string; role: string; body: readonly string[] };
+};
+
+export function HomeWhoWeAreSection({
+  content = homeWhoWeAreContent,
+  profileHref = "/danielsengstag",
+  profileLabel = "Zum Profil",
+  teamProfileLabel = "Zum Profil",
+}: {
+  content?: WhoWeAreCopy;
+  profileHref?: string;
+  profileLabel?: string;
+  teamProfileLabel?: string;
+}) {
+  const c = content;
   const daniel = teamProfiles.danielsengstag;
 
   return (
@@ -47,17 +64,17 @@ export function HomeWhoWeAreSection() {
             </div>
             <div className="mt-6 flex justify-center md:justify-start">
               <Link
-                href="/danielsengstag"
+                href={profileHref}
                 className="inline-flex min-h-[44px] touch-manipulation items-center justify-center rounded-full border border-black/[0.1] bg-white px-6 text-[15px] font-medium text-[#1d1d1f] transition hover:border-brand-500/30 hover:text-brand-900 active:scale-[0.99]"
               >
-                Zum Profil
+                {profileLabel}
               </Link>
             </div>
           </div>
         </div>
 
         <div className="mt-10 sm:mt-14">
-          <AboutTeamGrid />
+          <AboutTeamGrid profileLabel={teamProfileLabel} />
         </div>
       </div>
     </MotionSection>

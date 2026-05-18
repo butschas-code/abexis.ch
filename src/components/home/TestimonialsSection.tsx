@@ -1,6 +1,14 @@
 import { homeTestimonials } from "@/data/home-testimonials";
 
-export function TestimonialsSection() {
+export function TestimonialsSection({
+  eyebrow = "Referenzen",
+  headline = "Ergebnisse aus der Praxis.",
+  intro = "Stimmen von Führungspersonen und Partnern — mit Freigabe der Zitierten.",
+}: {
+  eyebrow?: string;
+  headline?: string;
+  intro?: string;
+} = {}) {
   const [featured, ...rest] = homeTestimonials;
 
   return (
@@ -21,12 +29,12 @@ export function TestimonialsSection() {
       <div className="relative mx-auto max-w-[1068px] px-[max(1rem,env(safe-area-inset-left,0px))] sm:px-6">
 
         {/* header */}
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Referenzen</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">{eyebrow}</p>
         <h2 className="mt-2 text-balance break-words text-[28px] font-semibold leading-none tracking-[-0.03em] text-[#1d1d1f] sm:text-[32px] md:text-[40px]">
-          Ergebnisse aus der Praxis.
+          {headline}
         </h2>
         <p className="mt-3 max-w-[54ch] text-[15px] leading-relaxed text-[#6e6e73] sm:mt-4 sm:text-[16px]">
-          Stimmen von Führungspersonen und Partnern — mit Freigabe der Zitierten.
+          {intro}
         </p>
 
         {/* featured testimonial */}

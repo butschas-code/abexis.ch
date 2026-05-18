@@ -226,3 +226,225 @@ export const homeClosingContent = {
   body: "Im Gespräch klären wir Ihre Situation und geben eine erste Einschätzung. Danach entscheiden Sie, ob ein nächster Schritt sinnvoll ist.",
   ctaLabel: "Termin vereinbaren",
 } as const;
+
+export const homeHeroContentEn = {
+  eyebrow: "Abexis Consulting",
+  titleLines: [
+    "Projects rarely fail outright",
+    "but often drift in a direction nobody intended.",
+  ] as const,
+  sub: "Abexis creates clarity when it is missing.",
+  body: "Many projects do not fail because of one single mistake. They gradually lose orientation, and that often remains unclear for too long.",
+  primaryCta: { href: "/en/projectrealitycheck" as const, label: "Request a Project Reality Check" },
+  secondaryCta: { href: "/en/contact" as const, label: "Non-binding conversation" },
+} as const;
+
+export const homeChallengeContentEn = {
+  eyebrow: "The challenge",
+  headline: "Projects keep moving, but the real situation remains unclear.",
+  intro:
+    "Meetings take place. Reports are written. And still it often remains unclear where the project really stands.",
+  situationsSubline: "Four patterns we repeatedly see in critical projects.",
+  groups: [
+    {
+      title: "Transparency is missing",
+      bullets: [
+        "Status reports show only part of reality",
+        "Problems are categorized but not resolved",
+        "Risks exist, but are hard to grasp",
+      ],
+    },
+    {
+      title: "Different perspectives",
+      lines: ["IT sees progress", "The business experiences standstill", "Steering lacks a shared picture"],
+    },
+    {
+      title: "Signals arrive too late",
+      bullets: [
+        "Budgets develop differently than planned",
+        "Timelines remain optimistic",
+        "Key people lose trust or leave the project",
+      ],
+    },
+    {
+      title: "Decisions are delayed",
+      bullets: [
+        "Critical points are not named clearly",
+        "Escalations happen late",
+        "Time is lost before it becomes visible",
+      ],
+    },
+  ] as const,
+  whatIsMissing: {
+    title: "What is missing",
+    line: "A clear, independent view of the project",
+    sub: "as the basis for sound decisions",
+  },
+  whenExternal: {
+    title: "When an external view makes sense",
+    bullets: ["When uncertainty grows", "When pressure increases", "When important decisions remain open"],
+  },
+  framing: "The greatest risk is not the mistake, but missing clarity.",
+} as const;
+
+export const homeWhoWeAreContentEn = {
+  eyebrow: "Who we are",
+  headline: "Experience that classifies the situation and takes responsibility.",
+  intro: [
+    "We know these situations from our own practice: from line responsibility, critical projects and decisions under pressure.",
+    "We address what is actually happening. Clearly, objectively and without detours.",
+  ] as const,
+  daniel: {
+    name: "Daniel Sengstag",
+    role: "Founder and owner",
+    body: [
+      "30 years of experience in industry, software and technology. Former Country Manager at Siemens Industry Software and EMEA Sales Director at Dassault Systèmes.",
+      "Mechanical engineer, Executive MBA and certified board director. Certified in HERMES, PRINCE2 and ITIL 4.",
+      "He works directly with clients and personally leads mandates.",
+    ] as const,
+  },
+} as const;
+
+export const homePrcContentEn = {
+  eyebrow: "Offering",
+  headline: "Clarity about the real status of your project.",
+  sub: "Within 3 days to 4 weeks, you receive a reliable assessment and concrete next steps.",
+  context:
+    "The Project Reality Check is used when uncertainty exists or decisions are pending. It creates a shared basis before risks become more deeply embedded.",
+  youGet: {
+    title: "What you receive",
+    bullets: [
+      "Executive summary for management and board",
+      "Assessment across 6 dimensions",
+      "Prioritized risks with probability",
+      "Assessment of governance and decision structures",
+      "Analysis of implementation and change readiness",
+      "Action plan for 30, 60 and 90 days",
+      "Clear recommendation: Continue, Stabilize or Reset",
+    ],
+  },
+  dimensionsLabel: "Assessment dimensions",
+  dimensions: "Strategy · Governance · Execution · Risks · Change · Technology",
+  packages: [
+    {
+      name: "LIGHT",
+      sub: "Quick status assessment",
+      duration: "3-5 days",
+      body: "First structured assessment focused on critical points",
+      outcome: "Overview, central risks, initial recommendations",
+    },
+    {
+      name: "CORE",
+      sub: "Management clarity (recommended)",
+      duration: "1-2 weeks",
+      body: "Interviews, document review and full assessment",
+      outcome: "Clear situation assessment and concrete decision basis",
+      recommended: true,
+    },
+    {
+      name: "DEEP DIVE",
+      sub: "Stabilization and alignment",
+      duration: "3-4 weeks",
+      body: "In-depth analysis and workshops",
+      outcome: "Overall picture, clear priorities and actionable roadmap",
+    },
+  ] as const,
+  secondaryCta: { href: "/en/projectrealitycheck" as const, label: "Learn more" },
+  primaryCtaLabel: "Schedule a non-binding call",
+} as const;
+
+export const homeProcessContentEn = {
+  eyebrow: "Approach",
+  headline: "Three steps to a clear decision basis.",
+  steps: [
+    {
+      title: "Initial conversation",
+      body: "You describe the situation. We ask targeted questions. At the end, it is clear whether an assessment makes sense.",
+    },
+    {
+      title: "Analysis",
+      body: "Interviews, document review and structured assessment. The scope depends on the situation and selected phase.",
+    },
+    {
+      title: "Result",
+      body: "You receive a clear assessment, prioritized risks and concrete next steps.",
+    },
+  ] as const,
+} as const;
+
+export const homeLeistungenBlockEn = {
+  eyebrow: "Services",
+  headline: "Support in situations where decisions matter.",
+  intro:
+    "The Project Reality Check is the starting point. Beyond that, we work in the following areas.",
+  items: [
+    {
+      title: "Project Reality Check",
+      body: "Independent assessment of your project: risks, gaps and concrete recommendations in a compact format.",
+      href: "/en/projectrealitycheck",
+    },
+    {
+      title: "Digital Transformation",
+      body: "Introduction and development of digital solutions, AI and analytics. Focused on value, integration and implementation.",
+      href: "/en/topics/digital-transformation",
+    },
+    {
+      title: "Corporate Strategy",
+      body: "Structured strategy work with clear prioritization. A basis for decisions and implementation.",
+      href: "/en/topics/corporate-strategy",
+    },
+    {
+      title: "Sales and Marketing",
+      body: "Analysis and development of market approach and sales. Goal: understandable and manageable growth.",
+      href: "/en/topics/sales-marketing",
+    },
+    {
+      title: "Change Management",
+      body: "Support for transformations at organizational and human level. Focused on clarity and acceptance.",
+      href: "/en/topics/change-management",
+    },
+    {
+      title: "Process Optimization",
+      body: "Analysis and improvement of existing workflows. Reducing complexity and increasing efficiency.",
+      href: "/en/topics/process-optimization",
+    },
+    {
+      title: "Project Management",
+      body: "Leadership and stabilization of critical projects. Clear structure and transparent steering.",
+      href: "/en/topics/project-management",
+    },
+    {
+      title: "Executive Search (Abexis SEARCH)",
+      body: "Filling key positions in demanding situations. Focused on personalities who take responsibility.",
+      href: "/en/executive-search",
+    },
+  ] as const,
+} as const;
+
+export const homeClarityContentEn = {
+  eyebrow: "Perspective",
+  without: {
+    title: "Without clear classification:",
+    bullets: [
+      "Risks are recognized late",
+      "Decisions are delayed",
+      "Different views emerge in management",
+      "Progress is hard to judge",
+    ],
+  },
+  with: {
+    title: "With clear classification:",
+    bullets: [
+      "Clear view of the real situation",
+      "Risks are named and prioritized",
+      "A shared understanding emerges",
+      "Decisions can be made",
+    ],
+  },
+} as const;
+
+export const homeClosingContentEn = {
+  headline: "Let us take 30 minutes.",
+  body: "In a conversation, we clarify your situation and give an initial assessment. After that, you decide whether a next step makes sense.",
+  ctaLabel: "Schedule a call",
+} as const;

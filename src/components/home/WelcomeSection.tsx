@@ -5,7 +5,22 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 import { useRef } from "react";
 import { homeWelcomeSection } from "@/data/pages";
 
-export function WelcomeSection() {
+type WelcomeCopy = {
+  eyebrow: string;
+  title: string;
+  titleAccent: string;
+  paragraphs: readonly string[];
+};
+
+export function WelcomeSection({
+  content = homeWelcomeSection,
+  contactHref = "/kontakt",
+  contactLabel = "Kontakt aufnehmen",
+}: {
+  content?: WelcomeCopy;
+  contactHref?: string;
+  contactLabel?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({
@@ -15,7 +30,7 @@ export function WelcomeSection() {
   const opacity = useTransform(scrollYProgress, [0, 0.25, 0.65, 1], reduce ? [1, 1, 1, 1] : [0.45, 0.98, 1, 1]);
   const y = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [18, 0]);
 
-  const { eyebrow, title, titleAccent, paragraphs } = homeWelcomeSection;
+  const { eyebrow, title, titleAccent, paragraphs } = content;
 
   return (
     <div
@@ -64,10 +79,10 @@ export function WelcomeSection() {
             className="mt-10"
           >
             <Link
-              href="/kontakt"
+              href={contactHref}
               className="inline-flex min-h-11 items-center text-[15px] font-medium text-brand-900 underline-offset-4 transition-colors duration-200 hover:text-brand-500 hover:underline"
             >
-              Kontakt aufnehmen
+              {contactLabel}
             </Link>
           </motion.div>
         </motion.div>

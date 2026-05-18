@@ -10,7 +10,7 @@ const ease = [0.22, 1, 0.36, 1] as const;
 const body = "text-[15px] font-normal leading-relaxed text-[#3c3c43]";
 
 function listItems(
-  g: (typeof homeChallengeContent.groups)[number]
+  g: { bullets?: readonly string[]; lines?: readonly string[] }
 ): readonly string[] {
   if ("bullets" in g && g.bullets) return g.bullets;
   if ("lines" in g && g.lines) return g.lines;
@@ -25,9 +25,28 @@ function Eyebrow({ children }: { children: ReactNode }) {
   );
 }
 
-export function HomeChallengeSection() {
+type ChallengeCopy = {
+  eyebrow: string;
+  headline: string;
+  intro: string;
+  situationsSubline: string;
+  groups: readonly { title: string; bullets?: readonly string[]; lines?: readonly string[] }[];
+  whatIsMissing: { title: string; line: string; sub: string };
+  whenExternal: { title: string; bullets: readonly string[] };
+  framing: string;
+};
+
+export function HomeChallengeSection({
+  content = homeChallengeContent,
+  situationsLabel = "Typische Situationen",
+  situationsAriaLabel = "Typische Projektsituationen",
+}: {
+  content?: ChallengeCopy;
+  situationsLabel?: string;
+  situationsAriaLabel?: string;
+}) {
   const reduce = useReducedMotion();
-  const c = homeChallengeContent;
+  const c = content;
 
   return (
     <section
@@ -52,14 +71,14 @@ export function HomeChallengeSection() {
         {/* Two-column: label left / cards right */}
         <div className="mt-8 md:mt-10 md:grid md:grid-cols-[5fr_8fr] md:gap-10 lg:gap-14">
           <div className="mb-6 md:mb-0 md:pt-0.5">
-            <Eyebrow>Typische Situationen</Eyebrow>
+            <Eyebrow>{situationsLabel}</Eyebrow>
             <p className={`mt-2 max-w-[28ch] md:max-w-none ${body}`}>{c.situationsSubline}</p>
           </div>
 
           <ul
             className="grid grid-cols-1 gap-3 list-none pl-0 min-[480px]:grid-cols-2 sm:gap-4"
             role="list"
-            aria-label="Typische Projektsituationen"
+            aria-label={situationsAriaLabel}
           >
             {c.groups.map((g, i) => {
               const items = listItems(g);

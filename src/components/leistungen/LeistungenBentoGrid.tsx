@@ -6,7 +6,14 @@ import { serviceCardImages } from "@/data/site-images";
 type ServiceSlug = keyof typeof serviceCardImages;
 
 type BentoItem = {
-  s: (typeof fokusthemenMeta)[number];
+  s: {
+    slug: string;
+    href: string;
+    title: string;
+    subtitle: string;
+    excerpt: string;
+    imageKey?: ServiceSlug;
+  };
   img: string;
   i: number;
 };
@@ -15,10 +22,10 @@ function indexLabel(i: number) {
   return String(i + 1).padStart(2, "0");
 }
 
-function buildItems(): BentoItem[] {
-  return fokusthemenMeta.map((s, i) => ({
+function buildItems(items: readonly BentoItem["s"][]): BentoItem[] {
+  return items.map((s, i) => ({
     s,
-    img: serviceCardImages[s.slug as ServiceSlug],
+    img: serviceCardImages[s.imageKey ?? (s.slug as ServiceSlug)],
     i,
   }));
 }
@@ -27,15 +34,25 @@ function buildItems(): BentoItem[] {
  * Gleichmässiges Raster (3×2 ab `xl`) : gleiche Kartenstruktur; Raster `items-stretch` + `h-full`
  * gleicht die Höhe pro Zeile aus, `min-h-*` setzt eine gemeinsame Untergrenze (Luft unten ok).
  */
-export function LeistungenBentoGrid() {
-  const items = buildItems();
+export function LeistungenBentoGrid({
+  items = fokusthemenMeta,
+  lang = "de",
+  startLabel = "Hier beginnen",
+  moreLabel = "Mehr erfahren",
+}: {
+  items?: readonly BentoItem["s"][];
+  lang?: "de" | "en";
+  startLabel?: string;
+  moreLabel?: string;
+}) {
+  const builtItems = buildItems(items);
 
   return (
     <div
-      lang="de"
+      lang={lang}
       className="grid grid-cols-1 items-stretch gap-4 sm:gap-5 md:grid-cols-2 xl:grid-cols-3 xl:gap-6"
     >
-      {items.map((item, idx) => {
+      {builtItems.map((item, idx) => {
         const isFullWidth = idx === 0 || idx === items.length - 1;
         return (
           <LeistungenBentoCard
@@ -43,6 +60,8 @@ export function LeistungenBentoGrid() {
             item={item}
             imagePriority={idx === 0}
             isFullWidth={isFullWidth}
+            startLabel={startLabel}
+            moreLabel={moreLabel}
           />
         );
       })}
@@ -54,10 +73,14 @@ function LeistungenBentoCard({
   item,
   imagePriority,
   isFullWidth,
+  startLabel,
+  moreLabel,
 }: {
   item: BentoItem;
   imagePriority?: boolean;
   isFullWidth?: boolean;
+  startLabel: string;
+  moreLabel: string;
 }) {
   const { s, img, i } = item;
 
@@ -108,7 +131,7 @@ function LeistungenBentoCard({
 
         {i === 0 && (
           <span className="mb-1.5 mt-3 inline-flex w-fit items-center rounded-full bg-brand-900 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white sm:mb-2">
-            Hier beginnen
+            {startLabel}
           </span>
         )}
 
@@ -127,7 +150,7 @@ function LeistungenBentoCard({
           {s.excerpt}
         </p>
         <span className="mt-auto inline-flex items-center gap-2 pt-6 text-[13px] font-semibold text-brand-900 transition group-hover:gap-3 group-hover:text-brand-500">
-          Mehr erfahren
+          {moreLabel}
           <span aria-hidden className="translate-y-px text-base leading-none">
             →
           </span>

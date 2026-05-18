@@ -20,8 +20,23 @@ const LEISTUNG_IMAGES: readonly string[] = [
   serviceCardImages["executive-search"],
 ];
 
-export function HomeLeistungenGridSection() {
-  const c = homeLeistungenBlock;
+type HomeServicesCopy = {
+  eyebrow: string;
+  headline: string;
+  intro: string;
+  items: readonly { title: string; body: string; href: string }[];
+};
+
+export function HomeLeistungenGridSection({
+  content = homeLeistungenBlock,
+  startLabel = "Hier beginnen",
+  moreLabel = "Mehr erfahren",
+}: {
+  content?: HomeServicesCopy;
+  startLabel?: string;
+  moreLabel?: string;
+}) {
+  const c = content;
   return (
     <MotionSection className="apple-animated-gradient relative isolate overflow-x-hidden py-14 sm:py-20 md:py-28">
       <div className="mx-auto min-w-0 max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
@@ -53,13 +68,13 @@ export function HomeLeistungenGridSection() {
                 <div className="flex flex-1 flex-col px-5 pb-7 pt-5 sm:px-6 sm:pb-8 sm:pt-6">
                   {i === 0 && (
                     <span className="mb-3 inline-flex w-fit items-center rounded-full bg-brand-900 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
-                      Hier beginnen
+                      {startLabel}
                     </span>
                   )}
                   <h3 className={`font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f]${isFullWidth ? " text-[19px] sm:text-[22px]" : " text-[17px] sm:text-[19px]"}`}>{s.title}</h3>
                   <p className="mt-2.5 flex-1 text-[14px] leading-relaxed text-[#6e6e73] sm:mt-3">{s.body}</p>
                   <span className="mt-4 inline-flex min-h-11 items-center text-[14px] font-medium text-brand-900 transition group-hover:translate-x-0.5 group-hover:text-brand-500 sm:mt-5">
-                    Mehr erfahren →
+                    {moreLabel} →
                   </span>
                 </div>
               </Link>

@@ -56,7 +56,15 @@ export async function getHomeBlogTeasers(): Promise<HomeBlogTeaser[]> {
   });
 }
 
-export async function HomeBlogTeasers() {
+export async function HomeBlogTeasers({
+  heading = "Aus dem Blog",
+  allLabel = "Alle Beiträge",
+  dateLocale = "de-CH",
+}: {
+  heading?: string;
+  allLabel?: string;
+  dateLocale?: string;
+} = {}) {
   const posts = await getHomeBlogTeasers();
 
   return (
@@ -66,14 +74,14 @@ export async function HomeBlogTeasers() {
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Insights</p>
             <h2 className="mt-2 text-balance break-words text-[28px] font-semibold leading-none tracking-[-0.03em] text-[#1d1d1f] sm:text-[32px] md:text-[40px]">
-              Aus dem Blog
+              {heading}
             </h2>
           </div>
           <Link
             href="/blog"
             className="min-h-11 shrink-0 self-start text-[15px] font-medium text-brand-900 transition-colors duration-200 hover:text-brand-500 hover:underline md:self-auto"
           >
-            Alle Beiträge
+            {allLabel}
           </Link>
         </div>
         <div className="mt-8 grid gap-5 sm:mt-12 sm:gap-6 md:grid-cols-2">
@@ -95,7 +103,7 @@ export async function HomeBlogTeasers() {
               </div>
               <div className="px-5 pb-6 pt-4 sm:px-6 sm:pb-7 sm:pt-5">
                 <time className="text-[11px] font-medium uppercase tracking-widest text-[#86868b]">
-                  {p.publishedISO ? new Date(p.publishedISO).toLocaleDateString("de-CH") : ""}
+                  {p.publishedISO ? new Date(p.publishedISO).toLocaleDateString(dateLocale) : ""}
                 </time>
                 <h3 className="mt-2 text-[18px] font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f] group-hover:text-brand-900 sm:text-[21px]">
                   {p.title}

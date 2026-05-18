@@ -296,9 +296,10 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [mobileSubOpenHref, setMobileSubOpenHref] = useState<string | null>(null);
   const isHome = pathname === "/";
-  const navItems = isEnglishPath(pathname) ? mainNavEn : mainNav;
-  const contactHref = isEnglishPath(pathname) ? "/en/contact" : "/kontakt";
-  const contactLabel = isEnglishPath(pathname) ? "Book a call" : "Termin buchen";
+  const english = isEnglishPath(pathname);
+  const navItems = english ? mainNavEn : mainNav;
+  const contactHref = english ? "/en/contact" : "/kontakt";
+  const contactLabel = english ? "Book a call" : "Termin buchen";
   const [mobileTopWash, setMobileTopWash] = useState(!isHome);
   const reduce = useReducedMotion();
 
@@ -331,7 +332,7 @@ export function SiteHeader() {
       <header className="pointer-events-none sticky top-0 z-40 h-0 overflow-visible">
         <div className="px-4 md:px-6" style={{ paddingTop: "calc(0.75rem + env(safe-area-inset-top, 0px))" }}>
           <div className="pointer-events-auto mx-auto flex w-full max-w-[1068px] items-center justify-between gap-2 rounded-full border border-black/[0.07] bg-white px-3 py-2 shadow-[0_4px_24px_rgba(0,0,0,0.07)] md:gap-4 md:px-4">
-            <Link href="/" className="flex shrink-0 items-center">
+            <Link href={english ? "/en/home" : "/"} className="flex shrink-0 items-center">
               <Image
                 src={logoUrl}
                 alt="Abexis"

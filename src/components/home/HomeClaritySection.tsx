@@ -1,8 +1,14 @@
 import { MotionSection } from "@/components/motion/MotionSection";
 import { homeClarityContent } from "@/data/home-page-content";
 
-export function HomeClaritySection() {
-  const c = homeClarityContent;
+type ClarityCopy = {
+  eyebrow: string;
+  without: { title: string; bullets: readonly string[] };
+  with: { title: string; bullets: readonly string[] };
+};
+
+export function HomeClaritySection({ content = homeClarityContent }: { content?: ClarityCopy }) {
+  const c = content;
   return (
     <MotionSection className="py-14 sm:py-20 md:py-28">
       <div className="mx-auto max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">

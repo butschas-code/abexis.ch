@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { teamOrder, teamProfiles } from "@/data/pages";
 
-export function AboutTeamGrid() {
+export function AboutTeamGrid({ profileLabel = "Zum Profil" }: { profileLabel?: string }) {
   return (
     <div className="grid grid-cols-1 items-stretch gap-7 min-[420px]:grid-cols-2 min-[420px]:gap-6 sm:grid-cols-3 sm:gap-8">
       {teamOrder
@@ -38,7 +38,7 @@ export function AboutTeamGrid() {
                   </p>
                 ) : null}
                 <p className="mt-2.5 flex items-center gap-1 text-[13px] font-medium text-brand-600">
-                  Zum Profil
+                  {profileLabel}
                   <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                     <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>

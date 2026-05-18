@@ -1,8 +1,20 @@
 import { homeClosingContent } from "@/data/home-page-content";
 import { siteConfig } from "@/data/pages";
 
-export function HomeFinalCtaSection() {
-  const c = homeClosingContent;
+type ClosingCopy = {
+  headline: string;
+  body: string;
+  ctaLabel: string;
+};
+
+export function HomeFinalCtaSection({
+  content = homeClosingContent,
+  bookingUrl = siteConfig.bookingUrlDe,
+}: {
+  content?: ClosingCopy;
+  bookingUrl?: string;
+}) {
+  const c = content;
   return (
     <section className="pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] pt-20 pb-20 sm:px-6 sm:pt-24 sm:pb-24 md:pt-28 md:pb-28">
       <div className="abexis-hero-gradient-surface relative mx-auto max-w-[1068px] overflow-hidden rounded-[20px] px-4 py-10 text-center text-white sm:rounded-[24px] sm:px-8 sm:py-12 md:rounded-[32px] md:px-16 md:py-20">
@@ -18,7 +30,7 @@ export function HomeFinalCtaSection() {
           <h2 className="text-balance break-words text-[26px] font-semibold leading-none tracking-[-0.03em] sm:text-[32px] md:text-[40px]">{c.headline}</h2>
           <p className="mx-auto mt-3 max-w-xl text-[16px] leading-relaxed text-white/90 sm:mt-4 sm:text-[17px]">{c.body}</p>
           <a
-            href={siteConfig.bookingUrlDe}
+            href={bookingUrl}
             className="mx-auto mt-7 inline-flex min-h-12 w-full max-w-sm touch-manipulation items-center justify-center rounded-full bg-white px-6 text-[16px] font-medium text-brand-900 transition-all duration-200 ease-out hover:bg-white hover:shadow-xl hover:shadow-brand-900/25 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] sm:mt-8 sm:min-h-[48px] sm:max-w-none sm:px-8 sm:text-[17px]"
             rel="noreferrer"
           >

@@ -3,8 +3,38 @@ import { MotionSection } from "@/components/motion/MotionSection";
 import { homePrcContent } from "@/data/home-page-content";
 import { siteConfig } from "@/data/pages";
 
-export function HomePrcSection() {
-  const c = homePrcContent;
+type HomePrcCopy = {
+  eyebrow: string;
+  headline: string;
+  sub: string;
+  context: string;
+  youGet: { title: string; bullets: readonly string[] };
+  dimensionsLabel: string;
+  dimensions: string;
+  packages: readonly {
+    name: string;
+    sub: string;
+    duration: string;
+    body: string;
+    outcome: string;
+    recommended?: boolean;
+  }[];
+  secondaryCta: { href: string; label: string };
+  primaryCtaLabel: string;
+};
+
+export function HomePrcSection({
+  content = homePrcContent,
+  bookingUrl = siteConfig.bookingUrlDe,
+  packagesLabel = "Pakete",
+  recommendedLabel = "Empfohlen",
+}: {
+  content?: HomePrcCopy;
+  bookingUrl?: string;
+  packagesLabel?: string;
+  recommendedLabel?: string;
+}) {
+  const c = content;
   return (
     <MotionSection className="apple-animated-gradient relative isolate overflow-x-hidden py-14 sm:py-20 md:py-28">
       <div className="mx-auto min-w-0 max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
@@ -39,7 +69,7 @@ export function HomePrcSection() {
           </div>
         </div>
 
-        <h3 className="mt-10 text-[15px] font-semibold text-[#1d1d1f] sm:mt-14">Pakete</h3>
+        <h3 className="mt-10 text-[15px] font-semibold text-[#1d1d1f] sm:mt-14">{packagesLabel}</h3>
         <div className="mt-5 grid gap-4 sm:mt-6 sm:gap-5 lg:grid-cols-3">
           {c.packages.map((pkg) => (
             <div
@@ -52,7 +82,7 @@ export function HomePrcSection() {
             >
               {"recommended" in pkg && pkg.recommended ? (
                 <span className="absolute -top-2.5 right-4 rounded-full bg-brand-900 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
-                  Empfohlen
+                  {recommendedLabel}
                 </span>
               ) : null}
               <p className="text-[13px] font-bold uppercase tracking-[0.12em] text-brand-900">{pkg.name}</p>
@@ -68,7 +98,7 @@ export function HomePrcSection() {
 
         <div className="mt-10 flex flex-col gap-3 sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
           <a
-            href={siteConfig.bookingUrlDe}
+            href={bookingUrl}
             className="inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-full bg-brand-900 px-6 text-[16px] font-medium text-white shadow-lg shadow-brand-900/25 transition hover:bg-[var(--brand-900-hover)] active:scale-[0.99] sm:w-auto sm:px-7 sm:text-[17px]"
             rel="noreferrer"
           >

@@ -150,6 +150,16 @@ export const homeWelcomeSection = {
   ],
 } as const;
 
+export const homeWelcomeSectionEn = {
+  eyebrow: "Welcome",
+  title: "Good to have you here, ",
+  titleAccent: "welcome to Abexis.",
+  paragraphs: [
+    "At Abexis, we support companies and leadership teams where it counts: strategy, digitalization, change, sales and projects, always with a focus on tangible results and collaboration at eye level.",
+    "Explore our areas of focus, read an insight from the blog or contact us if you would like to start a conversation. We look forward to hearing from you.",
+  ],
+} as const;
+
 export const homeDifferentiators = [
   {
     label: "Strategie vor Technologie",

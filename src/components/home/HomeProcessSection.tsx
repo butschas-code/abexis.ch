@@ -3,8 +3,14 @@ import { MotionSection } from "@/components/motion/MotionSection";
 import { homeProcessContent } from "@/data/home-page-content";
 import { fokusPageHeroImages } from "@/data/site-images";
 
-export function HomeProcessSection() {
-  const c = homeProcessContent;
+type HomeProcessCopy = {
+  eyebrow: string;
+  headline: string;
+  steps: readonly { title: string; body: string }[];
+};
+
+export function HomeProcessSection({ content = homeProcessContent }: { content?: HomeProcessCopy }) {
+  const c = content;
   return (
     <MotionSection className="relative isolate bg-white py-14 sm:py-20 md:py-28">
       <div className="mx-auto grid min-w-0 max-w-[1068px] items-center gap-8 overflow-x-hidden pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:gap-10 sm:pl-6 sm:pr-6 md:gap-12 lg:grid-cols-[1fr_1.05fr]">

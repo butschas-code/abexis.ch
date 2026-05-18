@@ -6,16 +6,85 @@ import { z } from "zod";
 import { submitPublicForm } from "@/cms/services/form-submission-public-client";
 import { isTurnstileConfigured, TurnstileField } from "@/components/site/TurnstileField";
 
-const schema = z.object({
-  name: z.string().trim().min(1, "Bitte geben Sie Ihren Namen an."),
-  company: z.string().max(200).optional(),
-  email: z.string().trim().email("Bitte geben Sie eine gültige E-Mail-Adresse an."),
-  phone: z.string().max(80).optional(),
-  message: z.string().trim().min(1, "Bitte formulieren Sie eine kurze Nachricht."),
-  privacyAccepted: z.literal(true, {
-    errorMap: () => ({ message: "Bitte bestätigen Sie die Datenschutzhinweise." }),
-  }),
-});
+const formCopy = {
+  de: {
+    errors: {
+      name: "Bitte geben Sie Ihren Namen an.",
+      email: "Bitte geben Sie eine gültige E-Mail-Adresse an.",
+      message: "Bitte formulieren Sie eine kurze Nachricht.",
+      privacy: "Bitte bestätigen Sie die Datenschutzhinweise.",
+      turnstile: "Bitte bestätigen Sie den Bot-Schutz.",
+      failed: "Senden fehlgeschlagen.",
+    },
+    sentEyebrow: "Gesendet",
+    sentTitle: "Vielen Dank für Ihre Nachricht",
+    sentBody: "Wir melden uns, sobald es sachlich passt : in der Regel innerhalb weniger Werktage.",
+    sentAlternative: "Alternativ:",
+    sentBooking: "Termin direkt im Kalender wählen",
+    formEyebrow: "Nachricht",
+    formTitle: "Schreiben Sie uns",
+    formIntro: "Ihre Angaben werden verschlüsselt übermittelt und vertraulich bearbeitet.",
+    name: "Name",
+    company: "Unternehmen",
+    email: "E-Mail",
+    phone: "Telefon",
+    optional: "optional",
+    phoneHint: "Optional.",
+    messageLabel: "Ihre Nachricht",
+    messagePlaceholder: "Thema und wie wir Sie am besten erreichen.",
+    privacyBefore: "Ich habe die",
+    privacyLink: "Datenschutzerklärung",
+    privacyAfter: "zur Kenntnis genommen.",
+    submitting: "Wird gesendet …",
+    submit: "Nachricht senden",
+  },
+  en: {
+    errors: {
+      name: "Please enter your name.",
+      email: "Please enter a valid email address.",
+      message: "Please add a short message.",
+      privacy: "Please confirm the privacy notice.",
+      turnstile: "Please confirm the bot protection.",
+      failed: "Sending failed.",
+    },
+    sentEyebrow: "Sent",
+    sentTitle: "Thank you for your message",
+    sentBody: "We will get back to you when it makes sense, usually within a few working days.",
+    sentAlternative: "Alternatively:",
+    sentBooking: "choose a time directly in the calendar",
+    formEyebrow: "Message",
+    formTitle: "Write to us",
+    formIntro: "Your details are transmitted securely and handled confidentially.",
+    name: "Name",
+    company: "Company",
+    email: "Email",
+    phone: "Phone",
+    optional: "optional",
+    phoneHint: "Optional.",
+    messageLabel: "Your message",
+    messagePlaceholder: "Topic and how we can best reach you.",
+    privacyBefore: "I have read the",
+    privacyLink: "privacy policy",
+    privacyAfter: ".",
+    submitting: "Sending …",
+    submit: "Send message",
+  },
+} as const;
+
+function makeSchema(copy: (typeof formCopy)["de" | "en"]) {
+  return z.object({
+    name: z.string().trim().min(1, copy.errors.name),
+    company: z.string().max(200).optional(),
+    email: z.string().trim().email(copy.errors.email),
+    phone: z.string().max(80).optional(),
+    message: z.string().trim().min(1, copy.errors.message),
+    privacyAccepted: z.literal(true, {
+      errorMap: () => ({ message: copy.errors.privacy }),
+    }),
+  });
+}
+
+const schema = makeSchema(formCopy.de);
 
 type Values = z.infer<typeof schema>;
 
@@ -31,10 +100,13 @@ const initial = {
 type KontaktPageFormProps = {
   /** Outlook / Buchungs-URL : vom Server übergeben, damit der Client nicht `pages.ts` bundelt. */
   bookingUrl: string;
+  locale?: "de" | "en";
 };
 
 /** Kontaktformular für `/kontakt` (ohne Datei-Upload). */
-export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
+export function KontaktPageForm({ bookingUrl, locale = "de" }: KontaktPageFormProps) {
+  const copy = formCopy[locale];
+  const activeSchema = makeSchema(copy);
   const formId = useId();
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState<Partial<Record<keyof Values | "privacyAccepted", string>>>({});
@@ -59,7 +131,7 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
-    const parsed = schema.safeParse({
+    const parsed = activeSchema.safeParse({
       ...values,
       company: values.company.trim() || undefined,
       phone: values.phone.trim() || undefined,
@@ -77,7 +149,7 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
       return;
     }
     if (!turnstileToken) {
-      setTurnstileError("Bitte bestätigen Sie den Bot-Schutz.");
+      setTurnstileError(copy.errors.turnstile);
       return;
     }
 
@@ -108,7 +180,7 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
       setTurnstileResetSignal((n) => n + 1);
     } catch (err) {
       setPhase("idle");
-      setFormError(err instanceof Error ? err.message : "Senden fehlgeschlagen.");
+      setFormError(err instanceof Error ? err.message : copy.errors.failed);
       setTurnstileToken(null);
       setTurnstileResetSignal((n) => n + 1);
     }
@@ -121,22 +193,22 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
         role="status"
         aria-live="polite"
       >
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Gesendet</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">{copy.sentEyebrow}</p>
         <h2 className="mt-3 text-[22px] font-semibold tracking-[-0.02em] text-[#1d1d1f] md:text-[24px]">
-          Vielen Dank für Ihre Nachricht
+          {copy.sentTitle}
         </h2>
         <p className="mt-4 text-[15px] leading-relaxed text-[#6e6e73]">
-          Wir melden uns, sobald es sachlich passt : in der Regel innerhalb weniger Werktage.
+          {copy.sentBody}
         </p>
         <p className="mt-6 text-[14px] text-[#86868b]">
-          Alternativ:{" "}
+          {copy.sentAlternative}{" "}
           <a
             className="font-medium text-brand-900 underline-offset-4 hover:text-brand-500 hover:underline"
             href={bookingUrl}
             target="_blank"
             rel="noopener noreferrer"
           >
-            Termin direkt im Kalender wählen
+            {copy.sentBooking}
           </a>
           .
         </p>
@@ -150,12 +222,12 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
       onSubmit={onSubmit}
       noValidate
     >
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Nachricht</p>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">{copy.formEyebrow}</p>
       <h2 className="mt-3 text-[22px] font-semibold tracking-[-0.02em] text-[#1d1d1f] md:text-[24px]">
-        Schreiben Sie uns
+        {copy.formTitle}
       </h2>
       <p className="mt-4 text-[14px] leading-relaxed text-[#6e6e73]">
-        Ihre Angaben werden verschlüsselt übermittelt und vertraulich bearbeitet.
+        {copy.formIntro}
       </p>
 
       {formError ? (
@@ -167,7 +239,7 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
       <div className="mt-8 space-y-6">
         <div className="grid gap-6 md:grid-cols-2">
           <Field
-            label="Name"
+            label={copy.name}
             name="name"
             required
             autoComplete="name"
@@ -176,18 +248,19 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
             error={errors.name}
           />
           <Field
-            label="Unternehmen"
+            label={copy.company}
             name="company"
             optional
             autoComplete="organization"
             value={values.company}
             onChange={(v) => set("company")(v)}
             error={errors.company}
+            optionalLabel={copy.optional}
           />
         </div>
         <div className="grid gap-6 md:grid-cols-2">
           <Field
-            label="E-Mail"
+            label={copy.email}
             name="email"
             type="email"
             required
@@ -197,7 +270,7 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
             error={errors.email}
           />
           <Field
-            label="Telefon"
+            label={copy.phone}
             name="tel"
             type="tel"
             optional
@@ -205,13 +278,14 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
             value={values.phone}
             onChange={(v) => set("phone")(v)}
             error={errors.phone}
-            hint="Optional."
+            hint={copy.phoneHint}
+            optionalLabel={copy.optional}
           />
         </div>
 
         <div>
           <label htmlFor={`${formId}-msg`} className="block text-[13px] font-medium text-[#1d1d1f]">
-            Ihre Nachricht <span className="text-red-600">*</span>
+            {copy.messageLabel} <span className="text-red-600">*</span>
           </label>
           <textarea
             id={`${formId}-msg`}
@@ -221,7 +295,7 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
             value={values.message}
             onChange={(e) => set("message")(e.target.value)}
             className="mt-2 w-full resize-y rounded-2xl border border-black/[0.08] bg-[#fafafa] px-4 py-3 text-[15px] leading-relaxed text-[#1d1d1f] outline-none transition placeholder:text-[#aeaeb2] focus:border-brand-500/40 focus:bg-white focus:ring-2 focus:ring-brand-500/25"
-            placeholder="Thema und wie wir Sie am besten erreichen."
+            placeholder={copy.messagePlaceholder}
             aria-invalid={errors.message ? true : undefined}
           />
           {errors.message ? (
@@ -240,16 +314,16 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
               onChange={(e) => set("privacyAccepted")(e.target.checked)}
             />
             <span>
-              Ich habe die{" "}
+              {copy.privacyBefore}{" "}
               <Link
                 href="/privacy-policy"
                 className="font-medium text-brand-900 underline-offset-4 hover:text-brand-500 hover:underline"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Datenschutzerklärung
+                {copy.privacyLink}
               </Link>{" "}
-              zur Kenntnis genommen. <span className="text-red-600">*</span>
+              {copy.privacyAfter} <span className="text-red-600">*</span>
             </span>
           </label>
           {errors.privacyAccepted ? (
@@ -275,7 +349,7 @@ export function KontaktPageForm({ bookingUrl }: KontaktPageFormProps) {
           disabled={phase === "submitting" || !isTurnstileConfigured()}
           className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-brand-900 px-8 text-[16px] font-medium text-white shadow-lg shadow-brand-900/28 transition-all duration-200 hover:bg-[var(--brand-900-hover)] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {phase === "submitting" ? "Wird gesendet …" : "Nachricht senden"}
+          {phase === "submitting" ? copy.submitting : copy.submit}
         </button>
       </div>
     </form>
@@ -293,6 +367,7 @@ function Field(props: {
   onChange: (v: string) => void;
   error?: string;
   hint?: string;
+  optionalLabel?: string;
 }) {
   const id = useId();
   return (
@@ -300,7 +375,7 @@ function Field(props: {
       <label htmlFor={id} className="block text-[13px] font-medium text-[#1d1d1f]">
         {props.label}{" "}
         {props.required ? <span className="text-red-600">*</span> : null}
-        {props.optional ? <span className="font-normal text-[#86868b]"> (optional)</span> : null}
+        {props.optional ? <span className="font-normal text-[#86868b]"> ({props.optionalLabel ?? "optional"})</span> : null}
       </label>
       <input
         id={id}

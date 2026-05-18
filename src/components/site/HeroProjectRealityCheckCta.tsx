@@ -2,8 +2,13 @@ import Link from "next/link";
 import { homeHeroContent } from "@/data/home-page-content";
 
 /** Same primary CTA as the home hero : used on Leistungen and Fokusthemen heroes. */
-export function HeroProjectRealityCheckCta() {
-  const { href, label } = homeHeroContent.primaryCta;
+export function HeroProjectRealityCheckCta({
+  href = homeHeroContent.primaryCta.href,
+  label = homeHeroContent.primaryCta.label,
+}: {
+  href?: string;
+  label?: string;
+}) {
   return (
     <Link
       href={href}

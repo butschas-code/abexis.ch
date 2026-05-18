@@ -5,6 +5,9 @@ import { partnershipBannerLogos } from "@/data/site-images";
 const INTRO =
   "Wir arbeiten mit verschiedenen namhaften Unternehmen zusammen und haben strategische Partnerschaften aufgebaut. Auch sind wir Mitglied verschiedener Verbände und Fachvereine:";
 
+const INTRO_EN =
+  "We work with various well-known organizations, have built strategic partnerships and are members of selected associations and professional bodies.";
+
 function PartnerLogoSlot({ label, logo }: { label: string; logo: string }) {
   return (
     <div className="flex shrink-0 cursor-default flex-col items-center gap-2 px-2 md:gap-2.5">
@@ -16,7 +19,15 @@ function PartnerLogoSlot({ label, logo }: { label: string; logo: string }) {
   );
 }
 
-export function PartnershipsMarquee() {
+export function PartnershipsMarquee({
+  eyebrow = "Partnerschaften",
+  headline = "Partnerschaften",
+  intro = INTRO,
+}: {
+  eyebrow?: string;
+  headline?: string;
+  intro?: string;
+} = {}) {
   const items = footerPartners.map((p, i) => ({
     ...p,
     logo: partnershipBannerLogos[i]!,
@@ -25,9 +36,9 @@ export function PartnershipsMarquee() {
   return (
     <section className="relative border-y border-black/[0.06] bg-gradient-to-b from-[#eef2fb] via-white to-[#e8f4fa] py-12 sm:py-14 md:py-20">
       <div className="mx-auto max-w-[1068px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Partnerschaften</p>
-        <h2 className="mt-2 text-[28px] font-semibold leading-none tracking-[-0.03em] text-[#1d1d1f] md:text-[32px]">Partnerschaften</h2>
-        <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-[#6e6e73]">{INTRO}</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">{eyebrow}</p>
+        <h2 className="mt-2 text-[28px] font-semibold leading-none tracking-[-0.03em] text-[#1d1d1f] md:text-[32px]">{headline}</h2>
+        <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-[#6e6e73]">{intro}</p>
       </div>
 
       <div className="partnership-marquee-wrap relative mt-10 overflow-hidden py-4 md:mt-12 md:py-6">
@@ -51,3 +62,5 @@ export function PartnershipsMarquee() {
     </section>
   );
 }
+
+export const partnershipsIntroEn = INTRO_EN;

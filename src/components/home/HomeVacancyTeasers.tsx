@@ -2,7 +2,17 @@ import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { listPublishedVacancies } from "@/public-site/cms/vacancy";
 
-export async function HomeVacancyTeasers() {
+export async function HomeVacancyTeasers({
+  heading = "Aktuelle Vakanzen",
+  allLabel = "Alle Vakanzen",
+  allHref = "/executive-search/vakanzen",
+  actionLabel = "Position ansehen",
+}: {
+  heading?: string;
+  allLabel?: string;
+  allHref?: string;
+  actionLabel?: string;
+} = {}) {
   let vacancies: Awaited<ReturnType<typeof listPublishedVacancies>> = [];
   try {
     vacancies = await listPublishedVacancies(3);
@@ -19,14 +29,14 @@ export async function HomeVacancyTeasers() {
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Executive Search</p>
             <h2 className="mt-2 text-balance break-words text-[28px] font-semibold leading-none tracking-[-0.03em] text-[#1d1d1f] sm:text-[32px] md:text-[40px]">
-              Aktuelle Vakanzen
+              {heading}
             </h2>
           </div>
           <Link
-            href="/executive-search/vakanzen"
+            href={allHref}
             className="min-h-11 shrink-0 self-start text-[15px] font-medium text-brand-900 transition-colors duration-200 hover:text-brand-500 hover:underline md:self-auto"
           >
-            Alle Vakanzen
+            {allLabel}
           </Link>
         </div>
 
@@ -63,7 +73,7 @@ export async function HomeVacancyTeasers() {
                 )}
               </div>
               <p className="mt-5 text-[13px] font-medium text-brand-900 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-brand-500">
-                Position ansehen →
+                {actionLabel} →
               </p>
             </Link>
           ))}
