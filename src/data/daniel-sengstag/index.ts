@@ -3,6 +3,7 @@
  */
 export type { SiteContent, Locale, TimelineEntry, EducationEntry, FurtherEducationEntry, NavItem } from "./types";
 export { danielSengstagContent } from "./content-de";
+export { danielSengstagContentEn } from "./content-en";
 
 export const danielSengstagImages = {
   /** Full-bleed editorial hero */

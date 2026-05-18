@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { MotionSection } from "@/components/motion/MotionSection";
+import { DanielSengstagProfilePage } from "@/components/profile/daniel-sengstag-ui";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
-import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
+import { InteriorPageLayout, InteriorPageRoot } from "@/components/site/InteriorPageLayout";
+import { danielSengstagContentEn, danielSengstagImages } from "@/data/daniel-sengstag";
 import { teamOrder, teamProfiles, type TeamSlug } from "@/data/pages";
 import { teamProfilesEn } from "@/data/team-profiles-en";
 
@@ -19,6 +21,18 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { profile } = await params;
   if (!isTeamSlug(profile)) return {};
+  if (profile === "danielsengstag") {
+    return {
+      title: danielSengstagContentEn.meta.title,
+      description: danielSengstagContentEn.meta.description,
+      openGraph: {
+        title: `${danielSengstagContentEn.meta.title} | Abexis`,
+        description: danielSengstagContentEn.meta.description,
+        type: "profile",
+        images: [{ url: danielSengstagImages.hero }],
+      },
+    };
+  }
   const p = teamProfiles[profile];
   const english = teamProfilesEn[profile];
   return {
@@ -38,6 +52,24 @@ export default async function EnglishTeamProfilePage({ params }: Props) {
   if (!isTeamSlug(profile)) notFound();
   const p = teamProfiles[profile];
   const english = teamProfilesEn[profile];
+
+  if (profile === "danielsengstag") {
+    return (
+      <InteriorPageRoot>
+        <SchemaMarkup
+          type="Person"
+          path={`/en/${profile}`}
+          data={{ ...p, title: danielSengstagContentEn.hero.credentials, body: danielSengstagContentEn.meta.description, slug: profile }}
+          breadcrumbs={[
+            { name: "Home", url: "/en/home" },
+            { name: "About us", url: "/en/ueber-uns" },
+            { name: p.name, url: `/en/${profile}` },
+          ]}
+        />
+        <DanielSengstagProfilePage copy={danielSengstagContentEn} images={danielSengstagImages} locale="en" />
+      </InteriorPageRoot>
+    );
+  }
 
   return (
     <InteriorPageLayout

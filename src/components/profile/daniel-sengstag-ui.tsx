@@ -9,6 +9,40 @@ import { PageHero } from "@/components/site/PageHero";
 import { siteConfig } from "@/data/pages";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
+const uiCopy = {
+  de: {
+    sectionNavAria: "Abschnitte",
+    inProfile: "Im Profil",
+    yearsLeadership: "Jahre Führung",
+    since: "seit 1995",
+    stations: "Stationen",
+    brands: "Marken",
+    boardCredential: "Verwaltungsrat CAS",
+    boardCredentialOrg: "Swiss Board School · HSG",
+    fields: "Felder",
+    emailCta: "Per E-Mail kontaktieren →",
+    phoneLabel: "Telefon",
+    emailLabel: "E-Mail",
+    schedule: "Termin planen",
+    bookingUrl: siteConfig.bookingUrlDe,
+  },
+  en: {
+    sectionNavAria: "Sections",
+    inProfile: "In profile",
+    yearsLeadership: "Years leadership",
+    since: "since 1995",
+    stations: "Stations",
+    brands: "Brands",
+    boardCredential: "Board Director CAS",
+    boardCredentialOrg: "Swiss Board School · HSG",
+    fields: "Fields",
+    emailCta: "Contact by email →",
+    phoneLabel: "Phone",
+    emailLabel: "Email",
+    schedule: "Schedule appointment",
+    bookingUrl: siteConfig.bookingUrlEn,
+  },
+} as const;
 
 function CountUp({
   to,
@@ -60,7 +94,16 @@ function Eyebrow({ children, dark = false }: { children: React.ReactNode; dark?:
   );
 }
 
-export function DanielSengstagProfilePage({ copy, images }: { copy: SiteContent; images: { hero: string; editorial: string } }) {
+export function DanielSengstagProfilePage({
+  copy,
+  images,
+  locale = "de",
+}: {
+  copy: SiteContent;
+  images: { hero: string; editorial: string };
+  locale?: "de" | "en";
+}) {
+  const labels = uiCopy[locale];
   return (
     <>
       <PageHero imageSrc={images.hero} priority imageObjectClassName="object-[center_22%]">
@@ -85,7 +128,7 @@ export function DanielSengstagProfilePage({ copy, images }: { copy: SiteContent;
       <MotionSection className="border-b border-black/[0.06] bg-white py-3">
         <nav
           className="mx-auto flex max-w-[1068px] flex-wrap justify-center gap-1 px-4 sm:gap-2 sm:px-6"
-          aria-label="Abschnitte"
+          aria-label={labels.sectionNavAria}
         >
           {copy.nav.map((item) => (
             <a
@@ -107,7 +150,7 @@ export function DanielSengstagProfilePage({ copy, images }: { copy: SiteContent;
 
       <MotionSection className="bg-[#26337c] py-16 text-white md:py-24">
         <div className="mx-auto max-w-[1068px] px-4 sm:px-6">
-          <Eyebrow dark>Im Profil</Eyebrow>
+          <Eyebrow dark>{labels.inProfile}</Eyebrow>
           <h2 className="mt-4 max-w-[20ch] text-[clamp(2rem,8vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.03em]">
             {copy.hero.name}
           </h2>
@@ -120,33 +163,33 @@ export function DanielSengstagProfilePage({ copy, images }: { copy: SiteContent;
               <p className="text-[clamp(2.25rem,6vw,3.5rem)] font-semibold leading-none tabular-nums">
                 <CountUp to={30} suffix="+" duration={1.4} />
               </p>
-              <p className="mt-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/55">Jahre Führung</p>
-              <p className="mt-1 text-[13px] text-white/40">seit 1995</p>
+              <p className="mt-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/55">{labels.yearsLeadership}</p>
+              <p className="mt-1 text-[13px] text-white/40">{labels.since}</p>
             </div>
             <div>
               <p className="text-[clamp(2.25rem,6vw,3.5rem)] font-semibold leading-none tabular-nums">
                 <CountUp to={copy.experience.timeline.length} pad={2} duration={1.3} />
               </p>
-              <p className="mt-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/55">Stationen</p>
+              <p className="mt-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/55">{labels.stations}</p>
               <p className="mt-1 text-[13px] text-white/40">Siemens → Abexis</p>
             </div>
             <div>
               <p className="text-[clamp(2.25rem,6vw,3.5rem)] font-semibold leading-none tabular-nums">
                 <CountUp to={5} pad={2} duration={1.2} />
               </p>
-              <p className="mt-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/55">Marken</p>
+              <p className="mt-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/55">{labels.brands}</p>
               <p className="mt-1 text-[13px] text-white/40">CEO · EMEA · Founder</p>
             </div>
             <div>
               <p className="text-[clamp(2.25rem,6vw,3.5rem)] font-semibold leading-none tabular-nums">
                 <CountUp to={2023} from={2000} duration={2} />
               </p>
-              <p className="mt-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/55">Verwaltungsrat CAS</p>
-              <p className="mt-1 text-[13px] text-white/40">Swiss Board School · HSG</p>
+              <p className="mt-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/55">{labels.boardCredential}</p>
+              <p className="mt-1 text-[13px] text-white/40">{labels.boardCredentialOrg}</p>
             </div>
           </div>
           <div className="mt-14 border-t border-white/15 pt-8 md:mt-16 md:pt-10">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/45">Stationen</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/45">{labels.stations}</p>
             <p className="mt-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-[clamp(0.95rem,2vw,1.25rem)] font-medium leading-snug text-white/88 sm:justify-start sm:text-left">
               {["Siemens Industry Software", "Dassault Systèmes", "Ansys", "Pegasystems", "Abexis"].map((name, i, arr) => (
                 <span key={name} className="inline-flex flex-wrap items-center gap-x-2">
@@ -300,7 +343,7 @@ export function DanielSengstagProfilePage({ copy, images }: { copy: SiteContent;
                   </li>
                 ))}
               </ul>
-              <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Felder</p>
+              <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">{labels.fields}</p>
               <ul className="mt-4 space-y-2 text-[15px] leading-relaxed text-[#6e6e73]">
                 {copy.strengths.items.map((line) => (
                   <li key={line} className="flex gap-3">
@@ -421,7 +464,7 @@ export function DanielSengstagProfilePage({ copy, images }: { copy: SiteContent;
                   href={`mailto:daniel.sengstag@abexis.ch`}
                   className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-brand-900 px-6 py-3 text-[14px] font-medium text-white transition-colors hover:bg-[var(--brand-900-hover)]"
                 >
-                  Per E-Mail kontaktieren →
+                  {labels.emailCta}
                 </a>
                 <a
                   href={`tel:${copy.contact.phone.replace(/\s/g, "")}`}
@@ -456,7 +499,7 @@ export function DanielSengstagProfilePage({ copy, images }: { copy: SiteContent;
           <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-[#6e6e73] sm:text-[16px]">{copy.contact.invite}</p>
           <div className="mx-auto mt-10 grid max-w-2xl gap-8 text-left sm:grid-cols-2 md:mt-12">
             <div className="border-t border-black/[0.08] pt-6">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#86868b]">Telefon</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#86868b]">{labels.phoneLabel}</p>
               <a
                 href={`tel:${copy.contact.phone.replace(/\s/g, "")}`}
                 className="mt-2 block text-[clamp(1.25rem,2.4vw,1.75rem)] font-semibold tracking-[-0.02em] text-[#1d1d1f] transition-colors hover:text-brand-900"
@@ -465,7 +508,7 @@ export function DanielSengstagProfilePage({ copy, images }: { copy: SiteContent;
               </a>
             </div>
             <div className="border-t border-black/[0.08] pt-6">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#86868b]">E-Mail</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#86868b]">{labels.emailLabel}</p>
               <div className="mt-2 flex flex-col gap-1">
                 {copy.contact.emails.map((e) => (
                   <a key={e.href} href={e.href} className="text-[16px] font-medium text-brand-900 transition-colors hover:underline">
@@ -497,11 +540,11 @@ export function DanielSengstagProfilePage({ copy, images }: { copy: SiteContent;
             ))}
           </div>
           <a
-            href={siteConfig.bookingUrlDe}
+            href={labels.bookingUrl}
             className="mt-10 inline-flex min-h-[48px] items-center justify-center rounded-full bg-brand-900 px-8 text-[16px] font-medium text-white shadow-lg shadow-brand-900/25 transition-all hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:-translate-y-0.5"
             rel="noreferrer"
           >
-            Termin planen
+            {labels.schedule}
           </a>
         </div>
       </MotionSection>
