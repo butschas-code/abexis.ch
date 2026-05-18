@@ -12,8 +12,29 @@ interface SchemaMarkupProps {
   name?: string;
   description?: string;
   type?: SchemaType;
-  data?: any;
+  data?: unknown;
   breadcrumbs?: { name: string; url: string }[];
+}
+
+type SchemaRecord = Record<string, unknown>;
+type JsonLdObject = Record<string, unknown>;
+
+function asRecord(value: unknown): SchemaRecord {
+  return value && typeof value === "object" && !Array.isArray(value) ? (value as SchemaRecord) : {};
+}
+
+function asText(value: unknown): string {
+  if (typeof value === "string") return value;
+  if (value == null) return "";
+  return String(value);
+}
+
+function readLinks(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => asRecord(item).href)
+    .map(asText)
+    .filter(Boolean);
 }
 
 /**
@@ -29,6 +50,13 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
   const currentUrl = `${BASE_URL}${path === "/" ? "" : path}`;
   const pageId = `${currentUrl}/#webpage`;
   const entityId = `${currentUrl}/#entity`;
+  const english = path === "/en" || path.startsWith("/en/");
+  const language = english ? "en-CH" : "de-CH";
+  const defaultPageName = english ? "Abexis: Management consulting" : "Abexis : Managementberatung";
+  const defaultDescription = english
+    ? "Strategic management consulting and executive search in Switzerland."
+    : "Strategische Managementberatung und Executive Search in der Schweiz.";
+  const schemaData = asRecord(data);
 
   // 1. GLOBAL IDENTITY (LocalBusiness / Organization)
   const organizationSchema = {
@@ -43,7 +71,9 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
       "height": "630"
     },
     "image": logoUrl,
-    "description": "Abexis GmbH ist eine Schweizer Managementberatung mit Fokus auf Strategie, Digitalisierung und Business Transformation.",
+    "description": english
+      ? "Abexis GmbH is a Swiss management consultancy focused on strategy, digitalization and business transformation."
+      : "Abexis GmbH ist eine Schweizer Managementberatung mit Fokus auf Strategie, Digitalisierung und Business Transformation.",
     "telephone": siteConfig.phoneTel,
     "email": siteConfig.emailPrimary,
     "address": {
@@ -63,7 +93,9 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
       "@type": "Country",
       "name": "CH"
     },
-    "additionalType": "https://de.wikipedia.org/wiki/Unternehmensberatung",
+    "additionalType": english
+      ? "https://en.wikipedia.org/wiki/Management_consulting"
+      : "https://de.wikipedia.org/wiki/Unternehmensberatung",
     "sameAs": [
       siteConfig.linkedin
     ].filter(Boolean)
@@ -76,22 +108,22 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
     "url": BASE_URL,
     "name": "Abexis",
     "publisher": { "@id": ORG_ID },
-    "inLanguage": "de-CH"
+    "inLanguage": language
   };
 
   // 3. WEBPAGE LAYER (Required on every page)
-  const webPageSchema: any = {
+  const webPageSchema: JsonLdObject = {
     "@type": "WebPage",
     "@id": pageId,
     "url": currentUrl,
-    "name": name || "Abexis : Managementberatung",
-    "description": description || "Strategische Managementberatung und Executive Search in der Schweiz.",
+    "name": name || defaultPageName,
+    "description": description || defaultDescription,
     "isPartOf": { "@id": WEBSITE_ID },
     "about": { "@id": ORG_ID },
-    "inLanguage": "de-CH"
+    "inLanguage": language
   };
 
-  const schemas: any[] = [organizationSchema, webSiteSchema, webPageSchema];
+  const schemas: JsonLdObject[] = [organizationSchema, webSiteSchema, webPageSchema];
 
   // 4. MAIN ENTITY LAYER (Specific to page type)
   if (type === "Home") {
@@ -105,16 +137,16 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
     schemas.push({
       "@type": "Service",
       "@id": entityId,
-      "name": data.title || name,
-      "description": data.excerpt || description,
+      "name": asText(schemaData.title) || name,
+      "description": asText(schemaData.excerpt) || description,
       "provider": { "@id": ORG_ID },
       "areaServed": "CH",
       "offers": {
         "@type": "Offer",
         "itemOffered": {
           "@type": "Service",
-          "name": data.title || name,
-          "description": data.excerpt || description
+          "name": asText(schemaData.title) || name,
+          "description": asText(schemaData.excerpt) || description
         }
       }
     });
@@ -123,14 +155,14 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
     schemas.push({
       "@type": "BlogPosting",
       "@id": entityId,
-      "headline": data.title,
-      "description": data.excerpt,
-      "image": data.image || logoUrl,
-      "datePublished": data.publishedAt,
-      "dateModified": data.updatedAt || data.publishedAt,
+      "headline": asText(schemaData.title),
+      "description": asText(schemaData.excerpt),
+      "image": asText(schemaData.image) || logoUrl,
+      "datePublished": asText(schemaData.publishedAt),
+      "dateModified": asText(schemaData.updatedAt) || asText(schemaData.publishedAt),
       "author": {
         "@type": "Person",
-        "name": data.authorName || "Daniel Sengstag",
+        "name": asText(schemaData.authorName) || "Daniel Sengstag",
         "url": `${BASE_URL}/danielsengstag`
       },
       "publisher": { "@id": ORG_ID },
@@ -140,7 +172,7 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
     webPageSchema.mainEntity = { "@id": entityId };
 
     // Map free-form employmentType strings to Google's allowed values.
-    const rawEmployment = String(data.employmentType || "").toLowerCase();
+    const rawEmployment = asText(schemaData.employmentType).toLowerCase();
     const employmentType =
       rawEmployment.includes("teil") || rawEmployment.includes("part")
         ? "PART_TIME"
@@ -153,14 +185,14 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
               : "FULL_TIME";
 
     // validThrough is required-non-critical: Google recommends 6 months after datePosted when no explicit deadline exists.
-    const datePosted = data.publishedAt || data.createdAt || new Date().toISOString();
+    const datePosted = asText(schemaData.publishedAt) || asText(schemaData.createdAt) || new Date().toISOString();
     const validThrough = new Date(new Date(datePosted).getTime() + 1000 * 60 * 60 * 24 * 180).toISOString();
 
     schemas.push({
       "@type": "JobPosting",
       "@id": entityId,
-      "title": data.title || name,
-      "description": data.excerpt || data.hook || description,
+      "title": asText(schemaData.title) || name,
+      "description": asText(schemaData.excerpt) || asText(schemaData.hook) || description,
       "datePosted": datePosted,
       "validThrough": validThrough,
       "employmentType": employmentType,
@@ -176,7 +208,7 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Zihlstrasse 25",
-          "addressLocality": data.location || "Hinwil",
+          "addressLocality": asText(schemaData.location) || "Hinwil",
           "addressRegion": "ZH",
           "postalCode": "8340",
           "addressCountry": "CH"
@@ -188,17 +220,20 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
     schemas.push({
       "@type": "Person",
       "@id": entityId,
-      "name": data.name,
-      "jobTitle": data.title,
-      "image": data.image,
-      "description": data.body,
-      "url": `${BASE_URL}/${data.slug}`,
-      "sameAs": (data.links || []).map((l: any) => l.href),
+      "name": asText(schemaData.name),
+      "jobTitle": asText(schemaData.title),
+      "image": asText(schemaData.image),
+      "description": asText(schemaData.body),
+      "url": english ? `${BASE_URL}/en/${asText(schemaData.slug)}` : `${BASE_URL}/${asText(schemaData.slug)}`,
+      "sameAs": readLinks(schemaData.links),
       "worksFor": { "@id": ORG_ID }
     });
   } else if (type === "Breadcrumb" && Array.isArray(data)) {
     // Legacy support for Breadcrumb type
-    breadcrumbs = data;
+    breadcrumbs = data.map((item) => {
+      const row = asRecord(item);
+      return { name: asText(row.name), url: asText(row.url) };
+    });
   }
 
   if (breadcrumbs && Array.isArray(breadcrumbs)) {
@@ -214,13 +249,13 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
   }
 
   // Inject Ratings ONLY if valid data exists (Strict Google Rules)
-  if (data?.ratingValue && data?.reviewCount) {
+  if (schemaData.ratingValue && schemaData.reviewCount) {
     const mainEntity = schemas.find(s => s["@id"] === entityId);
     if (mainEntity) {
       mainEntity.aggregateRating = {
         "@type": "AggregateRating",
-        "ratingValue": data.ratingValue,
-        "reviewCount": data.reviewCount,
+        "ratingValue": schemaData.ratingValue,
+        "reviewCount": schemaData.reviewCount,
         "bestRating": "5",
         "worstRating": "1"
       };

@@ -26,6 +26,7 @@ import {
   homeProcessContentEn,
   homeWhoWeAreContentEn,
 } from "@/data/home-page-content";
+import { homeTestimonialsEn } from "@/data/home-testimonials";
 import { homeWelcomeSectionEn, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
@@ -108,6 +109,7 @@ export default function EnglishHomePage() {
           eyebrow="References"
           headline="Results from practice."
           intro="Voices from executives and partners, published with permission."
+          items={homeTestimonialsEn}
         />
       </MotionSection>
 

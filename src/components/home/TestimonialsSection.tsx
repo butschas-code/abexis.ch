@@ -1,15 +1,18 @@
-import { homeTestimonials } from "@/data/home-testimonials";
+import { homeTestimonials, type HomeTestimonialItem } from "@/data/home-testimonials";
 
 export function TestimonialsSection({
   eyebrow = "Referenzen",
   headline = "Ergebnisse aus der Praxis.",
   intro = "Stimmen von Führungspersonen und Partnern — mit Freigabe der Zitierten.",
+  items = homeTestimonials,
 }: {
   eyebrow?: string;
   headline?: string;
   intro?: string;
+  items?: HomeTestimonialItem[];
 } = {}) {
-  const [featured, ...rest] = homeTestimonials;
+  const [featured, ...rest] = items;
+  if (!featured) return null;
 
   return (
     <section className="relative overflow-hidden border-y border-black/[0.06] py-16 sm:py-24 md:py-32">

@@ -47,12 +47,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  const team = teamOrder.map((p) => ({
-    url: `${base}/${p}`,
-    lastModified: new Date(),
-    changeFrequency: "yearly" as const,
-    priority: 0.55,
-  }));
+  const team = teamOrder.flatMap((p) => [
+    {
+      url: `${base}/${p}`,
+      lastModified: new Date(),
+      changeFrequency: "yearly" as const,
+      priority: 0.55,
+    },
+    {
+      url: `${base}/en/${p}`,
+      lastModified: new Date(),
+      changeFrequency: "yearly" as const,
+      priority: 0.55,
+    },
+  ]);
 
   const legacyPosts = getAllBlogPosts().map((p) => ({
     url: `${base}/blog/${p.slug}`,

@@ -33,6 +33,16 @@ const englishAliasesToCanonical: Record<string, string> = {
   "/en/topics/project-management": "/en/fokusthemen/projektmanagement",
 };
 
+const teamProfileSlugs = new Set([
+  "danielsengstag",
+  "christophwainig",
+  "katrinyuan",
+  "sergegarazi",
+  "williamdemaeyer",
+  "sachamoeller",
+  "renatesengstag",
+]);
+
 const englishToGerman: Record<string, string> = Object.fromEntries(
   Object.entries(germanToEnglish).map(([de, en]) => [en, de === "/projectfitcheck" ? "/projectrealitycheck" : de]),
 );
@@ -61,6 +71,7 @@ export function localizedPath(pathname: string, locale: SiteLocale) {
   if (locale === "en") {
     if (isEnglishPath(cleanPath)) return canonicalEnglishPath(cleanPath);
     if (cleanPath.startsWith("/executive-search/vakanzen/")) return `/en${cleanPath}`;
+    if (isGermanTeamProfilePath(cleanPath)) return `/en${cleanPath}`;
     return germanToEnglish[cleanPath] ?? "/en/home";
   }
 
@@ -69,6 +80,7 @@ export function localizedPath(pathname: string, locale: SiteLocale) {
   if (cleanPath.startsWith("/en/executive-search/vacancies/")) {
     return cleanPath.replace(/^\/en\/executive-search\/vacancies/, "/executive-search/vakanzen");
   }
+  if (isEnglishTeamProfilePath(cleanPath)) return cleanPath.replace(/^\/en/, "");
   return englishToGerman[cleanPath] ?? "/";
 }
 
@@ -83,4 +95,14 @@ function normalizePath(pathname: string) {
   const pathOnly = pathname.split(/[?#]/, 1)[0] || "/";
   if (pathOnly.length > 1 && pathOnly.endsWith("/")) return pathOnly.slice(0, -1);
   return pathOnly;
+}
+
+function isGermanTeamProfilePath(pathname: string) {
+  const slug = pathname.slice(1);
+  return !slug.includes("/") && teamProfileSlugs.has(slug);
+}
+
+function isEnglishTeamProfilePath(pathname: string) {
+  const slug = pathname.replace(/^\/en\//, "");
+  return Boolean(slug) && !slug.includes("/") && teamProfileSlugs.has(slug);
 }
