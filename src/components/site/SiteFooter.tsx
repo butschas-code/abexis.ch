@@ -33,14 +33,14 @@ export function SiteFooter() {
   const english = isEnglishPath(pathname);
   const servicesLinks = english
     ? [
-        { href: "/en/services", label: "Overview" },
+        { href: "/en/leistungen", label: "Overview" },
         { href: "/en/projectrealitycheck", label: "Project Reality Check" },
-        { href: "/en/topics/digital-transformation", label: "Digital Transformation" },
-        { href: "/en/topics/corporate-strategy", label: "Corporate Strategy" },
-        { href: "/en/topics/sales-marketing", label: "Sales & Marketing" },
-        { href: "/en/topics/change-management", label: "Change Management" },
-        { href: "/en/topics/process-optimization", label: "Process Optimization" },
-        { href: "/en/topics/project-management", label: "Project Management" },
+        { href: "/en/fokusthemen/digitale-transformation", label: "Digital Transformation" },
+        { href: "/en/fokusthemen/unternehmensstrategie", label: "Corporate Strategy" },
+        { href: "/en/fokusthemen/vertriebmarketing", label: "Sales & Marketing" },
+        { href: "/en/fokusthemen/veränderungsmanagement", label: "Change Management" },
+        { href: "/en/fokusthemen/prozessoptimierung", label: "Process Optimization" },
+        { href: "/en/fokusthemen/projektmanagement", label: "Project Management" },
       ]
     : [
         { href: "/leistungen", label: "Überblick" },
@@ -55,10 +55,10 @@ export function SiteFooter() {
   const companyLinks = english
     ? [
         { href: "/en/executive-search", label: "Executive Search" },
-        { href: "/en/executive-search/vacancies", label: "Vacancies" },
+        { href: "/en/executive-search/vakanzen", label: "Vacancies" },
         { href: "/blog", label: "Insights" },
-        { href: "/en/about", label: "About" },
-        { href: "/en/contact", label: "Contact" },
+        { href: "/en/ueber-uns", label: "About" },
+        { href: "/en/kontakt", label: "Contact" },
       ]
     : [
         { href: "/executive-search", label: "Executive Search" },

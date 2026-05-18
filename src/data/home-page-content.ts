@@ -236,7 +236,7 @@ export const homeHeroContentEn = {
   sub: "Abexis creates clarity when it is missing.",
   body: "Many projects do not fail because of one single mistake. They gradually lose orientation, and that often remains unclear for too long.",
   primaryCta: { href: "/en/projectrealitycheck" as const, label: "Request a Project Reality Check" },
-  secondaryCta: { href: "/en/contact" as const, label: "Non-binding conversation" },
+  secondaryCta: { href: "/en/kontakt" as const, label: "Non-binding conversation" },
 } as const;
 
 export const homeChallengeContentEn = {
@@ -386,32 +386,32 @@ export const homeLeistungenBlockEn = {
     {
       title: "Digital Transformation",
       body: "Introduction and development of digital solutions, AI and analytics. Focused on value, integration and implementation.",
-      href: "/en/topics/digital-transformation",
+      href: "/en/fokusthemen/digitale-transformation",
     },
     {
       title: "Corporate Strategy",
       body: "Structured strategy work with clear prioritization. A basis for decisions and implementation.",
-      href: "/en/topics/corporate-strategy",
+      href: "/en/fokusthemen/unternehmensstrategie",
     },
     {
       title: "Sales and Marketing",
       body: "Analysis and development of market approach and sales. Goal: understandable and manageable growth.",
-      href: "/en/topics/sales-marketing",
+      href: "/en/fokusthemen/vertriebmarketing",
     },
     {
       title: "Change Management",
       body: "Support for transformations at organizational and human level. Focused on clarity and acceptance.",
-      href: "/en/topics/change-management",
+      href: "/en/fokusthemen/veränderungsmanagement",
     },
     {
       title: "Process Optimization",
       body: "Analysis and improvement of existing workflows. Reducing complexity and increasing efficiency.",
-      href: "/en/topics/process-optimization",
+      href: "/en/fokusthemen/prozessoptimierung",
     },
     {
       title: "Project Management",
       body: "Leadership and stabilization of critical projects. Clear structure and transparent steering.",
-      href: "/en/topics/project-management",
+      href: "/en/fokusthemen/projektmanagement",
     },
     {
       title: "Executive Search (Abexis SEARCH)",

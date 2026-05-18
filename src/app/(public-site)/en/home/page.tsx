@@ -68,7 +68,7 @@ export default function EnglishHomePage() {
         </div>
       </HomeHero>
 
-      <WelcomeSection content={homeWelcomeSectionEn} contactHref="/en/contact" contactLabel="Contact Abexis" />
+      <WelcomeSection content={homeWelcomeSectionEn} contactHref="/en/kontakt" contactLabel="Contact Abexis" />
 
       <HomeChallengeSection
         content={homeChallengeContentEn}
@@ -87,7 +87,7 @@ export default function EnglishHomePage() {
 
       <HomeWhoWeAreSection
         content={homeWhoWeAreContentEn}
-        profileHref="/en/about"
+        profileHref="/en/ueber-uns"
         profileLabel="About Abexis"
         teamProfileLabel="Profile"
       />
@@ -99,7 +99,7 @@ export default function EnglishHomePage() {
       <HomeVacancyTeasers
         heading="Current vacancies"
         allLabel="All vacancies"
-        allHref="/en/executive-search/vacancies"
+        allHref="/en/executive-search/vakanzen"
         actionLabel="View position"
       />
 

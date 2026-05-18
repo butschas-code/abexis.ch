@@ -30,7 +30,7 @@ export default function EnglishExecutiveSearchPage() {
           </article>
         ))}
       </div>
-      <Link href="/en/contact" className="mt-10 inline-flex rounded-full bg-brand-900 px-5 py-3 text-[14px] font-semibold text-white">
+      <Link href="/en/kontakt" className="mt-10 inline-flex rounded-full bg-brand-900 px-5 py-3 text-[14px] font-semibold text-white">
         Start a confidential conversation
       </Link>
     </InteriorPageLayout>

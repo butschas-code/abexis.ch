@@ -298,7 +298,7 @@ export function SiteHeader() {
   const isHome = pathname === "/";
   const english = isEnglishPath(pathname);
   const navItems = english ? mainNavEn : mainNav;
-  const contactHref = english ? "/en/contact" : "/kontakt";
+  const contactHref = english ? "/en/kontakt" : "/kontakt";
   const contactLabel = english ? "Book a call" : "Termin buchen";
   const [mobileTopWash, setMobileTopWash] = useState(!isHome);
   const reduce = useReducedMotion();

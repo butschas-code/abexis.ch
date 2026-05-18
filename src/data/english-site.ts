@@ -127,7 +127,7 @@ export const englishServiceTeasers = [
   ...englishTopics.map((topic) => ({
     slug: topic.slug,
     imageKey: topic.deSlug,
-    href: `/en/topics/${topic.slug}`,
+    href: `/en/fokusthemen/${topic.deSlug}`,
     title: topic.title,
     subtitle: topic.subtitle,
     excerpt: topic.excerpt,
@@ -147,4 +147,8 @@ export type EnglishTopic = (typeof englishTopics)[number];
 
 export function getEnglishTopic(slug: string): EnglishTopic | undefined {
   return englishTopics.find((topic) => topic.slug === slug);
+}
+
+export function getEnglishTopicByDeSlug(slug: string): EnglishTopic | undefined {
+  return englishTopics.find((topic) => topic.deSlug === slug);
 }

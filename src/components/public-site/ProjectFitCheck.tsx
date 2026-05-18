@@ -309,7 +309,7 @@ const prcCopyEn = {
     heroTitle2: "but often drift in the wrong direction",
     heroBody:
       "The Abexis Project Reality Check quickly shows where your project really stands and what needs to be decided now.",
-    contactHref: "/en/contact",
+    contactHref: "/en/kontakt",
     contactCta: "Schedule a non-binding call",
     flowCta: "View process",
     earlyWarning: "Early warning",

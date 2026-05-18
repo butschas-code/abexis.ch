@@ -18,12 +18,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/legal-policy",
     "/privacy-policy",
     "/en/home",
-    "/en/services",
+    "/en/leistungen",
+    "/en/leistungen/executive-search",
     "/en/projectrealitycheck",
-    "/en/about",
-    "/en/contact",
+    "/en/ueber-uns",
+    "/en/kontakt",
     "/en/executive-search",
-    "/en/executive-search/vacancies",
+    "/en/executive-search/vakanzen",
     "/executive-search/vakanzen",
   ].map((path) => ({
     url: `${base}${path}`,
@@ -40,7 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const englishFokus = englishTopics.map((f) => ({
-    url: `${base}/en/topics/${f.slug}`,
+    url: `${base}/en/fokusthemen/${f.deSlug}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.7,

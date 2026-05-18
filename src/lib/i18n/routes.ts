@@ -2,20 +2,35 @@ export type SiteLocale = "de" | "en";
 
 const germanToEnglish: Record<string, string> = {
   "/": "/en/home",
-  "/leistungen": "/en/services",
+  "/leistungen": "/en/leistungen",
   "/projectfitcheck": "/en/projectrealitycheck",
   "/projectrealitycheck": "/en/projectrealitycheck",
-  "/kontakt": "/en/contact",
-  "/ueber-uns": "/en/about",
+  "/kontakt": "/en/kontakt",
+  "/ueber-uns": "/en/ueber-uns",
   "/executive-search": "/en/executive-search",
-  "/executive-search/vakanzen": "/en/executive-search/vacancies",
-  "/leistungen/executive-search": "/en/executive-search",
-  "/fokusthemen/digitale-transformation": "/en/topics/digital-transformation",
-  "/fokusthemen/unternehmensstrategie": "/en/topics/corporate-strategy",
-  "/fokusthemen/vertriebmarketing": "/en/topics/sales-marketing",
-  "/fokusthemen/veränderungsmanagement": "/en/topics/change-management",
-  "/fokusthemen/prozessoptimierung": "/en/topics/process-optimization",
-  "/fokusthemen/projektmanagement": "/en/topics/project-management",
+  "/executive-search/vakanzen": "/en/executive-search/vakanzen",
+  "/leistungen/executive-search": "/en/leistungen/executive-search",
+  "/fokusthemen/digitale-transformation": "/en/fokusthemen/digitale-transformation",
+  "/fokusthemen/unternehmensstrategie": "/en/fokusthemen/unternehmensstrategie",
+  "/fokusthemen/vertriebmarketing": "/en/fokusthemen/vertriebmarketing",
+  "/fokusthemen/veränderungsmanagement": "/en/fokusthemen/veränderungsmanagement",
+  "/fokusthemen/prozessoptimierung": "/en/fokusthemen/prozessoptimierung",
+  "/fokusthemen/projektmanagement": "/en/fokusthemen/projektmanagement",
+};
+
+const englishAliasesToCanonical: Record<string, string> = {
+  "/en": "/en/home",
+  "/en/services": "/en/leistungen",
+  "/en/contact": "/en/kontakt",
+  "/en/about": "/en/ueber-uns",
+  "/en/executive-search/vacancies": "/en/executive-search/vakanzen",
+  "/en/services/executive-search": "/en/leistungen/executive-search",
+  "/en/topics/digital-transformation": "/en/fokusthemen/digitale-transformation",
+  "/en/topics/corporate-strategy": "/en/fokusthemen/unternehmensstrategie",
+  "/en/topics/sales-marketing": "/en/fokusthemen/vertriebmarketing",
+  "/en/topics/change-management": "/en/fokusthemen/veränderungsmanagement",
+  "/en/topics/process-optimization": "/en/fokusthemen/prozessoptimierung",
+  "/en/topics/project-management": "/en/fokusthemen/projektmanagement",
 };
 
 const englishToGerman: Record<string, string> = Object.fromEntries(
@@ -24,7 +39,17 @@ const englishToGerman: Record<string, string> = Object.fromEntries(
 
 englishToGerman["/en"] = "/";
 englishToGerman["/en/home"] = "/";
-englishToGerman["/en/services/executive-search"] = "/executive-search";
+englishToGerman["/en/services"] = "/leistungen";
+englishToGerman["/en/contact"] = "/kontakt";
+englishToGerman["/en/about"] = "/ueber-uns";
+englishToGerman["/en/executive-search/vacancies"] = "/executive-search/vakanzen";
+englishToGerman["/en/services/executive-search"] = "/leistungen/executive-search";
+englishToGerman["/en/topics/digital-transformation"] = "/fokusthemen/digitale-transformation";
+englishToGerman["/en/topics/corporate-strategy"] = "/fokusthemen/unternehmensstrategie";
+englishToGerman["/en/topics/sales-marketing"] = "/fokusthemen/vertriebmarketing";
+englishToGerman["/en/topics/change-management"] = "/fokusthemen/veränderungsmanagement";
+englishToGerman["/en/topics/process-optimization"] = "/fokusthemen/prozessoptimierung";
+englishToGerman["/en/topics/project-management"] = "/fokusthemen/projektmanagement";
 
 export function isEnglishPath(pathname: string) {
   return pathname === "/en" || pathname.startsWith("/en/");
@@ -34,7 +59,7 @@ export function localizedPath(pathname: string, locale: SiteLocale) {
   const cleanPath = normalizePath(pathname);
 
   if (locale === "en") {
-    if (isEnglishPath(cleanPath)) return cleanPath;
+    if (isEnglishPath(cleanPath)) return englishAliasesToCanonical[cleanPath] ?? cleanPath;
     return germanToEnglish[cleanPath] ?? "/en/home";
   }
 

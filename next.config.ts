@@ -18,6 +18,61 @@ const nextConfig: NextConfig = {
         destination: "/en/projectrealitycheck",
         statusCode: 301,
       },
+      {
+        source: "/en/services",
+        destination: "/en/leistungen",
+        statusCode: 301,
+      },
+      {
+        source: "/en/services/executive-search",
+        destination: "/en/leistungen/executive-search",
+        statusCode: 301,
+      },
+      {
+        source: "/en/contact",
+        destination: "/en/kontakt",
+        statusCode: 301,
+      },
+      {
+        source: "/en/about",
+        destination: "/en/ueber-uns",
+        statusCode: 301,
+      },
+      {
+        source: "/en/executive-search/vacancies",
+        destination: "/en/executive-search/vakanzen",
+        statusCode: 301,
+      },
+      {
+        source: "/en/topics/digital-transformation",
+        destination: "/en/fokusthemen/digitale-transformation",
+        statusCode: 301,
+      },
+      {
+        source: "/en/topics/corporate-strategy",
+        destination: "/en/fokusthemen/unternehmensstrategie",
+        statusCode: 301,
+      },
+      {
+        source: "/en/topics/sales-marketing",
+        destination: "/en/fokusthemen/vertriebmarketing",
+        statusCode: 301,
+      },
+      {
+        source: "/en/topics/change-management",
+        destination: "/en/fokusthemen/veränderungsmanagement",
+        statusCode: 301,
+      },
+      {
+        source: "/en/topics/process-optimization",
+        destination: "/en/fokusthemen/prozessoptimierung",
+        statusCode: 301,
+      },
+      {
+        source: "/en/topics/project-management",
+        destination: "/en/fokusthemen/projektmanagement",
+        statusCode: 301,
+      },
     ];
   },
   images: {
