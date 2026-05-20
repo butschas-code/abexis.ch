@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/data/pages";
 import { logoUrl } from "@/data/site-images";
-import { footerShowsOnlyHinwilAddress, isEnglishPath, localizedPath } from "@/lib/i18n/routes";
+import { isEnglishPath, localizedPath } from "@/lib/i18n/routes";
 
 function FooterNavColumn({ label, items }: { label: string; items: { href: string; label: string }[] }) {
   return (
@@ -31,7 +31,6 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
   const pathname = usePathname();
   const english = isEnglishPath(pathname);
-  const legalFooterHinwilOnly = footerShowsOnlyHinwilAddress(pathname);
   const servicesLinks = english
     ? [
         { href: "/en/leistungen", label: "Overview" },
@@ -151,17 +150,13 @@ export function SiteFooter() {
               </p>
               <div className="space-y-3 text-[14px] leading-snug text-white/70">
                 <div>
-                  {!legalFooterHinwilOnly ? (
-                    <p className="text-white/40">{english ? "Head office" : "Hauptsitz"}</p>
-                  ) : null}
+                  <p className="text-white/40">{english ? "Head office" : "Hauptsitz"}</p>
                   <p className="whitespace-pre-line">{siteConfig.footerAddressHinwil}</p>
                 </div>
-                {!legalFooterHinwilOnly ? (
-                  <div>
-                    <p className="text-white/40">{english ? "Additional location" : "Weiterer Standort"}</p>
-                    <p className="whitespace-pre-line">{siteConfig.footerAddressZurich}</p>
-                  </div>
-                ) : null}
+                <div>
+                  <p className="text-white/40">{english ? "Additional location" : "Weiterer Standort"}</p>
+                  <p className="whitespace-pre-line">{siteConfig.footerAddressZurich}</p>
+                </div>
                 <a
                   href={`mailto:${siteConfig.emailPrimary}`}
                   className="block transition-colors duration-150 hover:text-white"
