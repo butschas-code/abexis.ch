@@ -36,26 +36,37 @@ const baseActions = [
 
 type Props = {
   showSubmissionsShortcut?: boolean;
+  /** Vacancy applications — editors with CMS access. */
+  showJobApplicationsShortcut?: boolean;
 };
 
-export function DashboardQuickActions({ showSubmissionsShortcut = true }: Props) {
-  const actions = showSubmissionsShortcut
-    ? [
-        ...baseActions,
-        {
-          href: CMS_PATHS.adminSubmissions,
-          title: "Eingänge",
-          text: "Formularmeldungen",
-          style: "secondary" as const,
-        },
-        {
-          href: CMS_PATHS.adminApplications,
-          title: "Bewerbungen",
-          text: "Board & sortierbare Liste",
-          style: "secondary" as const,
-        },
-      ]
-    : [...baseActions];
+export function DashboardQuickActions({
+  showSubmissionsShortcut = true,
+  showJobApplicationsShortcut = true,
+}: Props) {
+  const actions = [
+    ...baseActions,
+    ...(showSubmissionsShortcut
+      ? [
+          {
+            href: CMS_PATHS.adminSubmissions,
+            title: "Eingänge",
+            text: "Formularmeldungen",
+            style: "secondary" as const,
+          },
+        ]
+      : []),
+    ...(showJobApplicationsShortcut
+      ? [
+          {
+            href: CMS_PATHS.adminApplications,
+            title: "Bewerbungen",
+            text: "Board & sortierbare Liste",
+            style: "secondary" as const,
+          },
+        ]
+      : []),
+  ];
 
   return (
     <div className="rounded-2xl border border-black/[0.07] bg-white p-6 shadow-[0_1px_0_rgba(0,0,0,0.04)]">

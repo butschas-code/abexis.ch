@@ -45,6 +45,7 @@ const EMPTY_STATE: DashState = {
 export function AdminDashboardClient() {
   const { roleReady, hasPermission } = useCmsAuth();
   const canManageSubmissions = hasPermission("manage_submissions");
+  const canManageJobApplications = hasPermission("manage_job_applications");
   const [dash, setDash] = useState<DashState>(EMPTY_STATE);
   const { counts, recentPosts, recentSubmissions, listError, aggError } = dash;
 
@@ -112,7 +113,10 @@ export function AdminDashboardClient() {
       ) : null}
 
       <AdminPageSection>
-        <DashboardQuickActions showSubmissionsShortcut={canManageSubmissions} />
+        <DashboardQuickActions
+          showSubmissionsShortcut={canManageSubmissions}
+          showJobApplicationsShortcut={canManageJobApplications}
+        />
       </AdminPageSection>
 
       {showFullSkeleton ? (

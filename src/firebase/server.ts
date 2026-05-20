@@ -6,6 +6,7 @@
  * account off client bundles, restrict IAM in GCP, and validate sensitive Route Handlers (e.g. uploads).
  */
 export {
+  getAdminAuth,
   getAdminFirestore,
   getAdminStorage,
   getFirebaseAdminApp,

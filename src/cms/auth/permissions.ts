@@ -15,6 +15,8 @@ export const CMS_PERMISSIONS = [
   "manage_authors",
   /** Form intakes, PII : admin only in v1. */
   "manage_submissions",
+  /** Vacancy job applications (Bewerbungen) : editors and admins. */
+  "manage_job_applications",
   /** Site settings, SEO blocks, legal/contact config : admin only. */
   "manage_site_settings",
   /** Executive Search vacancy/mandate postings. */
@@ -34,6 +36,7 @@ const EDITOR_PERMISSIONS: ReadonlySet<CmsPermission> = new Set([
   "manage_categories",
   "manage_authors",
   "manage_vacancies",
+  "manage_job_applications",
 ]);
 
 /** @deprecated Prefer {@link roleHasPermission} with a concrete permission. Kept for existing imports. */

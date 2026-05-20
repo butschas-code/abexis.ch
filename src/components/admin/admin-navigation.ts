@@ -22,7 +22,7 @@ export const ADMIN_NAV_ITEMS: readonly AdminNavItem[] = [
   { href: CMS_PATHS.adminAuthors, label: "Autor:innen", permission: "manage_authors" },
   { href: CMS_PATHS.adminVacancies, label: "Vakanzen", permission: "manage_vacancies" },
   { href: CMS_PATHS.adminSubmissions, label: "Eingänge", permission: "manage_submissions" },
-  { href: CMS_PATHS.adminApplications, label: "Bewerbungen", permission: "manage_submissions" },
+  { href: CMS_PATHS.adminApplications, label: "Bewerbungen", permission: "manage_job_applications" },
   { href: CMS_PATHS.adminSettings, label: "Einstellungen", permission: "manage_site_settings" },
 ] as const;
 
