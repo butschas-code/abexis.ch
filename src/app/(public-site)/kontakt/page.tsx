@@ -42,9 +42,9 @@ export default async function KontaktPage() {
             <dl className="space-y-8 text-[15px]">
               <div>
                 <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Anschrift</dt>
-                <dd className="mt-2 leading-relaxed text-[#1d1d1f]">
+                <dd className="mt-2 whitespace-pre-line leading-relaxed text-[#1d1d1f]">
                   {siteConfig.company}
-                  <br />
+                  {"\n"}
                   {siteConfig.footerAddressHinwil}
                 </dd>
               </div>
@@ -52,9 +52,9 @@ export default async function KontaktPage() {
                 <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">
                   Weiterer Standort
                 </dt>
-                <dd className="mt-2 leading-relaxed text-[#1d1d1f]">
+                <dd className="mt-2 whitespace-pre-line leading-relaxed text-[#1d1d1f]">
                   {siteConfig.company}
-                  <br />
+                  {"\n"}
                   {siteConfig.footerAddressZurich}
                 </dd>
               </div>

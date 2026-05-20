@@ -79,6 +79,20 @@ export function isEnglishPath(pathname: string) {
   return pathname === "/en" || pathname.startsWith("/en/");
 }
 
+/** Legal / policy URLs: footer lists only the registered office (Hinwil), not the second location. */
+const FOOTER_HINWIL_ONLY_PATHS = new Set([
+  "/legal-policy",
+  "/privacy-policy",
+  "/en/legal-policy",
+  "/en/privacy-policy",
+  "/en/legal",
+  "/en/privacy",
+]);
+
+export function footerShowsOnlyHinwilAddress(pathname: string): boolean {
+  return FOOTER_HINWIL_ONLY_PATHS.has(normalizePath(pathname));
+}
+
 export function localizedPath(pathname: string, locale: SiteLocale) {
   const cleanPath = normalizePath(pathname);
 

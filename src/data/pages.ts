@@ -20,9 +20,9 @@ export const ART_DIRECTION = `Mood: präzise, diskret, hochwertig · Serif + San
 
 export const siteConfig = {
   company: "Abexis GmbH",
-  /** Wie auf der bisherigen Startseite / Kontaktbereich ausgewiesen */
-  footerAddressHinwil: "Zihlstrasse 25, 8340 Hinwil, Schweiz",
-  footerAddressZurich: "Bahnhofquai 11, 8001 Zürich, Schweiz",
+  /** Footer & Kontakt: Hauptsitz und weiterer Standort (Zeilenumbrüche via `whitespace-pre-line`). */
+  footerAddressHinwil: "Zihlstrasse 25, \n8340 Hinwil, \nSchweiz",
+  footerAddressZurich: "Bahnhofquai 11, \n8001 Zürich, \nSchweiz",
   emailPrimary: "contact@abexis.ch",
   phoneDisplay: "+41 43 535 84 34",
   phoneTel: "+41435358434",

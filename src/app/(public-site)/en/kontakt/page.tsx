@@ -22,17 +22,17 @@ export default function EnglishContactPage() {
             <dl className="space-y-8 text-[15px]">
               <div>
                 <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Head office</dt>
-                <dd className="mt-2 leading-relaxed text-[#1d1d1f]">
+                <dd className="mt-2 whitespace-pre-line leading-relaxed text-[#1d1d1f]">
                   {siteConfig.company}
-                  <br />
+                  {"\n"}
                   {siteConfig.footerAddressHinwil}
                 </dd>
               </div>
               <div>
                 <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Additional location</dt>
-                <dd className="mt-2 leading-relaxed text-[#1d1d1f]">
+                <dd className="mt-2 whitespace-pre-line leading-relaxed text-[#1d1d1f]">
                   {siteConfig.company}
-                  <br />
+                  {"\n"}
                   {siteConfig.footerAddressZurich}
                 </dd>
               </div>
