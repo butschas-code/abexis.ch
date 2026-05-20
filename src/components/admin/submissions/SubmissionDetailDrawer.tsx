@@ -8,18 +8,7 @@ import {
   updateSubmissionStatus,
   type SubmissionDetail,
 } from "@/cms/services/submissions-admin-client";
-
-const statusLabel: Record<CmsSubmissionStatus, string> = {
-  new: "Neu",
-  reviewed: "Gelesen",
-  archived: "Archiviert",
-  spam: "Spam",
-  screening: "In Prüfung",
-  interview: "Interview",
-  offer: "Angebot",
-  hired: "Eingestellt",
-  rejected: "Abgesagt",
-};
+import { submissionStatusLabelDe } from "./submission-admin-labels";
 
 type Props = {
   submissionId: string | null;
@@ -126,7 +115,7 @@ export function SubmissionDetailDrawer({ submissionId, open, onClose, onStatusCh
                           : "border border-black/10 bg-white text-[var(--apple-text-secondary)] hover:border-black/20"
                       }`}
                     >
-                      {statusLabel[s]}
+                      {submissionStatusLabelDe[s]}
                     </button>
                   ))}
                 </div>

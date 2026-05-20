@@ -27,6 +27,12 @@ export type SubmissionListItem = {
   /** From payload when present */
   summary: string | null;
   hasFiles: boolean;
+  /** Bewerbung / lead list (from payload); null when absent */
+  applicantName: string | null;
+  email: string | null;
+  phone: string | null;
+  jobTitle: string | null;
+  messagePreview: string | null;
 };
 
 export type SubmissionDetail = Submission & { id: string };
@@ -82,6 +88,12 @@ function payloadSummary(payload: Record<string, string>): string | null {
   return bits.length ? bits.join(" · ") : null;
 }
 
+function messagePreview(payload: Record<string, string>): string | null {
+  const m = payload.message?.trim();
+  if (!m) return null;
+  return m.length > 160 ? `${m.slice(0, 157)}…` : m;
+}
+
 export async function listSubmissionsForAdmin(max = 150): Promise<SubmissionListItem[]> {
   const db = getCmsFirestore();
   if (!db) return [];
@@ -93,6 +105,10 @@ export async function listSubmissionsForAdmin(max = 150): Promise<SubmissionList
       data.payload && typeof data.payload === "object" && !Array.isArray(data.payload)
         ? (data.payload as Record<string, string>)
         : {};
+    const applicantName = payload.name?.trim() || null;
+    const email = payload.email?.trim() || null;
+    const phone = payload.phone?.trim() || null;
+    const jobTitle = payload.jobTitle?.trim() || null;
     return {
       id: d.id,
       type: String(data.type ?? ""),
@@ -101,6 +117,11 @@ export async function listSubmissionsForAdmin(max = 150): Promise<SubmissionList
       createdAt: toIso(data.createdAt),
       summary: payloadSummary(payload),
       hasFiles: Array.isArray(data.fileUrls) && data.fileUrls.length > 0,
+      applicantName,
+      email,
+      phone,
+      jobTitle,
+      messagePreview: messagePreview(payload),
     };
   });
 }

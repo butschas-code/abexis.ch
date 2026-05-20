@@ -48,6 +48,12 @@ export function DashboardQuickActions({ showSubmissionsShortcut = true }: Props)
           text: "Formularmeldungen",
           style: "secondary" as const,
         },
+        {
+          href: CMS_PATHS.adminApplications,
+          title: "Bewerbungen",
+          text: "Board & sortierbare Liste",
+          style: "secondary" as const,
+        },
       ]
     : [...baseActions];
 

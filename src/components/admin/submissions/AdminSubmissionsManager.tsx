@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CMS_PATHS } from "@/admin/paths";
 import type { CmsSubmissionStatus } from "@/cms/types/enums";
+import { CMS_SUBMISSION_STATUSES } from "@/cms/types/enums";
 import {
   listSubmissionsForAdmin,
   type SubmissionListItem,
@@ -18,19 +19,9 @@ import {
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminLoading } from "@/components/admin/AdminLoading";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
+import { APPLICATION_BOARD_COLUMNS, applicationBoardColumn } from "@/lib/cms/application-board";
 import { SubmissionDetailDrawer } from "./SubmissionDetailDrawer";
-
-const statusLabel: Record<CmsSubmissionStatus, string> = {
-  new: "Neu",
-  reviewed: "Gelesen",
-  archived: "Archiviert",
-  spam: "Spam",
-  screening: "In Prüfung",
-  interview: "Interview",
-  offer: "Angebot",
-  hired: "Eingestellt",
-  rejected: "Abgesagt",
-};
+import { applicationBoardLabelDe, submissionStatusLabelDe } from "./submission-admin-labels";
 
 const typeLabel: Record<string, string> = {
   contact: "Kontakt",
@@ -40,14 +31,6 @@ const typeLabel: Record<string, string> = {
   generic: "Generisch",
 };
 
-const PIPELINE_COLUMNS: CmsSubmissionStatus[] = [
-  "new",
-  "screening",
-  "interview",
-  "offer",
-  "hired",
-  "rejected"
-];
 
 export function AdminSubmissionsManager() {
   const [rows, setRows] = useState<SubmissionListItem[]>([]);
@@ -87,7 +70,10 @@ export function AdminSubmissionsManager() {
         tLabel.toLowerCase().includes(s) ||
         r.type.toLowerCase().includes(s) ||
         r.id.toLowerCase().includes(s) ||
-        (r.summary ?? "").toLowerCase().includes(s)
+        (r.summary ?? "").toLowerCase().includes(s) ||
+        (r.email ?? "").toLowerCase().includes(s) ||
+        (r.jobTitle ?? "").toLowerCase().includes(s) ||
+        (r.applicantName ?? "").toLowerCase().includes(s)
       );
     });
   }, [rows, filterStatus, q]);
@@ -101,17 +87,25 @@ export function AdminSubmissionsManager() {
     <AdminPageContainer>
       <AdminPageHeader
         title="Eingänge & Bewerber"
-        description="Nachrichten und Bewerbungs-Pipeline. Nutzen Sie die Table-Ansicht für Kontakte und Pipeline für Job-Bewerber."
+        description="Nachrichten und Bewerbungen. Nutzen Sie die Tabelle für alle Eingänge oder die Pipeline-Karten für Bewerbungen."
       />
 
       <AdminPageSection>
-        <div className="flex items-center justify-between text-[15px] mb-4">
-          <Link
-            href={CMS_PATHS.adminHome}
-            className="font-medium text-[var(--brand-900)] underline decoration-[var(--brand-900)]/20 underline-offset-4 transition hover:decoration-[var(--brand-900)]/45"
-          >
-            Zur Übersicht
-          </Link>
+        <div className="flex flex-wrap items-center justify-between gap-3 text-[15px] mb-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <Link
+              href={CMS_PATHS.adminHome}
+              className="font-medium text-[var(--brand-900)] underline decoration-[var(--brand-900)]/20 underline-offset-4 transition hover:decoration-[var(--brand-900)]/45"
+            >
+              Zur Übersicht
+            </Link>
+            <Link
+              href={CMS_PATHS.adminApplications}
+              className="font-medium text-[var(--brand-900)] underline decoration-[var(--brand-900)]/25 underline-offset-4 transition hover:decoration-[var(--brand-900)]/50"
+            >
+              Bewerbungen →
+            </Link>
+          </div>
           <div className="flex bg-[var(--apple-bg-subtle)] p-1 rounded-xl items-center border border-black/[0.06]">
             <button
               onClick={() => setViewMode("table")}
@@ -148,15 +142,11 @@ export function AdminSubmissionsManager() {
                 className={adminInput}
               >
                 <option value="all">Alle Status</option>
-                <option value="new">Neu</option>
-                <option value="reviewed">Gelesen</option>
-                <option value="screening">In Prüfung</option>
-                <option value="interview">Interview</option>
-                <option value="offer">Angebot</option>
-                <option value="hired">Eingestellt</option>
-                <option value="rejected">Abgesagt</option>
-                <option value="archived">Archiviert</option>
-                <option value="spam">Spam</option>
+                {CMS_SUBMISSION_STATUSES.map((st) => (
+                  <option key={st} value={st}>
+                    {submissionStatusLabelDe[st]}
+                  </option>
+                ))}
               </select>
             </label>
           </div>
@@ -175,13 +165,20 @@ export function AdminSubmissionsManager() {
           />
         ) : viewMode === "pipeline" ? (
           <div className="flex gap-4 overflow-x-auto pb-6 pt-2 snap-x">
-            {PIPELINE_COLUMNS.map((colStatus) => {
-              const colItems = pipelineRows.filter((r) => r.status === colStatus);
+            {APPLICATION_BOARD_COLUMNS.map((colKey) => {
+              const colItems = pipelineRows.filter((r) => applicationBoardColumn(r.status) === colKey);
               return (
-                <div key={colStatus} className="flex-none w-80 bg-[var(--apple-bg-subtle)] rounded-2xl flex flex-col snap-start border border-black/[0.04] p-4 max-h-[750px]">
+                <div
+                  key={colKey}
+                  className="flex-none w-80 bg-[var(--apple-bg-subtle)] rounded-2xl flex flex-col snap-start border border-black/[0.04] p-4 max-h-[750px]"
+                >
                   <div className="flex justify-between items-center mb-4">
-                    <h3 className="font-semibold text-[14px] text-[var(--apple-text)]">{statusLabel[colStatus]}</h3>
-                    <span className="bg-black/5 text-[11px] font-mono px-2 py-0.5 rounded-full text-[var(--apple-text-tertiary)]">{colItems.length}</span>
+                    <h3 className="font-semibold text-[14px] text-[var(--apple-text)]">
+                      {applicationBoardLabelDe[colKey]}
+                    </h3>
+                    <span className="bg-black/5 text-[11px] font-mono px-2 py-0.5 rounded-full text-[var(--apple-text-tertiary)]">
+                      {colItems.length}
+                    </span>
                   </div>
                   <div className="flex-1 overflow-y-auto space-y-3 pb-2 pr-1">
                     {colItems.length === 0 ? (
@@ -198,14 +195,29 @@ export function AdminSubmissionsManager() {
                               {typeLabel[r.type] ?? r.type}
                             </div>
                             {r.hasFiles && (
-                              <svg className="w-3.5 h-3.5 text-[var(--apple-text-tertiary)] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                              <svg
+                                className="w-3.5 h-3.5 text-[var(--apple-text-tertiary)] shrink-0"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                                />
+                              </svg>
                             )}
                           </div>
-                          <p className="text-[14px] leading-snug font-medium text-[var(--apple-text)] mb-2 break-words">
+                          <p className="text-[14px] leading-snug font-medium text-[var(--apple-text)] mb-1 break-words">
                             {r.summary || "Unbekannter Bewerber"}
                           </p>
+                          <p className="text-[10px] text-[var(--apple-text-tertiary)] mb-1">
+                            {submissionStatusLabelDe[r.status]}
+                          </p>
                           <p className="text-[11px] text-[var(--apple-text-tertiary)]">
-                            {r.createdAt ? new Date(r.createdAt).toLocaleDateString("de-CH") : ","}
+                            {r.createdAt ? new Date(r.createdAt).toLocaleDateString("de-CH") : "—"}
                           </p>
                         </div>
                       ))
@@ -260,7 +272,7 @@ export function AdminSubmissionsManager() {
                         {r.createdAt ? new Date(r.createdAt).toLocaleString("de-CH") : ","}
                       </td>
                       <td className="px-4 py-3.5 pr-5">
-                        <span className={adminPill}>{statusLabel[r.status] ?? r.status}</span>
+                        <span className={adminPill}>{submissionStatusLabelDe[r.status] ?? r.status}</span>
                       </td>
                     </tr>
                   ))

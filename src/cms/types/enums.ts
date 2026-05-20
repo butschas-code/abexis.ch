@@ -7,13 +7,15 @@ export type CmsPostStatus = PostStatus;
 export const CMS_SUBMISSION_STATUSES = [
   "new",
   "reviewed",
+  "accepted",
+  "rejected",
+  "done",
   "archived",
   "spam",
   "screening",
   "interview",
   "offer",
   "hired",
-  "rejected",
 ] as const;
 export type CmsSubmissionStatus = (typeof CMS_SUBMISSION_STATUSES)[number];
 

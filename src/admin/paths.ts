@@ -13,6 +13,8 @@ export const CMS_PATHS = {
   adminPostNew: "/admin/posts/new",
   /** Form intakes (canonical). */
   adminSubmissions: "/admin/submissions",
+  /** Job applications from vacancy forms (table + board). */
+  adminApplications: "/admin/applications",
   /** @deprecated Use `adminSubmissions`; kept for redirects. */
   adminForms: "/admin/forms",
   adminMedia: "/admin/media",
