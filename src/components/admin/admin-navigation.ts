@@ -23,7 +23,6 @@ export const ADMIN_NAV_ITEMS: readonly AdminNavItem[] = [
   { href: CMS_PATHS.adminVacancies, label: "Vakanzen", permission: "manage_vacancies" },
   { href: CMS_PATHS.adminSubmissions, label: "Eingänge", permission: "manage_submissions" },
   { href: CMS_PATHS.adminApplications, label: "Bewerbungen", permission: "manage_job_applications" },
-  { href: CMS_PATHS.adminSettings, label: "Einstellungen", permission: "manage_site_settings" },
 ] as const;
 
 export function adminNavItemIsActive(pathname: string | null, href: string): boolean {

@@ -98,6 +98,11 @@ const nextConfig: NextConfig = {
         destination: "/en/fokusthemen/projektmanagement",
         statusCode: 301,
       },
+      {
+        source: "/admin/settings",
+        destination: "/admin",
+        statusCode: 301,
+      },
     ];
   },
   images: {
