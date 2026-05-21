@@ -106,6 +106,13 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    /**
+     * Bypass Vercel’s hosted Image Optimization (`/_next/image`) so we stay under plan limits.
+     * `next/image` still gives stable layout (width/height, lazy loading); assets should be
+     * compressed at upload (WebP/JPEG ~80–85 quality, sane dimensions). Alternatives: Pro tier,
+     * or an external CDN loader (Imgix/Cloudinary) if we need edge resizing later.
+     */
+    unoptimized: true,
     qualities: [75, 90, 95],
     remotePatterns: [
       {

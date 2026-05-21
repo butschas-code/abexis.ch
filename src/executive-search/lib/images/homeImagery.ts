@@ -5,9 +5,9 @@ const img = (key: string) => `${base}${key}.jpg?alt=media`;
 export const homeImagery = {
   intro: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fe44da72a-1261-48e6-aa49-17b2d7ae5cd5.jpg?alt=media",
   /** Self-hosted : avoids remote 404s / ad blockers on pillar cards */
-  pillarCustomer: "/images/home-pillars/customer.jpg",
-  pillarNetwork:  "/images/home-pillars/network.jpg",
-  pillarQuality:  "/images/home-pillars/quality.jpg",
+  pillarCustomer: "/images/home-pillars/customer.webp",
+  pillarNetwork: "/images/home-pillars/network.webp",
+  pillarQuality: "/images/home-pillars/quality.webp",
   sectors:        img("editorial-hero"),
   projectFitCheck: img("editorial-insights"),
   process:        img("editorial-team"),
