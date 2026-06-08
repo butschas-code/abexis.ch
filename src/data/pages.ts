@@ -1,5 +1,6 @@
 import fokusthemenMain from "./fokusthemen-main.json";
 import blogPosts from "./blog-posts.json";
+import { partnershipBannerLogos } from "./site-images";
 
 /**
  * ## Style DNA / Art Direction (Abexis Consulting)
@@ -108,23 +109,25 @@ export const mainNavEn: MainNavItem[] = [
   { href: "/en/kontakt", label: "Contact" },
 ];
 
-const PARTNERS_BASE = "https://storage.googleapis.com/abexis-cms.firebasestorage.app/site/partners";
+function getPartnerLogo(index: number): string {
+  return partnershipBannerLogos[index] ?? partnershipBannerLogos[0] ?? "";
+}
 
 export const footerPartners = [
-  { label: "Swiss Institute of Directors", href: "https://boardfoundation.org/en/institution/swiss-institute-of-directors/", logo: `${PARTNERS_BASE}/swiss-institute-of-directors.jpg` },
-  { label: "Sustainable Leaders", href: "https://www.sustainableleaders.ch/de/", logo: `${PARTNERS_BASE}/sustainable-leaders.png` },
-  { label: "Digital Winterthur", href: "https://www.digital-winterthur.ch/", logo: `${PARTNERS_BASE}/digital-winterthur.png` },
-  { label: "Swiss Leaders", href: "https://swissleaders.ch/", logo: `${PARTNERS_BASE}/swiss-leaders.png` },
-  { label: "SwissICT", href: "https://www.swissict.ch/", logo: `${PARTNERS_BASE}/swissict.png` },
-  { label: "Ausbildung & Weiterbildung", href: "https://www.ausbildung-weiterbildung.ch/", logo: `${PARTNERS_BASE}/ausbildung-weiterbildung.png` },
-  { label: "UFZ", href: "https://www.ufz.ch/", logo: `${PARTNERS_BASE}/ufz.jpg` },
-  { label: "AVZO", href: "https://avzo.ch/", logo: `${PARTNERS_BASE}/avzo.jpg` },
-  { label: "Zürcher Oberland", href: "https://www.zuerioberland.ch/", logo: `${PARTNERS_BASE}/zuerioberland.jpg` },
-  { label: "SVC", href: "https://svc.swiss/de", logo: `${PARTNERS_BASE}/svc.jpg` },
-  { label: "Future Institute", href: "https://www.futureinstitute.ch/", logo: `${PARTNERS_BASE}/future-institute.jpg` },
-  { label: "Valueon", href: "https://www.valueon.ch/", logo: `${PARTNERS_BASE}/valueon.png` },
-  { label: "Swiss MBAs", href: "https://swissmbas.com/", logo: `${PARTNERS_BASE}/swiss-mbas.jpg` },
-  { label: "Leverage Experts", href: "https://leverage-experts.com/de/", logo: `${PARTNERS_BASE}/leverage-experts.jpg` },
+  { label: "Swiss Institute of Directors", href: "https://boardfoundation.org/en/institution/swiss-institute-of-directors/", logo: getPartnerLogo(0) },
+  { label: "Sustainable Leaders", href: "https://www.sustainableleaders.ch/de/", logo: getPartnerLogo(1) },
+  { label: "Digital Winterthur", href: "https://www.digital-winterthur.ch/", logo: getPartnerLogo(2) },
+  { label: "Swiss Leaders", href: "https://swissleaders.ch/", logo: getPartnerLogo(3) },
+  { label: "SwissICT", href: "https://www.swissict.ch/", logo: getPartnerLogo(4) },
+  { label: "Ausbildung & Weiterbildung", href: "https://www.ausbildung-weiterbildung.ch/", logo: getPartnerLogo(5) },
+  { label: "UFZ", href: "https://www.ufz.ch/", logo: getPartnerLogo(6) },
+  { label: "AVZO", href: "https://avzo.ch/", logo: getPartnerLogo(7) },
+  { label: "Zürcher Oberland", href: "https://www.zuerioberland.ch/", logo: getPartnerLogo(8) },
+  { label: "SVC", href: "https://svc.swiss/de", logo: getPartnerLogo(9) },
+  { label: "Future Institute", href: "https://www.futureinstitute.ch/", logo: getPartnerLogo(10) },
+  { label: "Valueon", href: "https://www.valueon.ch/", logo: getPartnerLogo(11) },
+  { label: "Swiss MBAs", href: "https://swissmbas.com/", logo: getPartnerLogo(12) },
+  { label: "Leverage Experts", href: "https://leverage-experts.com/de/", logo: getPartnerLogo(13) },
 ];
 
 export const homeIntroLines = [

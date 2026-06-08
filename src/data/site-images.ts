@@ -46,17 +46,8 @@ export const fokusPageHeroImages = {
   projektmanagement: (scraped["https://www.abexis.ch/fokusthemen/projektmanagement"] as string[])[1],
 } as const;
 
-/** Startseiten-Hero: eigenes Bild, in Firebase Storage hochgeladen (site/hero/home-hero.png) */
-export const homeHeroImage = "https://storage.googleapis.com/abexis-cms.firebasestorage.app/site/hero/home-hero.png";
-
-/** Project Reality Check : Infografik «Warum Projekte selten scheitern aber oft entgleisen» (Warnsignale-Sektion) */
-export const prcChallengesInfographic = "https://storage.googleapis.com/abexis-cms.firebasestorage.app/site/prc/prc-challenges-infographic.png";
-
-/** Project Reality Check : Hexagonales 6-Dimensionen-Modell (Dimensionen-Sektion) */
-export const prcDimensionenModell = "https://storage.googleapis.com/abexis-cms.firebasestorage.app/site/prc/prc-6-dimensionen-modell.png";
-
-/** Project Reality Check : Ablauf-Timeline Tag 1-5 (Ablauf-Sektion) */
-export const prcAblaufTimeline = "https://storage.googleapis.com/abexis-cms.firebasestorage.app/site/prc/prc-ablauf-timeline.jpg";
+/** Startseiten-Hero: lokale Kopie, damit die gemeinsame Hero-Grafik nicht von Storage-Rechten abhängt. */
+export const homeHeroImage = "/images/legacy/home-hero.webp";
 
 /** Kontaktseite : separates Hero-Motiv (nicht Startseiten-Hero). */
 export const kontaktPageHeroImage = fokusPageHeroImages.unternehmensstrategie;

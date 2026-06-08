@@ -1,10 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { PageHero } from "@/components/site/PageHero";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { HeroHeadlineBrandAccent } from "@/components/site/HeroHeadlineBrandAccent";
-import { homeHeroImage, prcChallengesInfographic, prcDimensionenModell, prcAblaufTimeline } from "@/data/site-images";
+import { homeHeroImage } from "@/data/site-images";
 import { siteConfig } from "@/data/pages";
 
 /** Same ambient layer as Leistungen / interior long-form pages (`apple-section-mesh` sits on the root). */
@@ -383,6 +382,70 @@ function ArrowRight() {
   );
 }
 
+type DimensionItem = { key: string; label: string; body: string };
+type TimelineStep = { marker: string; label: string };
+
+function SignalMap({ signals }: { signals: readonly string[] }) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-black/[0.07] bg-white shadow-[0_4px_24px_rgba(38,51,124,0.08)]">
+      <div className="grid divide-y divide-black/[0.06] md:grid-cols-3 md:divide-x md:divide-y-0">
+        {signals.map((signal, i) => (
+          <div key={signal} className="relative min-h-32 px-5 py-5 sm:px-6 sm:py-6">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <p className="mt-4 text-[18px] font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f]">
+              {signal}
+            </p>
+            <div className="absolute bottom-0 left-0 h-[3px] w-full bg-gradient-to-r from-[#26337c] via-[#45b3e2] to-[#c9a96e] opacity-70" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function DimensionsModel({ dimensions }: { dimensions: readonly DimensionItem[] }) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-black/[0.07] bg-white shadow-[0_4px_20px_rgba(38,51,124,0.08)]">
+      <div className="grid gap-px bg-black/[0.06] sm:grid-cols-2 lg:grid-cols-3">
+        {dimensions.map((dim, index) => (
+          <article key={dim.key} className="min-h-52 bg-white px-5 py-6 sm:px-6">
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">
+                {dim.key}
+              </span>
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f0f3fb] text-[12px] font-semibold text-brand-900">
+                {index + 1}
+              </span>
+            </div>
+            <h3 className="mt-5 text-[20px] font-semibold leading-snug tracking-[-0.025em] text-[#1d1d1f]">
+              {dim.label}
+            </h3>
+            <p className="mt-3 text-[14px] leading-relaxed text-[#6e6e73]">{dim.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ProcessTimelineVisual({ steps }: { steps: readonly TimelineStep[] }) {
+  return (
+    <ol className="grid gap-3 sm:grid-cols-5" role="list">
+      {steps.map((step, index) => (
+        <li key={`${step.marker}-${step.label}`} className="relative rounded-xl border border-black/[0.07] bg-white px-4 py-4 shadow-[0_1px_8px_rgba(38,51,124,0.06)]">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">{step.marker}</span>
+          <p className="mt-3 text-[14px] font-semibold leading-snug text-[#1d1d1f]">{step.label}</p>
+          {index < steps.length - 1 ? (
+            <span className="absolute -right-2 top-1/2 hidden h-px w-4 bg-[#26337c]/25 sm:block" aria-hidden />
+          ) : null}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 // ─── Page component ───────────────────────────────────────────────────────────
 
 export function ProjectFitCheck({ locale = "de" }: { locale?: "de" | "en" }) {
@@ -461,6 +524,21 @@ export function ProjectFitCheck({ locale = "de" }: { locale?: "de" | "en" }) {
       };
   const s = c.strings;
   const bookingUrl = isEnglish ? siteConfig.bookingUrlEn : siteConfig.bookingUrlDe;
+  const coreTimelineSteps = isEnglish
+    ? [
+        { marker: "Day 1", label: "Kickoff and document analysis" },
+        { marker: "Day 2", label: "Interviews with key people" },
+        { marker: "Day 3", label: "Interviews and validation" },
+        { marker: "Day 4", label: "Analysis and assessment" },
+        { marker: "Day 5", label: "Executive presentation" },
+      ]
+    : [
+        { marker: "Tag 1", label: "Kickoff und Dokumentenanalyse" },
+        { marker: "Tag 2", label: "Interviews mit Schlüsselpersonen" },
+        { marker: "Tag 3", label: "Interviews und Validierung" },
+        { marker: "Tag 4", label: "Analyse und Bewertung" },
+        { marker: "Tag 5", label: "Executive Präsentation" },
+      ];
 
   return (
     <InteriorPageRoot>
@@ -544,15 +622,7 @@ export function ProjectFitCheck({ locale = "de" }: { locale?: "de" | "en" }) {
           </div>
 
           <div className="mt-10 sm:mt-14">
-            <div className="overflow-hidden rounded-2xl border border-black/[0.07] shadow-[0_4px_24px_rgba(38,51,124,0.08)]">
-              <Image
-                src={prcChallengesInfographic}
-                alt={s.infographicAlt}
-                width={1536}
-                height={1024}
-                className="w-full"
-              />
-            </div>
+            <SignalMap signals={c.warnsignale} />
           </div>
         </div>
       </MotionSection>
@@ -725,14 +795,8 @@ export function ProjectFitCheck({ locale = "de" }: { locale?: "de" | "en" }) {
               </ol>
             </div>
           </div>
-          <div className="mt-10 overflow-hidden rounded-2xl border border-black/[0.07] shadow-[0_4px_20px_rgba(38,51,124,0.08)] sm:mt-12">
-            <Image
-              src={prcDimensionenModell}
-              alt={s.dimensionsAlt}
-              width={1024}
-              height={1024}
-              className="w-full"
-            />
+          <div className="mt-10 sm:mt-12">
+            <DimensionsModel dimensions={c.dimensionen} />
           </div>
 
           <div className="relative mt-10 flex justify-center border-t border-black/[0.06] px-1 pt-10 sm:mt-14 sm:pt-12">
@@ -803,13 +867,7 @@ export function ProjectFitCheck({ locale = "de" }: { locale?: "de" | "en" }) {
             <div className="mt-10 sm:mt-12">
               <div className="overflow-hidden rounded-2xl border border-black/[0.07] bg-white shadow-[0_4px_20px_rgba(38,51,124,0.07)] p-4 sm:p-6">
                 <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">{s.timelineLabel}</p>
-                <Image
-                  src={prcAblaufTimeline}
-                  alt={s.timelineAlt}
-                  width={1597}
-                  height={237}
-                  className="w-full"
-                />
+                <ProcessTimelineVisual steps={coreTimelineSteps} />
               </div>
             </div>
 
