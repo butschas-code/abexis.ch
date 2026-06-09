@@ -8,6 +8,8 @@ import type { BlogAutomationSettings, BlogTopic } from "@/lib/blogAutomation/typ
 
 const BLOG_DRAFT_MAX_OUTPUT_TOKENS = 14_000;
 const BLOG_DRAFT_RETRY_MAX_OUTPUT_TOKENS = 18_000;
+const DIRECT_PROMPT_ARTICLE_MAX_OUTPUT_TOKENS = 16_000;
+const DIRECT_PROMPT_METADATA_MAX_OUTPUT_TOKENS = 7_000;
 
 /** Strict output shape after OpenAI Responses + web_search (matches structured JSON schema). */
 export const blogAutomationDraftOutputSchema = z.object({
@@ -24,6 +26,42 @@ export const blogAutomationDraftOutputSchema = z.object({
 });
 
 export type BlogAutomationDraftOutput = z.infer<typeof blogAutomationDraftOutputSchema>;
+
+const directPromptMetadataSchema = blogAutomationDraftOutputSchema.omit({ articleHtml: true });
+
+type DirectPromptMetadata = z.infer<typeof directPromptMetadataSchema>;
+
+const DIRECT_PROMPT_METADATA_JSON_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: [
+    "title",
+    "slug",
+    "excerpt",
+    "metaTitle",
+    "metaDescription",
+    "researchSummary",
+    "linkedinPost",
+    "imageSearchQueries",
+    "heroImageAlt",
+  ],
+  properties: {
+    title: { type: "string" },
+    slug: { type: "string" },
+    excerpt: { type: "string" },
+    metaTitle: { type: "string" },
+    metaDescription: { type: "string" },
+    researchSummary: { type: "string" },
+    linkedinPost: { type: "string" },
+    imageSearchQueries: {
+      type: "array",
+      minItems: 3,
+      maxItems: 6,
+      items: { type: "string" },
+    },
+    heroImageAlt: { type: "string" },
+  },
+} as const;
 
 export type GenerateBlogDraftParams = {
   settings: BlogAutomationSettings;
@@ -123,6 +161,263 @@ Scheduled for (ISO timestamp if set): ${formatScheduledFor(topic)}
 Use web_search where it materially improves factual grounding for Swiss / SME-relevant context. Then write the article and social snippets.${retryInstruction}`;
 }
 
+function isDirectCmsPrompt(topic: BlogTopic): boolean {
+  return topic.notes.includes("Direkter CMS-Prompt");
+}
+
+function extractDirectCmsPrompt(topic: BlogTopic): string {
+  const notes = topic.notes.trim();
+  const firstBlankLine = notes.search(/\n\s*\n/);
+  if (firstBlankLine >= 0) {
+    const afterHeader = notes.slice(firstBlankLine).replace(/^\s+/, "");
+    if (afterHeader.trim()) return afterHeader.trim();
+  }
+  return (notes || topic.title).trim();
+}
+
+function stripHtmlToText(html: string): string {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function countWords(html: string): number {
+  return stripHtmlToText(html).match(/[\p{L}\p{N}][\p{L}\p{N}'’.-]*/gu)?.length ?? 0;
+}
+
+function extractRequestedWordRange(prompt: string): { min: number; max: number } | null {
+  const normalized = prompt
+    .replace(/[’']/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  const match = normalized.match(/(\d{3,5})\s*[–—-]\s*(\d{3,5})\s*W[öo]rter/i);
+  if (!match) return null;
+  const min = Number.parseInt(match[1] ?? "", 10);
+  const max = Number.parseInt(match[2] ?? "", 10);
+  if (!Number.isFinite(min) || !Number.isFinite(max) || min <= 0 || max < min) return null;
+  return { min, max };
+}
+
+function normalizeGeneratedHtml(text: string): string {
+  return text
+    .trim()
+    .replace(/^```(?:html)?\s*/i, "")
+    .replace(/```\s*$/i, "")
+    .replace(/^<article[^>]*>/i, "")
+    .replace(/<\/article>$/i, "")
+    .trim();
+}
+
+function buildDirectArticleInstructions(params: GenerateBlogDraftParams): string {
+  const { settings } = params;
+  const extra = params.abexisBrandInstructions?.trim();
+  const mergedBrand = [settings.brandInstructions?.trim(), extra].filter(Boolean).join("\n\n");
+
+  return `You are the senior editorial writer for Abexis, a Swiss consulting firm.
+
+Write the article from the editor prompt as the binding brief.
+Default language is ${settings.defaultLanguage}; for German use Swiss German conventions and avoid "ß".
+Tone: ${settings.tone || "analytical, precise, experienced, not academic"}.
+Audience: ${settings.targetAudience || "Swiss SME executives, boards, sponsors, CIOs, CFOs, and project leaders"}.
+
+Non-negotiables:
+- Follow the editor prompt closely: thesis, structure, keywords, exclusions, tone, and requested length.
+- Do not turn the prompt into a generic explanation if it asks for a specific argument.
+- Use semantic HTML fragments only: paragraphs, h2/h3 headings, ul/ol/li, strong where useful.
+- Do not output JSON, Markdown, code fences, <html>, <body>, or an <h1>.
+- Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", or external source URLs.
+- Never invent statistics, surveys, regulations, quotations, or named references.
+- If a factual point is uncertain, phrase it as experienced project judgement rather than as a sourced fact.
+- Keep Abexis positioned as a practical advisor for project implementation, project steering, risk management, and transformation work.
+
+Forbidden topics / exclusions from settings:
+${settings.forbiddenTopics?.trim() || "(none)"}
+
+Brand & editorial instructions from settings:
+${mergedBrand || "(none beyond defaults)"}`;
+}
+
+function buildDirectArticlePrompt(params: GenerateBlogDraftParams, retryInstruction?: string): string {
+  const prompt = extractDirectCmsPrompt(params.topic);
+  return `Write the complete blog article for abexis.ch from this editor prompt.
+
+Topic title: ${params.topic.title}
+SEO focus: ${params.topic.targetKeyword || "(use the editor prompt)"}
+
+Editor prompt:
+${prompt}
+
+${retryInstruction ? `Revision instruction:\n${retryInstruction}\n\n` : ""}Return only the article HTML fragment.`;
+}
+
+async function createDirectArticleResponse(params: {
+  client: OpenAI;
+  generationParams: GenerateBlogDraftParams;
+  retryInstruction?: string;
+}): Promise<BlogDraftResponse> {
+  const response = await params.client.responses.create({
+    model: resolveModel(),
+    instructions: buildDirectArticleInstructions(params.generationParams),
+    input: buildDirectArticlePrompt(params.generationParams, params.retryInstruction),
+    max_output_tokens: DIRECT_PROMPT_ARTICLE_MAX_OUTPUT_TOKENS,
+  });
+
+  return response as BlogDraftResponse;
+}
+
+function parseTextResponse(response: BlogDraftResponse, fallbackMessage: string): string {
+  if (response.status === "incomplete" || response.incomplete_details?.reason) {
+    const reason = response.incomplete_details?.reason ?? "unknown";
+    throw new Error(
+      reason === "max_output_tokens"
+        ? fallbackMessage
+        : `[blogAutomation] Der KI-Text wurde unvollständig zurückgegeben (${reason}). Bitte erneut versuchen.`,
+    );
+  }
+
+  const text = response.output_text?.trim();
+  if (!text) {
+    throw new Error("[blogAutomation] Der KI-Text war leer. Bitte erneut versuchen.");
+  }
+  return text;
+}
+
+async function generateDirectArticleHtml(client: OpenAI, params: GenerateBlogDraftParams): Promise<{ articleHtml: string; responseId: string }> {
+  const directPrompt = extractDirectCmsPrompt(params.topic);
+  const requestedRange = extractRequestedWordRange(directPrompt);
+  let response = await createDirectArticleResponse({ client, generationParams: params });
+  let articleHtml = normalizeGeneratedHtml(
+    parseTextResponse(response, "[blogAutomation] Der Artikel wurde zu lang und unvollständig zurückgegeben. Er wird erneut erstellt."),
+  );
+
+  if (requestedRange) {
+    const words = countWords(articleHtml);
+    const tooShort = words < Math.floor(requestedRange.min * 0.9);
+    const tooLong = words > Math.ceil(requestedRange.max * 1.15);
+    if (tooShort || tooLong) {
+      response = await createDirectArticleResponse({
+        client,
+        generationParams: params,
+        retryInstruction: `The previous article had ${words} words. The editor requested ${requestedRange.min}-${requestedRange.max} words. Regenerate the full article within that range while keeping the exact requested structure and argument.`,
+      });
+      articleHtml = normalizeGeneratedHtml(
+        parseTextResponse(response, "[blogAutomation] Der Artikel wurde erneut zu lang und unvollständig zurückgegeben. Bitte den Prompt etwas enger fassen."),
+      );
+    }
+  }
+
+  return { articleHtml, responseId: response.id };
+}
+
+function buildDirectMetadataInstructions(params: GenerateBlogDraftParams): string {
+  const { settings } = params;
+  return `Create CMS metadata for an Abexis blog article.
+
+Return exactly one JSON object matching the schema.
+Do not include articleHtml.
+Default language: ${settings.defaultLanguage}. For German, use Swiss German conventions and avoid "ß".
+LinkedIn: create one substantial German LinkedIn post for Daniel Sengstag's profile, with a calm executive point of view. Include {{BLOG_URL}} exactly once.
+Image search: return 3-6 short English Unsplash search phrases, restrained Swiss consulting mood, no cheesy corporate cliches.
+No source links, citations, or fabricated facts.`;
+}
+
+function buildDirectMetadataPrompt(params: GenerateBlogDraftParams, articleHtml: string): string {
+  const prompt = extractDirectCmsPrompt(params.topic);
+  return `Create title, slug, excerpt, SEO metadata, researchSummary, LinkedIn post, and image fields for this article.
+
+Original editor prompt:
+${prompt}
+
+Generated article HTML:
+${articleHtml}`;
+}
+
+function normalizeLinkedinPlaceholder(post: string): string {
+  const trimmed = post.trim();
+  if (!trimmed.includes("{{BLOG_URL}}")) {
+    return `${trimmed}\n\n{{BLOG_URL}}`;
+  }
+  return trimmed;
+}
+
+async function createDirectMetadataResponse(params: {
+  client: OpenAI;
+  generationParams: GenerateBlogDraftParams;
+  articleHtml: string;
+}): Promise<BlogDraftResponse> {
+  const response = await params.client.responses.create({
+    model: resolveModel(),
+    instructions: buildDirectMetadataInstructions(params.generationParams),
+    input: buildDirectMetadataPrompt(params.generationParams, params.articleHtml),
+    max_output_tokens: DIRECT_PROMPT_METADATA_MAX_OUTPUT_TOKENS,
+    text: {
+      format: {
+        type: "json_schema",
+        name: "abexis_direct_prompt_metadata_v1",
+        strict: true,
+        schema: DIRECT_PROMPT_METADATA_JSON_SCHEMA as unknown as Record<string, unknown>,
+      },
+    },
+  });
+
+  return response as BlogDraftResponse;
+}
+
+async function generateDirectMetadata(
+  client: OpenAI,
+  params: GenerateBlogDraftParams,
+  articleHtml: string,
+): Promise<{ metadata: DirectPromptMetadata; responseId: string }> {
+  let response = await createDirectMetadataResponse({ client, generationParams: params, articleHtml });
+  let raw: unknown;
+  try {
+    raw = parseBlogDraftResponse(response);
+  } catch (e) {
+    if (!isRetryableDraftJsonError(e)) throw e;
+    response = await createDirectMetadataResponse({ client, generationParams: params, articleHtml });
+    raw = parseBlogDraftResponse(response);
+  }
+
+  const parsed = directPromptMetadataSchema.safeParse(raw);
+  if (!parsed.success) {
+    const detail = parsed.error.flatten().fieldErrors;
+    throw new Error(`[blogAutomation] Invalid prompt metadata JSON: ${JSON.stringify(detail)}`);
+  }
+
+  return {
+    metadata: {
+      ...parsed.data,
+      linkedinPost: normalizeLinkedinPlaceholder(parsed.data.linkedinPost),
+    },
+    responseId: response.id,
+  };
+}
+
+async function generateDirectPromptBlogDraft(
+  client: OpenAI,
+  params: GenerateBlogDraftParams,
+): Promise<GenerateBlogDraftResult> {
+  const article = await generateDirectArticleHtml(client, params);
+  const metadata = await generateDirectMetadata(client, params, article.articleHtml);
+
+  return {
+    output: {
+      ...metadata.metadata,
+      articleHtml: article.articleHtml,
+    },
+    responseId: `${article.responseId}:${metadata.responseId}`,
+  };
+}
+
 type BlogDraftResponse = {
   id: string;
   output_text?: string;
@@ -195,6 +490,10 @@ export async function generateBlogDraft(params: GenerateBlogDraftParams): Promis
   }
 
   const client = new OpenAI({ apiKey });
+
+  if (isDirectCmsPrompt(params.topic)) {
+    return generateDirectPromptBlogDraft(client, params);
+  }
 
   let response = await createBlogDraftResponse({
     client,
