@@ -6,6 +6,9 @@ import { z } from "zod";
 import { BLOG_PIPELINE_JSON_SCHEMA } from "@/lib/blog-pipeline/openai-json-schema";
 import type { BlogAutomationSettings, BlogTopic } from "@/lib/blogAutomation/types";
 
+const BLOG_DRAFT_MAX_OUTPUT_TOKENS = 14_000;
+const BLOG_DRAFT_RETRY_MAX_OUTPUT_TOKENS = 18_000;
+
 /** Strict output shape after OpenAI Responses + web_search (matches structured JSON schema). */
 export const blogAutomationDraftOutputSchema = z.object({
   title: z.string().min(1),
@@ -102,7 +105,11 @@ Brand & editorial instructions from settings:
 ${mergedBrand || "(none beyond defaults)"}`;
 }
 
-function buildUserPrompt(topic: BlogTopic): string {
+function buildUserPrompt(topic: BlogTopic, retryNote = false): string {
+  const retryInstruction = retryNote
+    ? "\n\nImportant retry instruction: the previous draft response could not be parsed as complete JSON. Regenerate the full draft as one valid JSON object. Keep the article focused enough that the JSON closes completely."
+    : "";
+
   return `Produce one blog draft as JSON.
 
 Topic title: ${topic.title}
@@ -113,7 +120,69 @@ Editor notes: ${topic.notes || "(none)"}
 Priority (numeric): ${topic.priority}
 Scheduled for (ISO timestamp if set): ${formatScheduledFor(topic)}
 
-Use web_search where it materially improves factual grounding for Swiss / SME-relevant context. Then write the article and social snippets.`;
+Use web_search where it materially improves factual grounding for Swiss / SME-relevant context. Then write the article and social snippets.${retryInstruction}`;
+}
+
+type BlogDraftResponse = {
+  id: string;
+  output_text?: string;
+  status?: string;
+  incomplete_details?: { reason?: string } | null;
+};
+
+async function createBlogDraftResponse(params: {
+  client: OpenAI;
+  generationParams: GenerateBlogDraftParams;
+  maxOutputTokens: number;
+  retryNote?: boolean;
+}): Promise<BlogDraftResponse> {
+  const { client, generationParams, maxOutputTokens, retryNote = false } = params;
+
+  const response = await client.responses.create({
+    model: resolveModel(),
+    tools: [
+      {
+        type: "web_search",
+        user_location: { type: "approximate", country: "CH", city: "Zürich", region: "Zürich" },
+      },
+    ],
+    tool_choice: "auto",
+    include: ["web_search_call.action.sources"],
+    instructions: buildDeveloperInstructions(generationParams),
+    input: buildUserPrompt(generationParams.topic, retryNote),
+    max_output_tokens: maxOutputTokens,
+    text: {
+      format: {
+        type: "json_schema",
+        name: "abexis_blog_automation_draft_v2",
+        strict: true,
+        schema: BLOG_PIPELINE_JSON_SCHEMA as unknown as Record<string, unknown>,
+      },
+    },
+  });
+
+  return response as BlogDraftResponse;
+}
+
+function parseBlogDraftResponse(response: BlogDraftResponse): unknown {
+  if (response.status === "incomplete" || response.incomplete_details?.reason) {
+    const reason = response.incomplete_details?.reason ?? "unknown";
+    throw new Error(
+      reason === "max_output_tokens"
+        ? "[blogAutomation] Der KI-Entwurf wurde zu lang und unvollständig zurückgegeben. Bitte den Prompt etwas enger fassen oder den Entwurf erneut erstellen."
+        : `[blogAutomation] Der KI-Entwurf wurde unvollständig zurückgegeben (${reason}). Bitte erneut versuchen.`,
+    );
+  }
+
+  return safeParseOutputText(response);
+}
+
+function isRetryableDraftJsonError(e: unknown): boolean {
+  if (!(e instanceof Error)) return false;
+  return (
+    e.message.includes("[blogAutomation] Der KI-Entwurf konnte nicht als vollständiges JSON gelesen werden.") ||
+    e.message.includes("[blogAutomation] Der KI-Entwurf wurde zu lang und unvollständig zurückgegeben.")
+  );
 }
 
 /**
@@ -125,32 +194,29 @@ export async function generateBlogDraft(params: GenerateBlogDraftParams): Promis
     throw new Error("[blogAutomation] Missing OPENAI_API_KEY.");
   }
 
-  const model = resolveModel();
   const client = new OpenAI({ apiKey });
 
-  const response = await client.responses.parse({
-    model,
-    tools: [
-      {
-        type: "web_search",
-        user_location: { type: "approximate", country: "CH", city: "Zürich", region: "Zürich" },
-      },
-    ],
-    tool_choice: "auto",
-    include: ["web_search_call.action.sources"],
-    instructions: buildDeveloperInstructions(params),
-    input: buildUserPrompt(params.topic),
-    text: {
-      format: {
-        type: "json_schema",
-        name: "abexis_blog_automation_draft_v2",
-        strict: true,
-        schema: BLOG_PIPELINE_JSON_SCHEMA as unknown as Record<string, unknown>,
-      },
-    },
+  let response = await createBlogDraftResponse({
+    client,
+    generationParams: params,
+    maxOutputTokens: BLOG_DRAFT_MAX_OUTPUT_TOKENS,
   });
 
-  const raw = response.output_parsed ?? safeParseOutputText(response);
+  let raw: unknown;
+  try {
+    raw = parseBlogDraftResponse(response);
+  } catch (e) {
+    if (!isRetryableDraftJsonError(e)) {
+      throw e;
+    }
+    response = await createBlogDraftResponse({
+      client,
+      generationParams: params,
+      maxOutputTokens: BLOG_DRAFT_RETRY_MAX_OUTPUT_TOKENS,
+      retryNote: true,
+    });
+    raw = parseBlogDraftResponse(response);
+  }
 
   const parsed = blogAutomationDraftOutputSchema.safeParse(raw);
   if (!parsed.success) {
@@ -164,14 +230,17 @@ export async function generateBlogDraft(params: GenerateBlogDraftParams): Promis
   };
 }
 
-function safeParseOutputText(response: { output_text?: string }): unknown {
+function safeParseOutputText(response: BlogDraftResponse): unknown {
   const text = response.output_text?.trim();
   if (!text) {
     throw new Error("[blogAutomation] Empty Responses output (no JSON).");
   }
   try {
     return JSON.parse(text) as unknown;
-  } catch {
-    throw new Error("[blogAutomation] Responses output_text is not valid JSON.");
+  } catch (e) {
+    const detail = e instanceof Error ? e.message : "unknown parser error";
+    throw new Error(
+      `[blogAutomation] Der KI-Entwurf konnte nicht als vollständiges JSON gelesen werden. Bitte erneut erstellen. Technisches Detail: ${detail}`,
+    );
   }
 }
