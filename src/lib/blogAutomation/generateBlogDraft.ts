@@ -93,6 +93,11 @@ Automation parameters (respect these):
 - articleLength: ${settings.articleLength}. ${articleLengthHint}
 - forbiddenTopics / exclusions (do not centre the piece on these): ${settings.forbiddenTopics?.trim() || "(none)"}
 
+Direct CMS prompts:
+- If the editor notes say "Direkter CMS-Prompt", treat the notes as the primary writing brief.
+- Follow concrete structure, thesis, examples, language, and length requests from that prompt unless they conflict with factual accuracy, brand safety, or forbidden topics.
+- Do not dilute a direct prompt into a generic Abexis article.
+
 Brand & editorial instructions from settings:
 ${mergedBrand || "(none beyond defaults)"}`;
 }

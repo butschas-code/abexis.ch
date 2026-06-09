@@ -81,6 +81,16 @@ export async function apiRunBlogAutomationNow(idToken: string): Promise<RunBlogA
   return cmsBlogAutomationFetch<RunBlogAutomationNowResult>(idToken, "/run-now", { method: "POST" });
 }
 
+export async function apiGenerateBlogDraftFromPrompt(
+  idToken: string,
+  input: { prompt: string; title?: string },
+): Promise<RunBlogAutomationNowResult> {
+  return cmsBlogAutomationFetch<RunBlogAutomationNowResult>(idToken, "/prompt-draft", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
 export async function apiListQueuedBlogTopics(idToken: string): Promise<QueuedBlogTopicRow[]> {
   const j = await cmsBlogAutomationFetch<{ topics: QueuedBlogTopicRow[] }>(idToken, "/topics?queued=true");
   return j.topics;

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { CMS_PATHS } from "@/admin/paths";
@@ -11,6 +12,7 @@ import {
   type QueuedBlogTopicRow,
 } from "@/cms/services/blog-automation-admin-client";
 import {
+  apiGenerateBlogDraftFromPrompt,
   apiCreateBlogTopic,
   apiListQueuedBlogTopics,
   apiLoadBlogAutomationSettings,
@@ -108,6 +110,7 @@ function ChoiceCard(props: {
 
 export function BlogAutomationClient() {
   const { user, ready: authReady } = useCmsAuth();
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [topicsLoading, setTopicsLoading] = useState(false);
@@ -119,6 +122,8 @@ export function BlogAutomationClient() {
   const [dashboard, setDashboard] = useState<BlogAutomationDashboardSnapshot | null>(null);
   const [dashboardBusy, setDashboardBusy] = useState(false);
   const [runNowBusy, setRunNowBusy] = useState(false);
+  const [promptDraftBusy, setPromptDraftBusy] = useState(false);
+  const [promptDraft, setPromptDraft] = useState({ title: "", prompt: "" });
 
   const [newTopic, setNewTopic] = useState({
     title: "",
@@ -281,6 +286,50 @@ export function BlogAutomationClient() {
     }
   }, [form, docExists, getIdToken, refreshTopics, refreshDashboard]);
 
+  const onGeneratePromptDraft = useCallback(async () => {
+    if (!form) return;
+    const prompt = promptDraft.prompt.trim();
+    const title = promptDraft.title.trim();
+    if (prompt.length < 20) {
+      setError("Bitte zuerst den Prompt oder das Briefing einfügen.");
+      setSuccess(null);
+      return;
+    }
+
+    setPromptDraftBusy(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const token = await getIdToken();
+      const toSave: BlogAutomationFormState = {
+        ...form,
+        articlesPerWeek: Math.min(3, Math.max(1, Math.floor(form.articlesPerWeek) || 1)),
+        socialPlatforms: form.createSocialPosts ? ["linkedin"] : [],
+      };
+      await apiSaveBlogAutomationSettings(token, toSave, docExists);
+      setForm(toSave);
+      setDocExists(true);
+
+      const result = await apiGenerateBlogDraftFromPrompt(token, {
+        prompt,
+        ...(title ? { title } : {}),
+      });
+      await Promise.all([refreshTopics(), refreshDashboard(toSave)]);
+
+      if ((result.action === "draft_created" || result.action === "published") && result.draftId) {
+        setPromptDraft({ title: "", prompt: "" });
+        router.push(CMS_PATHS.adminBlogAutomationDraft(result.draftId));
+        return;
+      }
+
+      setSuccess(result.reason || "Der Prompt-Lauf ist abgeschlossen.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Entwurf aus Prompt konnte nicht vorbereitet werden.");
+    } finally {
+      setPromptDraftBusy(false);
+    }
+  }, [form, promptDraft, docExists, getIdToken, refreshTopics, refreshDashboard, router]);
+
   const onAddTopic = useCallback(async () => {
     setAddingTopic(true);
     setError(null);
@@ -351,6 +400,80 @@ export function BlogAutomationClient() {
 
         {error ? <div className={adminFeedbackError}>{error}</div> : null}
         {success ? <div className={adminFeedbackSuccess}>{success}</div> : null}
+
+        <AdminPageSection>
+          <section className={`${adminPanel} overflow-hidden`}>
+            <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.42fr)]">
+              <div className="space-y-6 p-7 sm:p-8">
+                <div>
+                  <p className={adminSectionLabel}>Schneller Entwurf</p>
+                  <h2 className="mt-3 font-serif text-[1.55rem] font-medium leading-tight text-[var(--apple-text)]">
+                    Prompt einfügen, Entwurf erzeugen
+                  </h2>
+                  <p className={`mt-3 max-w-2xl ${adminBody}`}>
+                    Für fertige Briefings: Prompt einfügen und einen neuen Artikelentwurf vorbereiten. Der Entwurf landet danach direkt in der Prüfung; Themenliste und Zeitplan bleiben weiterhin verfügbar.
+                  </p>
+                </div>
+
+                <div className="grid gap-4">
+                  <label className="block space-y-2">
+                    <span className="text-[14px] font-medium text-[var(--apple-text)]">Arbeitstitel (freiwillig)</span>
+                    <input
+                      className={adminInput}
+                      value={promptDraft.title}
+                      onChange={(e) => setPromptDraft((d) => ({ ...d, title: e.target.value }))}
+                      placeholder="z. B. Warum Projektklarheit nicht erst im Steering beginnt"
+                    />
+                  </label>
+                  <label className="block space-y-2">
+                    <span className="text-[14px] font-medium text-[var(--apple-text)]">Prompt / Briefing</span>
+                    <textarea
+                      className={`${adminInput} min-h-[190px] resize-y`}
+                      value={promptDraft.prompt}
+                      onChange={(e) => setPromptDraft((d) => ({ ...d, prompt: e.target.value }))}
+                      placeholder="Hier den kompletten Prompt einfügen: Thema, Zielgruppe, gewünschte Argumentation, Struktur, Beispiele, Tonalität..."
+                    />
+                  </label>
+                </div>
+
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <button
+                    type="button"
+                    disabled={promptDraftBusy || saving || promptDraft.prompt.trim().length < 20}
+                    onClick={() => void onGeneratePromptDraft()}
+                    className={`${adminBtnPrimary} !min-h-[46px] px-7 text-[15px]`}
+                  >
+                    {promptDraftBusy ? "Entwurf wird erzeugt…" : "Entwurf aus Prompt erstellen"}
+                  </button>
+                  <Link href={CMS_PATHS.adminBlogAutomationDrafts} className={`${adminBtnSecondary} inline-flex !min-h-[46px] items-center justify-center text-[15px]`}>
+                    Entwürfe prüfen
+                  </Link>
+                </div>
+              </div>
+
+              <aside className="border-t border-black/[0.06] bg-[color-mix(in_srgb,var(--apple-bg-subtle)_62%,white)] p-7 sm:p-8 lg:border-l lg:border-t-0">
+                <p className={adminSectionLabel}>Was passiert danach?</p>
+                <div className="mt-5 space-y-5 text-[14px] leading-relaxed text-[var(--apple-text-secondary)]">
+                  <p>
+                    <span className="font-medium text-[var(--apple-text)]">1. Prompt wird Briefing.</span>
+                    <br />
+                    Das CMS legt daraus automatisch ein internes Thema an.
+                  </p>
+                  <p>
+                    <span className="font-medium text-[var(--apple-text)]">2. Entwurf entsteht.</span>
+                    <br />
+                    Artikel, Bildvorschlag und LinkedIn-Text nutzen die bestehenden Einstellungen.
+                  </p>
+                  <p>
+                    <span className="font-medium text-[var(--apple-text)]">3. Sie prüfen.</span>
+                    <br />
+                    Nichts geht live, bevor der Entwurf wie gewohnt freigegeben oder veröffentlicht wird.
+                  </p>
+                </div>
+              </aside>
+            </div>
+          </section>
+        </AdminPageSection>
 
         <AdminPageSection className="!space-y-4">
           <BlogAutomationJourneyStrip />

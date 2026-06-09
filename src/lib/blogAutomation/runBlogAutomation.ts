@@ -43,6 +43,8 @@ export type RunBlogAutomationResult = {
 export type RunBlogAutomationOptions = {
   /** CMS action: create one draft immediately, without waiting for the daily cron/time gate. */
   bypassScheduleGate?: boolean;
+  /** CMS prompt flow: claim this exact queued topic instead of choosing the next queue item. */
+  forcedTopicRefPath?: string;
 };
 
 function resolveOpenAiModel(): string {
@@ -386,7 +388,17 @@ export async function runBlogAutomation(
       });
     }
 
-    let topicPath = await pickNextQueuedTopicRef();
+    const forcedTopicPath = options.forcedTopicRefPath?.trim() || "";
+    let topicPath = forcedTopicPath || (await pickNextQueuedTopicRef());
+
+    if (forcedTopicPath) {
+      await appendPipelineLog({
+        pipelineRunId: runId,
+        level: "info",
+        message: "Manual CMS prompt requested: using the exact topic created from the editor prompt.",
+        context: { phase: "topic_pick", forcedTopicPath },
+      });
+    }
 
     if (!topicPath && settings.topicMode === "ai_suggested") {
       const suggestion = await suggestQueuedBlogTopic(settings);
