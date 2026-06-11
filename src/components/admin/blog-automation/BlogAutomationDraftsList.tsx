@@ -40,7 +40,7 @@ const TAB_EMPTY: Record<DraftTab, { title: string; description: string }> = {
   review: {
     title: "Keine Entwürfe in dieser Rubrik",
     description:
-      "Neue Entwürfe erscheinen hier nach dem nächsten geplanten Schreibtag. Prüfen Sie in der Blog-Automation, ob die Automatisierung eingeschaltet und Themen oder KI-Vorschläge aktiv sind.",
+      "Neue Entwürfe erscheinen hier nach dem nächsten geplanten Entwurfstag. Prüfen Sie in der Blog-Automation, ob die Automatisierung eingeschaltet und Themen oder KI-Vorschläge aktiv sind.",
   },
   approved: {
     title: "Noch keine freigegebenen Entwürfe",
@@ -202,7 +202,7 @@ export function BlogAutomationDraftsList() {
         {rows.length === 0 ? (
           <AdminEmptyState
             title="Noch keine KI-Entwürfe"
-            description="Neue Entwürfe erscheinen hier nach dem nächsten geplanten Schreibtag, sobald die Automatisierung aktiv ist und Themen oder Vorschläge vorliegen."
+            description="Neue Entwürfe erscheinen hier nach dem nächsten geplanten Entwurfstag, sobald die Automatisierung aktiv ist und Themen oder Vorschläge vorliegen."
             action={{ label: "Blog-Automation öffnen", href: CMS_PATHS.adminBlogAutomation }}
           />
         ) : filtered.length === 0 ? (

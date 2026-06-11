@@ -4,8 +4,14 @@ import type { BlogAutomationArticleLength, BlogAutomationTopicMode } from "@/lib
 export type BlogAutomationFormState = {
   enabled: boolean;
   articlesPerWeek: number;
+  /** One day per week when the automatic pipeline may create a new draft. */
   preferredDays: string[];
+  /** Local wall-clock time after which draft creation may happen on the draft day. */
   preferredTime: string;
+  /** Weekdays when approved articles should be scheduled to go live. */
+  postingDays: string[];
+  /** Local wall-clock time for approved article publishing. */
+  postingTime: string;
   timezone: string;
   targetAudience: string;
   tone: string;
@@ -26,6 +32,8 @@ export const DEFAULT_BLOG_AUTOMATION_FORM: BlogAutomationFormState = {
   articlesPerWeek: 1,
   preferredDays: ["monday"],
   preferredTime: "09:00",
+  postingDays: ["thursday"],
+  postingTime: "09:00",
   timezone: "Europe/Zurich",
   targetAudience: "",
   tone: "Ruhig und exekutiv",
@@ -39,10 +47,6 @@ export const DEFAULT_BLOG_AUTOMATION_FORM: BlogAutomationFormState = {
   brandInstructions: "",
   forbiddenTopics: "",
 };
-
-function readNum(v: unknown, fallback: number): number {
-  return typeof v === "number" && Number.isFinite(v) ? v : fallback;
-}
 
 function readBool(v: unknown, fallback: boolean): boolean {
   return typeof v === "boolean" ? v : fallback;
@@ -65,11 +69,17 @@ export function mapFirestoreRecordToBlogAutomationForm(data: Record<string, unkn
   const articleLength: BlogAutomationArticleLength =
     articleLengthRaw === "short" || articleLengthRaw === "long" ? articleLengthRaw : "medium";
 
+  const legacyPreferredDays = readStrArr(data.preferredDays);
+  const preferredDays = legacyPreferredDays.length ? [legacyPreferredDays[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays;
+  const postingDaysRaw = readStrArr(data.postingDays);
+
   return {
     enabled: readBool(data.enabled, DEFAULT_BLOG_AUTOMATION_FORM.enabled),
-    articlesPerWeek: Math.min(3, Math.max(1, Math.floor(readNum(data.articlesPerWeek, 1)))) || 1,
-    preferredDays: readStrArr(data.preferredDays).length ? readStrArr(data.preferredDays) : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays,
+    articlesPerWeek: 1,
+    preferredDays,
     preferredTime: readStr(data.preferredTime, DEFAULT_BLOG_AUTOMATION_FORM.preferredTime),
+    postingDays: postingDaysRaw.length ? postingDaysRaw : legacyPreferredDays.length ? legacyPreferredDays : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
+    postingTime: readStr(data.postingTime, readStr(data.preferredTime, DEFAULT_BLOG_AUTOMATION_FORM.postingTime)),
     timezone: readStr(data.timezone, DEFAULT_BLOG_AUTOMATION_FORM.timezone),
     targetAudience: readStr(data.targetAudience, ""),
     tone: readStr(data.tone, DEFAULT_BLOG_AUTOMATION_FORM.tone),

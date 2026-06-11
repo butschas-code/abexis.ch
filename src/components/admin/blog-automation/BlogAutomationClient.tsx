@@ -51,6 +51,8 @@ const WEEKDAY_OPTIONS = [
   { key: "wednesday", label: "Mittwoch" },
   { key: "thursday", label: "Donnerstag" },
   { key: "friday", label: "Freitag" },
+  { key: "saturday", label: "Samstag" },
+  { key: "sunday", label: "Sonntag" },
 ] as const;
 
 const TONE_OPTIONS = [
@@ -200,13 +202,21 @@ export function BlogAutomationClient() {
     setForm((s) => (s ? { ...s, ...p } : s));
   }, []);
 
-  const toggleWeekday = useCallback((key: string, on: boolean) => {
+  const setDraftDay = useCallback((key: string) => {
     setForm((s) => {
       if (!s) return s;
-      const next = new Set(s.preferredDays);
+      return { ...s, articlesPerWeek: 1, preferredDays: [key] };
+    });
+  }, []);
+
+  const togglePostingDay = useCallback((key: string, on: boolean) => {
+    setForm((s) => {
+      if (!s) return s;
+      const next = new Set(s.postingDays);
       if (on) next.add(key);
       else next.delete(key);
-      return { ...s, preferredDays: [...next] };
+      if (next.size === 0) return s;
+      return { ...s, postingDays: [...next] };
     });
   }, []);
 
@@ -234,7 +244,10 @@ export function BlogAutomationClient() {
         const token = await getIdToken();
         const toSave: BlogAutomationFormState = {
           ...form,
-          articlesPerWeek: Math.min(3, Math.max(1, Math.floor(form.articlesPerWeek) || 1)),
+          articlesPerWeek: 1,
+          preferredDays: form.preferredDays.length ? [form.preferredDays[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays,
+          postingDays: form.postingDays.length ? form.postingDays : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
+          postingTime: form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
           socialPlatforms: form.createSocialPosts ? ["linkedin"] : [],
         };
         await apiSaveBlogAutomationSettings(token, toSave, docExists);
@@ -260,7 +273,10 @@ export function BlogAutomationClient() {
       const toSave: BlogAutomationFormState = {
         ...form,
         enabled: true,
-        articlesPerWeek: Math.min(3, Math.max(1, Math.floor(form.articlesPerWeek) || 1)),
+        articlesPerWeek: 1,
+        preferredDays: form.preferredDays.length ? [form.preferredDays[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays,
+        postingDays: form.postingDays.length ? form.postingDays : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
+        postingTime: form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
         socialPlatforms: form.createSocialPosts ? ["linkedin"] : [],
       };
       await apiSaveBlogAutomationSettings(token, toSave, docExists);
@@ -493,7 +509,7 @@ export function BlogAutomationClient() {
             />
             {!form.enabled ? (
               <div className={`rounded-2xl border border-black/[0.06] bg-[color-mix(in_srgb,var(--apple-bg-subtle)_55%,white)] px-5 py-4 ${adminBody}`}>
-                Nach dem Einschalten und Speichern werden Entwürfe an den von Ihnen gewählten Tagen erzeugt — sobald Themen oder passende Vorschläge vorliegen.
+                Nach dem Einschalten und Speichern werden Entwürfe am gewählten Entwurfstag erzeugt — sobald Themen oder passende Vorschläge vorliegen.
               </div>
             ) : (
               <p className={`${adminBody} text-[14px]`}>
@@ -506,28 +522,11 @@ export function BlogAutomationClient() {
         <AdminPageSection>
           <BlogAutomationStepCard
             step={2}
-            title="Wie viele Entwürfe pro Woche?"
-            intro="Maximal eine Vorbereitung pro Kalendertag — bis zur hier gewählten Obergrenze pro Woche."
+            title="Wann sollen neue Entwürfe entstehen?"
+            intro="Wählen Sie einen festen Tag. Die Automatisierung erstellt dann höchstens einen KI-Entwurf pro Woche, sofern ein Thema bereitsteht."
           >
-            <label className="block max-w-md space-y-2">
-              <span className="text-[14px] font-medium text-[var(--apple-text)]">Entwürfe pro Woche höchstens</span>
-              <select className={adminInput} value={form.articlesPerWeek} onChange={(e) => patch({ articlesPerWeek: Number(e.target.value) })}>
-                <option value={1}>1</option>
-                <option value={2}>2</option>
-                <option value={3}>3</option>
-              </select>
-            </label>
-          </BlogAutomationStepCard>
-        </AdminPageSection>
-
-        <AdminPageSection>
-          <BlogAutomationStepCard
-            step={3}
-            title="Wann soll gearbeitet werden?"
-            intro="Wählen Sie Zeitzone, Uhrzeit ab wann ein Entwurf an einem Schreibtag in Frage kommt, und die Wochentage."
-          >
-            <div className="grid gap-8 md:grid-cols-2">
-              <label className="block space-y-2 md:col-span-2">
+            <div className="grid gap-6 md:grid-cols-3">
+              <label className="block space-y-2 md:col-span-3">
                 <span className="text-[14px] font-medium text-[var(--apple-text)]">Region / Zeitzone</span>
                 <select className={adminInput} value={form.timezone} onChange={(e) => patch({ timezone: e.target.value })}>
                   {!isKnownTimezone(form.timezone) ? <option value={form.timezone}>{form.timezone}</option> : null}
@@ -538,36 +537,65 @@ export function BlogAutomationClient() {
                   ))}
                 </select>
               </label>
-              <label className="block space-y-2">
-                <span className="text-[14px] font-medium text-[var(--apple-text)]">Ab dieser Uhrzeit</span>
-                <input type="time" className={adminInput} value={form.preferredTime} onChange={(e) => patch({ preferredTime: e.target.value })} />
-                <span className={`${adminBody} text-[13px]`}>Am gewählten Tag erst nach dieser Zeit (lokal).</span>
-              </label>
-              <div className="rounded-2xl border border-[var(--brand-900)]/12 bg-[color-mix(in_srgb,var(--brand-900)_6%,white)] px-5 py-4 text-[14px] leading-relaxed text-[var(--apple-text-secondary)] md:col-span-2">
-                Der Zeitplan steuert die automatische Tagesprüfung. Für einen sofortigen Entwurf nutzen Sie oben «Jetzt Entwurf vorbereiten».
-              </div>
-              <div className="space-y-3 md:col-span-2">
-                <span className="block text-[14px] font-medium text-[var(--apple-text)]">Schreibtage</span>
-                <div className="flex flex-wrap gap-2">
+
+              <label className="block space-y-2 md:col-span-2">
+                <span className="text-[14px] font-medium text-[var(--apple-text)]">Entwurfstag</span>
+                <select
+                  className={adminInput}
+                  value={form.preferredDays[0] ?? DEFAULT_BLOG_AUTOMATION_FORM.preferredDays[0]}
+                  onChange={(e) => setDraftDay(e.target.value)}
+                >
                   {WEEKDAY_OPTIONS.map((d) => (
-                    <label
-                      key={d.key}
-                      className={`flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2.5 text-[14px] transition ${
-                        form.preferredDays.includes(d.key)
-                          ? "border-[var(--brand-900)]/25 bg-[color-mix(in_srgb,var(--brand-900)_7%,white)] text-[var(--apple-text)]"
-                          : "border-black/[0.08] bg-white text-[var(--apple-text)] hover:border-black/14"
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={form.preferredDays.includes(d.key)}
-                        onChange={(e) => toggleWeekday(d.key, e.target.checked)}
-                        className="h-4 w-4 rounded border-black/18 text-[var(--brand-900)]"
-                      />
+                    <option key={d.key} value={d.key}>
                       {d.label}
-                    </label>
+                    </option>
                   ))}
-                </div>
+                </select>
+              </label>
+
+              <label className="block space-y-2">
+                <span className="text-[14px] font-medium text-[var(--apple-text)]">Ab Uhrzeit</span>
+                <input type="time" className={adminInput} value={form.preferredTime} onChange={(e) => patch({ preferredTime: e.target.value })} />
+              </label>
+            </div>
+
+            <div className="rounded-2xl border border-[var(--brand-900)]/12 bg-[color-mix(in_srgb,var(--brand-900)_6%,white)] px-5 py-4 text-[14px] leading-relaxed text-[var(--apple-text-secondary)]">
+              Dieser Schritt erstellt nur Entwürfe. Nichts wird dadurch veröffentlicht.
+            </div>
+          </BlogAutomationStepCard>
+        </AdminPageSection>
+
+        <AdminPageSection>
+          <BlogAutomationStepCard
+            step={3}
+            title="An welchen Tagen sollen freigegebene Artikel live gehen?"
+            intro="Wenn Sie einen Entwurf freigeben, plant das CMS den Artikel automatisch auf den nächsten passenden Postingtag."
+          >
+            <div className="space-y-5">
+              <div className="flex flex-wrap gap-2">
+                {WEEKDAY_OPTIONS.map((d) => (
+                  <label
+                    key={d.key}
+                    className={`flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2.5 text-[14px] transition ${
+                      form.postingDays.includes(d.key)
+                        ? "border-[var(--brand-900)]/25 bg-[color-mix(in_srgb,var(--brand-900)_7%,white)] text-[var(--apple-text)]"
+                        : "border-black/[0.08] bg-white text-[var(--apple-text)] hover:border-black/14"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={form.postingDays.includes(d.key)}
+                      onChange={(e) => togglePostingDay(d.key, e.target.checked)}
+                      className="h-4 w-4 rounded border-black/18 text-[var(--brand-900)]"
+                    />
+                    {d.label}
+                  </label>
+                ))}
+              </div>
+
+              <div className="rounded-2xl border border-black/[0.06] bg-[color-mix(in_srgb,var(--apple-bg-subtle)_55%,white)] px-5 py-4 text-[14px] leading-relaxed text-[var(--apple-text-secondary)]">
+                Freigegebene Artikel werden jeweils um {form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime} Uhr ({form.timezone || "Europe/Zurich"}) geplant.
+                LinkedIn wird gleichzeitig an Nuelink übergeben.
               </div>
             </div>
           </BlogAutomationStepCard>
@@ -759,7 +787,6 @@ export function BlogAutomationClient() {
             snapshot={dashboard}
             displayTimezone={form.timezone?.trim() || "Europe/Zurich"}
             automationEnabled={form.enabled}
-            articlesPerWeek={form.articlesPerWeek}
             draftsReviewHref={CMS_PATHS.adminBlogAutomationDrafts}
             busy={dashboardBusy}
             onRefresh={() => void refreshDashboard(form)}

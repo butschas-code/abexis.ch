@@ -143,9 +143,9 @@ function parsePreferredTime(preferredTime: string): { hour: number; minute: numb
 
 function nextApprovalPublishSlot(form: BlogAutomationFormState, from = new Date()): Date {
   const zone = form.timezone?.trim() || "Europe/Zurich";
-  const preferredDays = form.preferredDays.map((d) => d.trim().toLowerCase()).filter(Boolean);
-  const days = preferredDays.length ? preferredDays : ["monday"];
-  const { hour, minute } = parsePreferredTime(form.preferredTime || "09:00");
+  const postingDays = form.postingDays.map((d) => d.trim().toLowerCase()).filter(Boolean);
+  const days = postingDays.length ? postingDays : ["thursday"];
+  const { hour, minute } = parsePreferredTime(form.postingTime || "09:00");
   const now = DateTime.fromJSDate(from, { zone });
 
   for (let offset = 0; offset < 28; offset += 1) {
@@ -213,9 +213,11 @@ export async function cmsWriteBlogAutomationSettings(
   const ref = adminDb.doc(`${COLLECTIONS.blogAutomationSettings}/${BLOG_AUTOMATION_SETTINGS_DOC_ID}`);
   const payload: Record<string, unknown> = {
     enabled: form.enabled,
-    articlesPerWeek: form.articlesPerWeek,
-    preferredDays: form.preferredDays,
-    preferredTime: form.preferredTime,
+    articlesPerWeek: 1,
+    preferredDays: form.preferredDays.length ? form.preferredDays.slice(0, 1) : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays,
+    preferredTime: form.preferredTime || DEFAULT_BLOG_AUTOMATION_FORM.preferredTime,
+    postingDays: form.postingDays.length ? form.postingDays : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
+    postingTime: form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
     timezone: form.timezone,
     targetAudience: form.targetAudience.trim(),
     tone: form.tone,
@@ -944,8 +946,8 @@ export async function cmsPublishDueScheduledPosts(max = 20): Promise<{ published
 function formToScheduleSettings(form: BlogAutomationFormState): AutomationScheduleSettings {
   return {
     enabled: form.enabled,
-    articlesPerWeek: form.articlesPerWeek,
-    preferredDays: form.preferredDays,
+    articlesPerWeek: 1,
+    preferredDays: form.preferredDays.slice(0, 1),
     preferredTime: form.preferredTime,
     timezone: form.timezone,
   };
@@ -1032,14 +1034,28 @@ export function parseBlogAutomationFormFromJson(body: unknown): BlogAutomationFo
   const articleLength: BlogAutomationArticleLength =
     articleLengthRaw === "short" || articleLengthRaw === "long" ? articleLengthRaw : "medium";
 
-  const preferredDays = Array.isArray(o.preferredDays) ? o.preferredDays.map(String) : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays;
+  const preferredDaysRaw = Array.isArray(o.preferredDays) ? o.preferredDays.map(String) : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays;
+  const preferredDays = preferredDaysRaw.length ? [preferredDaysRaw[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays;
+  const postingDaysRaw = Array.isArray(o.postingDays) ? o.postingDays.map(String).filter(Boolean) : [];
+  const postingDays = postingDaysRaw.length
+    ? postingDaysRaw
+    : preferredDaysRaw.length
+      ? preferredDaysRaw
+      : DEFAULT_BLOG_AUTOMATION_FORM.postingDays;
   const socialPlatforms = Array.isArray(o.socialPlatforms) ? o.socialPlatforms.map(String) : [];
 
   return {
     enabled: !!o.enabled,
-    articlesPerWeek: Math.min(3, Math.max(1, Math.floor(Number(o.articlesPerWeek)) || 1)),
+    articlesPerWeek: 1,
     preferredDays,
     preferredTime: typeof o.preferredTime === "string" ? o.preferredTime : DEFAULT_BLOG_AUTOMATION_FORM.preferredTime,
+    postingDays,
+    postingTime:
+      typeof o.postingTime === "string"
+        ? o.postingTime
+        : typeof o.preferredTime === "string"
+          ? o.preferredTime
+          : DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
     timezone: typeof o.timezone === "string" ? o.timezone : DEFAULT_BLOG_AUTOMATION_FORM.timezone,
     targetAudience: typeof o.targetAudience === "string" ? o.targetAudience : "",
     tone: typeof o.tone === "string" ? o.tone : DEFAULT_BLOG_AUTOMATION_FORM.tone,

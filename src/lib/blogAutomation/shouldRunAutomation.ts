@@ -73,14 +73,14 @@ export async function shouldRunAutomation(
 
   const preferredDays = (settings.preferredDays ?? []).map(normalizeDayLabel).filter(Boolean);
   if (preferredDays.length === 0) {
-    return { shouldRun: false, reason: "preferredDays is empty; add at least one weekday (e.g. monday)." };
+    return { shouldRun: false, reason: "No draft day is configured; choose one weekday for automatic draft creation." };
   }
 
   const todayKey = WEEKDAY_KEYS[dt.weekday - 1];
   if (!preferredDays.includes(todayKey)) {
     return {
       shouldRun: false,
-      reason: `Today (${todayKey}) is not in preferredDays [${preferredDays.join(", ")}] (${tz}).`,
+      reason: `Today (${todayKey}) is not the configured draft day [${preferredDays.join(", ")}] (${tz}).`,
     };
   }
 
@@ -129,7 +129,7 @@ export async function shouldRunAutomation(
   if (draftsThisWeek >= articlesPerWeek) {
     return {
       shouldRun: false,
-      reason: `Weekly cap reached: ${draftsThisWeek} draft(s) created this ISO week (limit ${articlesPerWeek}, timezone ${tz}).`,
+      reason: `Weekly draft already created: ${draftsThisWeek} draft(s) created this ISO week (limit ${articlesPerWeek}, timezone ${tz}).`,
     };
   }
 

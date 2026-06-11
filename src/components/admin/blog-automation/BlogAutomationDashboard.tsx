@@ -59,14 +59,13 @@ type Props = {
   snapshot: BlogAutomationDashboardSnapshot | null;
   displayTimezone: string;
   automationEnabled: boolean;
-  articlesPerWeek: number;
   draftsReviewHref: string;
   busy: boolean;
   onRefresh: () => void;
 };
 
 export function BlogAutomationDashboard(props: Props) {
-  const { snapshot, displayTimezone, automationEnabled, articlesPerWeek, draftsReviewHref, busy, onRefresh } = props;
+  const { snapshot, displayTimezone, automationEnabled, draftsReviewHref, busy, onRefresh } = props;
 
   const lastRun = snapshot?.runs?.[0] ?? null;
   const attentionLogs = snapshot ? pickRecentAttentionLogs(snapshot.logs) : [];
@@ -102,12 +101,12 @@ export function BlogAutomationDashboard(props: Props) {
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         <StatCard title="Vorbereitung" value={automationEnabled ? "Ein" : "Aus"} hint={automationHint} />
 
-        <StatCard title="Entwürfe / Woche max." value={articlesPerWeek} hint="Wie unter «Schritt 2» eingestellt." />
+        <StatCard title="Automatische Entwürfe" value="1 / Woche" hint="Am gewählten Entwurfstag, sofern ein Thema bereitsteht." />
 
         <StatCard
           title="Nächste Planprüfung"
           value={formatDateTime(snapshot?.nextAutomaticCheckAt ?? null, displayTimezone)}
-          hint="Einmal täglich wird geprüft. Ab diesem Zeitpunkt kann ein Entwurf entstehen — wenn Schreibtag, Uhrzeit und Obergrenze passen."
+          hint="Einmal täglich wird geprüft. Ein Entwurf entsteht nur am gewählten Entwurfstag nach der gespeicherten Uhrzeit."
         />
 
         <StatCard
@@ -160,7 +159,7 @@ export function BlogAutomationDashboard(props: Props) {
           <span className="font-medium text-[var(--apple-text)]">Orientierung nächster Entwurf: </span>
           {formatDateTime(snapshot.nextLikelyDraftAt, displayTimezone)}
           <span className="mt-2 block text-[var(--apple-text-secondary)]">
-            Keine Garantie — es müssen Schreibtag, Uhrzeit, Grenzen und Themen zusammenpassen.
+            Keine Garantie — es müssen Entwurfstag, Uhrzeit und ein Thema zusammenpassen.
           </span>
         </p>
       ) : null}

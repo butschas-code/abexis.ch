@@ -46,10 +46,14 @@ export const BLOG_AUTOMATION_SETTINGS_DOC_ID = "default" as const;
 export type BlogAutomationSettings = {
   enabled: boolean;
   articlesPerWeek: number;
-  /** Weekday labels, typically `monday` … `sunday` (validate at write-time in CMS). */
+  /** One weekday when the automatic pipeline may create a new draft. */
   preferredDays: string[];
-  /** Local wall-clock time for scheduling, e.g. `"09:30"`. */
+  /** Local wall-clock time for draft creation, e.g. `"09:30"`. */
   preferredTime: string;
+  /** Weekdays when approved articles should be scheduled to go live. */
+  postingDays: string[];
+  /** Local wall-clock time for approved article publishing. */
+  postingTime: string;
   /** IANA timezone, e.g. `Europe/Zurich`. */
   timezone: string;
   targetAudience: string;

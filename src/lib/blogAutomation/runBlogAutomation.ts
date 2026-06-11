@@ -69,23 +69,29 @@ export function coerceBlogAutomationSettings(raw: Record<string, unknown>): Blog
   const articleLength: BlogAutomationArticleLength =
     articleLengthRaw === "short" || articleLengthRaw === "long" ? articleLengthRaw : "medium";
 
-  const rawApw =
-    typeof raw.articlesPerWeek === "number" && Number.isFinite(raw.articlesPerWeek)
-      ? Math.floor(raw.articlesPerWeek)
-      : 1;
-
-  let preferredDays = Array.isArray(raw.preferredDays)
+  const legacyPreferredDays = Array.isArray(raw.preferredDays)
     ? raw.preferredDays.map(String).map((s) => s.trim().toLowerCase()).filter(Boolean)
     : [];
+  let preferredDays = legacyPreferredDays;
   if (preferredDays.length === 0) {
     preferredDays = ["monday"];
   }
 
+  let postingDays = Array.isArray(raw.postingDays)
+    ? raw.postingDays.map(String).map((s) => s.trim().toLowerCase()).filter(Boolean)
+    : [];
+  if (postingDays.length === 0) {
+    postingDays = legacyPreferredDays.length ? legacyPreferredDays : preferredDays;
+  }
+  preferredDays = [preferredDays[0]!];
+
   return {
     enabled: raw.enabled === true,
-    articlesPerWeek: Math.min(3, Math.max(1, rawApw)),
+    articlesPerWeek: 1,
     preferredDays,
     preferredTime: typeof raw.preferredTime === "string" ? raw.preferredTime : "09:00",
+    postingDays,
+    postingTime: typeof raw.postingTime === "string" ? raw.postingTime : typeof raw.preferredTime === "string" ? raw.preferredTime : "09:00",
     timezone: typeof raw.timezone === "string" ? raw.timezone : "Europe/Zurich",
     targetAudience: typeof raw.targetAudience === "string" ? raw.targetAudience : "",
     tone: typeof raw.tone === "string" ? raw.tone : "",
