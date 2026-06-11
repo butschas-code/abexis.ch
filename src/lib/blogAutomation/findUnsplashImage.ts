@@ -32,6 +32,12 @@ const CHEESY_SUBSTRINGS = [
   "financial chart",
   "skyscraper",
   "city skyline",
+  "swiss architecture",
+  "switzerland",
+  "swiss alps",
+  "mountain landscape",
+  "landscape",
+  "flag",
   "growth hacking",
   "millionaire mindset",
   "cash money",
@@ -39,6 +45,16 @@ const CHEESY_SUBSTRINGS = [
   "thumbs up",
   "pointing at",
 ];
+
+const FALLBACK_BUSINESS_TECH_QUERIES = [
+  "business technology",
+  "enterprise software",
+  "digital transformation",
+  "IT project management",
+  "business strategy meeting",
+  "software implementation",
+  "workflow automation",
+] as const;
 
 export type UnsplashHeroSelection = {
   heroImageUrl: string;
@@ -71,9 +87,12 @@ function editorialPenalty(text: string): number {
   return score;
 }
 
-function photoScore(p: UnsplashPhotoBrief): number {
+function photoScore(p: UnsplashPhotoBrief, avoidUrls?: Set<string>): number {
   const blob = [p.alt_description ?? "", p.user?.name ?? ""].join(" ");
-  return editorialPenalty(blob);
+  let score = editorialPenalty(blob);
+  const urls = [p.urls?.regular, p.urls?.small, p.links?.html].map((u) => u?.trim()).filter(Boolean);
+  if (avoidUrls && urls.some((u) => avoidUrls.has(u))) score += 1000;
+  return score;
 }
 
 function buildCredit(photographerName: string): string {
@@ -198,10 +217,17 @@ export async function applyUnsplashPhotoToHeroFields(
 export async function findUnsplashImage(params: {
   imageSearchQueries: string[];
   heroImageAlt: string;
+  avoidImageUrls?: string[];
 }): Promise<UnsplashHeroSelection | null> {
-  const queries = params.imageSearchQueries.map((q) => q.trim()).filter(Boolean);
+  const badQuery = /\b(swiss|schweiz|switzerland|architecture|architectural|landschaft|landscape|mountain|alps|flag|handshake|skyscraper)\b/i;
+  const generatedQueries = params.imageSearchQueries
+    .map((q) => q.trim())
+    .filter(Boolean)
+    .filter((q) => !badQuery.test(q));
+  const queries = [...new Set([...generatedQueries, ...FALLBACK_BUSINESS_TECH_QUERIES])].slice(0, 8);
   if (!queries.length) return null;
   if (!unsplashHeaders()) return null;
+  const avoidUrls = new Set((params.avoidImageUrls ?? []).map((u) => u.trim()).filter(Boolean));
 
   let best: { photo: UnsplashPhotoBrief; query: string; penalty: number } | null = null;
 
@@ -214,9 +240,9 @@ export async function findUnsplashImage(params: {
     }
     if (!rows.length) continue;
 
-    const ranked = [...rows].sort((a, b) => photoScore(a) - photoScore(b));
+    const ranked = [...rows].sort((a, b) => photoScore(a, avoidUrls) - photoScore(b, avoidUrls));
     const top = ranked[0];
-    const penalty = photoScore(top);
+    const penalty = photoScore(top, avoidUrls);
     if (!best || penalty < best.penalty) {
       best = { photo: top, query, penalty };
     }

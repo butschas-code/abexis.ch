@@ -73,13 +73,13 @@ export async function savePost(input: PostUpsertInput): Promise<void> {
     payload.createdAt = serverTimestamp();
   }
 
-  if (input.status === "published") {
+  if (input.status === "published" || input.status === "scheduled") {
     if (typeof input.publishedAt === "string" && input.publishedAt.length > 0) {
       const d = new Date(input.publishedAt);
       if (Number.isFinite(d.getTime())) {
         payload.publishedAt = Timestamp.fromDate(d);
       }
-    } else if (prev?.publishedAt == null) {
+    } else if (input.status === "published" && prev?.publishedAt == null) {
       payload.publishedAt = serverTimestamp();
     }
   } else if (input.status === "draft") {

@@ -171,8 +171,22 @@ export async function apiSelectBlogDraftUnsplashPhoto(
   });
 }
 
-export async function apiApproveBlogDraft(idToken: string, draftId: string): Promise<void> {
-  await cmsBlogAutomationFetch(idToken, `/drafts/${encodeURIComponent(draftId)}/approve`, { method: "POST" });
+export type ApproveBlogDraftApiResult = {
+  postId: string;
+  scheduledFor: string;
+  nuelinkSent: boolean;
+  nuelinkError: string | null;
+};
+
+export async function apiApproveBlogDraft(
+  idToken: string,
+  draftId: string,
+  body: { authorId?: string; categoryIds?: string[]; tags?: string[] } = {},
+): Promise<{ result: ApproveBlogDraftApiResult }> {
+  return cmsBlogAutomationFetch(idToken, `/drafts/${encodeURIComponent(draftId)}/approve`, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
 }
 
 export async function apiSendBackBlogDraft(idToken: string, draftId: string): Promise<void> {

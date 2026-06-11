@@ -6,7 +6,7 @@ export const siteKeySchema = z.literal("abexis");
 export const categorySiteKeySchema = z.literal("abexis");
 export const deploymentSiteKeySchema = z.literal("abexis");
 
-export const postStatusSchema = z.enum(["draft", "published", "archived"]);
+export const postStatusSchema = z.enum(["draft", "scheduled", "published", "archived"]);
 /** Single source of truth: {@link CMS_SUBMISSION_STATUSES}. */
 export const submissionStatusSchema = z.enum(
   CMS_SUBMISSION_STATUSES as unknown as [string, ...string[]],

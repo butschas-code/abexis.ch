@@ -5,7 +5,7 @@ import { getCmsFirestore } from "@/firebase/firestore";
 import { POST_SITE_FIRESTORE_IN } from "@/public-site/site/filters";
 import { COLLECTIONS } from "../firestore/collections";
 import type { Vacancy, VacancyFile } from "../types/vacancy";
-import type { PostStatus } from "../types/enums";
+import type { VacancyStatus } from "../types/vacancy";
 import type { SiteKey } from "../types/site";
 
 function normalizeVacancySite(_raw: unknown): SiteKey {
@@ -30,7 +30,7 @@ function readFiles(v: unknown): VacancyFile[] {
     .filter((f) => f.label && f.url);
 }
 
-function readStatus(v: unknown): PostStatus {
+function readStatus(v: unknown): VacancyStatus {
   if (v === "published" || v === "archived" || v === "draft") return v;
   return "draft";
 }

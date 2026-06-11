@@ -5,8 +5,7 @@ import { collection, getDocs, getFirestore, limit, query, where, doc, getDoc } f
 import { COLLECTIONS } from "@/cms/firestore/collections";
 import { getAdminFirestore } from "@/firebase/server";
 import { parseFirebaseWebEnv } from "@/firebase/env.schema";
-import type { Vacancy, VacancyFile } from "@/cms/types/vacancy";
-import type { PostStatus } from "@/cms/types/enums";
+import type { Vacancy, VacancyFile, VacancyStatus } from "@/cms/types/vacancy";
 import type { SiteKey } from "@/cms/types/site";
 import { getResolvedPublicDeploymentSite, isPostVisibleOnDeployment } from "@/public-site/site";
 import type { PublicDeploymentSite } from "@/public-site/site";
@@ -47,7 +46,7 @@ function readFiles(v: unknown): VacancyFile[] {
     .filter((f) => f.label && f.url);
 }
 
-function readStatus(v: unknown): PostStatus {
+function readStatus(v: unknown): VacancyStatus {
   if (v === "published" || v === "archived" || v === "draft") return v;
   return "draft";
 }

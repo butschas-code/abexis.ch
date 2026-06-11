@@ -8,6 +8,8 @@ export type BlogDraftEditableFields = {
   articleHtml: string;
   researchSummary: string;
   sources: Array<{ title: string; url: string }>;
+  /** Direct hero image URL from manual upload / media selection. */
+  heroImageUrl?: string | null;
   /** Alt text for the hero image (optional PATCH key). */
   heroImageAlt?: string;
   /** Visible credit line for the hero image (optional PATCH key). */

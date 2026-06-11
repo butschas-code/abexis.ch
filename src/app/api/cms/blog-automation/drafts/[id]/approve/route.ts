@@ -12,8 +12,12 @@ export async function POST(req: Request, ctx: RouteContext) {
   if (auth instanceof NextResponse) return auth;
   const { id } = await ctx.params;
   try {
-    await cmsSetBlogDraftApproved(id);
-    return NextResponse.json({ ok: true });
+    const body = await req.json().catch(() => ({})) as Record<string, unknown>;
+    const authorId = typeof body.authorId === "string" ? body.authorId : undefined;
+    const categoryIds = Array.isArray(body.categoryIds) ? body.categoryIds.map(String) : undefined;
+    const tags = Array.isArray(body.tags) ? body.tags.map(String) : undefined;
+    const result = await cmsSetBlogDraftApproved(id, { authorId, categoryIds, tags });
+    return NextResponse.json({ ok: true, result });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Freigabe fehlgeschlagen.";
     const status = message.includes("nicht gefunden") ? 404 : 400;

@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { CMS_PATHS } from "@/admin/paths";
 import { getVacancyForAdmin, saveVacancy, type VacancyUpsertInput } from "@/cms/services/vacancy-write-client";
 import type { VacancyFile } from "@/cms/types/vacancy";
-import type { PostStatus } from "@/cms/types/enums";
 import { parsePostBody, serializePostBody } from "@/lib/cms/post-body-storage";
 import { slugFromTitle } from "@/lib/cms/slug-from-title";
 import {
@@ -114,7 +113,7 @@ export function VacancyForm({ mode, vacancyId }: Props) {
     set("files", form.files.filter((_, idx) => idx !== i));
   }
 
-  async function handleSave(newStatus?: PostStatus) {
+  async function handleSave(newStatus?: VacancyUpsertInput["status"]) {
     setSaving(true);
     setError(null);
     setSavedBanner(false);
@@ -238,7 +237,7 @@ export function VacancyForm({ mode, vacancyId }: Props) {
 
           <label className="block max-w-md">
             <span className="mb-1.5 block text-[13px] font-medium text-[var(--apple-text)]">Status</span>
-            <select value={form.status} onChange={(e) => set("status", e.target.value as PostStatus)} className={adminInput}>
+            <select value={form.status} onChange={(e) => set("status", e.target.value as VacancyUpsertInput["status"])} className={adminInput}>
               <option value="draft">Entwurf</option>
               <option value="published">Veröffentlicht</option>
               <option value="archived">Archiviert</option>

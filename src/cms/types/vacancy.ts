@@ -1,7 +1,6 @@
-import type { PostStatus } from "./enums";
 import type { SiteKey } from "./site";
 
-export type { PostStatus } from "./enums";
+export type VacancyStatus = "draft" | "published" | "archived";
 
 /** Downloadable file attached to a vacancy (PDF, brief, etc.). */
 export type VacancyFile = {
@@ -36,7 +35,7 @@ export type Vacancy = {
   /** Short call-to-action / application instructions shown below the body. */
   apply: string;
   site: SiteKey;
-  status: PostStatus;
+  status: VacancyStatus;
   publishedAt: string | null;
   createdAt: string;
   updatedAt: string;

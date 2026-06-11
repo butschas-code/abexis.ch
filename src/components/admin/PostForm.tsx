@@ -257,13 +257,15 @@ const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
         intent === "publish" ? ("published" as const) : intent === "draft" ? ("draft" as const) : input.status;
 
       let publishedAt: string | undefined;
-      if (status === "published") {
+      if (status === "published" || status === "scheduled") {
         if (publishSchedule.trim()) {
           const d = new Date(publishSchedule);
           if (!Number.isFinite(d.getTime())) {
             throw new Error("Bitte gültiges Veröffentlichungsdatum wählen.");
           }
           publishedAt = d.toISOString();
+        } else if (status === "scheduled") {
+          throw new Error("Bitte ein Veröffentlichungsdatum für geplante Beiträge wählen.");
         } else {
           publishedAt = undefined;
         }
@@ -289,7 +291,7 @@ const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
 
       await savePost(parsed.data);
       setInput(parsed.data);
-      if (status === "published" && parsed.data.publishedAt) {
+      if ((status === "published" || status === "scheduled") && parsed.data.publishedAt) {
         setPublishSchedule(toDatetimeLocalValue(parsed.data.publishedAt));
       }
       if (intent === "publish") {
@@ -559,6 +561,7 @@ const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
                 }
               >
                 <option value="draft">Entwurf</option>
+                <option value="scheduled">Freigegeben / geplant</option>
                 <option value="published">Veröffentlicht</option>
                 <option value="archived">Archiviert</option>
               </select>
@@ -577,7 +580,7 @@ const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
                 disabled={disabledForm}
               />
               <p className="text-[12px] leading-relaxed text-[var(--apple-text-tertiary)]">
-                Beim Veröffentlichen: leer lassen für «jetzt», oder Datum für eine Planung.
+                Für geplante Beiträge muss ein Datum gesetzt sein. Beim direkten Veröffentlichen: leer lassen für «jetzt».
               </p>
               {fieldErrors.publishedAt ? <p className="text-xs text-red-600">{fieldErrors.publishedAt}</p> : null}
             </label>

@@ -33,6 +33,7 @@ import { PostsRowMenu } from "./PostsRowMenu";
 
 const statusLabel: Record<PostStatus, string> = {
   draft: "Entwurf",
+  scheduled: "Freigegeben",
   published: "Live",
   archived: "Archiv",
 };
@@ -53,7 +54,7 @@ function formatWhen(iso: string | null) {
 }
 
 function parseStatus(v: string | null): PostStatus | "all" {
-  if (v === "draft" || v === "published" || v === "archived") return v;
+  if (v === "draft" || v === "scheduled" || v === "published" || v === "archived") return v;
   return "all";
 }
 
@@ -276,6 +277,7 @@ export function AdminPostsManager() {
               >
                 <option value="all">Alle</option>
                 <option value="draft">Entwurf</option>
+                <option value="scheduled">Freigegeben</option>
                 <option value="published">Live</option>
                 <option value="archived">Archiv</option>
               </select>

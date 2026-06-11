@@ -5,9 +5,10 @@ import { useCallback, useEffect, useState } from "react";
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
 import {
   apiPatchBlogSocialPost,
-  apiSendBlogSocialPostToNuelink,
 } from "@/cms/services/blog-automation-cms-api-client";
 import type { BlogSocialListItem } from "@/cms/services/blog-pipeline-types";
+import { recordMediaAsset } from "@/cms/services/media-client";
+import { AdminFileUpload } from "@/components/admin/AdminFileUpload";
 import {
   adminBody,
   adminBtnGhost,
@@ -77,8 +78,7 @@ export function BlogAutomationDraftSocialPosts(props: Props) {
       <section className="space-y-3">
         <h2 className={adminSectionLabel}>Social-Posts</h2>
         <div className={`rounded-xl border border-black/[0.06] bg-white/85 px-5 py-4 ${adminBody}`}>
-          Keine Kurztexte für diesen Entwurf. Unter Blog-Automation können Sie «Social-Texte mit erstellen» einschalten und LinkedIn oder X auswählen — dann erscheinen beim nächsten passenden Zeitpunkt Vorschläge hier. Es wird{" "}
-          <span className="font-medium text-[var(--apple-text)]">nichts automatisch</span> auf LinkedIn oder X veröffentlicht.
+          Keine Kurztexte für diesen Entwurf. Unter Blog-Automation können Sie «Social-Texte mit erstellen» einschalten — dann erscheinen beim nächsten Entwurf LinkedIn-Vorschläge hier.
         </div>
       </section>
     );
@@ -89,7 +89,7 @@ export function BlogAutomationDraftSocialPosts(props: Props) {
       <div>
         <h2 className={adminSectionLabel}>Social-Posts</h2>
         <p className={`mt-1 max-w-[52rem] ${adminBody}`}>
-          Texte prüfen, bei Bedarf anpassen und dann an Nuelink übergeben. Nuelink nutzt die dort konfigurierte Collection und Queue.
+          Text und Bild prüfen. Beim Freigeben des Entwurfs übergibt das CMS den LinkedIn-Post automatisch an Nuelink.
         </p>
       </div>
 
@@ -117,13 +117,17 @@ function BlogSocialPostCard(props: {
   const { row, onRefresh, onFlashSuccess, onFlashError } = props;
   const { user } = useCmsAuth();
   const [linkedinPost, setLinkedinPost] = useState(row.linkedinPost);
+  const [socialImageUrl, setSocialImageUrl] = useState(row.socialImageUrl ?? "");
+  const [socialImageAlt, setSocialImageAlt] = useState(row.socialImageAlt ?? "");
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     queueMicrotask(() => {
       setLinkedinPost(row.linkedinPost);
+      setSocialImageUrl(row.socialImageUrl ?? "");
+      setSocialImageAlt(row.socialImageAlt ?? "");
     });
-  }, [row.id, row.linkedinPost, row.usedAt]);
+  }, [row.id, row.linkedinPost, row.socialImageAlt, row.socialImageUrl, row.usedAt]);
 
   const getToken = useCallback(async () => {
     if (!user) throw new Error("Bitte melden Sie sich an.");
@@ -146,15 +150,19 @@ function BlogSocialPostCard(props: {
     setBusy(true);
     try {
       const token = await getToken();
-      await apiPatchBlogSocialPost(token, row.id, { linkedinPost });
-      onFlashSuccess("Social-Texte gespeichert.");
+      await apiPatchBlogSocialPost(token, row.id, {
+        linkedinPost,
+        socialImageUrl: socialImageUrl.trim() || null,
+        socialImageAlt: socialImageAlt.trim() || null,
+      });
+      onFlashSuccess("LinkedIn-Text und Bild gespeichert.");
       await onRefresh();
     } catch (e) {
       onFlashError(e instanceof Error ? e.message : "Speichern fehlgeschlagen.");
     } finally {
       setBusy(false);
     }
-  }, [getToken, linkedinPost, onFlashError, onFlashSuccess, onRefresh, row.id]);
+  }, [getToken, linkedinPost, onFlashError, onFlashSuccess, onRefresh, row.id, socialImageAlt, socialImageUrl]);
 
   const onMarkUsed = useCallback(async () => {
     setBusy(true);
@@ -170,26 +178,25 @@ function BlogSocialPostCard(props: {
     }
   }, [getToken, onFlashError, onFlashSuccess, onRefresh, row.id]);
 
-  const onSendToNuelink = useCallback(
-    async (target: "linkedin", caption: string) => {
-      setBusy(true);
+  const onUploadSocialImage = useCallback(
+    async (url: string, meta: { storagePath: string; file: File }) => {
       try {
-        const token = await getToken();
-        const { result } = await apiSendBlogSocialPostToNuelink(token, row.id, {
-          target,
-          caption,
-          socialImageUrl: row.socialImageUrl,
-          socialImageAlt: row.socialImageAlt,
+        await recordMediaAsset({
+          storagePath: meta.storagePath,
+          downloadUrl: url,
+          originalFileName: meta.file.name,
+          mimeType: meta.file.type || "image/jpeg",
+          sizeBytes: meta.file.size,
+          kind: "hero",
+          source: "blog_automation_social",
         });
-        onFlashSuccess(`${formatNuelinkTarget(target)} wurde an Nuelink übergeben (${result.publishMode}).`);
-        await onRefresh();
-      } catch (e) {
-        onFlashError(e instanceof Error ? e.message : "Nuelink-Verbindung fehlgeschlagen.");
-      } finally {
-        setBusy(false);
+      } catch {
+        /* The social row can still use the uploaded URL. */
       }
+      setSocialImageUrl(url);
+      if (!socialImageAlt.trim()) setSocialImageAlt(meta.file.name.replace(/\.[^.]+$/, ""));
     },
-    [getToken, onFlashError, onFlashSuccess, onRefresh, row.id, row.socialImageAlt, row.socialImageUrl],
+    [socialImageAlt],
   );
 
   return (
@@ -221,14 +228,35 @@ function BlogSocialPostCard(props: {
         <button type="button" className={`${adminBtnGhost} text-[13px]`} disabled={busy} onClick={() => void doCopy("LinkedIn-Text", linkedinPost)}>
           LinkedIn kopieren
         </button>
-        <button
-          type="button"
-          className={`${adminBtnSecondary} text-[13px]`}
-          disabled={busy || !user || !linkedinPost.trim()}
-          onClick={() => void onSendToNuelink("linkedin", linkedinPost)}
-        >
-          LinkedIn an Nuelink
-        </button>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-[minmax(180px,260px)_1fr] md:items-start">
+        <div className="overflow-hidden rounded-xl border border-black/[0.06] bg-black/[0.02]">
+          {socialImageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={socialImageUrl} alt="" className="aspect-video w-full object-cover" />
+          ) : (
+            <div className={`flex aspect-video items-center justify-center px-4 text-center ${adminBody} text-[13px]`}>
+              Kein LinkedIn-Bild gewählt.
+            </div>
+          )}
+        </div>
+        <div className="space-y-3">
+          <label className="block space-y-2">
+            <span className="text-[14px] font-medium text-[var(--apple-text)]">LinkedIn-Bild URL</span>
+            <input className={adminInput} value={socialImageUrl} onChange={(e) => setSocialImageUrl(e.target.value)} />
+          </label>
+          <label className="block space-y-2">
+            <span className="text-[14px] font-medium text-[var(--apple-text)]">Bildbeschreibung</span>
+            <input className={adminInput} value={socialImageAlt} onChange={(e) => setSocialImageAlt(e.target.value)} />
+          </label>
+          <AdminFileUpload
+            path={`cms/media/social/${row.blogDraftId}/`}
+            accept="image/*"
+            label="LinkedIn-Bild hochladen"
+            onUploadSuccess={(url, meta) => void onUploadSocialImage(url, meta)}
+          />
+        </div>
       </div>
 
       <label className="block space-y-2">

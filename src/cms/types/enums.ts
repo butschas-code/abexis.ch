@@ -1,5 +1,5 @@
 /** Post workflow : stored as string on `posts.status`. */
-export const CMS_POST_STATUSES = ["draft", "published", "archived"] as const;
+export const CMS_POST_STATUSES = ["draft", "scheduled", "published", "archived"] as const;
 export type PostStatus = (typeof CMS_POST_STATUSES)[number];
 export type CmsPostStatus = PostStatus;
 

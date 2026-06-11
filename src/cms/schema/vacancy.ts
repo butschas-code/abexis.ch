@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { idString, isoDateString, postStatusSchema, siteKeySchema, slugSegment } from "./common";
+import { idString, isoDateString, siteKeySchema, slugSegment } from "./common";
 
 const vacancyFileSchema = z.object({
   label: z.string().trim().min(1).max(300),
@@ -15,6 +15,7 @@ const nullableStr = (max = 2000) =>
 
 /** Mirrors Firestore `vacancies` — distinguishes general spontaneous applications from concrete mandates. */
 export const vacancyJobKindSchema = z.enum(["vacancy", "spontanbewerbung"]);
+export const vacancyStatusSchema = z.enum(["draft", "published", "archived"]);
 
 export const vacancyCreateInputSchema = z.object({
   title: z.string().trim().min(1).max(500),
@@ -31,7 +32,7 @@ export const vacancyCreateInputSchema = z.object({
   files: z.array(vacancyFileSchema).max(20).default([]),
   apply: nullableStr(2000),
   site: siteKeySchema,
-  status: postStatusSchema.default("draft"),
+  status: vacancyStatusSchema.default("draft"),
 });
 
 export const vacancyUpsertInputSchema = vacancyCreateInputSchema.extend({

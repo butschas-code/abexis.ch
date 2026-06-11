@@ -24,7 +24,7 @@ function readFeatured(d: Record<string, unknown>): boolean {
 
 function readStatus(d: Record<string, unknown>): PostStatus {
   const s = d.status;
-  if (s === "published" || s === "archived" || s === "draft") return s;
+  if (s === "published" || s === "scheduled" || s === "archived" || s === "draft") return s;
   return "draft";
 }
 

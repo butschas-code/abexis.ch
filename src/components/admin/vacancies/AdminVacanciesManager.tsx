@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { CMS_PATHS } from "@/admin/paths";
 import { listVacanciesForAdmin, type VacancyListItem } from "@/cms/services/vacancies-client";
 import { deleteVacancy, saveVacancy, vacancyListItemToUpsert } from "@/cms/services/vacancy-write-client";
-import type { PostStatus } from "@/cms/types/enums";
+import type { VacancyStatus } from "@/cms/types/vacancy";
 import {
   adminBtnGhost,
   adminBtnPrimary,
@@ -20,7 +20,7 @@ import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminLoading } from "@/components/admin/AdminLoading";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
 
-const statusLabel: Record<PostStatus, string> = {
+const statusLabel: Record<VacancyStatus, string> = {
   draft: "Entwurf",
   published: "Live",
   archived: "Archiv",

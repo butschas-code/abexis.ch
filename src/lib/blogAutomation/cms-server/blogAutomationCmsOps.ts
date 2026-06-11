@@ -32,7 +32,7 @@ import {
 } from "@/lib/blogAutomation/findUnsplashImage";
 import type { UnsplashPhotoBrief } from "@/lib/blogAutomation/unsplash-photo-types";
 import { adminDb } from "@/lib/firebaseAdmin";
-import { createNuelinkSocialPost, type NuelinkSocialTarget } from "@/lib/nuelink/client";
+import { createNuelinkSocialPost, type NuelinkPublishMode, type NuelinkSocialTarget } from "@/lib/nuelink/client";
 import { POST_SITE_FIRESTORE_IN } from "@/public-site/site/filters";
 
 import type {
@@ -62,6 +62,9 @@ function toTime(v: unknown): number | null {
   const t = new Date(iso).getTime();
   return Number.isFinite(t) ? t : null;
 }
+
+const PUBLIC_BLOG_BASE_URL = "https://www.abexis.ch/blog";
+const WEEKDAY_KEYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] as const;
 
 function mapRun(id: string, d: Record<string, unknown>): BlogPipelineRunDashboardRow {
   return {
@@ -130,6 +133,64 @@ async function allocateUniquePublishedSlug(baseSlug: string): Promise<{ slug: st
   const existing = await adminDb.collection(COLLECTIONS.posts).where("slug", "==", normalized).limit(1).get();
   if (existing.empty) return { slug: normalized, adjusted: false };
   return { slug: `${normalized}-${Date.now().toString(36)}`, adjusted: true };
+}
+
+function parsePreferredTime(preferredTime: string): { hour: number; minute: number } {
+  const m = /^([01]?\d|2[0-3]):([0-5]\d)$/.exec(preferredTime.trim());
+  if (!m) return { hour: 9, minute: 0 };
+  return { hour: Number(m[1]), minute: Number(m[2]) };
+}
+
+function nextApprovalPublishSlot(form: BlogAutomationFormState, from = new Date()): Date {
+  const zone = form.timezone?.trim() || "Europe/Zurich";
+  const preferredDays = form.preferredDays.map((d) => d.trim().toLowerCase()).filter(Boolean);
+  const days = preferredDays.length ? preferredDays : ["monday"];
+  const { hour, minute } = parsePreferredTime(form.preferredTime || "09:00");
+  const now = DateTime.fromJSDate(from, { zone });
+
+  for (let offset = 0; offset < 28; offset += 1) {
+    const candidateDay = now.plus({ days: offset });
+    const key = WEEKDAY_KEYS[candidateDay.weekday - 1];
+    if (!key || !days.includes(key)) continue;
+    const candidate = candidateDay.set({ hour, minute, second: 0, millisecond: 0 });
+    if (candidate.toMillis() > now.toMillis() + 60_000) return candidate.toJSDate();
+  }
+
+  return now.plus({ days: 1 }).set({ hour, minute, second: 0, millisecond: 0 }).toJSDate();
+}
+
+function formatNuelinkScheduledAt(date: Date, timezone: string): string {
+  const zone = timezone?.trim() || "Europe/Zurich";
+  return DateTime.fromJSDate(date, { zone }).toFormat("yyyy-LL-dd HH:mm:ss");
+}
+
+function normalizeLinkedInCaptionForBlog(caption: string, blogUrl: string): string {
+  const clean = caption
+    .replace(/ß/g, "ss")
+    .replace(/ẞ/g, "SS")
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, "$1")
+    .replace(/https?:\/\/(?!www\.abexis\.ch\/blog\/)[^\s)]+/gi, "")
+    .replace(/\{\{BLOG_URL\}\}/g, "")
+    .replace(/\(\s*\)/g, "")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  if (!blogUrl) return clean;
+  if (clean.includes(blogUrl)) return clean;
+  return `${clean}\n\n${blogUrl}`.trim();
+}
+
+async function syncDraftHeroToSocialPosts(draftId: string, fields: { imageUrl?: string | null; imageAlt?: string | null }): Promise<void> {
+  const snap = await adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "==", draftId.trim()).get();
+  if (snap.empty) return;
+  const batch = adminDb.batch();
+  for (const docSnap of snap.docs) {
+    const patch: Record<string, unknown> = { updatedAt: FieldValue.serverTimestamp() };
+    if ("imageUrl" in fields) patch.socialImageUrl = fields.imageUrl?.trim() || FieldValue.delete();
+    if ("imageAlt" in fields) patch.socialImageAlt = fields.imageAlt?.trim() || FieldValue.delete();
+    batch.update(docSnap.ref, patch);
+  }
+  await batch.commit();
 }
 
 // ——— Settings ———
@@ -306,10 +367,20 @@ export async function cmsUpdateBlogDraftFields(draftId: string, fields: BlogDraf
       heroImageDownloadLocation: FieldValue.delete(),
       imageSearchQuery: FieldValue.delete(),
     });
+    await syncDraftHeroToSocialPosts(draftId, { imageUrl: null, imageAlt: null });
     return;
   }
 
   const patch: Record<string, unknown> = { ...baseArticle };
+  if (fields.heroImageUrl !== undefined) {
+    const imageUrl = fields.heroImageUrl?.trim() || null;
+    patch.heroImageUrl = imageUrl;
+    patch.heroImagePhotographerName = FieldValue.delete();
+    patch.heroImagePhotographerUrl = FieldValue.delete();
+    patch.heroImageUnsplashUrl = FieldValue.delete();
+    patch.heroImageDownloadLocation = FieldValue.delete();
+    patch.imageSearchQuery = "Medienbibliothek / Upload";
+  }
   if (fields.heroImageAlt !== undefined) {
     patch.heroImageAlt = fields.heroImageAlt.trim() || null;
   }
@@ -317,17 +388,169 @@ export async function cmsUpdateBlogDraftFields(draftId: string, fields: BlogDraf
     patch.heroImageCredit = fields.heroImageCredit.trim() || null;
   }
   await ref.update(patch);
+  if (fields.heroImageUrl !== undefined || fields.heroImageAlt !== undefined) {
+    await syncDraftHeroToSocialPosts(draftId, {
+      ...(fields.heroImageUrl !== undefined ? { imageUrl: fields.heroImageUrl } : {}),
+      ...(fields.heroImageAlt !== undefined ? { imageAlt: fields.heroImageAlt } : {}),
+    });
+  }
 }
 
-export async function cmsSetBlogDraftApproved(draftId: string): Promise<void> {
+export type ApproveBlogDraftServerParams = {
+  authorId?: string;
+  categoryIds?: string[];
+  tags?: string[];
+};
+
+export type ApproveBlogDraftServerResult = {
+  postId: string;
+  scheduledFor: string;
+  nuelinkSent: boolean;
+  nuelinkError: string | null;
+};
+
+export async function cmsSetBlogDraftApproved(
+  draftId: string,
+  params: ApproveBlogDraftServerParams = {},
+): Promise<ApproveBlogDraftServerResult> {
   const ref = adminDb.collection(COLLECTIONS.blogDrafts).doc(draftId.trim());
   const snap = await ref.get();
   if (!snap.exists) throw new Error("Entwurf nicht gefunden.");
-  await ref.update({
+
+  const d = snap.data() as Record<string, unknown>;
+  if (String(d.status ?? "") === "published") {
+    throw new Error("Dieser Entwurf ist bereits veröffentlicht.");
+  }
+
+  const authorId = params.authorId?.trim() || process.env.BLOG_AUTOMATION_DEFAULT_AUTHOR_ID?.trim() || "";
+  if (!authorId) {
+    throw new Error("Bitte eine Autorin / einen Autor wählen, bevor der Entwurf freigegeben wird.");
+  }
+
+  const { form } = await cmsReadBlogAutomationSettings();
+  const scheduledFor = nextApprovalPublishSlot(form);
+  const scheduledTs = Timestamp.fromDate(scheduledFor);
+  const existingPostId = typeof d.publishedPostId === "string" && d.publishedPostId.trim() ? d.publishedPostId.trim() : "";
+  const postId = existingPostId || adminDb.collection(COLLECTIONS.posts).doc().id;
+  const postRef = adminDb.collection(COLLECTIONS.posts).doc(postId);
+  const postSnap = existingPostId ? await postRef.get() : null;
+  const requestedSlug = String(d.slug ?? "").trim();
+  const slugResult = existingPostId
+    ? { slug: String(postSnap?.get("slug") ?? requestedSlug).trim() || requestedSlug, adjusted: false }
+    : await allocateUniquePublishedSlug(requestedSlug);
+  const seoTitle = String(d.metaTitle ?? "").trim() || null;
+  const seoDescription = String(d.metaDescription ?? "").trim() || null;
+  const cleanArticleHtml = sanitizeGeneratedBlogHtmlWithoutLinks(String(d.articleHtml ?? ""));
+
+  const upsert: PostUpsertInput = {
+    id: postId,
+    title: String(d.title ?? "").trim(),
+    slug: slugResult.slug,
+    excerpt: String(d.excerpt ?? ""),
+    body: serializePostBody(cleanArticleHtml),
+    heroImagePath: null,
+    ...readPublishedHeroFromDraft(d),
+    authorId,
+    categoryIds: params.categoryIds ?? [],
+    tags: params.tags ?? [],
+    site: "abexis",
+    status: "scheduled",
+    seoTitle,
+    seoDescription,
+    featured: false,
+    publishedAt: scheduledFor.toISOString(),
+  };
+
+  const parsed = parsePostUpsert(upsert);
+  if (!parsed.success) {
+    const msg = parsed.error.issues.map((i) => i.message).join(" · ");
+    throw new Error(msg || "Beitrag konnte nicht validiert werden.");
+  }
+
+  const batch = adminDb.batch();
+  const now = FieldValue.serverTimestamp();
+  const postPayload: Record<string, unknown> = {
+    title: parsed.data.title.trim(),
+    slug: parsed.data.slug.trim(),
+    status: "scheduled",
+    site: parsed.data.site,
+    authorId: parsed.data.authorId,
+    categoryIds: parsed.data.categoryIds,
+    tags: parsed.data.tags,
+    featured: parsed.data.featured,
+    heroImageUrl: parsed.data.heroImageUrl,
+    heroImageAlt: parsed.data.heroImageAlt,
+    heroImagePath: parsed.data.heroImagePath,
+    heroImageCredit: parsed.data.heroImageCredit,
+    heroImagePhotographerName: parsed.data.heroImagePhotographerName,
+    heroImagePhotographerUrl: parsed.data.heroImagePhotographerUrl,
+    heroImageUnsplashUrl: parsed.data.heroImageUnsplashUrl,
+    body: parsed.data.body,
+    excerpt: parsed.data.excerpt,
+    seoTitle: parsed.data.seoTitle,
+    seoDescription: parsed.data.seoDescription,
+    publishedAt: scheduledTs,
+    updatedAt: now,
+  };
+  if (!postSnap?.exists) postPayload.createdAt = now;
+  batch.set(postRef, postPayload, { merge: true });
+  batch.update(ref, {
+    title: parsed.data.title.trim(),
+    slug: parsed.data.slug.trim(),
+    excerpt: String(d.excerpt ?? ""),
+    metaTitle: String(d.metaTitle ?? "").trim(),
+    metaDescription: String(d.metaDescription ?? "").trim(),
+    articleHtml: cleanArticleHtml,
+    sources: [],
     status: "approved",
-    approvedAt: FieldValue.serverTimestamp(),
-    updatedAt: FieldValue.serverTimestamp(),
+    approvedAt: now,
+    publishedAt: scheduledTs,
+    publishedPostId: postId,
+    updatedAt: now,
   });
+
+  const socialSnap = await adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "==", draftId.trim()).get();
+  for (const socialDoc of socialSnap.docs) {
+    batch.update(socialDoc.ref, {
+      status: "scheduled",
+      socialImageUrl: typeof d.heroImageUrl === "string" && d.heroImageUrl.trim() ? d.heroImageUrl.trim() : FieldValue.delete(),
+      socialImageAlt: typeof d.heroImageAlt === "string" && d.heroImageAlt.trim() ? d.heroImageAlt.trim() : FieldValue.delete(),
+      updatedAt: now,
+    });
+  }
+
+  await batch.commit();
+
+  let nuelinkSent = false;
+  let nuelinkError: string | null = null;
+  const firstSocial = socialSnap.docs[0];
+  if (firstSocial && !firstSocial.get("nuelinkLastSentAt")) {
+    try {
+      const blogUrl = `${PUBLIC_BLOG_BASE_URL}/${encodeURIComponent(parsed.data.slug.trim())}`;
+      const caption = normalizeLinkedInCaptionForBlog(String(firstSocial.get("linkedinPost") ?? ""), blogUrl);
+      await cmsSendBlogSocialPostToNuelink(firstSocial.id, {
+        target: "linkedin",
+        caption,
+        socialImageUrl: typeof d.heroImageUrl === "string" ? d.heroImageUrl : null,
+        socialImageAlt: typeof d.heroImageAlt === "string" ? d.heroImageAlt : null,
+        scheduledAt: formatNuelinkScheduledAt(scheduledFor, form.timezone),
+      });
+      nuelinkSent = true;
+    } catch (e) {
+      nuelinkError = e instanceof Error ? e.message : "Nuelink-Verbindung fehlgeschlagen.";
+      await firstSocial.ref.update({
+        nuelinkLastError: nuelinkError,
+        updatedAt: FieldValue.serverTimestamp(),
+      }).catch(() => undefined);
+    }
+  }
+
+  return {
+    postId,
+    scheduledFor: scheduledFor.toISOString(),
+    nuelinkSent,
+    nuelinkError,
+  };
 }
 
 export async function cmsSetBlogDraftSendBack(draftId: string): Promise<void> {
@@ -389,6 +612,7 @@ export async function cmsApplyUnsplashPhotoToBlogDraft(
     imageSearchQuery: hero.imageSearchQuery,
     updatedAt: FieldValue.serverTimestamp(),
   });
+  await syncDraftHeroToSocialPosts(draftId, { imageUrl: hero.heroImageUrl, imageAlt: hero.heroImageAlt });
 }
 
 export type PublishBlogDraftServerParams = BlogDraftEditableFields & {
@@ -601,7 +825,14 @@ export async function cmsPatchBlogSocialPost(
 
 export async function cmsSendBlogSocialPostToNuelink(
   socialPostId: string,
-  params: { target: NuelinkSocialTarget; caption: string; socialImageUrl?: string | null; socialImageAlt?: string | null },
+  params: {
+    target: NuelinkSocialTarget;
+    caption: string;
+    socialImageUrl?: string | null;
+    socialImageAlt?: string | null;
+    publishMode?: NuelinkPublishMode | null;
+    scheduledAt?: string | null;
+  },
 ): Promise<{
   postId: string;
   publishMode: string;
@@ -615,15 +846,8 @@ export async function cmsSendBlogSocialPostToNuelink(
   const draft = await readDraftForSocial(row);
 
   const draftSlug = typeof draft?.slug === "string" ? draft.slug.trim() : "";
-  const blogUrl = draftSlug ? `https://www.abexis.ch/blog/${encodeURIComponent(draftSlug)}` : "";
-  const baseCaption = params.caption.trim();
-  const caption = blogUrl
-    ? baseCaption.includes("{{BLOG_URL}}")
-      ? baseCaption.replace("{{BLOG_URL}}", blogUrl)
-      : baseCaption.includes(blogUrl)
-        ? baseCaption
-        : `${baseCaption}\n\nZum Beitrag: ${blogUrl}`
-    : baseCaption;
+  const blogUrl = draftSlug ? `${PUBLIC_BLOG_BASE_URL}/${encodeURIComponent(draftSlug)}` : "";
+  const caption = normalizeLinkedInCaptionForBlog(params.caption.trim(), blogUrl);
   if (!caption) throw new Error("Bitte zuerst einen Social-Text erfassen.");
   const socialImageUrl = params.socialImageUrl?.trim() || (typeof row.socialImageUrl === "string" ? row.socialImageUrl.trim() : "") || (typeof draft?.heroImageUrl === "string" ? draft.heroImageUrl.trim() : "");
   const socialImageAlt = params.socialImageAlt?.trim() || (typeof row.socialImageAlt === "string" ? row.socialImageAlt.trim() : "") || (typeof draft?.heroImageAlt === "string" ? draft.heroImageAlt.trim() : "");
@@ -635,6 +859,8 @@ export async function cmsSendBlogSocialPostToNuelink(
     title: typeof draft?.title === "string" ? draft.title : undefined,
     alt: socialImageAlt || undefined,
     mediaUrl: socialImageUrl || undefined,
+    publishMode: params.publishMode,
+    scheduledAt: params.scheduledAt,
   });
   const sentAt = Timestamp.now();
   const update: Record<string, unknown> = {
@@ -662,6 +888,55 @@ export async function cmsSendBlogSocialPostToNuelink(
     collectionId: result.collectionId,
     sentAt: sentAt.toDate().toISOString(),
   };
+}
+
+export async function cmsPublishDueScheduledPosts(max = 20): Promise<{ published: number; postIds: string[] }> {
+  const now = Timestamp.now();
+  const snap = await adminDb
+    .collection(COLLECTIONS.posts)
+    .where("status", "==", "scheduled")
+    .limit(Math.max(max * 3, 30))
+    .get();
+  if (snap.empty) return { published: 0, postIds: [] };
+
+  const dueDocs = snap.docs.filter((row) => {
+    const publishedAt = row.get("publishedAt");
+    return publishedAt instanceof Timestamp && publishedAt.toMillis() <= now.toMillis();
+  }).slice(0, max);
+  if (!dueDocs.length) return { published: 0, postIds: [] };
+
+  const batch = adminDb.batch();
+  const postIds: string[] = [];
+  for (const docSnap of dueDocs) {
+    postIds.push(docSnap.id);
+    batch.update(docSnap.ref, {
+      status: "published",
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+    const draftSnap = await adminDb.collection(COLLECTIONS.blogDrafts).where("publishedPostId", "==", docSnap.id).limit(5).get();
+    for (const draftDoc of draftSnap.docs) {
+      batch.update(draftDoc.ref, {
+        status: "published",
+        publishedAt: docSnap.get("publishedAt") ?? now,
+        updatedAt: FieldValue.serverTimestamp(),
+      });
+    }
+    const draftIds = draftSnap.docs.map((d) => d.id).slice(0, 10);
+    if (draftIds.length) {
+      const socialSnap = await adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "in", draftIds).get().catch(() => null);
+      if (socialSnap) {
+        for (const socialDoc of socialSnap.docs) {
+          batch.update(socialDoc.ref, {
+            status: "published",
+            updatedAt: FieldValue.serverTimestamp(),
+          });
+        }
+      }
+    }
+  }
+
+  await batch.commit();
+  return { published: postIds.length, postIds };
 }
 
 // ——— Dashboard snapshot ———
@@ -800,6 +1075,9 @@ export function parseBlogDraftEditableFields(body: unknown): BlogDraftEditableFi
     researchSummary: String(o.researchSummary ?? ""),
     sources,
   };
+  if (typeof o.heroImageUrl === "string" || o.heroImageUrl === null) {
+    base.heroImageUrl = o.heroImageUrl === null ? null : o.heroImageUrl;
+  }
   if (typeof o.heroImageAlt === "string") {
     base.heroImageAlt = o.heroImageAlt;
   }

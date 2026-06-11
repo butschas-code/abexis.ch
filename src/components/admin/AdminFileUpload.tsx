@@ -2,12 +2,12 @@
 
 import { useRef, useState } from "react";
 import { uploadCmsFile } from "@/firebase/storage";
-import { adminBtnSecondary, adminFeedbackError } from "./admin-ui";
+import { adminBtnSecondary } from "./admin-ui";
 
 interface AdminFileUploadProps {
   /** Target path in storage, e.g. 'cms/heroes/post-id/filename.jpg' */
   path: string;
-  onUploadSuccess: (url: string) => void;
+  onUploadSuccess: (url: string, meta: { storagePath: string; file: File }) => void;
   label?: string;
   accept?: string;
   className?: string;
@@ -42,7 +42,7 @@ export function AdminFileUpload({
       }
 
       const url = await uploadCmsFile(file, finalPath);
-      onUploadSuccess(url);
+      onUploadSuccess(url, { storagePath: finalPath, file });
     } catch (err) {
       console.error("Upload error:", err);
       setError(err instanceof Error ? err.message : "Upload fehlgeschlagen.");

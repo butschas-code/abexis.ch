@@ -39,7 +39,8 @@ function readRequiredIntEnv(name: string): number {
   return parsed;
 }
 
-function resolvePublishMode(): NuelinkPublishMode {
+function resolvePublishMode(override?: NuelinkPublishMode | null): NuelinkPublishMode {
+  if (override === "DRAFT" || override === "IMMEDIATE" || override === "SCHEDULE" || override === "QUEUE") return override;
   const raw = process.env.NUELINK_PUBLISH_MODE?.trim().toUpperCase();
   if (raw === "DRAFT" || raw === "IMMEDIATE" || raw === "SCHEDULE") return raw;
   return "QUEUE";
@@ -93,11 +94,13 @@ export async function createNuelinkSocialPost(params: {
   title?: string | null;
   alt?: string | null;
   mediaUrl?: string | null;
+  publishMode?: NuelinkPublishMode | null;
+  scheduledAt?: string | null;
 }): Promise<NuelinkCreatePostResult> {
   const apiKey = readRequiredEnv("NUELINK_API_KEY");
   const brandId = readRequiredIntEnv("NUELINK_BRAND_ID");
   const collectionId = resolveCollectionId(params.target);
-  const publishMode = resolvePublishMode();
+  const publishMode = resolvePublishMode(params.publishMode);
   const caption = params.caption.trim();
 
   if (!caption) throw new Error("Bitte zuerst einen Social-Text erfassen.");
@@ -105,7 +108,7 @@ export async function createNuelinkSocialPost(params: {
 
   const body: NuelinkCreatePostBody = { caption, publishMode };
   if (publishMode === "SCHEDULE") {
-    body.scheduledAt = readRequiredEnv("NUELINK_SCHEDULED_AT");
+    body.scheduledAt = params.scheduledAt?.trim() || readRequiredEnv("NUELINK_SCHEDULED_AT");
   }
   if (params.link?.trim()) body.link = params.link.trim();
   if (params.title?.trim()) body.title = params.title.trim().slice(0, 255);

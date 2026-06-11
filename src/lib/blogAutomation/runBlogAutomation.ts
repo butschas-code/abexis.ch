@@ -293,6 +293,16 @@ async function allocateUniquePostSlug(baseSlug: string): Promise<string> {
   return `${normalized}-${Date.now().toString(36)}`;
 }
 
+async function listRecentHeroImageUrls(max = 80): Promise<string[]> {
+  const snap = await adminDb.collection(COLLECTIONS.blogDrafts).orderBy("createdAt", "desc").limit(max).get();
+  return snap.docs
+    .flatMap((docSnap) => {
+      const d = docSnap.data() as Record<string, unknown>;
+      return [d.heroImageUrl, d.heroImageUnsplashUrl].map((v) => (typeof v === "string" ? v.trim() : ""));
+    })
+    .filter(Boolean);
+}
+
 /**
  * Main cron entry: schedules via {@link shouldRunAutomation}, claims a topic, generates a draft, audits in `blogPipelineRuns` / `blogPipelineLogs`.
  */
@@ -479,9 +489,11 @@ export async function runBlogAutomation(
 
     let unsplashHero: UnsplashHeroSelection | null = null;
     try {
+      const avoidImageUrls = await listRecentHeroImageUrls();
       unsplashHero = await findUnsplashImage({
         imageSearchQueries: draftOutput.imageSearchQueries,
         heroImageAlt: draftOutput.heroImageAlt,
+        avoidImageUrls,
       });
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);

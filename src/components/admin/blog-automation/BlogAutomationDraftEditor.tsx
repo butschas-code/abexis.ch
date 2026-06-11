@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { CMS_PATHS } from "@/admin/paths";
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
 import type { BlogDraftEditableFields } from "@/cms/types/blog-draft-pipeline";
+import { listMediaAssets, recordMediaAsset, type MediaAssetListItem } from "@/cms/services/media-client";
 import {
   apiApproveBlogDraft,
   apiDeleteBlogDraft,
@@ -31,6 +32,7 @@ import {
   adminSectionLabel,
 } from "@/components/admin/admin-ui";
 import { BlogAutomationDraftSocialPosts } from "@/components/admin/blog-automation/BlogAutomationDraftSocialPosts";
+import { AdminFileUpload } from "@/components/admin/AdminFileUpload";
 import { AdminLoading } from "@/components/admin/AdminLoading";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
 
@@ -81,6 +83,18 @@ function friendlyDraftStatus(status: string): string {
   }
 }
 
+function formatDateTime(iso: string | null): string {
+  if (!iso) return "—";
+  try {
+    return new Intl.DateTimeFormat("de-CH", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(new Date(iso));
+  } catch {
+    return iso;
+  }
+}
+
 export function BlogAutomationDraftEditor({ draftId }: Props) {
   const router = useRouter();
   const { user, ready: authReady } = useCmsAuth();
@@ -96,6 +110,8 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
   const [unsplashResults, setUnsplashResults] = useState<UnsplashPhotoBrief[]>([]);
   const [unsplashBusy, setUnsplashBusy] = useState(false);
   const [heroPickerOpen, setHeroPickerOpen] = useState(false);
+  const [mediaRows, setMediaRows] = useState<MediaAssetListItem[]>([]);
+  const [mediaBusy, setMediaBusy] = useState(false);
 
   const reload = useCallback(async () => {
     if (!user) return;
@@ -121,6 +137,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
         setForm(null);
         setUnsplashQuery("");
         setUnsplashResults([]);
+        setMediaRows([]);
       }
     } catch {
       setDraft(null);
@@ -128,6 +145,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
       setSocialRows([]);
       setUnsplashQuery("");
       setUnsplashResults([]);
+      setMediaRows([]);
     }
   }, [draftId, user]);
 
@@ -204,15 +222,28 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
     try {
       const token = await user.getIdToken();
       await apiUpdateBlogDraftFields(token, draftId, collectEditable());
-      await apiApproveBlogDraft(token, draftId);
-      setSuccess("Als freigegeben markiert.");
+      if (!authorId.trim()) {
+        throw new Error("Bitte eine Autorin / einen Autor wählen, bevor der Entwurf freigegeben wird.");
+      }
+      const { result } = await apiApproveBlogDraft(token, draftId, {
+        authorId,
+        categoryIds: [],
+        tags: [],
+      });
+      const scheduled = formatDateTime(result.scheduledFor);
+      const nuelink = result.nuelinkSent
+        ? " LinkedIn wurde an Nuelink übergeben."
+        : result.nuelinkError
+          ? ` Nuelink braucht noch Aufmerksamkeit: ${result.nuelinkError}`
+          : "";
+      setSuccess(`Freigegeben und als Beitrag für ${scheduled} geplant.${nuelink}`);
       await reload();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Freigabe fehlgeschlagen.");
     } finally {
       setBusy(false);
     }
-  }, [collectEditable, draftId, form, readOnly, reload, user]);
+  }, [authorId, collectEditable, draftId, form, readOnly, reload, user]);
 
   const onSendBack = useCallback(async () => {
     if (readOnly || !user) return;
@@ -324,6 +355,64 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
     }
   }, [collectEditable, draftId, form, readOnly, reload, user]);
 
+  const loadMedia = useCallback(async () => {
+    setMediaBusy(true);
+    try {
+      const rows = await listMediaAssets(80);
+      setMediaRows(rows.filter((row) => row.downloadUrl && row.mimeType.startsWith("image/")));
+    } catch (e) {
+      flashError(e instanceof Error ? e.message : "Medien konnten nicht geladen werden.");
+    } finally {
+      setMediaBusy(false);
+    }
+  }, [flashError]);
+
+  const applyHeroImageUrl = useCallback(
+    async (url: string, alt?: string, credit?: string) => {
+      if (!user || readOnly || !form) return;
+      setBusy(true);
+      setError(null);
+      setSuccess(null);
+      try {
+        const token = await user.getIdToken();
+        await apiUpdateBlogDraftFields(token, draftId, {
+          ...collectEditable(),
+          heroImageUrl: url,
+          heroImageAlt: alt ?? form.heroImageAlt,
+          heroImageCredit: credit ?? form.heroImageCredit,
+        });
+        setSuccess("Titelbild aktualisiert. Das Social-Bild wurde mit angepasst.");
+        setHeroPickerOpen(false);
+        await reload();
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Bild konnte nicht gespeichert werden.");
+      } finally {
+        setBusy(false);
+      }
+    },
+    [collectEditable, draftId, form, readOnly, reload, user],
+  );
+
+  const onHeroUpload = useCallback(
+    async (url: string, meta: { storagePath: string; file: File }) => {
+      try {
+        await recordMediaAsset({
+          storagePath: meta.storagePath,
+          downloadUrl: url,
+          originalFileName: meta.file.name,
+          mimeType: meta.file.type || "image/jpeg",
+          sizeBytes: meta.file.size,
+          kind: "hero",
+          source: "blog_automation_draft",
+        });
+      } catch {
+        /* Image is still usable even if media metadata registration fails. */
+      }
+      await applyHeroImageUrl(url, form?.heroImageAlt || meta.file.name.replace(/\.[^.]+$/, ""), "");
+    },
+    [applyHeroImageUrl, form?.heroImageAlt],
+  );
+
   const onDelete = useCallback(async () => {
     if (!user) return;
     const isPublished = draft?.status === "published";
@@ -393,7 +482,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
     <AdminPageContainer>
       <AdminPageHeader
         title={draft.title || "Entwurf"}
-        description={`Status: ${friendlyDraftStatus(draft.status)} · Nur mit «Veröffentlichen» geht der Text auf die Website.`}
+        description={`Status: ${friendlyDraftStatus(draft.status)} · «Freigeben» erstellt den geplanten Beitrag und übergibt LinkedIn an Nuelink.`}
       />
 
       <p className={`${adminBody} -mt-4 mb-6`}>
@@ -408,7 +497,8 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
 
       {draft.publishedPostId ? (
         <div className="mb-6 rounded-xl border border-emerald-200/80 bg-emerald-50/90 px-4 py-3 text-[14px] text-emerald-950">
-          Veröffentlichter Blogbeitrag:{" "}
+          {draft.status === "published" ? "Veröffentlichter" : "Geplanter"} Blogbeitrag
+          {draft.publishedAt ? ` (${formatDateTime(draft.publishedAt)})` : ""}:{" "}
           <Link href={CMS_PATHS.adminPostEdit(draft.publishedPostId)} className="font-semibold underline-offset-2 hover:underline">
             Beitrag öffnen und bearbeiten
           </Link>
@@ -433,7 +523,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
           </button>
           {canApprove ? (
             <button type="button" className={`${adminBtnSecondary} text-[13px]`} disabled={busy || readOnly} onClick={() => void onApprove()}>
-              Freigeben
+              Freigeben & planen
             </button>
           ) : null}
           {canSendBack ? (
@@ -443,7 +533,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
           ) : null}
           {canPublish ? (
             <button type="button" className={`${adminBtnPrimary} text-[13px]`} disabled={busy || readOnly} onClick={() => void onPublish()}>
-              Veröffentlichen
+              Sofort veröffentlichen
             </button>
           ) : null}
         </div>
@@ -465,7 +555,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
                   </option>
                 ))}
               </select>
-              <span className={`${adminBody} text-[13px]`}>Pflichtfeld nur für «Veröffentlichen».</span>
+              <span className={`${adminBody} text-[13px]`}>Pflichtfeld für «Freigeben & planen» und «Sofort veröffentlichen».</span>
             </label>
           </div>
         ) : null}
@@ -546,6 +636,50 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
                   ))}
                 </ul>
               ) : null}
+
+              <div className="border-t border-black/[0.06] pt-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[14px] font-medium text-[var(--apple-text)]">Eigenes Bild</p>
+                    <p className={`${adminBody} mt-1 text-[13px]`}>Hochladen oder aus der Medienbibliothek wählen.</p>
+                  </div>
+                  <AdminFileUpload
+                    path={`cms/media/blog-drafts/${draftId}/`}
+                    accept="image/*"
+                    label="Bild hochladen"
+                    onUploadSuccess={(url, meta) => void onHeroUpload(url, meta)}
+                  />
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    className={`${adminBtnGhost} text-[13px]`}
+                    disabled={mediaBusy}
+                    onClick={() => void loadMedia()}
+                  >
+                    {mediaBusy ? "Medien werden geladen …" : "Medienbibliothek anzeigen"}
+                  </button>
+                </div>
+                {mediaRows.length ? (
+                  <ul className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {mediaRows.map((asset) => (
+                      <li key={asset.id} className="flex flex-col gap-2 rounded-xl border border-black/[0.06] bg-white p-3 shadow-sm">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={asset.downloadUrl} alt="" className="aspect-video w-full rounded-lg object-cover" />
+                        <p className="truncate text-[12px] text-[var(--apple-text-tertiary)]">{asset.originalFileName || "Medienbild"}</p>
+                        <button
+                          type="button"
+                          className={`${adminBtnPrimary} w-full text-[13px]`}
+                          disabled={busy}
+                          onClick={() => void applyHeroImageUrl(asset.downloadUrl, form.heroImageAlt || asset.originalFileName.replace(/\.[^.]+$/, ""), "")}
+                        >
+                          Verwenden
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
             </div>
           ) : null}
 

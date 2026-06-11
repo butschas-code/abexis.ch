@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { cmsPublishDueScheduledPosts } from "@/lib/blogAutomation/cms-server/blogAutomationCmsOps";
 import { runBlogAutomation } from "@/lib/blogAutomation/runBlogAutomation";
 
 export const runtime = "nodejs";
@@ -35,6 +36,7 @@ export async function GET(_req: Request) {
   }
 
   try {
+    const scheduled = await cmsPublishDueScheduledPosts();
     const result = await runBlogAutomation("cron");
 
     if (!result.ok) {
@@ -55,6 +57,7 @@ export async function GET(_req: Request) {
         success: true,
         action: "skipped",
         reason: result.reason ?? "Skipped.",
+        scheduledPublished: scheduled.published,
       });
     }
 
@@ -62,6 +65,7 @@ export async function GET(_req: Request) {
       success: true,
       action: result.publishedPostId ? "published" : "draft_created",
       reason: result.reason ?? "Automation finished.",
+      scheduledPublished: scheduled.published,
       ...(result.draftId ? { draftId: result.draftId } : {}),
     });
   } catch (e) {

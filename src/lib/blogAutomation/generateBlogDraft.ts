@@ -10,6 +10,15 @@ const BLOG_DRAFT_MAX_OUTPUT_TOKENS = 14_000;
 const BLOG_DRAFT_RETRY_MAX_OUTPUT_TOKENS = 18_000;
 const DIRECT_PROMPT_ARTICLE_MAX_OUTPUT_TOKENS = 16_000;
 const DIRECT_PROMPT_METADATA_MAX_OUTPUT_TOKENS = 7_000;
+const BLOG_URL_PLACEHOLDER = "{{BLOG_URL}}";
+const BUSINESS_TECH_IMAGE_QUERIES = [
+  "business technology",
+  "enterprise software",
+  "digital transformation",
+  "IT project management",
+  "business strategy meeting",
+  "software implementation",
+] as const;
 
 /** Strict output shape after OpenAI Responses + web_search (matches structured JSON schema). */
 export const blogAutomationDraftOutputSchema = z.object({
@@ -106,6 +115,7 @@ function buildDeveloperInstructions(params: GenerateBlogDraftParams): string {
 
 Default audience: Swiss SME owners, board members, and executives — unless the automation settings or topic explicitly specify otherwise.
 Default tone: calm, senior, precise, premium (professional German appropriate for Switzerland, e.g. de-CH unless settings say otherwise).
+For German text, always use Swiss spelling: write "ss", never "ß".
 No hype, no clickbait, no breathless marketing.
 Executive Search is one practice area at Abexis, not the definition of the entire firm.
 
@@ -121,10 +131,10 @@ Output:
 - Respond with exactly one JSON object matching the schema (no markdown outside JSON).
 - articleHtml: semantic HTML fragments for a CMS body (headings, paragraphs, lists, links) — no outer <html> document.
 - Draft quality must be suitable for human editorial review before any publishing step.
-- linkedinPost: one substantial German LinkedIn post for Daniel Sengstag's LinkedIn profile. Make it longer and more useful than a short teaser, include a calm executive point of view, and include the placeholder {{BLOG_URL}} exactly once where the published blog link should appear.
+- linkedinPost: one short German LinkedIn teaser for Daniel Sengstag's LinkedIn profile. 500-800 characters, 2-4 short paragraphs, no hashtags unless the editor prompt explicitly asks for them, no source links, no external links. End with the placeholder {{BLOG_URL}} on its own final line exactly once.
 
 Hero imagery (no URLs — server selects licensed photos separately):
-- imageSearchQueries: 3–6 short English phrases suitable for stock photo search (Unsplash). Aim for calm Swiss-editorial mood: architecture detail, natural texture, lakes/alps restraint, minimal workspace still-life — never literal handshakes, grinning «teams», laptop dashboards, or skyscraper hero clichés.
+- imageSearchQueries: 3–6 short English phrases suitable for stock photo search (Unsplash). Prefer business/technology/project imagery such as business technology, enterprise software, digital transformation, IT project management, business strategy meeting, software implementation, change management, workflow automation. Avoid Swiss architecture, landscapes, mountains, flags, grinning teams, handshakes, laptop dashboards, or skyscraper clichés.
 - heroImageAlt: concise German alt text describing the intended visual for accessibility (not filenames).
 
 Automation parameters (respect these):
@@ -208,13 +218,46 @@ function extractRequestedWordRange(prompt: string): { min: number; max: number }
 }
 
 function normalizeGeneratedHtml(text: string): string {
-  return text
+  return cleanGeneratedArticleHtml(text
     .trim()
     .replace(/^```(?:html)?\s*/i, "")
     .replace(/```\s*$/i, "")
     .replace(/^<article[^>]*>/i, "")
     .replace(/<\/article>$/i, "")
+    .trim());
+}
+
+function toSwissGerman(value: string): string {
+  return value.replace(/ß/g, "ss").replace(/ẞ/g, "SS");
+}
+
+function stripModelCodeFences(value: string): string {
+  return value
+    .trim()
+    .replace(/^```(?:html|json|markdown|md)?\s*/i, "")
+    .replace(/```\s*$/i, "")
     .trim();
+}
+
+function cleanGeneratedArticleHtml(value: string): string {
+  let html = toSwissGerman(stripModelCodeFences(value));
+  html = html.replace(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi, (_m, text) => `<h2>${String(text).trim()}</h2>`);
+
+  const stopHeadingPattern =
+    /<h[2-6]\b[^>]*>\s*(?:Bildersuche(?:[-\s]Anfragen)?|Alt[-\s]?Text(?:\s+für\s+das\s+Titelbild)?|LinkedIn|Social(?:\s*Media)?|Meta(?:daten)?|SEO|Quellen|Sources)\s*<\/h[2-6]>/i;
+  const stopMatch = html.search(stopHeadingPattern);
+  if (stopMatch >= 0) {
+    html = html.slice(0, stopMatch).trim();
+  }
+
+  html = html
+    .replace(/<p\b[^>]*>[\s\S]*?(?:\{\{BLOG_URL\}\}|BLOG_URL|Für weitere Informationen|besuchen Sie unsere Webseite|Bildersuche|Unsplash|Alt[-\s]?Text)[\s\S]*?<\/p>/gi, "")
+    .replace(/<li\b[^>]*>[\s\S]*?(?:\{\{BLOG_URL\}\}|BLOG_URL|Bildersuche|Unsplash|Alt[-\s]?Text)[\s\S]*?<\/li>/gi, "")
+    .replace(/\{\{BLOG_URL\}\}/g, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+
+  return html;
 }
 
 function buildDirectArticleInstructions(params: GenerateBlogDraftParams): string {
@@ -235,6 +278,8 @@ Non-negotiables:
 - Use semantic HTML fragments only: paragraphs, h2/h3 headings, ul/ol/li, strong where useful.
 - Do not output JSON, Markdown, code fences, <html>, <body>, or an <h1>.
 - Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", or external source URLs.
+- Do not add a CTA paragraph with a blog URL placeholder; the article is already the blog post.
+- Do not include image-search terms, alt text, metadata, SEO notes, LinkedIn text, or any implementation notes in the article body.
 - Never invent statistics, surveys, regulations, quotations, or named references.
 - If a factual point is uncertain, phrase it as experienced project judgement rather than as a sourced fact.
 - Keep Abexis positioned as a practical advisor for project implementation, project steering, risk management, and transformation work.
@@ -325,8 +370,8 @@ function buildDirectMetadataInstructions(params: GenerateBlogDraftParams): strin
 Return exactly one JSON object matching the schema.
 Do not include articleHtml.
 Default language: ${settings.defaultLanguage}. For German, use Swiss German conventions and avoid "ß".
-LinkedIn: create one substantial German LinkedIn post for Daniel Sengstag's profile, with a calm executive point of view. Include {{BLOG_URL}} exactly once.
-Image search: return 3-6 short English Unsplash search phrases, restrained Swiss consulting mood, no cheesy corporate cliches.
+LinkedIn: create one short German LinkedIn teaser for Daniel Sengstag's profile. 500-800 characters, 2-4 short paragraphs, no source links, no external links, no citation parentheses. End with {{BLOG_URL}} on its own final line exactly once.
+Image search: return 3-6 short English Unsplash search phrases. Prefer business/technology/project imagery: business technology, enterprise software, digital transformation, IT project management, business strategy meeting, software implementation, change management, workflow automation. Avoid Swiss architecture, Swiss landscapes, mountains, flags, handshakes, grinning teams, laptop dashboards, and skyscrapers.
 No source links, citations, or fabricated facts.`;
 }
 
@@ -342,11 +387,44 @@ ${articleHtml}`;
 }
 
 function normalizeLinkedinPlaceholder(post: string): string {
-  const trimmed = post.trim();
-  if (!trimmed.includes("{{BLOG_URL}}")) {
-    return `${trimmed}\n\n{{BLOG_URL}}`;
+  const withoutLinks = toSwissGerman(post)
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, "$1")
+    .replace(/https?:\/\/(?!www\.abexis\.ch\/blog\/)[^\s)]+/gi, "")
+    .replace(/\(\s*\)/g, "")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  const placeholderEscaped = BLOG_URL_PLACEHOLDER.replace(/[{}]/g, "\\$&");
+  const placeholderRegex = new RegExp(placeholderEscaped, "g");
+  const stripped = withoutLinks.replace(placeholderRegex, "").trim();
+  if (!stripped) {
+    return BLOG_URL_PLACEHOLDER;
   }
-  return trimmed;
+  return `${stripped}\n\n${BLOG_URL_PLACEHOLDER}`;
+}
+
+function normalizeImageSearchQueries(queries: string[]): string[] {
+  const bad = /\b(swiss|schweiz|switzerland|architecture|architectural|landschaft|landscape|mountain|alps|flag|handshake|skyscraper)\b/i;
+  const cleaned = queries
+    .map((q) => toSwissGerman(q).trim())
+    .filter(Boolean)
+    .filter((q) => !bad.test(q));
+  return [...new Set([...cleaned, ...BUSINESS_TECH_IMAGE_QUERIES])].slice(0, 6);
+}
+
+function normalizeDraftOutput(output: BlogAutomationDraftOutput): BlogAutomationDraftOutput {
+  return {
+    title: toSwissGerman(output.title).trim(),
+    slug: output.slug.trim().toLowerCase(),
+    excerpt: toSwissGerman(output.excerpt).trim(),
+    metaTitle: toSwissGerman(output.metaTitle).trim(),
+    metaDescription: toSwissGerman(output.metaDescription).trim(),
+    articleHtml: cleanGeneratedArticleHtml(output.articleHtml),
+    researchSummary: toSwissGerman(output.researchSummary).trim(),
+    linkedinPost: normalizeLinkedinPlaceholder(output.linkedinPost),
+    imageSearchQueries: normalizeImageSearchQueries(output.imageSearchQueries),
+    heroImageAlt: toSwissGerman(output.heroImageAlt).trim(),
+  };
 }
 
 async function createDirectMetadataResponse(params: {
@@ -397,6 +475,7 @@ async function generateDirectMetadata(
     metadata: {
       ...parsed.data,
       linkedinPost: normalizeLinkedinPlaceholder(parsed.data.linkedinPost),
+      imageSearchQueries: normalizeImageSearchQueries(parsed.data.imageSearchQueries),
     },
     responseId: response.id,
   };
@@ -410,10 +489,10 @@ async function generateDirectPromptBlogDraft(
   const metadata = await generateDirectMetadata(client, params, article.articleHtml);
 
   return {
-    output: {
+    output: normalizeDraftOutput({
       ...metadata.metadata,
       articleHtml: article.articleHtml,
-    },
+    }),
     responseId: `${article.responseId}:${metadata.responseId}`,
   };
 }
@@ -524,7 +603,7 @@ export async function generateBlogDraft(params: GenerateBlogDraftParams): Promis
   }
 
   return {
-    output: parsed.data,
+    output: normalizeDraftOutput(parsed.data),
     responseId: response.id,
   };
 }

@@ -33,7 +33,7 @@ export function mapClientDoc(id: string, d: Record<string, unknown>): CmsPostLis
   };
   const statusRaw = d.status;
   const status: PostStatus =
-    statusRaw === "published" || statusRaw === "archived" || statusRaw === "draft" ? statusRaw : "draft";
+    statusRaw === "published" || statusRaw === "scheduled" || statusRaw === "archived" || statusRaw === "draft" ? statusRaw : "draft";
   return {
     id,
     title: String(d.title ?? ""),
