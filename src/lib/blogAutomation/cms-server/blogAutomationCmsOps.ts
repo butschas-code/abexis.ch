@@ -24,7 +24,7 @@ import {
   type RunAggRow,
 } from "@/lib/blogAutomation/schedulingSimulation";
 import { serializePostBody } from "@/lib/cms/post-body-storage";
-import { sanitizeGeneratedBlogHtmlWithoutLinks } from "@/lib/cms/sanitize-blog-html";
+import { normalizeEscapedBlogHtml, sanitizeGeneratedBlogHtmlWithoutLinks } from "@/lib/cms/sanitize-blog-html";
 import {
   applyUnsplashPhotoToHeroFields,
   getUnsplashPhotoById,
@@ -110,7 +110,7 @@ function mapDraftDetail(id: string, d: Record<string, unknown>): BlogDraftDetail
     ...base,
     metaTitle: String(d.metaTitle ?? ""),
     metaDescription: String(d.metaDescription ?? ""),
-    articleHtml: String(d.articleHtml ?? ""),
+    articleHtml: normalizeEscapedBlogHtml(String(d.articleHtml ?? "")),
     researchSummary: String(d.researchSummary ?? ""),
     sources: [],
     openaiResponseId: d.openaiResponseId != null ? String(d.openaiResponseId) : null,

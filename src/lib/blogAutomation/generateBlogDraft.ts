@@ -3,6 +3,7 @@ import "server-only";
 import OpenAI from "openai";
 import { z } from "zod";
 
+import { normalizeEscapedBlogHtml } from "@/lib/cms/sanitize-blog-html";
 import { BLOG_PIPELINE_JSON_SCHEMA } from "@/lib/blog-pipeline/openai-json-schema";
 import type { BlogAutomationSettings, BlogTopic } from "@/lib/blogAutomation/types";
 
@@ -240,7 +241,7 @@ function stripModelCodeFences(value: string): string {
 }
 
 function cleanGeneratedArticleHtml(value: string): string {
-  let html = toSwissGerman(stripModelCodeFences(value));
+  let html = toSwissGerman(normalizeEscapedBlogHtml(stripModelCodeFences(value)));
   html = html.replace(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi, (_m, text) => `<h2>${String(text).trim()}</h2>`);
 
   const stopHeadingPattern =
