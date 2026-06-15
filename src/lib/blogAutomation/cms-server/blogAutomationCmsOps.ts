@@ -113,6 +113,7 @@ function mapDraftDetail(id: string, d: Record<string, unknown>): BlogDraftDetail
     articleHtml: normalizeEscapedBlogHtml(String(d.articleHtml ?? "")),
     researchSummary: String(d.researchSummary ?? ""),
     sources: [],
+    authorId: nu(d.authorId),
     openaiResponseId: d.openaiResponseId != null ? String(d.openaiResponseId) : null,
     pipelineModel: d.pipelineModel != null ? String(d.pipelineModel) : null,
     approvedAt: toIso(d.approvedAt),
@@ -185,6 +186,7 @@ async function syncDraftHeroToSocialPosts(draftId: string, fields: { imageUrl?: 
   if (snap.empty) return;
   const batch = adminDb.batch();
   for (const docSnap of snap.docs) {
+    if (docSnap.get("socialImageManualOverride") === true) continue;
     const patch: Record<string, unknown> = { updatedAt: FieldValue.serverTimestamp() };
     if ("imageUrl" in fields) patch.socialImageUrl = fields.imageUrl?.trim() || FieldValue.delete();
     if ("imageAlt" in fields) patch.socialImageAlt = fields.imageAlt?.trim() || FieldValue.delete();
@@ -356,6 +358,9 @@ export async function cmsUpdateBlogDraftFields(draftId: string, fields: BlogDraf
     sources: [],
     updatedAt: FieldValue.serverTimestamp(),
   };
+  if (fields.authorId !== undefined) {
+    baseArticle.authorId = fields.authorId.trim() || FieldValue.delete();
+  }
 
   if (fields.heroImageClear === true) {
     await ref.update({
@@ -424,7 +429,11 @@ export async function cmsSetBlogDraftApproved(
     throw new Error("Dieser Entwurf ist bereits veröffentlicht.");
   }
 
-  const authorId = params.authorId?.trim() || process.env.BLOG_AUTOMATION_DEFAULT_AUTHOR_ID?.trim() || "";
+  const authorId =
+    params.authorId?.trim() ||
+    (typeof d.authorId === "string" ? d.authorId.trim() : "") ||
+    process.env.BLOG_AUTOMATION_DEFAULT_AUTHOR_ID?.trim() ||
+    "";
   if (!authorId) {
     throw new Error("Bitte eine Autorin / einen Autor wählen, bevor der Entwurf freigegeben wird.");
   }
@@ -504,6 +513,7 @@ export async function cmsSetBlogDraftApproved(
     metaDescription: String(d.metaDescription ?? "").trim(),
     articleHtml: cleanArticleHtml,
     sources: [],
+    authorId,
     status: "approved",
     approvedAt: now,
     publishedAt: scheduledTs,
@@ -513,12 +523,16 @@ export async function cmsSetBlogDraftApproved(
 
   const socialSnap = await adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "==", draftId.trim()).get();
   for (const socialDoc of socialSnap.docs) {
-    batch.update(socialDoc.ref, {
+    const socialData = socialDoc.data() as Record<string, unknown>;
+    const socialPatch: Record<string, unknown> = {
       status: "scheduled",
-      socialImageUrl: typeof d.heroImageUrl === "string" && d.heroImageUrl.trim() ? d.heroImageUrl.trim() : FieldValue.delete(),
-      socialImageAlt: typeof d.heroImageAlt === "string" && d.heroImageAlt.trim() ? d.heroImageAlt.trim() : FieldValue.delete(),
       updatedAt: now,
-    });
+    };
+    if (socialData.socialImageManualOverride !== true) {
+      socialPatch.socialImageUrl = typeof d.heroImageUrl === "string" && d.heroImageUrl.trim() ? d.heroImageUrl.trim() : FieldValue.delete();
+      socialPatch.socialImageAlt = typeof d.heroImageAlt === "string" && d.heroImageAlt.trim() ? d.heroImageAlt.trim() : FieldValue.delete();
+    }
+    batch.update(socialDoc.ref, socialPatch);
   }
 
   await batch.commit();
@@ -528,13 +542,21 @@ export async function cmsSetBlogDraftApproved(
   const firstSocial = socialSnap.docs[0];
   if (firstSocial && !firstSocial.get("nuelinkLastSentAt")) {
     try {
+      const firstSocialData = firstSocial.data() as Record<string, unknown>;
+      const firstSocialManual = firstSocialData.socialImageManualOverride === true;
+      const effectiveSocialImageUrl =
+        (firstSocialManual && typeof firstSocialData.socialImageUrl === "string" ? firstSocialData.socialImageUrl.trim() : "") ||
+        (typeof d.heroImageUrl === "string" ? d.heroImageUrl.trim() : "");
+      const effectiveSocialImageAlt =
+        (firstSocialManual && typeof firstSocialData.socialImageAlt === "string" ? firstSocialData.socialImageAlt.trim() : "") ||
+        (typeof d.heroImageAlt === "string" ? d.heroImageAlt.trim() : "");
       const blogUrl = `${PUBLIC_BLOG_BASE_URL}/${encodeURIComponent(parsed.data.slug.trim())}`;
       const caption = normalizeLinkedInCaptionForBlog(String(firstSocial.get("linkedinPost") ?? ""), blogUrl);
       await cmsSendBlogSocialPostToNuelink(firstSocial.id, {
         target: "linkedin",
         caption,
-        socialImageUrl: typeof d.heroImageUrl === "string" ? d.heroImageUrl : null,
-        socialImageAlt: typeof d.heroImageAlt === "string" ? d.heroImageAlt : null,
+        socialImageUrl: effectiveSocialImageUrl || null,
+        socialImageAlt: effectiveSocialImageAlt || null,
         scheduledAt: formatNuelinkScheduledAt(scheduledFor, form.timezone),
       });
       nuelinkSent = true;
@@ -730,6 +752,7 @@ export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerPa
     articleHtml: sanitizeGeneratedBlogHtmlWithoutLinks(params.articleHtml),
     researchSummary: params.researchSummary,
     sources: [],
+    authorId: parsed.data.authorId,
     status: "published",
     publishedPostId: postId,
     publishedAt: ts,
@@ -750,6 +773,8 @@ function mapSocialListItem(
 ): BlogSocialListItem {
   const nu = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : null);
   const draftSlug = nu(draft?.slug);
+  const blogHeroImageUrl = nu(draft?.heroImageUrl);
+  const blogHeroImageAlt = nu(draft?.heroImageAlt);
   const blogUrl = draftSlug ? `https://www.abexis.ch/blog/${encodeURIComponent(draftSlug)}` : "";
   const linkedinPostRaw = String(d.linkedinPost ?? "");
   return {
@@ -760,8 +785,11 @@ function mapSocialListItem(
     linkedinPost: blogUrl && linkedinPostRaw.includes("{{BLOG_URL}}") ? linkedinPostRaw.replace("{{BLOG_URL}}", blogUrl) : linkedinPostRaw,
     shortLinkedinPost: typeof d.shortLinkedinPost === "string" ? d.shortLinkedinPost : "",
     xPost: typeof d.xPost === "string" ? d.xPost : "",
-    socialImageUrl: nu(d.socialImageUrl) ?? nu(draft?.heroImageUrl),
-    socialImageAlt: nu(d.socialImageAlt) ?? nu(draft?.heroImageAlt),
+    socialImageUrl: nu(d.socialImageUrl) ?? blogHeroImageUrl,
+    socialImageAlt: nu(d.socialImageAlt) ?? blogHeroImageAlt,
+    socialImageManualOverride: d.socialImageManualOverride === true,
+    blogHeroImageUrl,
+    blogHeroImageAlt,
     createdAt: toIso(d.createdAt),
     usedAt: toIso(d.usedAt),
     nuelinkLastSentAt: toIso(d.nuelinkLastSentAt),
@@ -817,7 +845,11 @@ export async function cmsPatchBlogSocialPost(
 
   const row: Record<string, unknown> = { updatedAt: FieldValue.serverTimestamp() };
   if (patch.linkedinPost !== undefined) row.linkedinPost = patch.linkedinPost;
-  if (patch.socialImageUrl !== undefined) row.socialImageUrl = patch.socialImageUrl?.trim() || FieldValue.delete();
+  if (patch.socialImageUrl !== undefined) {
+    const imageUrl = patch.socialImageUrl?.trim() || "";
+    row.socialImageUrl = imageUrl || FieldValue.delete();
+    row.socialImageManualOverride = !!imageUrl;
+  }
   if (patch.socialImageAlt !== undefined) row.socialImageAlt = patch.socialImageAlt?.trim() || FieldValue.delete();
   if (patch.markUsed === true) {
     row.usedAt = FieldValue.serverTimestamp();
@@ -1093,6 +1125,9 @@ export function parseBlogDraftEditableFields(body: unknown): BlogDraftEditableFi
   };
   if (typeof o.heroImageUrl === "string" || o.heroImageUrl === null) {
     base.heroImageUrl = o.heroImageUrl === null ? null : o.heroImageUrl;
+  }
+  if (typeof o.authorId === "string") {
+    base.authorId = o.authorId;
   }
   if (typeof o.heroImageAlt === "string") {
     base.heroImageAlt = o.heroImageAlt;

@@ -152,15 +152,38 @@ function SocialRowCard(props: {
     onFlash(null);
     try {
       const token = await user.getIdToken();
+      const imageUrl = socialImageUrl.trim();
+      const inheritedBlogImage =
+        !row.socialImageManualOverride && !!row.blogHeroImageUrl && imageUrl === row.blogHeroImageUrl;
       await apiPatchBlogSocialPost(token, row.id, {
         linkedinPost,
-        socialImageUrl: socialImageUrl.trim() || null,
-        socialImageAlt: socialImageAlt.trim() || null,
+        socialImageUrl: inheritedBlogImage ? null : imageUrl || null,
+        socialImageAlt: inheritedBlogImage ? null : socialImageAlt.trim() || null,
       });
       onFlash("LinkedIn-Post gespeichert.");
       await onRefresh();
     } catch (e) {
       onError(e instanceof Error ? e.message : "Speichern fehlgeschlagen.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function applyBlogImage() {
+    if (!user) return;
+    setBusy(true);
+    onError(null);
+    onFlash(null);
+    try {
+      const token = await user.getIdToken();
+      await apiPatchBlogSocialPost(token, row.id, {
+        socialImageUrl: null,
+        socialImageAlt: null,
+      });
+      onFlash("LinkedIn verwendet wieder das Blogbild.");
+      await onRefresh();
+    } catch (e) {
+      onError(e instanceof Error ? e.message : "Bild konnte nicht übernommen werden.");
     } finally {
       setBusy(false);
     }
@@ -220,6 +243,20 @@ function SocialRowCard(props: {
             )}
           </div>
           <div className="space-y-3">
+            {row.socialImageManualOverride && row.blogHeroImageUrl && row.socialImageUrl !== row.blogHeroImageUrl ? (
+              <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-[13px] leading-relaxed text-amber-950">
+                Dieses LinkedIn-Bild weicht vom Blogbild ab.
+                <div className="mt-3">
+                  <button type="button" className={`${adminBtnSecondary} text-[13px]`} disabled={busy} onClick={() => void applyBlogImage()}>
+                    Blogbild übernehmen
+                  </button>
+                </div>
+              </div>
+            ) : row.blogHeroImageUrl ? (
+              <p className="text-[13px] leading-relaxed text-[var(--apple-text-secondary)]">
+                LinkedIn verwendet das Blogbild, solange hier kein eigenes Bild gespeichert wird.
+              </p>
+            ) : null}
             <label className="block space-y-1.5">
               <span className="text-[13px] font-medium text-[var(--apple-text)]">Bild-URL für LinkedIn</span>
               <input className={adminInput} value={socialImageUrl} onChange={(e) => setSocialImageUrl(e.target.value)} placeholder="https://…" />

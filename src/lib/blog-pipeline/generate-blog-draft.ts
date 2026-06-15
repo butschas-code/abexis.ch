@@ -14,18 +14,18 @@ Quality rules:
 - Never invent statistics, surveys, regulations, or quotations.
 - Never fabricate citations or URLs.
 - Use the web_search tool when fresh or external facts materially strengthen the piece; otherwise rely on established general knowledge without pretending it is cited.
-- Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", or external source URLs to articleHtml.
+- Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", competitor references, or external source URLs to articleHtml.
 - Do not include source links in the JSON output.
 - If you cannot verify something, omit it or phrase it carefully as context/opinion without numeric precision.
 
-Output must match the JSON schema exactly. articleHtml should be semantic HTML fragments suitable inside a CMS body (headings, paragraphs, lists, links)—no <html> wrapper.
+Output must match the JSON schema exactly. articleHtml should be semantic HTML fragments suitable inside a CMS body (headings, paragraphs, lists)—no <html> wrapper. Structure the article with a strong intro followed by clear h2/h3 sections. Avoid one long undifferentiated body of text.
 
 Hero imagery fields:
-- imageSearchQueries: short English Unsplash search phrases (never URLs). Restrained Swiss-consulting mood — textures, architecture, landscape calm — avoid cheesy corporate clichés.
+- imageSearchQueries: short English Unsplash search phrases (never URLs). Prefer business/technology/project imagery such as business technology, enterprise software, digital transformation, IT project management, business strategy meeting, software implementation, change management, workflow automation. Avoid Swiss architecture, landscapes, mountains, flags, handshakes, grinning teams, laptop dashboards, or skyscrapers.
 - heroImageAlt: concise German alt text for accessibility.
 
 Social copy:
-- linkedinPost: one substantial German LinkedIn post for Daniel Sengstag's profile. Make it longer and more useful than a short teaser, include a calm executive point of view, and include the placeholder {{BLOG_URL}} exactly once where the published blog link should appear.`;
+- linkedinPost: one short German LinkedIn teaser for Daniel Sengstag's profile. 500-800 characters, 2-4 short paragraphs, no source links, no external links, no citation parentheses. End with the placeholder {{BLOG_URL}} on its own final line exactly once.`;
 
 function buildUserPrompt(topic: { title: string; brief?: string | null }): string {
   const brief = topic.brief?.trim() || "(Keine zusätzliche Briefing-Zusammenfassung.)";

@@ -150,10 +150,13 @@ function BlogSocialPostCard(props: {
     setBusy(true);
     try {
       const token = await getToken();
+      const imageUrl = socialImageUrl.trim();
+      const inheritedBlogImage =
+        !row.socialImageManualOverride && !!row.blogHeroImageUrl && imageUrl === row.blogHeroImageUrl;
       await apiPatchBlogSocialPost(token, row.id, {
         linkedinPost,
-        socialImageUrl: socialImageUrl.trim() || null,
-        socialImageAlt: socialImageAlt.trim() || null,
+        socialImageUrl: inheritedBlogImage ? null : imageUrl || null,
+        socialImageAlt: inheritedBlogImage ? null : socialImageAlt.trim() || null,
       });
       onFlashSuccess("LinkedIn-Text und Bild gespeichert.");
       await onRefresh();
@@ -162,7 +165,24 @@ function BlogSocialPostCard(props: {
     } finally {
       setBusy(false);
     }
-  }, [getToken, linkedinPost, onFlashError, onFlashSuccess, onRefresh, row.id, socialImageAlt, socialImageUrl]);
+  }, [getToken, linkedinPost, onFlashError, onFlashSuccess, onRefresh, row.blogHeroImageUrl, row.id, row.socialImageManualOverride, socialImageAlt, socialImageUrl]);
+
+  const onUseBlogImage = useCallback(async () => {
+    setBusy(true);
+    try {
+      const token = await getToken();
+      await apiPatchBlogSocialPost(token, row.id, {
+        socialImageUrl: null,
+        socialImageAlt: null,
+      });
+      onFlashSuccess("LinkedIn verwendet wieder das Blogbild.");
+      await onRefresh();
+    } catch (e) {
+      onFlashError(e instanceof Error ? e.message : "Bild konnte nicht übernommen werden.");
+    } finally {
+      setBusy(false);
+    }
+  }, [getToken, onFlashError, onFlashSuccess, onRefresh, row.id]);
 
   const onMarkUsed = useCallback(async () => {
     setBusy(true);
@@ -242,6 +262,18 @@ function BlogSocialPostCard(props: {
           )}
         </div>
         <div className="space-y-3">
+          {row.socialImageManualOverride && row.blogHeroImageUrl && row.socialImageUrl !== row.blogHeroImageUrl ? (
+            <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-[13px] leading-relaxed text-amber-950">
+              Das LinkedIn-Bild weicht vom Blogbild ab. Das ist ok, wenn es bewusst so gewählt wurde.
+              <div className="mt-3">
+                <button type="button" className={`${adminBtnSecondary} text-[13px]`} disabled={busy || !user} onClick={() => void onUseBlogImage()}>
+                  Blogbild übernehmen
+                </button>
+              </div>
+            </div>
+          ) : row.blogHeroImageUrl ? (
+            <p className={`${adminBody} text-[13px]`}>LinkedIn verwendet das Blogbild, solange hier kein eigenes Bild gespeichert wird.</p>
+          ) : null}
           <label className="block space-y-2">
             <span className="text-[14px] font-medium text-[var(--apple-text)]">LinkedIn-Bild URL</span>
             <input className={adminInput} value={socialImageUrl} onChange={(e) => setSocialImageUrl(e.target.value)} />

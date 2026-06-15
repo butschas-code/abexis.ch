@@ -35,6 +35,7 @@ import { BlogAutomationDraftSocialPosts } from "@/components/admin/blog-automati
 import { AdminFileUpload } from "@/components/admin/AdminFileUpload";
 import { AdminLoading } from "@/components/admin/AdminLoading";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
+import { sanitizeBlogHtml } from "@/lib/cms/sanitize-blog-html";
 
 type Props = { draftId: string };
 
@@ -95,6 +96,10 @@ function formatDateTime(iso: string | null): string {
   }
 }
 
+function articleLooksStructured(html: string): boolean {
+  return (html.match(/<h[2-3]\b/gi)?.length ?? 0) >= 2;
+}
+
 export function BlogAutomationDraftEditor({ draftId }: Props) {
   const router = useRouter();
   const { user, ready: authReady } = useCmsAuth();
@@ -110,6 +115,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
   const [unsplashResults, setUnsplashResults] = useState<UnsplashPhotoBrief[]>([]);
   const [unsplashBusy, setUnsplashBusy] = useState(false);
   const [heroPickerOpen, setHeroPickerOpen] = useState(false);
+  const [articleMode, setArticleMode] = useState<"preview" | "html">("preview");
   const [mediaRows, setMediaRows] = useState<MediaAssetListItem[]>([]);
   const [mediaBusy, setMediaBusy] = useState(false);
 
@@ -130,6 +136,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
         setUnsplashQuery(row.imageSearchQuery ?? "");
         setUnsplashResults([]);
         setAuthorId((prev) => {
+          if (row.authorId?.trim()) return row.authorId;
           if (prev.trim()) return prev;
           return authRows[0]?.id ?? "";
         });
@@ -181,10 +188,11 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
       articleHtml: form.articleHtml,
       researchSummary: form.researchSummary,
       sources: form.sources.filter((s) => s.title.trim() || s.url.trim()),
+      authorId: authorId.trim(),
       heroImageAlt: form.heroImageAlt,
       heroImageCredit: form.heroImageCredit,
     };
-  }, [form]);
+  }, [authorId, form]);
 
   const persistDraftFields = useCallback(
     async (successMsg: string) => {
@@ -477,6 +485,8 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
   const canApprove = !readOnly && draft.status !== "approved";
   const canSendBack = !readOnly && draft.status === "approved";
   const canPublish = !readOnly;
+  const articlePreviewHtml = sanitizeBlogHtml(form.articleHtml);
+  const structuredArticle = articleLooksStructured(articlePreviewHtml);
 
   return (
     <AdminPageContainer>
@@ -815,13 +825,51 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
       </AdminPageSection>
 
       <AdminPageSection>
-        <h2 className={adminSectionLabel}>Artikel (HTML)</h2>
-        <textarea
-          readOnly={readOnly}
-          className="h-[min(55vh,560px)] w-full resize-y rounded-xl border border-black/[0.1] bg-white p-4 font-mono text-xs leading-relaxed text-[var(--apple-text)] shadow-inner"
-          value={form.articleHtml}
-          onChange={(e) => patchForm({ articleHtml: e.target.value })}
-        />
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className={adminSectionLabel}>Artikel</h2>
+            {!structuredArticle ? (
+              <p className={`${adminBody} mt-1 text-[13px] text-amber-800`}>
+                Der Artikel wirkt noch wenig strukturiert. Vor der Freigabe bitte Abschnitte mit Zwischenüberschriften prüfen.
+              </p>
+            ) : null}
+          </div>
+          <div className="flex rounded-full border border-black/[0.08] bg-white p-1 shadow-sm">
+            <button
+              type="button"
+              className={`rounded-full px-3 py-1.5 text-[13px] font-semibold transition ${
+                articleMode === "preview" ? "bg-[var(--brand-900)] text-white" : "text-[var(--apple-text-secondary)] hover:text-[var(--apple-text)]"
+              }`}
+              onClick={() => setArticleMode("preview")}
+            >
+              Lesen
+            </button>
+            <button
+              type="button"
+              className={`rounded-full px-3 py-1.5 text-[13px] font-semibold transition ${
+                articleMode === "html" ? "bg-[var(--brand-900)] text-white" : "text-[var(--apple-text-secondary)] hover:text-[var(--apple-text)]"
+              }`}
+              onClick={() => setArticleMode("html")}
+            >
+              HTML
+            </button>
+          </div>
+        </div>
+        {articleMode === "preview" ? (
+          <div className={`${adminPanel} p-6 sm:p-8`}>
+            <div
+              className="article-detail-prose blog-prose legacy-prose max-w-none text-[1rem] leading-[1.75]"
+              dangerouslySetInnerHTML={{ __html: articlePreviewHtml }}
+            />
+          </div>
+        ) : (
+          <textarea
+            readOnly={readOnly}
+            className="h-[min(55vh,560px)] w-full resize-y rounded-xl border border-black/[0.1] bg-white p-4 font-mono text-xs leading-relaxed text-[var(--apple-text)] shadow-inner"
+            value={form.articleHtml}
+            onChange={(e) => patchForm({ articleHtml: e.target.value })}
+          />
+        )}
       </AdminPageSection>
 
       {draft.openaiResponseId ? (

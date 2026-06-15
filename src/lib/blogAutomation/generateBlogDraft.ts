@@ -3,7 +3,7 @@ import "server-only";
 import OpenAI from "openai";
 import { z } from "zod";
 
-import { normalizeEscapedBlogHtml } from "@/lib/cms/sanitize-blog-html";
+import { cleanGeneratedBlogArticleHtml } from "@/lib/cms/sanitize-blog-html";
 import { BLOG_PIPELINE_JSON_SCHEMA } from "@/lib/blog-pipeline/openai-json-schema";
 import type { BlogAutomationSettings, BlogTopic } from "@/lib/blogAutomation/types";
 
@@ -124,13 +124,14 @@ Research & honesty:
 - Use the web_search tool to ground non-obvious or time-sensitive facts where helpful.
 - Never invent statistics, surveys, regulations, or quotations.
 - Never fabricate citations or URLs.
-- Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", or external source URLs to articleHtml.
+- Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", competitor references, or external source URLs to articleHtml.
 - Do not include source links in the JSON output.
 - If something cannot be verified, omit it or phrase carefully without numeric precision.
 
 Output:
 - Respond with exactly one JSON object matching the schema (no markdown outside JSON).
-- articleHtml: semantic HTML fragments for a CMS body (headings, paragraphs, lists, links) — no outer <html> document.
+- articleHtml: semantic HTML fragments for a CMS body (headings, paragraphs, lists) — no outer <html> document.
+- Structure the article with a strong intro followed by clear h2/h3 sections. Avoid one long undifferentiated body of text.
 - Draft quality must be suitable for human editorial review before any publishing step.
 - linkedinPost: one short German LinkedIn teaser for Daniel Sengstag's LinkedIn profile. 500-800 characters, 2-4 short paragraphs, no hashtags unless the editor prompt explicitly asks for them, no source links, no external links. End with the placeholder {{BLOG_URL}} on its own final line exactly once.
 
@@ -241,24 +242,7 @@ function stripModelCodeFences(value: string): string {
 }
 
 function cleanGeneratedArticleHtml(value: string): string {
-  let html = toSwissGerman(normalizeEscapedBlogHtml(stripModelCodeFences(value)));
-  html = html.replace(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi, (_m, text) => `<h2>${String(text).trim()}</h2>`);
-
-  const stopHeadingPattern =
-    /<h[2-6]\b[^>]*>\s*(?:Bildersuche(?:[-\s]Anfragen)?|Alt[-\s]?Text(?:\s+für\s+das\s+Titelbild)?|LinkedIn|Social(?:\s*Media)?|Meta(?:daten)?|SEO|Quellen|Sources)\s*<\/h[2-6]>/i;
-  const stopMatch = html.search(stopHeadingPattern);
-  if (stopMatch >= 0) {
-    html = html.slice(0, stopMatch).trim();
-  }
-
-  html = html
-    .replace(/<p\b[^>]*>[\s\S]*?(?:\{\{BLOG_URL\}\}|BLOG_URL|Für weitere Informationen|besuchen Sie unsere Webseite|Bildersuche|Unsplash|Alt[-\s]?Text)[\s\S]*?<\/p>/gi, "")
-    .replace(/<li\b[^>]*>[\s\S]*?(?:\{\{BLOG_URL\}\}|BLOG_URL|Bildersuche|Unsplash|Alt[-\s]?Text)[\s\S]*?<\/li>/gi, "")
-    .replace(/\{\{BLOG_URL\}\}/g, "")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
-
-  return html;
+  return toSwissGerman(cleanGeneratedBlogArticleHtml(stripModelCodeFences(value)));
 }
 
 function buildDirectArticleInstructions(params: GenerateBlogDraftParams): string {
@@ -278,7 +262,8 @@ Non-negotiables:
 - Do not turn the prompt into a generic explanation if it asks for a specific argument.
 - Use semantic HTML fragments only: paragraphs, h2/h3 headings, ul/ol/li, strong where useful.
 - Do not output JSON, Markdown, code fences, <html>, <body>, or an <h1>.
-- Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", or external source URLs.
+- Structure the article with a strong intro followed by clear h2/h3 sections. Avoid one long undifferentiated body of text.
+- Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", competitor references, or external source URLs.
 - Do not add a CTA paragraph with a blog URL placeholder; the article is already the blog post.
 - Do not include image-search terms, alt text, metadata, SEO notes, LinkedIn text, or any implementation notes in the article body.
 - Never invent statistics, surveys, regulations, quotations, or named references.

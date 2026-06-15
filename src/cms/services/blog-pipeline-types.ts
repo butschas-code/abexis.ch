@@ -14,6 +14,7 @@ export type BlogDraftDetail = BlogDraftListItem & {
   articleHtml: string;
   researchSummary: string;
   sources: Array<{ title: string; url: string }>;
+  authorId: string | null;
   openaiResponseId: string | null;
   pipelineModel: string | null;
   approvedAt: string | null;
@@ -38,6 +39,9 @@ export type BlogSocialListItem = {
   xPost?: string;
   socialImageUrl: string | null;
   socialImageAlt: string | null;
+  socialImageManualOverride: boolean;
+  blogHeroImageUrl: string | null;
+  blogHeroImageAlt: string | null;
   createdAt: string | null;
   /** Set when an editor marks the copy as manually posted (never triggers API posting). */
   usedAt: string | null;

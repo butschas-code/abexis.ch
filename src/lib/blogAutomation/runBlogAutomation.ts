@@ -309,6 +309,95 @@ async function listRecentHeroImageUrls(max = 80): Promise<string[]> {
     .filter(Boolean);
 }
 
+function stripHtmlForSimilarity(value: unknown): string {
+  return String(value ?? "")
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function comparableTokens(value: unknown): Set<string> {
+  const stop = new Set([
+    "aber",
+    "auch",
+    "das",
+    "der",
+    "die",
+    "ein",
+    "eine",
+    "einer",
+    "eines",
+    "für",
+    "ist",
+    "mit",
+    "nicht",
+    "oder",
+    "sich",
+    "und",
+    "von",
+    "wie",
+    "zu",
+    "zur",
+  ]);
+  const words = stripHtmlForSimilarity(value)
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .match(/[a-z0-9äöü]{4,}/gi) ?? [];
+  return new Set(words.filter((word) => !stop.has(word)));
+}
+
+function tokenSimilarity(a: unknown, b: unknown): number {
+  const left = comparableTokens(a);
+  const right = comparableTokens(b);
+  if (!left.size || !right.size) return 0;
+  let intersection = 0;
+  for (const token of left) {
+    if (right.has(token)) intersection += 1;
+  }
+  return intersection / Math.min(left.size, right.size);
+}
+
+function normalizeSlugForComparison(value: string): string {
+  return value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+async function findSimilarExistingContent(output: BlogAutomationDraftOutput): Promise<string | null> {
+  const draftSnap = await adminDb.collection(COLLECTIONS.blogDrafts).orderBy("createdAt", "desc").limit(80).get();
+  const postSnap = await adminDb.collection(COLLECTIONS.posts).orderBy("createdAt", "desc").limit(120).get();
+  const newSlug = normalizeSlugForComparison(output.slug || output.title);
+  const newArticleText = stripHtmlForSimilarity(output.articleHtml);
+  const candidates = [
+    ...draftSnap.docs.map((docSnap) => ({ kind: "Entwurf", id: docSnap.id, data: docSnap.data() as Record<string, unknown> })),
+    ...postSnap.docs.map((docSnap) => ({ kind: "Beitrag", id: docSnap.id, data: docSnap.data() as Record<string, unknown> })),
+  ];
+
+  for (const candidate of candidates) {
+    const title = String(candidate.data.title ?? "");
+    const slug = normalizeSlugForComparison(String(candidate.data.slug ?? title));
+    const body = candidate.data.articleHtml ?? candidate.data.body ?? "";
+    const titleSimilarity = tokenSimilarity(output.title, title);
+    const excerptSimilarity = tokenSimilarity(output.excerpt, candidate.data.excerpt);
+    const bodySimilarity = tokenSimilarity(newArticleText, body);
+    if (
+      (newSlug && slug && newSlug === slug) ||
+      titleSimilarity >= 0.78 ||
+      bodySimilarity >= 0.72 ||
+      (titleSimilarity >= 0.56 && excerptSimilarity >= 0.5)
+    ) {
+      return `Der neue KI-Entwurf ist zu ähnlich zu einem bestehenden ${candidate.kind}: «${title || candidate.id}». Bitte Thema oder Prompt schärfen, bevor erneut generiert wird.`;
+    }
+  }
+
+  return null;
+}
+
 /**
  * Main cron entry: schedules via {@link shouldRunAutomation}, claims a topic, generates a draft, audits in `blogPipelineRuns` / `blogPipelineLogs`.
  */
@@ -488,6 +577,34 @@ export async function runBlogAutomation(
         lastErrorMessage: msg,
       });
       return { ok: false, error: msg, runId, topicId };
+    }
+
+    const similarContentMessage = await findSimilarExistingContent(draftOutput);
+    if (similarContentMessage) {
+      await adminDb.doc(topicPath).update({
+        status: "failed",
+        lastPipelineError: similarContentMessage,
+        updatedAt: FieldValue.serverTimestamp(),
+      });
+      await appendPipelineLog({
+        pipelineRunId: runId,
+        level: "warn",
+        message: similarContentMessage,
+        topicId,
+        context: { phase: "duplicate_guard" },
+      });
+      await runRef.set({
+        trigger,
+        status: "failed",
+        startedAt,
+        completedAt: FieldValue.serverTimestamp(),
+        topicsProcessed: 1,
+        draftsCreated: 0,
+        socialPostsCreated: 0,
+        errorCount: 1,
+        lastErrorMessage: similarContentMessage,
+      });
+      return { ok: false, error: similarContentMessage, runId, topicId };
     }
 
     const draftRef = adminDb.collection(COLLECTIONS.blogDrafts).doc();
