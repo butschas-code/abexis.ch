@@ -244,12 +244,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
         tags: [],
       });
       const scheduled = formatDateTime(result.scheduledFor);
-      const nuelink = result.nuelinkSent
-        ? " LinkedIn wurde an Nuelink übergeben."
-        : result.nuelinkError
-          ? ` Nuelink braucht noch Aufmerksamkeit: ${result.nuelinkError}`
-          : "";
-      setSuccess(`Freigegeben und als Beitrag für ${scheduled} geplant.${nuelink}`);
+      setSuccess(`Freigegeben und als Beitrag für ${scheduled} geplant. LinkedIn wird an Nuelink übergeben, sobald der Beitrag live geschaltet wird.`);
       await reload();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Freigabe fehlgeschlagen.");
@@ -497,7 +492,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
     <AdminPageContainer>
       <AdminPageHeader
         title={draft.title || "Entwurf"}
-        description={`Status: ${friendlyDraftStatus(draft.status)} · «Freigeben» erstellt den geplanten Beitrag und übergibt LinkedIn an Nuelink.`}
+        description={`Status: ${friendlyDraftStatus(draft.status)} · «Freigeben» erstellt den geplanten Beitrag. LinkedIn geht erst bei Veröffentlichung an Nuelink.`}
       />
 
       <p className={`${adminBody} -mt-4 mb-6`}>

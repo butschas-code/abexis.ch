@@ -595,7 +595,7 @@ export function BlogAutomationClient() {
 
               <div className="rounded-2xl border border-black/[0.06] bg-[color-mix(in_srgb,var(--apple-bg-subtle)_55%,white)] px-5 py-4 text-[14px] leading-relaxed text-[var(--apple-text-secondary)]">
                 Freigegebene Artikel werden jeweils um {form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime} Uhr ({form.timezone || "Europe/Zurich"}) geplant.
-                LinkedIn wird gleichzeitig an Nuelink übergeben.
+                Der vorbereitete LinkedIn-Post wird erst an Nuelink übergeben, wenn der Blogbeitrag live geschaltet wird.
               </div>
             </div>
           </BlogAutomationStepCard>

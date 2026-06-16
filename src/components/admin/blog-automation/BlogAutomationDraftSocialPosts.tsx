@@ -89,7 +89,7 @@ export function BlogAutomationDraftSocialPosts(props: Props) {
       <div>
         <h2 className={adminSectionLabel}>Social-Posts</h2>
         <p className={`mt-1 max-w-[52rem] ${adminBody}`}>
-          Text und Bild prüfen. Beim Freigeben des Entwurfs übergibt das CMS den LinkedIn-Post automatisch an Nuelink.
+          Text und Bild prüfen. Beim Freigeben wird der LinkedIn-Post vorbereitet; an Nuelink geht er erst, wenn der Blogbeitrag live geschaltet wird.
         </p>
       </div>
 

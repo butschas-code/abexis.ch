@@ -164,11 +164,6 @@ function nextApprovalPublishSlot(form: BlogAutomationFormState, from = new Date(
   return now.plus({ days: 1 }).set({ hour, minute, second: 0, millisecond: 0 }).toJSDate();
 }
 
-function formatNuelinkScheduledAt(date: Date, timezone: string): string {
-  const zone = timezone?.trim() || "Europe/Zurich";
-  return DateTime.fromJSDate(date, { zone }).toFormat("yyyy-LL-dd HH:mm:ss");
-}
-
 function normalizeLinkedInCaptionForBlog(caption: string, blogUrl: string): string {
   const clean = stripCompetitorReferenceLines(caption)
     .replace(/ß/g, "ss")
@@ -557,43 +552,11 @@ export async function cmsSetBlogDraftApproved(
 
   await batch.commit();
 
-  let nuelinkSent = false;
-  let nuelinkError: string | null = null;
-  const firstSocial = socialSnap.docs[0];
-  if (firstSocial && !firstSocial.get("nuelinkLastSentAt")) {
-    try {
-      const firstSocialData = firstSocial.data() as Record<string, unknown>;
-      const firstSocialManual = firstSocialData.socialImageManualOverride === true;
-      const effectiveSocialImageUrl =
-        (firstSocialManual && typeof firstSocialData.socialImageUrl === "string" ? firstSocialData.socialImageUrl.trim() : "") ||
-        (typeof d.heroImageUrl === "string" ? d.heroImageUrl.trim() : "");
-      const effectiveSocialImageAlt =
-        (firstSocialManual && typeof firstSocialData.socialImageAlt === "string" ? firstSocialData.socialImageAlt.trim() : "") ||
-        (typeof d.heroImageAlt === "string" ? d.heroImageAlt.trim() : "");
-      const blogUrl = `${PUBLIC_BLOG_BASE_URL}/${encodeURIComponent(parsed.data.slug.trim())}`;
-      const caption = normalizeLinkedInCaptionForBlog(String(firstSocial.get("linkedinPost") ?? ""), blogUrl);
-      await cmsSendBlogSocialPostToNuelink(firstSocial.id, {
-        target: "linkedin",
-        caption,
-        socialImageUrl: effectiveSocialImageUrl || null,
-        socialImageAlt: effectiveSocialImageAlt || null,
-        scheduledAt: formatNuelinkScheduledAt(scheduledFor, form.timezone),
-      });
-      nuelinkSent = true;
-    } catch (e) {
-      nuelinkError = e instanceof Error ? e.message : "Nuelink-Verbindung fehlgeschlagen.";
-      await firstSocial.ref.update({
-        nuelinkLastError: nuelinkError,
-        updatedAt: FieldValue.serverTimestamp(),
-      }).catch(() => undefined);
-    }
-  }
-
   return {
     postId,
     scheduledFor: scheduledFor.toISOString(),
-    nuelinkSent,
-    nuelinkError,
+    nuelinkSent: false,
+    nuelinkError: null,
   };
 }
 
@@ -961,6 +924,7 @@ export async function cmsPublishDueScheduledPosts(max = 20): Promise<{ published
 
   const batch = adminDb.batch();
   const postIds: string[] = [];
+  const socialPostIdsToSend: string[] = [];
   for (const docSnap of dueDocs) {
     postIds.push(docSnap.id);
     batch.update(docSnap.ref, {
@@ -980,6 +944,9 @@ export async function cmsPublishDueScheduledPosts(max = 20): Promise<{ published
       const socialSnap = await adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "in", draftIds).get().catch(() => null);
       if (socialSnap) {
         for (const socialDoc of socialSnap.docs) {
+          if (!socialDoc.get("nuelinkLastSentAt")) {
+            socialPostIdsToSend.push(socialDoc.id);
+          }
           batch.update(socialDoc.ref, {
             status: "published",
             updatedAt: FieldValue.serverTimestamp(),
@@ -990,6 +957,24 @@ export async function cmsPublishDueScheduledPosts(max = 20): Promise<{ published
   }
 
   await batch.commit();
+
+  for (const socialPostId of socialPostIdsToSend) {
+    try {
+      const snap = await adminDb.collection(COLLECTIONS.blogSocialPosts).doc(socialPostId).get();
+      if (!snap.exists || snap.get("nuelinkLastSentAt")) continue;
+      await cmsSendBlogSocialPostToNuelink(socialPostId, {
+        target: "linkedin",
+        caption: String(snap.get("linkedinPost") ?? ""),
+        publishMode: "IMMEDIATE",
+      });
+    } catch (e) {
+      await adminDb.collection(COLLECTIONS.blogSocialPosts).doc(socialPostId).update({
+        nuelinkLastError: e instanceof Error ? e.message : "Nuelink-Verbindung fehlgeschlagen.",
+        updatedAt: FieldValue.serverTimestamp(),
+      }).catch(() => undefined);
+    }
+  }
+
   return { published: postIds.length, postIds };
 }
 
