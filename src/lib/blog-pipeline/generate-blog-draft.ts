@@ -15,6 +15,7 @@ Quality rules:
 - Never fabricate citations or URLs.
 - Use the web_search tool when fresh or external facts materially strengthen the piece; otherwise rely on established general knowledge without pretending it is cited.
 - Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", competitor references, or external source URLs to articleHtml.
+- Add 2-4 contextual links inside articleHtml to relevant Abexis pages when they naturally fit. Use only these internal relative URLs: /projectrealitycheck, /leistungen, /fokusthemen/digitale-transformation, /fokusthemen/unternehmensstrategie, /fokusthemen/projektmanagement, /fokusthemen/prozessoptimierung, /fokusthemen/vertriebmarketing, /fokusthemen/veränderungsmanagement, /danielsengstag, /kontakt. These links are editorial navigation aids, not source citations.
 - Do not include source links in the JSON output.
 - If you cannot verify something, omit it or phrase it carefully as context/opinion without numeric precision.
 

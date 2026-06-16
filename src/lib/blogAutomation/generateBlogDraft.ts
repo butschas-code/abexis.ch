@@ -24,6 +24,22 @@ const BUSINESS_TECH_IMAGE_QUERIES = [
   "software implementation",
 ] as const;
 
+const ABEXIS_INTERNAL_LINK_GUIDANCE = `Internal Abexis links:
+- Add 2-4 contextual links inside articleHtml to relevant Abexis pages when they naturally fit.
+- Use only these internal URLs, never external URLs:
+  /projectrealitycheck for project clarity, risks, steering committees, recovery, troubled projects
+  /fokusthemen/digitale-transformation for digital transformation, software, IT, technology change
+  /fokusthemen/unternehmensstrategie for strategy, governance, board-level direction, priorities
+  /fokusthemen/projektmanagement for project execution, implementation, project leadership
+  /fokusthemen/prozessoptimierung for process optimization, automation, workflow, operational excellence
+  /fokusthemen/vertriebmarketing for sales, go-to-market, marketing, growth topics
+  /fokusthemen/veränderungsmanagement for change management, adoption, organizational change
+  /leistungen for the overview of Abexis consulting fields
+  /danielsengstag for Daniel Sengstag's profile when his experience or mandate leadership is relevant
+  /kontakt for contact or non-binding conversation CTAs
+- Links must be natural editorial references, not source citations or "read more" lists.
+- Use relative hrefs only, e.g. <a href="/projectrealitycheck">Project Reality Check</a>.`;
+
 /** Strict output shape after OpenAI Responses + web_search (matches structured JSON schema). */
 export const blogAutomationDraftOutputSchema = z.object({
   title: z.string().min(1),
@@ -129,6 +145,7 @@ Research & honesty:
 - Never fabricate citations or URLs.
 - Do not mention competitors or external consulting/technology provider sites by name.
 - Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", competitor references, or external source URLs to articleHtml.
+- ${ABEXIS_INTERNAL_LINK_GUIDANCE.replace(/\n/g, "\n- ")}
 - Do not include source links in the JSON output. The only URL placeholder allowed anywhere is {{BLOG_URL}} in linkedinPost.
 - If something cannot be verified, omit it or phrase carefully without numeric precision.
 
@@ -268,6 +285,7 @@ Non-negotiables:
 - Do not output JSON, Markdown, code fences, <html>, <body>, or an <h1>.
 - Structure the article with a strong intro followed by clear h2/h3 sections. Avoid one long undifferentiated body of text.
 - Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", competitor references, or external source URLs.
+- ${ABEXIS_INTERNAL_LINK_GUIDANCE.replace(/\n/g, "\n- ")}
 - Do not mention competitors or external consulting/technology provider sites by name.
 - Do not add a CTA paragraph with a blog URL placeholder; the article is already the blog post.
 - Do not include image-search terms, alt text, metadata, SEO notes, LinkedIn text, or any implementation notes in the article body.

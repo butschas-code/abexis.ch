@@ -23,7 +23,11 @@ export const BLOG_PIPELINE_JSON_SCHEMA = {
     excerpt: { type: "string" },
     metaTitle: { type: "string" },
     metaDescription: { type: "string" },
-    articleHtml: { type: "string", description: "Semantic HTML body only (no full document shell)." },
+    articleHtml: {
+      type: "string",
+      description:
+        "Semantic HTML body only (no full document shell). Include 2-4 contextual internal Abexis links where relevant; never include external/source/competitor links.",
+    },
     researchSummary: {
       type: "string",
       description: "Short internal summary of what was researched and what is supported by sources.",

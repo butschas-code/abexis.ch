@@ -46,7 +46,7 @@ const GENERATED_TAIL_HEADING_PATTERN =
 const GENERATED_TAIL_LINE_PATTERN =
   /(?:^|\n)\s*(?:Bildersuche(?:[-\s]Anfragen)?|Alt[-\s]?Text(?:\s+für\s+das\s+Titelbild)?|LinkedIn(?:\s+Post)?|Social(?:\s*Media)?|Meta(?:daten)?|SEO\s+Metadata|SEO[-\s]Titel|Quellen|Sources|Image(?:\s+search)?|Hero(?:\s+image)?)(?:\s*:|\s*$)/i;
 
-const EXTERNAL_URL_PATTERN = /https?:\/\/(?!www\.abexis\.ch\/blog\/)[^\s<")]+/gi;
+const EXTERNAL_URL_PATTERN = /https?:\/\/(?!(?:www\.)?abexis\.ch(?:\/|$))[^\s<")]+/gi;
 
 const GENERATED_RESIDUE_PATTERN =
   /\{\{BLOG_URL\}\}|BLOG_URL|Für weitere Informationen|besuchen Sie unsere Webseite|Bildersuche|Unsplash|Alt[-\s]?Text|imageSearchQueries|heroImageAlt/i;
@@ -118,6 +118,29 @@ function stripHtmlBlocksMatching(html: string, pattern: RegExp): string {
   return out;
 }
 
+function normalizeAbexisInternalHref(href: string | undefined): string | null {
+  const raw = href?.trim();
+  if (!raw) return null;
+  if (raw.startsWith("/")) return raw.startsWith("//") ? null : raw;
+  try {
+    const url = new URL(raw);
+    if (url.hostname === "abexis.ch" || url.hostname === "www.abexis.ch") {
+      return `${url.pathname}${url.search}${url.hash}`;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+function restoreInternalMarkdownLinks(html: string): string {
+  return html.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_match, label: string, href: string) => {
+    const internalHref = normalizeAbexisInternalHref(href);
+    if (!internalHref) return label;
+    return `<a href="${internalHref}">${label}</a>`;
+  });
+}
+
 export function containsCompetitorReference(value: string): boolean {
   return COMPETITOR_REFERENCE_PATTERN.test(value);
 }
@@ -143,9 +166,11 @@ export function removeGeneratedArticleResidue(html: string): string {
  * final rendering to the strict sanitizer below.
  */
 export function cleanGeneratedBlogArticleHtml(html: string): string {
-  let out = removeGeneratedArticleResidue(html)
-    .replace(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi, (_m, text) => `<h2>${String(text).trim()}</h2>`)
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, "$1")
+  let out = restoreInternalMarkdownLinks(removeGeneratedArticleResidue(html)
+    .replace(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi, (_m, text) => `<h2>${String(text).trim()}</h2>`));
+
+  out = out
+    .replace(/\[([^\]]+)\]\((?:https?:\/\/[^\s)]+|[^)\s]+)\)/g, "$1")
     .replace(/\(\s*(?:Quelle|Source|vgl\.?|see|https?:\/\/)[^)]+\)/gi, "")
     .replace(EXTERNAL_URL_PATTERN, "");
 
@@ -184,13 +209,14 @@ export function sanitizeBlogHtml(html: string): string {
   }
 }
 
-/** Generated articles should not carry source/citation links into the public post. */
+/** Generated articles may carry internal Abexis links, but never source/citation links. */
 export function sanitizeGeneratedBlogHtmlWithoutLinks(html: string): string {
   const input = cleanGeneratedBlogArticleHtml(html);
   try {
     return sanitizeHtmlLib(input, {
-      allowedTags: ALLOWED_TAGS.filter((tag) => tag !== "a"),
+      allowedTags: ALLOWED_TAGS,
       allowedAttributes: {
+        a: ALLOWED_ATTR.a,
         img: ALLOWED_ATTR.img,
         span: ALLOWED_ATTR.span,
         "*": ALLOWED_ATTR["*"],
@@ -200,7 +226,16 @@ export function sanitizeGeneratedBlogHtmlWithoutLinks(html: string): string {
       allowProtocolRelative: true,
       disallowedTagsMode: "discard",
       transformTags: {
-        a: "span",
+        a: (_tagName, attribs) => {
+          const href = normalizeAbexisInternalHref(attribs.href);
+          if (!href) return { tagName: "span", attribs: {} };
+          const cleanAttribs: Record<string, string> = { href };
+          if (attribs.title) cleanAttribs.title = attribs.title;
+          return {
+            tagName: "a",
+            attribs: cleanAttribs,
+          };
+        },
       },
     });
   } catch {
