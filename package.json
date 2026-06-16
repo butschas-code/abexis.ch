@@ -16,6 +16,7 @@
     "cms:seed:dev": "tsx scripts/cms-seed-dev.ts",
     "cms:migrate:single-site": "tsx scripts/migrate-cms-sites-to-abexis.ts",
     "cms:import:legacy": "tsx scripts/import-legacy-blog-posts.ts",
+    "cms:rewrite-published-blog": "tsx scripts/rewrite-published-blog-posts.ts",
     "cms:check-mfa-env": "tsx scripts/check-cms-mfa-env.ts",
     "cms:grant-admin": "tsx scripts/cms-grant-admin.ts",
     "cms:optimize-storage-media": "tsx scripts/cms-optimize-storage-media.ts"
