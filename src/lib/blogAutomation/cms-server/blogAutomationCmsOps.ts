@@ -24,7 +24,11 @@ import {
   type RunAggRow,
 } from "@/lib/blogAutomation/schedulingSimulation";
 import { serializePostBody } from "@/lib/cms/post-body-storage";
-import { normalizeEscapedBlogHtml, sanitizeGeneratedBlogHtmlWithoutLinks } from "@/lib/cms/sanitize-blog-html";
+import {
+  normalizeEscapedBlogHtml,
+  sanitizeGeneratedBlogHtmlWithoutLinks,
+  stripCompetitorReferenceLines,
+} from "@/lib/cms/sanitize-blog-html";
 import {
   applyUnsplashPhotoToHeroFields,
   getUnsplashPhotoById,
@@ -166,7 +170,7 @@ function formatNuelinkScheduledAt(date: Date, timezone: string): string {
 }
 
 function normalizeLinkedInCaptionForBlog(caption: string, blogUrl: string): string {
-  const clean = caption
+  const clean = stripCompetitorReferenceLines(caption)
     .replace(/ß/g, "ss")
     .replace(/ẞ/g, "SS")
     .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, "$1")
@@ -179,6 +183,22 @@ function normalizeLinkedInCaptionForBlog(caption: string, blogUrl: string): stri
   if (!blogUrl) return clean;
   if (clean.includes(blogUrl)) return clean;
   return `${clean}\n\n${blogUrl}`.trim();
+}
+
+async function resolveDefaultBlogAuthorId(): Promise<string> {
+  const configured = process.env.BLOG_AUTOMATION_DEFAULT_AUTHOR_ID?.trim();
+  if (configured) return configured;
+
+  const snap = await adminDb.collection(COLLECTIONS.authors).limit(200).get();
+  const daniel = snap.docs.find((docSnap) => {
+    const row = docSnap.data() as Record<string, unknown>;
+    return (
+      /daniel\s+sengstag/i.test(String(row.name ?? "")) ||
+      /daniel[-_\s]?sengstag/i.test(String(row.slug ?? "")) ||
+      /daniel\.sengstag/i.test(String(row.email ?? ""))
+    );
+  });
+  return daniel?.id ?? "";
 }
 
 async function syncDraftHeroToSocialPosts(draftId: string, fields: { imageUrl?: string | null; imageAlt?: string | null }): Promise<void> {
@@ -432,7 +452,7 @@ export async function cmsSetBlogDraftApproved(
   const authorId =
     params.authorId?.trim() ||
     (typeof d.authorId === "string" ? d.authorId.trim() : "") ||
-    process.env.BLOG_AUTOMATION_DEFAULT_AUTHOR_ID?.trim() ||
+    (await resolveDefaultBlogAuthorId()) ||
     "";
   if (!authorId) {
     throw new Error("Bitte eine Autorin / einen Autor wählen, bevor der Entwurf freigegeben wird.");

@@ -5,7 +5,7 @@ import { adminDb } from "@/lib/firebaseAdmin";
 import { generateBlogDraftFromTopic } from "@/lib/blog-pipeline/generate-blog-draft";
 import { getOpenAiBlogModel } from "@/lib/blog-pipeline/openai-blog-model";
 import { findUnsplashImage } from "@/lib/blogAutomation/findUnsplashImage";
-import { sanitizeGeneratedBlogHtmlWithoutLinks } from "@/lib/cms/sanitize-blog-html";
+import { sanitizeGeneratedBlogHtmlWithoutLinks, stripCompetitorReferenceLines } from "@/lib/cms/sanitize-blog-html";
 
 export type BlogPipelineRunResult =
   | { status: "skipped"; reason: "no_queued_topics" | "claim_lost" }
@@ -28,6 +28,22 @@ function readTopicFields(data: DocumentData): {
     brief: typeof data.brief === "string" ? data.brief : null,
     status: typeof data.status === "string" ? data.status : "",
   };
+}
+
+async function resolveDefaultBlogAuthorId(): Promise<string> {
+  const configured = process.env.BLOG_AUTOMATION_DEFAULT_AUTHOR_ID?.trim();
+  if (configured) return configured;
+
+  const snap = await adminDb.collection(COLLECTIONS.authors).limit(200).get();
+  const daniel = snap.docs.find((docSnap) => {
+    const row = docSnap.data() as Record<string, unknown>;
+    return (
+      /daniel\s+sengstag/i.test(String(row.name ?? "")) ||
+      /daniel[-_\s]?sengstag/i.test(String(row.slug ?? "")) ||
+      /daniel\.sengstag/i.test(String(row.email ?? ""))
+    );
+  });
+  return daniel?.id ?? "";
 }
 
 /**
@@ -108,6 +124,7 @@ export async function runBlogPipelineOnce(): Promise<BlogPipelineRunResult> {
 
     const draftRef = adminDb.collection(COLLECTIONS.blogDrafts).doc();
     const socialRef = adminDb.collection(COLLECTIONS.blogSocialPosts).doc();
+    const defaultAuthorId = await resolveDefaultBlogAuthorId();
 
     const batch = adminDb.batch();
 
@@ -122,6 +139,7 @@ export async function runBlogPipelineOnce(): Promise<BlogPipelineRunResult> {
       articleHtml: sanitizeGeneratedBlogHtmlWithoutLinks(output.articleHtml),
       researchSummary: output.researchSummary,
       sources: [],
+      ...(defaultAuthorId ? { authorId: defaultAuthorId } : {}),
       openaiResponseId: responseId,
       pipelineModel: getOpenAiBlogModel(),
       createdAt: FieldValue.serverTimestamp(),
@@ -133,7 +151,7 @@ export async function runBlogPipelineOnce(): Promise<BlogPipelineRunResult> {
       topicId,
       blogDraftId: draftRef.id,
       status: "needs_review",
-      linkedinPost: output.linkedinPost,
+      linkedinPost: stripCompetitorReferenceLines(output.linkedinPost),
       socialImageUrl: typeof draftHeroFirestore.heroImageUrl === "string" ? draftHeroFirestore.heroImageUrl : null,
       socialImageAlt: typeof draftHeroFirestore.heroImageAlt === "string" ? draftHeroFirestore.heroImageAlt : null,
       openaiResponseId: responseId,

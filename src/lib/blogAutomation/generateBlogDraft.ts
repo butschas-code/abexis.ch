@@ -3,7 +3,10 @@ import "server-only";
 import OpenAI from "openai";
 import { z } from "zod";
 
-import { cleanGeneratedBlogArticleHtml } from "@/lib/cms/sanitize-blog-html";
+import {
+  cleanGeneratedBlogArticleHtml,
+  stripCompetitorReferenceLines,
+} from "@/lib/cms/sanitize-blog-html";
 import { BLOG_PIPELINE_JSON_SCHEMA } from "@/lib/blog-pipeline/openai-json-schema";
 import type { BlogAutomationSettings, BlogTopic } from "@/lib/blogAutomation/types";
 
@@ -124,8 +127,9 @@ Research & honesty:
 - Use the web_search tool to ground non-obvious or time-sensitive facts where helpful.
 - Never invent statistics, surveys, regulations, or quotations.
 - Never fabricate citations or URLs.
+- Do not mention competitors or external consulting/technology provider sites by name.
 - Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", competitor references, or external source URLs to articleHtml.
-- Do not include source links in the JSON output.
+- Do not include source links in the JSON output. The only URL placeholder allowed anywhere is {{BLOG_URL}} in linkedinPost.
 - If something cannot be verified, omit it or phrase carefully without numeric precision.
 
 Output:
@@ -264,6 +268,7 @@ Non-negotiables:
 - Do not output JSON, Markdown, code fences, <html>, <body>, or an <h1>.
 - Structure the article with a strong intro followed by clear h2/h3 sections. Avoid one long undifferentiated body of text.
 - Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", competitor references, or external source URLs.
+- Do not mention competitors or external consulting/technology provider sites by name.
 - Do not add a CTA paragraph with a blog URL placeholder; the article is already the blog post.
 - Do not include image-search terms, alt text, metadata, SEO notes, LinkedIn text, or any implementation notes in the article body.
 - Never invent statistics, surveys, regulations, quotations, or named references.
@@ -356,7 +361,7 @@ function buildDirectMetadataInstructions(params: GenerateBlogDraftParams): strin
 Return exactly one JSON object matching the schema.
 Do not include articleHtml.
 Default language: ${settings.defaultLanguage}. For German, use Swiss German conventions and avoid "ß".
-LinkedIn: create one short German LinkedIn teaser for Daniel Sengstag's profile. 500-800 characters, 2-4 short paragraphs, no source links, no external links, no citation parentheses. End with {{BLOG_URL}} on its own final line exactly once.
+LinkedIn: create one short German LinkedIn teaser for Daniel Sengstag's profile. 500-800 characters, 2-4 short paragraphs, no source links, no external links, no competitor references, no citation parentheses. End with {{BLOG_URL}} on its own final line exactly once.
 Image search: return 3-6 short English Unsplash search phrases. Prefer business/technology/project imagery: business technology, enterprise software, digital transformation, IT project management, business strategy meeting, software implementation, change management, workflow automation. Avoid Swiss architecture, Swiss landscapes, mountains, flags, handshakes, grinning teams, laptop dashboards, and skyscrapers.
 No source links, citations, or fabricated facts.`;
 }
@@ -373,7 +378,7 @@ ${articleHtml}`;
 }
 
 function normalizeLinkedinPlaceholder(post: string): string {
-  const withoutLinks = toSwissGerman(post)
+  const withoutLinks = stripCompetitorReferenceLines(toSwissGerman(post))
     .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, "$1")
     .replace(/https?:\/\/(?!www\.abexis\.ch\/blog\/)[^\s)]+/gi, "")
     .replace(/\(\s*\)/g, "")

@@ -309,6 +309,22 @@ async function listRecentHeroImageUrls(max = 80): Promise<string[]> {
     .filter(Boolean);
 }
 
+async function resolveDefaultBlogAuthorId(): Promise<string> {
+  const configured = process.env.BLOG_AUTOMATION_DEFAULT_AUTHOR_ID?.trim();
+  if (configured) return configured;
+
+  const snap = await adminDb.collection(COLLECTIONS.authors).limit(200).get();
+  const daniel = snap.docs.find((docSnap) => {
+    const row = docSnap.data() as Record<string, unknown>;
+    return (
+      /daniel\s+sengstag/i.test(String(row.name ?? "")) ||
+      /daniel[-_\s]?sengstag/i.test(String(row.slug ?? "")) ||
+      /daniel\.sengstag/i.test(String(row.email ?? ""))
+    );
+  });
+  return daniel?.id ?? "";
+}
+
 function stripHtmlForSimilarity(value: unknown): string {
   return String(value ?? "")
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
@@ -654,7 +670,7 @@ export async function runBlogAutomation(
     const batch = adminDb.batch();
 
     if (mayAutoPublish) {
-      const authorId = process.env.BLOG_AUTOMATION_DEFAULT_AUTHOR_ID?.trim();
+      const authorId = await resolveDefaultBlogAuthorId();
       if (!authorId) {
         await appendPipelineLog({
           pipelineRunId: runId,
@@ -746,6 +762,8 @@ export async function runBlogAutomation(
       }
     }
 
+    const defaultDraftAuthorId = await resolveDefaultBlogAuthorId();
+
     batch.set(draftRef, {
       title: draftOutput.title,
       slug: persistedDraftSlug,
@@ -755,6 +773,7 @@ export async function runBlogAutomation(
       articleHtml: sanitizeGeneratedBlogHtmlWithoutLinks(draftOutput.articleHtml),
       researchSummary: draftOutput.researchSummary,
       sources: [],
+      ...(defaultDraftAuthorId ? { authorId: defaultDraftAuthorId } : {}),
       status: draftStatus,
       topicId,
       automationRunId: runId,

@@ -31,12 +31,12 @@ export const BLOG_PIPELINE_JSON_SCHEMA = {
     linkedinPost: {
       type: "string",
       description:
-        "One substantial German LinkedIn post for Daniel Sengstag's profile. It must be longer than a short teaser, useful on its own, and include the final blog URL placeholder: {{BLOG_URL}}.",
+        "One short German LinkedIn teaser for Daniel Sengstag's profile. No source links, no external links, no competitor references. End with the final blog URL placeholder on its own final line: {{BLOG_URL}}.",
     },
     imageSearchQueries: {
       type: "array",
       description:
-        "Short English Unsplash search phrases (no URLs). Editorial Swiss-consulting mood: restrained architecture, texture, landscape, quiet workspace—not handshakes, laptop charts, or skyline clichés.",
+        "Short English Unsplash search phrases (no URLs). Prefer business technology, enterprise software, digital transformation, IT project management, business strategy meeting, software implementation, change management, workflow automation.",
       items: { type: "string" },
       minItems: 1,
       maxItems: 8,

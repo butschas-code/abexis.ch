@@ -52,7 +52,7 @@ const GENERATED_RESIDUE_PATTERN =
   /\{\{BLOG_URL\}\}|BLOG_URL|Für weitere Informationen|besuchen Sie unsere Webseite|Bildersuche|Unsplash|Alt[-\s]?Text|imageSearchQueries|heroImageAlt/i;
 
 const COMPETITOR_REFERENCE_PATTERN =
-  /\b(?:Accenture|Deloitte|PwC|KPMG|EY|Ernst\s*&\s*Young|McKinsey|BCG|Boston\s+Consulting\s+Group|Bain|Capgemini|BearingPoint|Zühlke|Zuehlke|Swisscom|ELCA|ti\s*&\s*m|ti&amp;m|Adesso|isolutions|Erni|AWK|Wavestone|Gartner|Forrester)\b|https?:\/\/(?:www\.)?(?:accenture|deloitte|pwc|kpmg|ey|mckinsey|bcg|bain|capgemini|bearingpoint|zuehlke|swisscom|elca|ti8m|adesso|isolutions|erni|gartner|forrester)\.[^\s<")]+/i;
+  /\b(?:Accenture|Deloitte|PwC|KPMG|EY|Ernst\s*&\s*Young|McKinsey|BCG|Boston\s+Consulting\s+Group|Bain|Capgemini|Bearing\s*Point|BearingPoint|Zühlke|Zuehlke|Swisscom|ELCA|ti\s*&\s*m|ti&amp;m|Adesso|isolutions|Erni|AWK|Wavestone|Synpulse|Implement\s+Consulting\s+Group|Sopra\s+Steria|NTT\s+DATA|Cognizant|Wipro|Infosys|TCS|DXC|EPAM|Gartner|Forrester)\b|https?:\/\/(?:www\.)?(?:accenture|deloitte|pwc|kpmg|ey|mckinsey|bcg|bain|capgemini|bearingpoint|zuehlke|swisscom|elca|ti8m|adesso|isolutions|erni|awk|wavestone|synpulse|implementconsultinggroup|soprasteria|nttdata|cognizant|wipro|infosys|tcs|dxc|epam|gartner|forrester)\.[^\s<")]+/i;
 
 /**
  * Repairs generated/CMS bodies that were accidentally stored as escaped HTML,
@@ -116,6 +116,19 @@ function stripHtmlBlocksMatching(html: string, pattern: RegExp): string {
     );
   }
   return out;
+}
+
+export function containsCompetitorReference(value: string): boolean {
+  return COMPETITOR_REFERENCE_PATTERN.test(value);
+}
+
+export function stripCompetitorReferenceLines(value: string): string {
+  return value
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter((line) => line && !COMPETITOR_REFERENCE_PATTERN.test(line))
+    .join("\n\n")
+    .trim();
 }
 
 /** Removes generator-only notes that should never display at the bottom of public articles. */

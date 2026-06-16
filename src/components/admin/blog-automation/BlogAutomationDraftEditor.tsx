@@ -100,6 +100,11 @@ function articleLooksStructured(html: string): boolean {
   return (html.match(/<h[2-3]\b/gi)?.length ?? 0) >= 2;
 }
 
+function pickDefaultAuthorId(authors: AuthorOption[]): string {
+  const daniel = authors.find((author) => /daniel\s+sengstag/i.test(author.name));
+  return daniel?.id ?? authors[0]?.id ?? "";
+}
+
 export function BlogAutomationDraftEditor({ draftId }: Props) {
   const router = useRouter();
   const { user, ready: authReady } = useCmsAuth();
@@ -138,7 +143,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
         setAuthorId((prev) => {
           if (row.authorId?.trim()) return row.authorId;
           if (prev.trim()) return prev;
-          return authRows[0]?.id ?? "";
+          return pickDefaultAuthorId(authRows);
         });
       } else {
         setForm(null);
