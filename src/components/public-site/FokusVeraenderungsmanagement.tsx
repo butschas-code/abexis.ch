@@ -6,12 +6,15 @@ import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { fokusPageHeroImages } from "@/data/site-images";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { resolvePublicImageUrl } from "@/lib/images/resolve-public-image-url";
 
 // ─── Static data : module level, no re-allocation ────────────────────────────
 
 const meta = fokusthemenMeta.find((m) => m.slug === "veränderungsmanagement")!;
 const heroImage = fokusPageHeroImages["veränderungsmanagement"];
-const contentImage = "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F3f6bff6e-7e5a-4da7-92ad-f900954f953f.jpeg?alt=media";
+const contentImage = resolvePublicImageUrl(
+  "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F3f6bff6e-7e5a-4da7-92ad-f900954f953f.jpeg?alt=media",
+);
 
 const handlungsfelder = [
   {

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { PublicImage as Image } from "@/components/site/PublicImage";
 import Link from "next/link";
 import { resolvePostHeroImageUrl } from "@/lib/cms/resolve-post-hero-image";
 import type { PublishedPostWithId } from "@/public-site/cms";

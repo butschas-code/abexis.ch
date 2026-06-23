@@ -6,12 +6,15 @@ import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { fokusPageHeroImages } from "@/data/site-images";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { resolvePublicImageUrl } from "@/lib/images/resolve-public-image-url";
 
 // ─── Static data : module level, no re-allocation ────────────────────────────
 
 const meta = fokusthemenMeta.find((m) => m.slug === "unternehmensstrategie")!;
 const heroImage = fokusPageHeroImages["unternehmensstrategie"];
-const contentImage = "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fe006b913-0cb3-4631-9d9d-7304bc2bab8e.jpg?alt=media";
+const contentImage = resolvePublicImageUrl(
+  "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fe006b913-0cb3-4631-9d9d-7304bc2bab8e.jpg?alt=media",
+);
 
 const prozessSchritte = [
   {

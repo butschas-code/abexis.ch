@@ -3,6 +3,7 @@
  * Rohdaten: `src/data/scraped-images-raw.json` (z. B. mit `node scripts/scrape-images.mjs` erneuern).
  */
 import scrapedRaw from "./scraped-images-raw.json";
+import { resolvePublicImageUrl } from "@/lib/images/resolve-public-image-url";
 
 const scraped = scrapedRaw as Record<string, string[]>;
 const HOME = scraped["https://www.abexis.ch/"]!;
@@ -16,9 +17,9 @@ export const homeTextureBar = HOME[1];
 
 /** Kachel-Bilder der sechs Fokusthemen, Reihenfolge wie auf der alten Startseite */
 export const serviceCardImages = {
-  projectfitcheck: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Feditorial-insights.jpg?alt=media",
-  projectrealitycheck: "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Feditorial-insights.jpg?alt=media",
-  "executive-search": "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Fexecutive-unsplash.jpg?alt=media",
+  projectfitcheck: resolvePublicImageUrl("https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Feditorial-insights.jpg?alt=media"),
+  projectrealitycheck: resolvePublicImageUrl("https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Feditorial-insights.jpg?alt=media"),
+  "executive-search": resolvePublicImageUrl("https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Fexecutive-unsplash.jpg?alt=media"),
   "digitale-transformation": HOME[2],
   unternehmensstrategie: HOME[3],
   vertriebmarketing: HOME[4],

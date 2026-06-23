@@ -1,3 +1,4 @@
+import { resolvePublicImageUrl } from "@/lib/images/resolve-public-image-url";
 import { getBlogListCoverByIndex } from "@/data/site-images";
 
 /**
@@ -26,7 +27,7 @@ export function resolvePostHeroImageUrl(post: { heroImageUrl: string | null; id:
       if (u.startsWith("http://files.designer.hoststar.ch")) {
         return `https://${u.slice("http://".length)}`;
       }
-      return u;
+      return resolvePublicImageUrl(u);
     }
     if (u.startsWith("//") && u.length > 2) {
       return `https:${u}`;

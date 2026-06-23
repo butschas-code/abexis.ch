@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { PublicImage as Image } from "@/components/site/PublicImage";
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 

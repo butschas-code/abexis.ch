@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { PublicImage as Image } from "@/components/site/PublicImage";
 import Link from "next/link";
 import { AboutTeamGrid } from "@/components/home/AboutTeamGrid";
 import { homeWhoWeAreContent } from "@/data/home-page-content";

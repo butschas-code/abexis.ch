@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { PublicImage as Image } from "@/components/site/PublicImage";
 import { footerPartners } from "@/data/pages";
 import { partnershipBannerLogos } from "@/data/site-images";
 

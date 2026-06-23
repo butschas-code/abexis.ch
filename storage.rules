@@ -92,6 +92,16 @@ service firebase.storage {
       allow read, write: if false;
     }
 
+    /**
+     * Site-wide static assets (hero, partners, PRC infographics) uploaded outside `cms/media`.
+     */
+    match /site/{allPaths=**} {
+      allow read: if true;
+      allow create, update: if isCmsEditorOrAdmin()
+        && request.resource.size < 20 * 1024 * 1024;
+      allow delete: if isCmsEditorOrAdmin();
+    }
+
     match /{allPaths=**} {
       allow read, write: if false;
     }

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { PublicImage as Image } from "@/components/site/PublicImage";
 import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { PublicImage as Image } from "@/components/site/PublicImage";
 import Link from "next/link";
 import { ConfidentialMandatesNotice } from "@/components/executive-search/ConfidentialMandatesNotice";
 import { ExecutiveSearchClosingSection } from "@/components/executive-search/ExecutiveSearchClosingSection";

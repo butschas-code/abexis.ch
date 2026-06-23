@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { PublicImage as Image } from "@/components/site/PublicImage";
 import Link from "next/link";
 import { fokusthemenMeta } from "@/data/pages";
 import { serviceCardImages } from "@/data/site-images";

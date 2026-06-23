@@ -1,4 +1,5 @@
 import sanitizeHtmlLib from "sanitize-html";
+import { resolvePublicImageUrl } from "@/lib/images/resolve-public-image-url";
 
 /**
  * Strict allowlist for blog HTML from the CMS editor and legacy imports.
@@ -200,6 +201,13 @@ export function sanitizeBlogHtml(html: string): string {
             /** External link hardening : safe default for CMS/legacy content. */
             target: attribs.target ?? "_blank",
             rel: attribs.rel ?? "noopener noreferrer",
+          },
+        }),
+        img: (tagName, attribs) => ({
+          tagName,
+          attribs: {
+            ...attribs,
+            ...(attribs.src ? { src: resolvePublicImageUrl(attribs.src) } : {}),
           },
         }),
       },

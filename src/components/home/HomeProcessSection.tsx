@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { PublicImage as Image } from "@/components/site/PublicImage";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { homeProcessContent } from "@/data/home-page-content";
 import { fokusPageHeroImages } from "@/data/site-images";
