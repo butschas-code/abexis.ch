@@ -19,7 +19,8 @@
     "cms:rewrite-published-blog": "tsx scripts/rewrite-published-blog-posts.ts",
     "cms:check-mfa-env": "tsx scripts/check-cms-mfa-env.ts",
     "cms:grant-admin": "tsx scripts/cms-grant-admin.ts",
-    "cms:optimize-storage-media": "tsx scripts/cms-optimize-storage-media.ts"
+    "cms:optimize-storage-media": "tsx scripts/cms-optimize-storage-media.ts",
+    "cms:repair-nuelink-social": "tsx scripts/repair-nuelink-social-handoff.ts"
   },
   "dependencies": {
     "@tiptap/extension-image": "^2.27.2",

@@ -1,6 +1,6 @@
 import "server-only";
 
-import { FieldValue, Timestamp } from "firebase-admin/firestore";
+import { FieldValue, Timestamp, type WriteBatch } from "firebase-admin/firestore";
 import { DateTime } from "luxon";
 
 import { parsePostUpsert } from "@/cms/schema";
@@ -26,6 +26,7 @@ import {
 import { serializePostBody } from "@/lib/cms/post-body-storage";
 import {
   normalizeEscapedBlogHtml,
+  normalizeSwissGermanText,
   sanitizeGeneratedBlogHtmlWithoutLinks,
   stripCompetitorReferenceLines,
 } from "@/lib/cms/sanitize-blog-html";
@@ -165,9 +166,7 @@ function nextApprovalPublishSlot(form: BlogAutomationFormState, from = new Date(
 }
 
 function normalizeLinkedInCaptionForBlog(caption: string, blogUrl: string): string {
-  const clean = stripCompetitorReferenceLines(caption)
-    .replace(/ß/g, "ss")
-    .replace(/ẞ/g, "SS")
+  const clean = stripCompetitorReferenceLines(normalizeSwissGermanText(caption))
     .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, "$1")
     .replace(/https?:\/\/(?!www\.abexis\.ch\/blog\/)[^\s)]+/gi, "")
     .replace(/\{\{BLOG_URL\}\}/g, "")
@@ -178,6 +177,10 @@ function normalizeLinkedInCaptionForBlog(caption: string, blogUrl: string): stri
   if (!blogUrl) return clean;
   if (clean.includes(blogUrl)) return clean;
   return `${clean}\n\n${blogUrl}`.trim();
+}
+
+function normalizeSwissTextField(value: unknown): string {
+  return normalizeSwissGermanText(String(value ?? "")).trim();
 }
 
 async function resolveDefaultBlogAuthorId(): Promise<string> {
@@ -208,6 +211,102 @@ async function syncDraftHeroToSocialPosts(draftId: string, fields: { imageUrl?: 
     batch.update(docSnap.ref, patch);
   }
   await batch.commit();
+}
+
+function timestampMillis(value: unknown): number {
+  if (value instanceof Timestamp) return value.toMillis();
+  if (value && typeof value === "object" && "toMillis" in value && typeof (value as Timestamp).toMillis === "function") {
+    return (value as Timestamp).toMillis();
+  }
+  return 0;
+}
+
+function readSocialCaptionForClone(source: Record<string, unknown>, draft: Record<string, unknown>): string {
+  const fromSocial = typeof source.linkedinPost === "string" ? source.linkedinPost.trim() : "";
+  if (fromSocial) return normalizeSwissGermanText(fromSocial);
+  const title = normalizeSwissTextField(draft.title);
+  return title ? `${title}\n\n{{BLOG_URL}}` : "{{BLOG_URL}}";
+}
+
+function readStringArray(value: unknown): string[] {
+  return Array.isArray(value) ? value.map(String).map((v) => v.trim()).filter(Boolean) : [];
+}
+
+async function ensureSendableSocialPostForDraft(params: {
+  batch: WriteBatch;
+  draftId: string;
+  draft: Record<string, unknown>;
+  targetStatus: "scheduled" | "published";
+  publishedPostId: string;
+  now: FieldValue;
+}): Promise<string[]> {
+  const snap = await adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "==", params.draftId.trim()).get();
+  if (snap.empty) return [];
+
+  const sendableIds: string[] = [];
+  for (const socialDoc of snap.docs) {
+    const source = socialDoc.data() as Record<string, unknown>;
+    const socialPatch: Record<string, unknown> = {
+      status: params.targetStatus,
+      updatedAt: params.now,
+    };
+    if (source.socialImageManualOverride !== true) {
+      socialPatch.socialImageUrl =
+        typeof params.draft.heroImageUrl === "string" && params.draft.heroImageUrl.trim()
+          ? params.draft.heroImageUrl.trim()
+          : FieldValue.delete();
+      socialPatch.socialImageAlt =
+        typeof params.draft.heroImageAlt === "string" && params.draft.heroImageAlt.trim()
+          ? normalizeSwissGermanText(params.draft.heroImageAlt.trim())
+          : FieldValue.delete();
+    }
+    if (!socialDoc.get("nuelinkLastSentAt")) {
+      sendableIds.push(socialDoc.id);
+    }
+    params.batch.update(socialDoc.ref, socialPatch);
+  }
+  if (sendableIds.length > 0) return sendableIds;
+
+  const sourceDoc = [...snap.docs].sort((a, b) => {
+    const at = timestampMillis(a.get("createdAt")) || timestampMillis(a.get("updatedAt"));
+    const bt = timestampMillis(b.get("createdAt")) || timestampMillis(b.get("updatedAt"));
+    return bt - at;
+  })[0];
+  if (!sourceDoc) return [];
+
+  const source = sourceDoc.data() as Record<string, unknown>;
+  const newRef = adminDb.collection(COLLECTIONS.blogSocialPosts).doc();
+  const socialImageUrl =
+    typeof source.socialImageUrl === "string" && source.socialImageUrl.trim()
+      ? source.socialImageUrl.trim()
+      : typeof params.draft.heroImageUrl === "string" && params.draft.heroImageUrl.trim()
+        ? params.draft.heroImageUrl.trim()
+        : null;
+  const socialImageAlt =
+    typeof source.socialImageAlt === "string" && source.socialImageAlt.trim()
+      ? normalizeSwissGermanText(source.socialImageAlt.trim())
+      : typeof params.draft.heroImageAlt === "string" && params.draft.heroImageAlt.trim()
+        ? normalizeSwissGermanText(params.draft.heroImageAlt.trim())
+        : null;
+
+  params.batch.set(newRef, {
+    topicId: typeof source.topicId === "string" ? source.topicId : typeof params.draft.topicId === "string" ? params.draft.topicId : null,
+    blogDraftId: params.draftId,
+    automationRunId: typeof source.automationRunId === "string" ? source.automationRunId : typeof params.draft.automationRunId === "string" ? params.draft.automationRunId : null,
+    status: params.targetStatus,
+    platforms: readStringArray(source.platforms).length ? readStringArray(source.platforms) : ["linkedin"],
+    linkedinPost: readSocialCaptionForClone(source, params.draft),
+    socialImageUrl,
+    socialImageAlt,
+    socialImageManualOverride: source.socialImageManualOverride === true,
+    clonedFromSocialPostId: sourceDoc.id,
+    clonedForPublishedPostId: params.publishedPostId,
+    clonedReason: "published_after_previous_nuelink_test_send",
+    createdAt: params.now,
+    updatedAt: params.now,
+  });
+
+  return [newRef.id];
 }
 
 // ——— Settings ———
@@ -363,13 +462,13 @@ export async function cmsUpdateBlogDraftFields(draftId: string, fields: BlogDraf
   if (!snap.exists) throw new Error("Entwurf nicht gefunden.");
 
   const baseArticle: Record<string, unknown> = {
-    title: fields.title.trim(),
+    title: normalizeSwissTextField(fields.title),
     slug: fields.slug.trim(),
-    excerpt: fields.excerpt,
-    metaTitle: fields.metaTitle.trim(),
-    metaDescription: fields.metaDescription.trim(),
+    excerpt: normalizeSwissGermanText(fields.excerpt),
+    metaTitle: normalizeSwissTextField(fields.metaTitle),
+    metaDescription: normalizeSwissTextField(fields.metaDescription),
     articleHtml: sanitizeGeneratedBlogHtmlWithoutLinks(fields.articleHtml),
-    researchSummary: fields.researchSummary,
+    researchSummary: normalizeSwissGermanText(fields.researchSummary),
     sources: [],
     updatedAt: FieldValue.serverTimestamp(),
   };
@@ -404,7 +503,7 @@ export async function cmsUpdateBlogDraftFields(draftId: string, fields: BlogDraf
     patch.imageSearchQuery = "Medienbibliothek / Upload";
   }
   if (fields.heroImageAlt !== undefined) {
-    patch.heroImageAlt = fields.heroImageAlt.trim() || null;
+    patch.heroImageAlt = fields.heroImageAlt.trim() ? normalizeSwissGermanText(fields.heroImageAlt.trim()) : null;
   }
   if (fields.heroImageCredit !== undefined) {
     patch.heroImageCredit = fields.heroImageCredit.trim() || null;
@@ -413,7 +512,7 @@ export async function cmsUpdateBlogDraftFields(draftId: string, fields: BlogDraf
   if (fields.heroImageUrl !== undefined || fields.heroImageAlt !== undefined) {
     await syncDraftHeroToSocialPosts(draftId, {
       ...(fields.heroImageUrl !== undefined ? { imageUrl: fields.heroImageUrl } : {}),
-      ...(fields.heroImageAlt !== undefined ? { imageAlt: fields.heroImageAlt } : {}),
+      ...(fields.heroImageAlt !== undefined ? { imageAlt: normalizeSwissGermanText(fields.heroImageAlt) } : {}),
     });
   }
 }
@@ -470,9 +569,9 @@ export async function cmsSetBlogDraftApproved(
 
   const upsert: PostUpsertInput = {
     id: postId,
-    title: String(d.title ?? "").trim(),
+    title: normalizeSwissTextField(d.title),
     slug: slugResult.slug,
-    excerpt: String(d.excerpt ?? ""),
+    excerpt: normalizeSwissGermanText(String(d.excerpt ?? "")),
     body: serializePostBody(cleanArticleHtml),
     heroImagePath: null,
     ...readPublishedHeroFromDraft(d),
@@ -496,7 +595,7 @@ export async function cmsSetBlogDraftApproved(
   const batch = adminDb.batch();
   const now = FieldValue.serverTimestamp();
   const postPayload: Record<string, unknown> = {
-    title: parsed.data.title.trim(),
+    title: normalizeSwissTextField(parsed.data.title),
     slug: parsed.data.slug.trim(),
     status: "scheduled",
     site: parsed.data.site,
@@ -512,20 +611,20 @@ export async function cmsSetBlogDraftApproved(
     heroImagePhotographerUrl: parsed.data.heroImagePhotographerUrl,
     heroImageUnsplashUrl: parsed.data.heroImageUnsplashUrl,
     body: parsed.data.body,
-    excerpt: parsed.data.excerpt,
-    seoTitle: parsed.data.seoTitle,
-    seoDescription: parsed.data.seoDescription,
+    excerpt: normalizeSwissGermanText(parsed.data.excerpt),
+    seoTitle: parsed.data.seoTitle ? normalizeSwissGermanText(parsed.data.seoTitle) : null,
+    seoDescription: parsed.data.seoDescription ? normalizeSwissGermanText(parsed.data.seoDescription) : null,
     publishedAt: scheduledTs,
     updatedAt: now,
   };
   if (!postSnap?.exists) postPayload.createdAt = now;
   batch.set(postRef, postPayload, { merge: true });
   batch.update(ref, {
-    title: parsed.data.title.trim(),
+    title: normalizeSwissTextField(parsed.data.title),
     slug: parsed.data.slug.trim(),
-    excerpt: String(d.excerpt ?? ""),
-    metaTitle: String(d.metaTitle ?? "").trim(),
-    metaDescription: String(d.metaDescription ?? "").trim(),
+    excerpt: normalizeSwissGermanText(String(d.excerpt ?? "")),
+    metaTitle: normalizeSwissTextField(d.metaTitle),
+    metaDescription: normalizeSwissTextField(d.metaDescription),
     articleHtml: cleanArticleHtml,
     sources: [],
     authorId,
@@ -536,19 +635,19 @@ export async function cmsSetBlogDraftApproved(
     updatedAt: now,
   });
 
-  const socialSnap = await adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "==", draftId.trim()).get();
-  for (const socialDoc of socialSnap.docs) {
-    const socialData = socialDoc.data() as Record<string, unknown>;
-    const socialPatch: Record<string, unknown> = {
-      status: "scheduled",
-      updatedAt: now,
-    };
-    if (socialData.socialImageManualOverride !== true) {
-      socialPatch.socialImageUrl = typeof d.heroImageUrl === "string" && d.heroImageUrl.trim() ? d.heroImageUrl.trim() : FieldValue.delete();
-      socialPatch.socialImageAlt = typeof d.heroImageAlt === "string" && d.heroImageAlt.trim() ? d.heroImageAlt.trim() : FieldValue.delete();
-    }
-    batch.update(socialDoc.ref, socialPatch);
-  }
+  await ensureSendableSocialPostForDraft({
+    batch,
+    draftId,
+    draft: {
+      ...d,
+      title: parsed.data.title,
+      heroImageUrl: d.heroImageUrl,
+      heroImageAlt: d.heroImageAlt,
+    },
+    targetStatus: "scheduled",
+    publishedPostId: postId,
+    now,
+  });
 
   await batch.commit();
 
@@ -675,9 +774,9 @@ export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerPa
 
   const upsert: PostUpsertInput = {
     id: postId,
-    title: params.title.trim(),
+    title: normalizeSwissTextField(params.title),
     slug: uniqueSlug,
-    excerpt: params.excerpt,
+    excerpt: normalizeSwissGermanText(params.excerpt),
     body: serializePostBody(sanitizeGeneratedBlogHtmlWithoutLinks(params.articleHtml)),
     heroImagePath: null,
     ...readPublishedHeroFromDraft(draftData),
@@ -700,7 +799,7 @@ export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerPa
 
   const ts = FieldValue.serverTimestamp();
   const payload: Record<string, unknown> = {
-    title: parsed.data.title.trim(),
+    title: normalizeSwissTextField(parsed.data.title),
     slug: parsed.data.slug.trim(),
     status: "published",
     site: parsed.data.site,
@@ -716,9 +815,9 @@ export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerPa
     heroImagePhotographerUrl: parsed.data.heroImagePhotographerUrl,
     heroImageUnsplashUrl: parsed.data.heroImageUnsplashUrl,
     body: parsed.data.body,
-    excerpt: parsed.data.excerpt,
-    seoTitle: parsed.data.seoTitle,
-    seoDescription: parsed.data.seoDescription,
+    excerpt: normalizeSwissGermanText(parsed.data.excerpt),
+    seoTitle: parsed.data.seoTitle ? normalizeSwissGermanText(parsed.data.seoTitle) : null,
+    seoDescription: parsed.data.seoDescription ? normalizeSwissGermanText(parsed.data.seoDescription) : null,
     updatedAt: ts,
     createdAt: ts,
     publishedAt: ts,
@@ -727,13 +826,13 @@ export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerPa
   const batch = adminDb.batch();
   batch.set(postRef, payload);
   batch.update(draftRef, {
-    title: params.title.trim(),
+    title: normalizeSwissTextField(params.title),
     slug: uniqueSlug,
-    excerpt: params.excerpt,
-    metaTitle: params.metaTitle.trim(),
-    metaDescription: params.metaDescription.trim(),
+    excerpt: normalizeSwissGermanText(params.excerpt),
+    metaTitle: normalizeSwissTextField(params.metaTitle),
+    metaDescription: normalizeSwissTextField(params.metaDescription),
     articleHtml: sanitizeGeneratedBlogHtmlWithoutLinks(params.articleHtml),
-    researchSummary: params.researchSummary,
+    researchSummary: normalizeSwissGermanText(params.researchSummary),
     sources: [],
     authorId: parsed.data.authorId,
     status: "published",
@@ -741,8 +840,38 @@ export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerPa
     publishedAt: ts,
     updatedAt: ts,
   });
+  const socialPostIdsToSend = await ensureSendableSocialPostForDraft({
+    batch,
+    draftId: params.draftId,
+    draft: {
+      ...draftData,
+      title: parsed.data.title,
+      heroImageUrl: draftData.heroImageUrl,
+      heroImageAlt: draftData.heroImageAlt,
+    },
+    targetStatus: "published",
+    publishedPostId: postId,
+    now: ts,
+  });
 
   await batch.commit();
+
+  for (const socialPostId of socialPostIdsToSend) {
+    try {
+      const snap = await adminDb.collection(COLLECTIONS.blogSocialPosts).doc(socialPostId).get();
+      if (!snap.exists || snap.get("nuelinkLastSentAt")) continue;
+      await cmsSendBlogSocialPostToNuelink(socialPostId, {
+        target: "linkedin",
+        caption: String(snap.get("linkedinPost") ?? ""),
+        publishMode: "IMMEDIATE",
+      });
+    } catch (e) {
+      await adminDb.collection(COLLECTIONS.blogSocialPosts).doc(socialPostId).update({
+        nuelinkLastError: e instanceof Error ? e.message : "Nuelink-Verbindung fehlgeschlagen.",
+        updatedAt: FieldValue.serverTimestamp(),
+      }).catch(() => undefined);
+    }
+  }
 
   return { postId, slugUsed: uniqueSlug, slugAdjusted: adjusted };
 }
@@ -827,13 +956,13 @@ export async function cmsPatchBlogSocialPost(
   if (!snap.exists) throw new Error("Social-Beitrag nicht gefunden.");
 
   const row: Record<string, unknown> = { updatedAt: FieldValue.serverTimestamp() };
-  if (patch.linkedinPost !== undefined) row.linkedinPost = patch.linkedinPost;
+  if (patch.linkedinPost !== undefined) row.linkedinPost = normalizeSwissGermanText(patch.linkedinPost);
   if (patch.socialImageUrl !== undefined) {
     const imageUrl = patch.socialImageUrl?.trim() || "";
     row.socialImageUrl = imageUrl || FieldValue.delete();
     row.socialImageManualOverride = !!imageUrl;
   }
-  if (patch.socialImageAlt !== undefined) row.socialImageAlt = patch.socialImageAlt?.trim() || FieldValue.delete();
+  if (patch.socialImageAlt !== undefined) row.socialImageAlt = patch.socialImageAlt?.trim() ? normalizeSwissGermanText(patch.socialImageAlt.trim()) : FieldValue.delete();
   if (patch.markUsed === true) {
     row.usedAt = FieldValue.serverTimestamp();
   }
@@ -939,20 +1068,16 @@ export async function cmsPublishDueScheduledPosts(max = 20): Promise<{ published
         updatedAt: FieldValue.serverTimestamp(),
       });
     }
-    const draftIds = draftSnap.docs.map((d) => d.id).slice(0, 10);
-    if (draftIds.length) {
-      const socialSnap = await adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "in", draftIds).get().catch(() => null);
-      if (socialSnap) {
-        for (const socialDoc of socialSnap.docs) {
-          if (!socialDoc.get("nuelinkLastSentAt")) {
-            socialPostIdsToSend.push(socialDoc.id);
-          }
-          batch.update(socialDoc.ref, {
-            status: "published",
-            updatedAt: FieldValue.serverTimestamp(),
-          });
-        }
-      }
+    for (const draftDoc of draftSnap.docs.slice(0, 10)) {
+      const ids = await ensureSendableSocialPostForDraft({
+        batch,
+        draftId: draftDoc.id,
+        draft: draftDoc.data() as Record<string, unknown>,
+        targetStatus: "published",
+        publishedPostId: docSnap.id,
+        now: FieldValue.serverTimestamp(),
+      });
+      socialPostIdsToSend.push(...ids);
     }
   }
 

@@ -55,6 +55,11 @@ const GENERATED_RESIDUE_PATTERN =
 const COMPETITOR_REFERENCE_PATTERN =
   /\b(?:Accenture|Deloitte|PwC|KPMG|EY|Ernst\s*&\s*Young|McKinsey|BCG|Boston\s+Consulting\s+Group|Bain|Capgemini|Bearing\s*Point|BearingPoint|Zühlke|Zuehlke|Swisscom|ELCA|ti\s*&\s*m|ti&amp;m|Adesso|isolutions|Erni|AWK|Wavestone|Synpulse|Implement\s+Consulting\s+Group|Sopra\s+Steria|NTT\s+DATA|Cognizant|Wipro|Infosys|TCS|DXC|EPAM|Gartner|Forrester)\b|https?:\/\/(?:www\.)?(?:accenture|deloitte|pwc|kpmg|ey|mckinsey|bcg|bain|capgemini|bearingpoint|zuehlke|swisscom|elca|ti8m|adesso|isolutions|erni|awk|wavestone|synpulse|implementconsultinggroup|soprasteria|nttdata|cognizant|wipro|infosys|tcs|dxc|epam|gartner|forrester)\.[^\s<")]+/i;
 
+/** Swiss German normalization: Abexis publishes German copy with `ss`, never `ß`. */
+export function normalizeSwissGermanText(value: string): string {
+  return value.replace(/ß/g, "ss").replace(/ẞ/g, "SS");
+}
+
 /**
  * Repairs generated/CMS bodies that were accidentally stored as escaped HTML,
  * e.g. `&lt;section&gt;&lt;p&gt;...`, before the strict sanitizer runs.
@@ -177,14 +182,14 @@ export function cleanGeneratedBlogArticleHtml(html: string): string {
 
   out = stripHtmlBlocksMatching(out, COMPETITOR_REFERENCE_PATTERN);
 
-  return out
+  return normalizeSwissGermanText(out)
     .replace(/[ \t]+\n/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
 
 export function sanitizeBlogHtml(html: string): string {
-  const input = stripHtmlBlocksMatching(removeGeneratedArticleResidue(html), COMPETITOR_REFERENCE_PATTERN);
+  const input = normalizeSwissGermanText(stripHtmlBlocksMatching(removeGeneratedArticleResidue(html), COMPETITOR_REFERENCE_PATTERN));
   try {
     return sanitizeHtmlLib(input, {
       allowedTags: ALLOWED_TAGS,
@@ -219,7 +224,7 @@ export function sanitizeBlogHtml(html: string): string {
 
 /** Generated articles may carry internal Abexis links, but never source/citation links. */
 export function sanitizeGeneratedBlogHtmlWithoutLinks(html: string): string {
-  const input = cleanGeneratedBlogArticleHtml(html);
+  const input = normalizeSwissGermanText(cleanGeneratedBlogArticleHtml(html));
   try {
     return sanitizeHtmlLib(input, {
       allowedTags: ALLOWED_TAGS,
