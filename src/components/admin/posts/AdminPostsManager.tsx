@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CMS_PATHS } from "@/admin/paths";
+import { useCmsAuth } from "@/cms/auth/cms-auth-context";
+import { apiSyncLinkedBlogDraftAfterPostPublish } from "@/cms/services/blog-automation-cms-api-client";
 import { listAuthorsForAdmin, listCategoriesForAdmin } from "@/cms/services/content-lookup-client";
 import type { CategoryOption } from "@/cms/services/content-lookup-client";
 import {
@@ -81,6 +83,7 @@ export function AdminPostsManager() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { user } = useCmsAuth();
 
   const [qLocal, setQLocal] = useState("");
   const [allPosts, setAllPosts] = useState<CmsPostListItem[]>([]);
@@ -157,6 +160,14 @@ export function AdminPostsManager() {
       const parsed = parsePostUpsert(next);
       if (!parsed.success) throw new Error(parsed.error.issues.map((i) => i.message).join(" · "));
       await savePost(parsed.data);
+      if (user) {
+        try {
+          const token = await user.getIdToken();
+          await apiSyncLinkedBlogDraftAfterPostPublish(token, parsed.data.id);
+        } catch {
+          /* Linked draft sync is best-effort. */
+        }
+      }
       await reload();
       setBanner("Beitrag veröffentlicht.");
     } catch (e) {
