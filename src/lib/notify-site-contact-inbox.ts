@@ -6,9 +6,9 @@ const INBOX = siteConfig.emailPrimary;
 /**
  * Sends a copy of public contact / Suchbrief submissions to the site inbox ({@link siteConfig.emailPrimary}).
  *
- * **Formspark:** contact forms post to `FORMSPARK_CONTACT_FORM_ID` when set,
- * otherwise the Abexis contact form `sRnKB4pPD`. Enable Turnstile in that Formspark
- * form and set the matching Cloudflare secret key in the Formspark dashboard.
+ * **Formspark:** contact forms post to `FORMSPARK_CONTACT_FORM_ID`.
+ * Enable Turnstile in that Formspark form and set the matching Cloudflare
+ * secret key in the Formspark dashboard.
  */
 export async function notifySiteContactInbox(opts: {
   type: CmsSubmissionType;
@@ -21,7 +21,10 @@ export async function notifySiteContactInbox(opts: {
   const { payload, fileUrls } = opts;
   const submitterEmail = payload.email?.trim();
 
-  const formsparkId = process.env.FORMSPARK_CONTACT_FORM_ID?.trim() || "sRnKB4pPD";
+  const formsparkId = process.env.FORMSPARK_CONTACT_FORM_ID?.trim();
+  if (!formsparkId) {
+    throw new Error("FORMSPARK_CONTACT_FORM_ID_NOT_CONFIGURED");
+  }
   try {
     const res = await fetch(`https://submit-form.com/${formsparkId}`, {
       method: "POST",

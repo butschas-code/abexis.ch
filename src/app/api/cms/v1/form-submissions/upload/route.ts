@@ -4,7 +4,6 @@ import { getAdminStorage } from "@/firebase/server";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB per file
 const MAX_FILES = 5;
-const SIGNED_URL_EXPIRY_MS = 1000 * 60 * 60 * 24 * 365 * 10; // 10 years (forms archive)
 
 const ALLOWED_MIME = new Set([
   "application/pdf",
@@ -28,7 +27,7 @@ export async function POST(req: Request) {
   const storage = getAdminStorage();
   if (!storage) {
     return NextResponse.json(
-      { error: "CMS_ADMIN_NOT_CONFIGURED", message: "Storage requires Firebase Admin credentials." },
+      { error: "CMS_ADMIN_NOT_CONFIGURED", message: "The upload backend is not configured." },
       { status: 503 },
     );
   }
@@ -91,9 +90,12 @@ export async function POST(req: Request) {
       
       urls.push(publicUrl);
       paths.push(path);
-    } catch (firebaseErr: any) {
-      console.error("Firebase Storage explicit error:", firebaseErr);
-      return NextResponse.json({ error: "UPLOAD_REJECTED", message: firebaseErr?.message || "Unknown Firebase Storage error" }, { status: 500 });
+    } catch (firebaseErr: unknown) {
+      console.error("Firebase Storage upload failed:", firebaseErr);
+      return NextResponse.json(
+        { error: "UPLOAD_REJECTED", message: "The file could not be uploaded." },
+        { status: 500 },
+      );
     }
   }
 

@@ -7,13 +7,13 @@ import { getResolvedPublicDeploymentSite } from "@/public-site/site";
  * Public read model: published posts for the **current deployment’s** site
  * (`NEXT_PUBLIC_CMS_SITE_ID` = `abexis` | `search`), including `site == "both"`.
  *
- * Requires server env: `FIREBASE_PROJECT_ID` + `FIREBASE_SERVICE_ACCOUNT_JSON`.
+ * Requires Firebase Admin credentials on the server.
  */
 export async function GET(req: Request) {
   const db = getAdminFirestore();
   if (!db) {
     return NextResponse.json(
-      { error: "CMS_ADMIN_NOT_CONFIGURED", message: "Set FIREBASE_PROJECT_ID and FIREBASE_SERVICE_ACCOUNT_JSON." },
+      { error: "CMS_ADMIN_NOT_CONFIGURED", message: "The posts backend is not configured." },
       { status: 503 },
     );
   }
@@ -26,7 +26,10 @@ export async function GET(req: Request) {
     const items = await listPublishedPostsFromDb(db, deployment, limit);
     return NextResponse.json({ items });
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Unknown error";
-    return NextResponse.json({ error: "CMS_QUERY_FAILED", message }, { status: 500 });
+    console.error("Published posts query failed:", e);
+    return NextResponse.json(
+      { error: "CMS_QUERY_FAILED", message: "Published posts could not be loaded." },
+      { status: 500 },
+    );
   }
 }

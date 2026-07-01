@@ -70,7 +70,7 @@ export async function POST(req: Request) {
   const db = getAdminFirestore();
   if (!db) {
     return NextResponse.json(
-      { error: "CMS_ADMIN_NOT_CONFIGURED", message: "Set FIREBASE_PROJECT_ID and FIREBASE_SERVICE_ACCOUNT_JSON." },
+      { error: "CMS_ADMIN_NOT_CONFIGURED", message: "The submission backend is not configured." },
       { status: 503 },
     );
   }
@@ -123,34 +123,35 @@ export async function POST(req: Request) {
 
   try {
     if (parsed.data.type === "application") {
-      const formsparkId = process.env.FORMSPARK_APPLICATION_FORM_ID || "WJ0NX6MXO";
-      if (formsparkId) {
-        const res = await fetch(`https://submit-form.com/${formsparkId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            "Job": parsed.data.payload.jobTitle || "Unknown Job",
-            "Job ID": parsed.data.payload.jobId || "N/A",
-            "Job type": parsed.data.payload.jobType || "",
-            "Spontaneous": parsed.data.payload.isSpontaneous || "",
-            "Name": parsed.data.payload.name || "",
-            "Email": parsed.data.payload.email || "",
-            "Phone": parsed.data.payload.phone || "",
-            "Message": parsed.data.payload.message || "",
-            "CV / Files": parsed.data.fileUrls?.join("\n") || "Keine Dateien hochgeladen",
-            ...(turnstileToken ? { "cf-turnstile-response": turnstileToken } : {}),
-            "_email.from": parsed.data.payload.name || "",
-            "_email.subject": `Neue Bewerbung: ${parsed.data.payload.jobTitle || "Vakanz"}`,
-          }),
-        });
-        if (!res.ok) {
-          const err = await res.text().catch(() => "");
-          console.error("Formspark send error:", res.status, err);
-          throw new Error("FORMSPARK_APPLICATION_FAILED");
-        }
+      const formsparkId = process.env.FORMSPARK_APPLICATION_FORM_ID?.trim();
+      if (!formsparkId) {
+        throw new Error("FORMSPARK_APPLICATION_FORM_ID_NOT_CONFIGURED");
+      }
+      const res = await fetch(`https://submit-form.com/${formsparkId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          "Job": parsed.data.payload.jobTitle || "Unknown Job",
+          "Job ID": parsed.data.payload.jobId || "N/A",
+          "Job type": parsed.data.payload.jobType || "",
+          "Spontaneous": parsed.data.payload.isSpontaneous || "",
+          "Name": parsed.data.payload.name || "",
+          "Email": parsed.data.payload.email || "",
+          "Phone": parsed.data.payload.phone || "",
+          "Message": parsed.data.payload.message || "",
+          "CV / Files": parsed.data.fileUrls?.join("\n") || "Keine Dateien hochgeladen",
+          ...(turnstileToken ? { "cf-turnstile-response": turnstileToken } : {}),
+          "_email.from": parsed.data.payload.name || "",
+          "_email.subject": `Neue Bewerbung: ${parsed.data.payload.jobTitle || "Vakanz"}`,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.text().catch(() => "");
+        console.error("Formspark send error:", res.status, err);
+        throw new Error("FORMSPARK_APPLICATION_FAILED");
       }
     }
 
@@ -175,7 +176,10 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ id: ref.id }, { status: 201 });
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Unknown error";
-    return NextResponse.json({ error: "CMS_WRITE_FAILED", message }, { status: 500 });
+    console.error("Submission intake failed:", e);
+    return NextResponse.json(
+      { error: "CMS_WRITE_FAILED", message: "The submission could not be processed." },
+      { status: 500 },
+    );
   }
 }

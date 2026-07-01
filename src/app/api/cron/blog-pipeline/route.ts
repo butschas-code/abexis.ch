@@ -10,7 +10,7 @@ export const runtime = "nodejs";
 export async function GET(req: Request) {
   const secret = process.env.CRON_SECRET?.trim();
   if (!secret) {
-    return NextResponse.json({ ok: false, error: "CRON_SECRET is not configured." }, { status: 503 });
+    return NextResponse.json({ ok: false, error: "Cron authentication is not configured." }, { status: 503 });
   }
 
   const auth = req.headers.get("authorization")?.trim();
@@ -23,7 +23,7 @@ export async function GET(req: Request) {
     const status = result.ok ? 200 : 500;
     return NextResponse.json({ ok: result.ok, result }, { status });
   } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    console.error("Blog pipeline cron failed:", e);
+    return NextResponse.json({ ok: false, error: "Cron job failed." }, { status: 500 });
   }
 }

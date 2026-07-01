@@ -22,8 +22,7 @@ export async function GET(req: Request) {
     return NextResponse.json(
       {
         error: "SERVER_MISCONFIG",
-        message:
-          "Set FIREBASE_WEB_API_KEY (server-only, same value as the Firebase Web API key) or NEXT_PUBLIC_FIREBASE_API_KEY.",
+        message: "Token verification is not configured.",
       },
       { status: 500 },
     );

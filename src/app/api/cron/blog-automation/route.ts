@@ -15,8 +15,8 @@ export async function GET(_req: Request) {
       {
         success: false,
         action: "error",
-        reason: "CRON_SECRET is not configured.",
-        error: "CRON_SECRET is not configured.",
+        reason: "Cron authentication is not configured.",
+        error: "Cron authentication is not configured.",
       },
       { status: 503 },
     );
@@ -28,7 +28,7 @@ export async function GET(_req: Request) {
       {
         success: false,
         action: "unauthorized",
-        reason: "Authorization header must be Bearer CRON_SECRET.",
+        reason: "Unauthorized.",
         error: "Unauthorized.",
       },
       { status: 401 },
@@ -69,13 +69,13 @@ export async function GET(_req: Request) {
       ...(result.draftId ? { draftId: result.draftId } : {}),
     });
   } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
+    console.error("Blog automation cron failed:", e);
     return NextResponse.json(
       {
         success: false,
         action: "error",
-        reason: message,
-        error: message,
+        reason: "Cron job failed.",
+        error: "Cron job failed.",
       },
       { status: 500 },
     );
