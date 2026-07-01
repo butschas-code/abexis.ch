@@ -10,6 +10,7 @@ import {
 import type { BlogSocialListItem } from "@/cms/services/blog-pipeline-types";
 import { recordMediaAsset } from "@/cms/services/media-client";
 import { AdminFileUpload } from "@/components/admin/AdminFileUpload";
+import { LinkedInPostEditor } from "@/components/admin/LinkedInPostEditor";
 import {
   adminBody,
   adminBtnGhost,
@@ -311,10 +312,7 @@ function BlogSocialPostCard(props: {
         </div>
       </div>
 
-      <label className="block space-y-2">
-        <span className="text-[14px] font-medium text-[var(--apple-text)]">LinkedIn</span>
-        <textarea className={`${adminInput} min-h-[140px]`} value={linkedinPost} onChange={(e) => setLinkedinPost(e.target.value)} />
-      </label>
+      <LinkedInPostEditor value={linkedinPost} onChange={setLinkedinPost} imageUrl={socialImageUrl} />
     </div>
   );
 }

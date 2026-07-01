@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { parsePostUpsert } from "@/cms/schema";
+import { apiSyncLinkedBlogDraftAfterPostPublish } from "@/cms/services/blog-automation-cms-api-client";
+import { useCmsAuth } from "@/cms/auth/cms-auth-context";
 import {
   listAuthorsForAdmin,
   listCategoriesForAdmin,
@@ -121,6 +123,7 @@ function isLikelyHttpUrl(s: string): boolean {
 
 export function PostForm({ mode, postId }: { mode: Mode; postId: string }) {
   const router = useRouter();
+  const { user } = useCmsAuth();
   const [loading, setLoading] = useState(mode === "edit");
   const [saving, setSaving] = useState(false);
   const [autosaving, setAutosaving] = useState(false);
@@ -290,6 +293,14 @@ const slugPreview = useMemo(() => input.slug.trim() || "(slug)", [input.slug]);
       }
 
       await savePost(parsed.data);
+      if (parsed.data.status === "published" && user) {
+        try {
+          const token = await user.getIdToken();
+          await apiSyncLinkedBlogDraftAfterPostPublish(token, parsed.data.id);
+        } catch {
+          /* Linked draft sync is best-effort; the post publish already succeeded. */
+        }
+      }
       setInput(parsed.data);
       if ((status === "published" || status === "scheduled") && parsed.data.publishedAt) {
         setPublishSchedule(toDatetimeLocalValue(parsed.data.publishedAt));

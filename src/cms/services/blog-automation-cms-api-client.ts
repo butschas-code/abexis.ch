@@ -254,3 +254,12 @@ export async function apiSendBlogSocialPostToNuelink(
     body: JSON.stringify(body),
   });
 }
+
+export async function apiSyncLinkedBlogDraftAfterPostPublish(
+  idToken: string,
+  postId: string,
+): Promise<{ synced: boolean; draftIds: string[] }> {
+  return cmsBlogAutomationFetch(idToken, `/posts/${encodeURIComponent(postId)}/sync-published`, {
+    method: "POST",
+  });
+}

@@ -32,6 +32,7 @@ import {
   adminSectionLabel,
 } from "@/components/admin/admin-ui";
 import { BlogAutomationDraftSocialPosts } from "@/components/admin/blog-automation/BlogAutomationDraftSocialPosts";
+import { BlogDraftArticleEditor } from "@/components/admin/blog-automation/BlogDraftArticleEditor";
 import { AdminFileUpload } from "@/components/admin/AdminFileUpload";
 import { AdminLoading } from "@/components/admin/AdminLoading";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
@@ -120,7 +121,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
   const [unsplashResults, setUnsplashResults] = useState<UnsplashPhotoBrief[]>([]);
   const [unsplashBusy, setUnsplashBusy] = useState(false);
   const [heroPickerOpen, setHeroPickerOpen] = useState(false);
-  const [articleMode, setArticleMode] = useState<"preview" | "html">("preview");
+  const [articleMode, setArticleMode] = useState<"visual" | "html">("visual");
   const [mediaRows, setMediaRows] = useState<MediaAssetListItem[]>([]);
   const [mediaBusy, setMediaBusy] = useState(false);
   const [mediaLibraryOpen, setMediaLibraryOpen] = useState(false);
@@ -855,11 +856,11 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
             <button
               type="button"
               className={`rounded-full px-3 py-1.5 text-[13px] font-semibold transition ${
-                articleMode === "preview" ? "bg-[var(--brand-900)] text-white" : "text-[var(--apple-text-secondary)] hover:text-[var(--apple-text)]"
+                articleMode === "visual" ? "bg-[var(--brand-900)] text-white" : "text-[var(--apple-text-secondary)] hover:text-[var(--apple-text)]"
               }`}
-              onClick={() => setArticleMode("preview")}
+              onClick={() => setArticleMode("visual")}
             >
-              Lesen
+              Bearbeiten
             </button>
             <button
               type="button"
@@ -872,13 +873,14 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
             </button>
           </div>
         </div>
-        {articleMode === "preview" ? (
-          <div className={`${adminPanel} p-6 sm:p-8`}>
-            <div
-              className="article-detail-prose blog-prose legacy-prose max-w-none text-[1rem] leading-[1.75]"
-              dangerouslySetInnerHTML={{ __html: articlePreviewHtml }}
-            />
-          </div>
+        {articleMode === "visual" ? (
+          <BlogDraftArticleEditor
+            value={form.articleHtml}
+            onChange={(html) => patchForm({ articleHtml: html })}
+            readOnly={readOnly}
+            previewHtml={articlePreviewHtml}
+            uploadPath={`cms/media/blog-drafts/${draftId}/body`}
+          />
         ) : (
           <textarea
             readOnly={readOnly}

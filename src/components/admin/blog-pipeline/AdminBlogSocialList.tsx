@@ -24,6 +24,7 @@ import {
   adminPanelInset,
   adminPill,
 } from "@/components/admin/admin-ui";
+import { LinkedInPostEditor } from "@/components/admin/LinkedInPostEditor";
 
 function formatWhen(iso: string | null) {
   if (!iso) return "—";
@@ -266,7 +267,7 @@ function SocialRowCard(props: {
         <p className="mt-4 text-sm font-medium text-emerald-900">An Nuelink übergeben · {formatWhen(row.nuelinkLastSentAt)}</p>
       ) : null}
       <div className="mt-5 grid gap-6">
-        <PostBlock label="LinkedIn" body={linkedinPost} onChange={setLinkedinPost} />
+        <LinkedInPostEditor value={linkedinPost} onChange={setLinkedinPost} imageUrl={socialImageUrl} />
         <div className="grid gap-4 rounded-xl border border-black/[0.06] bg-white/70 p-4 md:grid-cols-[minmax(220px,320px)_1fr]">
           <div className="overflow-hidden rounded-lg border border-black/[0.08] bg-[var(--apple-bg-subtle)]">
             {socialImageUrl.trim() ? (
@@ -326,18 +327,5 @@ function SocialRowCard(props: {
         </div>
       </div>
     </article>
-  );
-}
-
-function PostBlock({ label, body, onChange }: { label: string; body: string; onChange: (value: string) => void }) {
-  return (
-    <div>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--apple-text-tertiary)]">{label}</p>
-      <textarea
-        className="mt-2 min-h-[180px] w-full resize-y rounded-xl border border-black/[0.08] bg-[var(--apple-bg)] p-3 text-sm leading-relaxed text-[var(--apple-text)]"
-        value={body}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    </div>
   );
 }

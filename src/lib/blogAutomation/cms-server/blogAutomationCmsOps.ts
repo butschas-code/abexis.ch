@@ -1,6 +1,6 @@
 import "server-only";
 
-import { FieldValue, Timestamp, type WriteBatch } from "firebase-admin/firestore";
+import { FieldValue, Timestamp, type DocumentSnapshot, type QueryDocumentSnapshot, type WriteBatch } from "firebase-admin/firestore";
 import { DateTime } from "luxon";
 
 import { parsePostUpsert } from "@/cms/schema";
@@ -134,11 +134,81 @@ function mapDraftDetail(id: string, d: Record<string, unknown>): BlogDraftDetail
   };
 }
 
-async function allocateUniquePublishedSlug(baseSlug: string): Promise<{ slug: string; adjusted: boolean }> {
+async function allocateUniquePublishedSlug(
+  baseSlug: string,
+  excludePostId?: string,
+): Promise<{ slug: string; adjusted: boolean }> {
   const normalized = baseSlug.trim().toLowerCase() || `post-${Date.now().toString(36)}`;
   const existing = await adminDb.collection(COLLECTIONS.posts).where("slug", "==", normalized).limit(1).get();
   if (existing.empty) return { slug: normalized, adjusted: false };
+  const exclude = excludePostId?.trim();
+  if (exclude && existing.docs[0]?.id === exclude) return { slug: normalized, adjusted: false };
   return { slug: `${normalized}-${Date.now().toString(36)}`, adjusted: true };
+}
+
+/** When a linked CMS post is already live but the draft still shows as approved (e.g. manual publish). */
+async function reconcileStaleApprovedDrafts(
+  docs: Array<QueryDocumentSnapshot | DocumentSnapshot>,
+): Promise<Map<string, string>> {
+  const updated = new Map<string, string>();
+  const batch = adminDb.batch();
+  let pending = 0;
+
+  for (const draftDoc of docs) {
+    if (!draftDoc.exists) continue;
+    const status = String(draftDoc.get("status") ?? "");
+    const postId = typeof draftDoc.get("publishedPostId") === "string" ? draftDoc.get("publishedPostId").trim() : "";
+    if (!postId || status !== "approved") continue;
+
+    const postSnap = await adminDb.collection(COLLECTIONS.posts).doc(postId).get();
+    if (!postSnap.exists || postSnap.get("status") !== "published") continue;
+
+    batch.update(draftDoc.ref, {
+      status: "published",
+      publishedAt: postSnap.get("publishedAt") ?? FieldValue.serverTimestamp(),
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+    updated.set(draftDoc.id, "published");
+    pending += 1;
+  }
+
+  if (pending > 0) await batch.commit();
+  return updated;
+}
+
+export async function cmsSyncLinkedBlogDraftAfterPostPublish(
+  postId: string,
+): Promise<{ synced: boolean; draftIds: string[] }> {
+  const trimmed = postId.trim();
+  if (!trimmed) return { synced: false, draftIds: [] };
+
+  const postSnap = await adminDb.collection(COLLECTIONS.posts).doc(trimmed).get();
+  if (!postSnap.exists || postSnap.get("status") !== "published") {
+    return { synced: false, draftIds: [] };
+  }
+
+  const draftSnap = await adminDb
+    .collection(COLLECTIONS.blogDrafts)
+    .where("publishedPostId", "==", trimmed)
+    .limit(10)
+    .get();
+  if (draftSnap.empty) return { synced: false, draftIds: [] };
+
+  const batch = adminDb.batch();
+  const draftIds: string[] = [];
+  for (const draftDoc of draftSnap.docs) {
+    if (draftDoc.get("status") === "published") continue;
+    batch.update(draftDoc.ref, {
+      status: "published",
+      publishedAt: postSnap.get("publishedAt") ?? FieldValue.serverTimestamp(),
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+    draftIds.push(draftDoc.id);
+  }
+
+  if (draftIds.length === 0) return { synced: false, draftIds: [] };
+  await batch.commit();
+  return { synced: true, draftIds };
 }
 
 function parsePreferredTime(preferredTime: string): { hour: number; minute: number } {
@@ -447,13 +517,21 @@ export async function cmsDeleteBlogTopic(topicId: string): Promise<void> {
 
 export async function cmsListBlogDraftsForAdmin(max = 120): Promise<BlogDraftListItem[]> {
   const snap = await adminDb.collection(COLLECTIONS.blogDrafts).orderBy("createdAt", "desc").limit(max).get();
-  return snap.docs.map((d) => mapDraftList(d.id, d.data() as Record<string, unknown>));
+  const statusOverrides = await reconcileStaleApprovedDrafts(snap.docs);
+  return snap.docs.map((d) => {
+    const item = mapDraftList(d.id, d.data() as Record<string, unknown>);
+    const override = statusOverrides.get(d.id);
+    return override ? { ...item, status: override } : item;
+  });
 }
 
 export async function cmsGetBlogDraftForAdmin(id: string): Promise<BlogDraftDetail | null> {
   const snap = await adminDb.collection(COLLECTIONS.blogDrafts).doc(id.trim()).get();
   if (!snap.exists) return null;
-  return mapDraftDetail(snap.id, snap.data() as Record<string, unknown>);
+  const statusOverrides = await reconcileStaleApprovedDrafts([snap]);
+  const detail = mapDraftDetail(snap.id, snap.data() as Record<string, unknown>);
+  const override = statusOverrides.get(snap.id);
+  return override ? { ...detail, status: override } : detail;
 }
 
 export async function cmsUpdateBlogDraftFields(draftId: string, fields: BlogDraftEditableFields): Promise<void> {
@@ -770,10 +848,19 @@ export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerPa
     throw new Error("Dieser Entwurf ist bereits veröffentlicht.");
   }
 
-  const { slug: uniqueSlug, adjusted } = await allocateUniquePublishedSlug(params.slug);
-
-  const postId = adminDb.collection(COLLECTIONS.posts).doc().id;
+  const existingPostId =
+    typeof draftData.publishedPostId === "string" && draftData.publishedPostId.trim()
+      ? draftData.publishedPostId.trim()
+      : "";
+  const reusingScheduledPost = Boolean(existingPostId);
+  const postId = existingPostId || adminDb.collection(COLLECTIONS.posts).doc().id;
   const postRef = adminDb.collection(COLLECTIONS.posts).doc(postId);
+  const existingPostSnap = reusingScheduledPost ? await postRef.get() : null;
+
+  const { slug: uniqueSlug, adjusted } =
+    reusingScheduledPost && existingPostSnap?.exists
+      ? await allocateUniquePublishedSlug(params.slug, postId)
+      : await allocateUniquePublishedSlug(params.slug);
 
   const seoTitle = params.metaTitle.trim() ? params.metaTitle.trim() : null;
   const seoDescription = params.metaDescription.trim() ? params.metaDescription.trim() : null;
@@ -825,12 +912,14 @@ export async function cmsPublishBlogDraftToPost(params: PublishBlogDraftServerPa
     seoTitle: parsed.data.seoTitle ? normalizeSwissGermanText(parsed.data.seoTitle) : null,
     seoDescription: parsed.data.seoDescription ? normalizeSwissGermanText(parsed.data.seoDescription) : null,
     updatedAt: ts,
-    createdAt: ts,
     publishedAt: ts,
   };
+  if (!reusingScheduledPost || !existingPostSnap?.exists) {
+    payload.createdAt = ts;
+  }
 
   const batch = adminDb.batch();
-  batch.set(postRef, payload);
+  batch.set(postRef, payload, { merge: true });
   batch.update(draftRef, {
     title: normalizeSwissTextField(params.title),
     slug: uniqueSlug,
