@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { CMS_PATHS } from "@/admin/paths";
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
 import {
+  apiDeleteBlogSocialPost,
   apiListBlogSocialPostsForAdmin,
   apiPatchBlogSocialPost,
   apiSendBlogSocialPostToNuelink,
@@ -15,6 +16,7 @@ import { AdminLoading } from "@/components/admin/AdminLoading";
 import { AdminPageContainer, AdminPageHeader, AdminPageSection } from "@/components/admin/AdminPageContainer";
 import {
   adminBtnPrimary,
+  adminBtnGhost,
   adminBtnSecondary,
   adminFeedbackError,
   adminFeedbackSuccess,
@@ -211,6 +213,29 @@ function SocialRowCard(props: {
     }
   }
 
+  async function deleteSocialPost() {
+    if (!user) return;
+    const ok = window.confirm(
+      row.blogDraftExists
+        ? "Diesen LinkedIn-Entwurf löschen? Der Blog-Entwurf bleibt erhalten."
+        : "Diesen verwaisten LinkedIn-Entwurf löschen? Es gibt keinen zugehörigen Blog-Entwurf mehr.",
+    );
+    if (!ok) return;
+    setBusy(true);
+    onError(null);
+    onFlash(null);
+    try {
+      const token = await user.getIdToken();
+      await apiDeleteBlogSocialPost(token, row.id);
+      onFlash("Social-Entwurf gelöscht.");
+      await onRefresh();
+    } catch (e) {
+      onError(e instanceof Error ? e.message : "Löschen fehlgeschlagen.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <article className={`rounded-2xl ${adminPanelInset} shadow-[0_1px_0_rgba(0,0,0,0.04)]`}>
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] pb-4">
@@ -219,13 +244,24 @@ function SocialRowCard(props: {
           <span className="mx-2 text-[var(--apple-text-tertiary)]">·</span>
           <span className={adminPill}>{row.status}</span>
         </div>
-        <Link
-          href={CMS_PATHS.adminBlogPipelineDraft(row.blogDraftId)}
-          className="text-sm font-medium text-[var(--brand-900)] underline-offset-4 hover:underline"
-        >
-          Zugehöriger Blog-Entwurf
-        </Link>
+        {row.blogDraftExists ? (
+          <Link
+            href={CMS_PATHS.adminBlogPipelineDraft(row.blogDraftId)}
+            className="text-sm font-medium text-[var(--brand-900)] underline-offset-4 hover:underline"
+          >
+            Zugehöriger Blog-Entwurf
+          </Link>
+        ) : (
+          <span className="rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-950 ring-1 ring-amber-200">
+            Blog-Entwurf wurde gelöscht
+          </span>
+        )}
       </div>
+      {!row.blogDraftExists ? (
+        <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-950">
+          Dieser LinkedIn-Entwurf ist verwaist. Er gehört zu einem KI-Blogentwurf, der bereits gelöscht wurde.
+        </div>
+      ) : null}
       {row.nuelinkLastSentAt ? (
         <p className="mt-4 text-sm font-medium text-emerald-900">An Nuelink übergeben · {formatWhen(row.nuelinkLastSentAt)}</p>
       ) : null}
@@ -272,6 +308,9 @@ function SocialRowCard(props: {
             Sendet Text, Blog-Link und Bild an die Abexis Collection «Global Queue» in Nuelink.
           </p>
           <div className="flex flex-wrap gap-2">
+            <button type="button" className={`${adminBtnGhost} text-[13px] text-red-700`} disabled={busy} onClick={() => void deleteSocialPost()}>
+              Löschen
+            </button>
             <button type="button" className={`${adminBtnSecondary} text-[13px]`} disabled={busy} onClick={() => void save()}>
               Speichern
             </button>

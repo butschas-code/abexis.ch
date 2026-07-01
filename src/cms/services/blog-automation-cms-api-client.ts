@@ -238,6 +238,12 @@ export async function apiPatchBlogSocialPost(
   });
 }
 
+export async function apiDeleteBlogSocialPost(idToken: string, socialPostId: string): Promise<void> {
+  await cmsBlogAutomationFetch(idToken, `/social/${encodeURIComponent(socialPostId)}`, {
+    method: "DELETE",
+  });
+}
+
 export async function apiSendBlogSocialPostToNuelink(
   idToken: string,
   socialPostId: string,

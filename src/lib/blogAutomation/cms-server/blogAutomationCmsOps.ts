@@ -674,7 +674,13 @@ export async function cmsDeleteBlogDraft(draftId: string): Promise<void> {
   const ref = adminDb.collection(COLLECTIONS.blogDrafts).doc(draftId.trim());
   const snap = await ref.get();
   if (!snap.exists) throw new Error("Entwurf nicht gefunden.");
-  await ref.delete();
+  const socialSnap = await adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "==", draftId.trim()).get();
+  const batch = adminDb.batch();
+  batch.delete(ref);
+  for (const socialDoc of socialSnap.docs) {
+    batch.delete(socialDoc.ref);
+  }
+  await batch.commit();
 }
 
 /** Server-side Unsplash search for draft hero picker (access key stays on server). */
@@ -900,6 +906,7 @@ function mapSocialListItem(
     socialImageUrl: nu(d.socialImageUrl) ?? blogHeroImageUrl,
     socialImageAlt: nu(d.socialImageAlt) ?? blogHeroImageAlt,
     socialImageManualOverride: d.socialImageManualOverride === true,
+    blogDraftExists: draft != null,
     blogHeroImageUrl,
     blogHeroImageAlt,
     createdAt: toIso(d.createdAt),
@@ -967,6 +974,13 @@ export async function cmsPatchBlogSocialPost(
     row.usedAt = FieldValue.serverTimestamp();
   }
   await ref.update(row);
+}
+
+export async function cmsDeleteBlogSocialPost(socialPostId: string): Promise<void> {
+  const ref = adminDb.collection(COLLECTIONS.blogSocialPosts).doc(socialPostId.trim());
+  const snap = await ref.get();
+  if (!snap.exists) throw new Error("Social-Beitrag nicht gefunden.");
+  await ref.delete();
 }
 
 export async function cmsSendBlogSocialPostToNuelink(

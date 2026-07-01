@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
 import {
+  apiDeleteBlogSocialPost,
   apiPatchBlogSocialPost,
 } from "@/cms/services/blog-automation-cms-api-client";
 import type { BlogSocialListItem } from "@/cms/services/blog-pipeline-types";
@@ -198,6 +199,22 @@ function BlogSocialPostCard(props: {
     }
   }, [getToken, onFlashError, onFlashSuccess, onRefresh, row.id]);
 
+  const onDelete = useCallback(async () => {
+    const ok = window.confirm("Diesen LinkedIn-Entwurf löschen? Der Blog-Entwurf bleibt erhalten.");
+    if (!ok) return;
+    setBusy(true);
+    try {
+      const token = await getToken();
+      await apiDeleteBlogSocialPost(token, row.id);
+      onFlashSuccess("Social-Entwurf gelöscht.");
+      await onRefresh();
+    } catch (e) {
+      onFlashError(e instanceof Error ? e.message : "Löschen fehlgeschlagen.");
+    } finally {
+      setBusy(false);
+    }
+  }, [getToken, onFlashError, onFlashSuccess, onRefresh, row.id]);
+
   const onUploadSocialImage = useCallback(
     async (url: string, meta: { storagePath: string; file: File }) => {
       try {
@@ -240,6 +257,9 @@ function BlogSocialPostCard(props: {
           </button>
           <button type="button" className={`${adminBtnGhost} text-[13px]`} disabled={busy || !user} onClick={() => void onMarkUsed()}>
             Als verwendet markieren
+          </button>
+          <button type="button" className={`${adminBtnGhost} text-[13px] text-red-700`} disabled={busy || !user} onClick={() => void onDelete()}>
+            Löschen
           </button>
         </div>
       </div>

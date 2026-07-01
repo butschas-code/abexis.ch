@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { requireCmsManagePosts } from "@/cms/auth/require-cms-manage-posts";
-import { cmsPatchBlogSocialPost } from "@/lib/blogAutomation/cms-server/blogAutomationCmsOps";
+import { cmsDeleteBlogSocialPost, cmsPatchBlogSocialPost } from "@/lib/blogAutomation/cms-server/blogAutomationCmsOps";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +27,20 @@ export async function PATCH(req: Request, ctx: RouteContext) {
     return NextResponse.json({ ok: true });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Speichern fehlgeschlagen.";
+    const status = message.includes("nicht gefunden") ? 404 : 400;
+    return NextResponse.json({ error: "BAD_REQUEST", message }, { status });
+  }
+}
+
+export async function DELETE(req: Request, ctx: RouteContext) {
+  const auth = await requireCmsManagePosts(req);
+  if (auth instanceof NextResponse) return auth;
+  const { id } = await ctx.params;
+  try {
+    await cmsDeleteBlogSocialPost(id);
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    const message = e instanceof Error ? e.message : "Löschen fehlgeschlagen.";
     const status = message.includes("nicht gefunden") ? 404 : 400;
     return NextResponse.json({ error: "BAD_REQUEST", message }, { status });
   }

@@ -40,6 +40,7 @@ export type BlogSocialListItem = {
   socialImageUrl: string | null;
   socialImageAlt: string | null;
   socialImageManualOverride: boolean;
+  blogDraftExists: boolean;
   blogHeroImageUrl: string | null;
   blogHeroImageAlt: string | null;
   createdAt: string | null;
