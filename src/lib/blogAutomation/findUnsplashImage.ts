@@ -10,6 +10,7 @@ import type { UnsplashPhotoBrief } from "@/lib/blogAutomation/unsplash-photo-typ
  */
 
 const SEARCH_URL = "https://api.unsplash.com/search/photos";
+const CMS_PICKER_RESULTS_PER_SEARCH = 24;
 
 /** Token-kitsch cues we penalise when ranking results for Swiss editorial tone. */
 const CHEESY_SUBSTRINGS = [
@@ -151,7 +152,7 @@ async function fetchSearchPage(query: string): Promise<UnsplashPhotoBrief[]> {
   const params = new URLSearchParams({
     query: query.trim(),
     orientation: "landscape",
-    per_page: "10",
+    per_page: String(CMS_PICKER_RESULTS_PER_SEARCH),
     content_filter: "high",
   });
 

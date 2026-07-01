@@ -123,6 +123,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
   const [articleMode, setArticleMode] = useState<"preview" | "html">("preview");
   const [mediaRows, setMediaRows] = useState<MediaAssetListItem[]>([]);
   const [mediaBusy, setMediaBusy] = useState(false);
+  const [mediaLibraryOpen, setMediaLibraryOpen] = useState(false);
 
   const reload = useCallback(async () => {
     if (!user) return;
@@ -149,6 +150,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
         setForm(null);
         setUnsplashQuery("");
         setUnsplashResults([]);
+        setMediaLibraryOpen(false);
         setMediaRows([]);
       }
     } catch {
@@ -157,6 +159,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
       setSocialRows([]);
       setUnsplashQuery("");
       setUnsplashResults([]);
+      setMediaLibraryOpen(false);
       setMediaRows([]);
     }
   }, [draftId, user]);
@@ -364,6 +367,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
   }, [collectEditable, draftId, form, readOnly, reload, user]);
 
   const loadMedia = useCallback(async () => {
+    setMediaLibraryOpen(true);
     setMediaBusy(true);
     try {
       const rows = await listMediaAssets(80);
@@ -629,7 +633,9 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
               </label>
 
               {unsplashResults.length ? (
-                <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="space-y-3">
+                  <p className={`${adminBody} text-[13px]`}>{unsplashResults.length} Bilder gefunden. Wählen Sie ein Titelbild aus.</p>
+                  <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {unsplashResults.map((ph) => (
                     <li key={ph.id} className="flex flex-col gap-2 rounded-xl border border-black/[0.06] bg-white p-3 shadow-sm">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -644,7 +650,8 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
                       </button>
                     </li>
                   ))}
-                </ul>
+                  </ul>
+                </div>
               ) : null}
 
               <div className="border-t border-black/[0.06] pt-4">
@@ -667,10 +674,15 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
                     disabled={mediaBusy}
                     onClick={() => void loadMedia()}
                   >
-                    {mediaBusy ? "Medien werden geladen …" : "Medienbibliothek anzeigen"}
+                    {mediaBusy ? "Medien werden geladen …" : mediaLibraryOpen ? "Medienbibliothek aktualisieren" : "Medienbibliothek anzeigen"}
                   </button>
                 </div>
-                {mediaRows.length ? (
+                {mediaLibraryOpen ? (
+                  mediaBusy ? (
+                    <div className={`mt-4 rounded-xl border border-black/[0.06] bg-white/70 px-4 py-5 ${adminBody} text-[13px]`}>
+                      Medien werden geladen …
+                    </div>
+                  ) : mediaRows.length ? (
                   <ul className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {mediaRows.map((asset) => (
                       <li key={asset.id} className="flex flex-col gap-2 rounded-xl border border-black/[0.06] bg-white p-3 shadow-sm">
@@ -688,6 +700,11 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
                       </li>
                     ))}
                   </ul>
+                  ) : (
+                    <div className={`mt-4 rounded-xl border border-black/[0.06] bg-white/70 px-4 py-5 ${adminBody} text-[13px]`}>
+                      Keine Bilder in der Medienbibliothek gefunden. Laden Sie ein neues Bild hoch oder suchen Sie über Unsplash.
+                    </div>
+                  )
                 ) : null}
               </div>
             </div>
