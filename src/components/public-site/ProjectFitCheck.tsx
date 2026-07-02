@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { PageHero } from "@/components/site/PageHero";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
@@ -448,7 +449,7 @@ function ProcessTimelineVisual({ steps }: { steps: readonly TimelineStep[] }) {
 
 // ─── Page component ───────────────────────────────────────────────────────────
 
-export function ProjectFitCheck({ locale = "de" }: { locale?: "de" | "en" }) {
+export function ProjectFitCheck({ locale = "de", afterHero }: { locale?: "de" | "en"; afterHero?: ReactNode }) {
   const isEnglish = locale === "en";
   const c = isEnglish
     ? prcCopyEn
@@ -571,6 +572,8 @@ export function ProjectFitCheck({ locale = "de" }: { locale?: "de" | "en" }) {
           </Link>
         </div>
       </PageHero>
+
+      {afterHero}
 
       {/* ── 2. WARNSIGNALE ───────────────────────────────────────────────── */}
       <MotionSection className="relative overflow-hidden">

@@ -1,5 +1,6 @@
 import { ProjectFitCheck } from "@/components/public-site/ProjectFitCheck";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { ProjectSelfTest } from "@/components/project-reality-check/ProjectSelfTest";
 
 export const metadata = {
   title: "Project Reality Check | Abexis",
@@ -20,7 +21,7 @@ export default function ProjectRealityCheckPage() {
           { name: "Project Reality Check", url: "/projectrealitycheck" },
         ]}
       />
-      <ProjectFitCheck />
+      <ProjectFitCheck afterHero={<ProjectSelfTest />} />
     </>
   );
 }
