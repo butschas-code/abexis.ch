@@ -23,7 +23,7 @@ import {
   type AutomationScheduleSettings,
   type RunAggRow,
 } from "@/lib/blogAutomation/schedulingSimulation";
-import { serializePostBody } from "@/lib/cms/post-body-storage";
+import { parsePostBody, serializePostBody } from "@/lib/cms/post-body-storage";
 import {
   normalizeEscapedBlogHtml,
   normalizeSwissGermanText,
@@ -178,37 +178,97 @@ async function reconcileStaleApprovedDrafts(
 
 export async function cmsSyncLinkedBlogDraftAfterPostPublish(
   postId: string,
-): Promise<{ synced: boolean; draftIds: string[] }> {
+): Promise<{ synced: boolean; draftIds: string[]; socialPostIds: string[] }> {
   const trimmed = postId.trim();
-  if (!trimmed) return { synced: false, draftIds: [] };
+  if (!trimmed) return { synced: false, draftIds: [], socialPostIds: [] };
 
   const postSnap = await adminDb.collection(COLLECTIONS.posts).doc(trimmed).get();
   if (!postSnap.exists || postSnap.get("status") !== "published") {
-    return { synced: false, draftIds: [] };
+    return { synced: false, draftIds: [], socialPostIds: [] };
   }
+  const post = postSnap.data() as Record<string, unknown>;
 
   const draftSnap = await adminDb
     .collection(COLLECTIONS.blogDrafts)
     .where("publishedPostId", "==", trimmed)
     .limit(10)
     .get();
-  if (draftSnap.empty) return { synced: false, draftIds: [] };
 
   const batch = adminDb.batch();
   const draftIds: string[] = [];
-  for (const draftDoc of draftSnap.docs) {
-    if (draftDoc.get("status") === "published") continue;
-    batch.update(draftDoc.ref, {
-      status: "published",
-      publishedAt: postSnap.get("publishedAt") ?? FieldValue.serverTimestamp(),
-      updatedAt: FieldValue.serverTimestamp(),
+  const socialPostIds: string[] = [];
+  const now = FieldValue.serverTimestamp();
+  const publishedAt = postSnap.get("publishedAt") ?? now;
+  const mirrorDraftRef = draftSnap.empty ? adminDb.collection(COLLECTIONS.blogDrafts).doc() : null;
+  const linkedDraftDocs = draftSnap.empty
+    ? [{ id: mirrorDraftRef!.id, ref: mirrorDraftRef!, exists: false, data: () => ({}), get: () => undefined }]
+    : draftSnap.docs;
+
+  for (const draftDoc of linkedDraftDocs) {
+    const draftRef = draftDoc.ref;
+    const bodyHtml = parsePostBody(String(post.body ?? "")).html;
+    const draftData = draftDoc.exists
+      ? (draftDoc.data() as Record<string, unknown>)
+      : {
+          title: normalizeSwissTextField(post.title),
+          slug: String(post.slug ?? "").trim(),
+          excerpt: normalizeSwissGermanText(String(post.excerpt ?? "")),
+          metaTitle: post.seoTitle ? normalizeSwissTextField(post.seoTitle) : null,
+          metaDescription: post.seoDescription ? normalizeSwissGermanText(String(post.seoDescription)) : null,
+          articleHtml: bodyHtml,
+          researchSummary: "",
+          sources: [],
+          authorId: typeof post.authorId === "string" && post.authorId.trim() ? post.authorId.trim() : null,
+          status: "published",
+          publishedPostId: trimmed,
+          publishedAt,
+          heroImageUrl: typeof post.heroImageUrl === "string" && post.heroImageUrl.trim() ? post.heroImageUrl.trim() : null,
+          heroImageAlt: post.heroImageAlt ? normalizeSwissGermanText(String(post.heroImageAlt)) : null,
+          heroImageCredit: typeof post.heroImageCredit === "string" && post.heroImageCredit.trim() ? post.heroImageCredit.trim() : null,
+          heroImagePhotographerName:
+            typeof post.heroImagePhotographerName === "string" && post.heroImagePhotographerName.trim()
+              ? post.heroImagePhotographerName.trim()
+              : null,
+          heroImagePhotographerUrl:
+            typeof post.heroImagePhotographerUrl === "string" && post.heroImagePhotographerUrl.trim()
+              ? post.heroImagePhotographerUrl.trim()
+              : null,
+          heroImageUnsplashUrl:
+            typeof post.heroImageUnsplashUrl === "string" && post.heroImageUnsplashUrl.trim()
+              ? post.heroImageUnsplashUrl.trim()
+              : null,
+        };
+
+    if (draftDoc.exists && draftDoc.get("status") !== "published") {
+      batch.update(draftRef, {
+        status: "published",
+        publishedAt,
+        updatedAt: now,
+      });
+      draftIds.push(draftDoc.id);
+    } else if (!draftDoc.exists) {
+      batch.set(draftRef, {
+        ...draftData,
+        createdAt: now,
+        updatedAt: now,
+      });
+      draftIds.push(draftDoc.id);
+    }
+
+    const ids = await ensureSendableSocialPostForDraft({
+      batch,
+      draftId: draftDoc.id,
+      draft: draftData,
+      targetStatus: "published",
+      publishedPostId: trimmed,
+      now,
     });
-    draftIds.push(draftDoc.id);
+    socialPostIds.push(...ids);
   }
 
-  if (draftIds.length === 0) return { synced: false, draftIds: [] };
+  if (draftIds.length === 0 && socialPostIds.length === 0) return { synced: false, draftIds: [], socialPostIds: [] };
   await batch.commit();
-  return { synced: true, draftIds };
+  return { synced: true, draftIds, socialPostIds };
 }
 
 function parsePreferredTime(preferredTime: string): { hour: number; minute: number } {
@@ -295,6 +355,8 @@ function readSocialCaptionForClone(source: Record<string, unknown>, draft: Recor
   const fromSocial = typeof source.linkedinPost === "string" ? source.linkedinPost.trim() : "";
   if (fromSocial) return normalizeSwissGermanText(fromSocial);
   const title = normalizeSwissTextField(draft.title);
+  const excerpt = normalizeSwissGermanText(String(draft.excerpt ?? "")).trim();
+  if (excerpt) return `${excerpt}\n\n{{BLOG_URL}}`;
   return title ? `${title}\n\n{{BLOG_URL}}` : "{{BLOG_URL}}";
 }
 
@@ -311,7 +373,33 @@ async function ensureSendableSocialPostForDraft(params: {
   now: FieldValue;
 }): Promise<string[]> {
   const snap = await adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "==", params.draftId.trim()).get();
-  if (snap.empty) return [];
+  if (snap.empty) {
+    const newRef = adminDb.collection(COLLECTIONS.blogSocialPosts).doc();
+    const socialImageUrl =
+      typeof params.draft.heroImageUrl === "string" && params.draft.heroImageUrl.trim()
+        ? params.draft.heroImageUrl.trim()
+        : null;
+    const socialImageAlt =
+      typeof params.draft.heroImageAlt === "string" && params.draft.heroImageAlt.trim()
+        ? normalizeSwissGermanText(params.draft.heroImageAlt.trim())
+        : null;
+    params.batch.set(newRef, {
+      topicId: typeof params.draft.topicId === "string" ? params.draft.topicId : null,
+      blogDraftId: params.draftId,
+      automationRunId: typeof params.draft.automationRunId === "string" ? params.draft.automationRunId : null,
+      status: params.targetStatus,
+      platforms: ["linkedin"],
+      linkedinPost: readSocialCaptionForClone({}, params.draft),
+      socialImageUrl,
+      socialImageAlt,
+      socialImageManualOverride: false,
+      preparedFromPublishedPostId: params.publishedPostId,
+      preparedReason: "published_post_missing_social",
+      createdAt: params.now,
+      updatedAt: params.now,
+    });
+    return [newRef.id];
+  }
 
   const sendableIds: string[] = [];
   for (const socialDoc of snap.docs) {

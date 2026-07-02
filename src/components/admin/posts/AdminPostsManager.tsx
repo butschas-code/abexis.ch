@@ -208,6 +208,26 @@ export function AdminPostsManager() {
     }
   }
 
+  async function handlePrepareLinkedIn(post: CmsPostListItem) {
+    setBusyId(post.id);
+    setBanner(null);
+    try {
+      if (!user) throw new Error("Bitte melden Sie sich erneut an.");
+      const token = await user.getIdToken();
+      const result = await apiSyncLinkedBlogDraftAfterPostPublish(token, post.id);
+      await reload();
+      if (result.socialPostIds.length > 0) {
+        setBanner("LinkedIn-Entwurf vorbereitet. Sie finden ihn unter «Social (KI)».");
+      } else {
+        setBanner("Für diesen Beitrag gibt es bereits einen vorbereiteten LinkedIn-Entwurf unter «Social (KI)».");
+      }
+    } catch (e) {
+      setBanner(e instanceof Error ? e.message : "LinkedIn-Entwurf konnte nicht vorbereitet werden.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+
   async function confirmDelete() {
     if (!deleteTarget) return;
     setDeleteWorking(true);
@@ -424,6 +444,7 @@ export function AdminPostsManager() {
                           busy={busyId === p.id}
                           onDuplicate={() => void handleDuplicate(p)}
                           onDelete={() => setDeleteTarget({ id: p.id, title: p.title })}
+                          onPrepareLinkedIn={() => void handlePrepareLinkedIn(p)}
                           onPublish={() => void handlePublish(p)}
                           onUnpublish={() => void handleUnpublish(p)}
                         />

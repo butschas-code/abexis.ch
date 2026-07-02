@@ -560,7 +560,7 @@ export function BlogAutomationClient() {
             </div>
 
             <div className="rounded-2xl border border-[var(--brand-900)]/12 bg-[color-mix(in_srgb,var(--brand-900)_6%,white)] px-5 py-4 text-[14px] leading-relaxed text-[var(--apple-text-secondary)]">
-              Dieser Schritt erstellt nur Entwürfe. Nichts wird dadurch veröffentlicht.
+              Dieser Schritt erstellt nur Entwürfe. Nichts wird dadurch veröffentlicht. Die automatische Prüfung läuft nicht jede Minute; für einen sofortigen Test nutzen Sie oben «Jetzt Entwurf vorbereiten».
             </div>
           </BlogAutomationStepCard>
         </AdminPageSection>

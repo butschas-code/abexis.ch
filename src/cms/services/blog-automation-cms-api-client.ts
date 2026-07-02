@@ -258,7 +258,7 @@ export async function apiSendBlogSocialPostToNuelink(
 export async function apiSyncLinkedBlogDraftAfterPostPublish(
   idToken: string,
   postId: string,
-): Promise<{ synced: boolean; draftIds: string[] }> {
+): Promise<{ synced: boolean; draftIds: string[]; socialPostIds: string[] }> {
   return cmsBlogAutomationFetch(idToken, `/posts/${encodeURIComponent(postId)}/sync-published`, {
     method: "POST",
   });

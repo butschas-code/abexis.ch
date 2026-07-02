@@ -10,11 +10,12 @@ type Props = {
   busy: boolean;
   onDuplicate: () => void;
   onDelete: () => void;
+  onPrepareLinkedIn: () => void;
   onPublish: () => void;
   onUnpublish: () => void;
 };
 
-export function PostsRowMenu({ post, busy, onDuplicate, onDelete, onPublish, onUnpublish }: Props) {
+export function PostsRowMenu({ post, busy, onDuplicate, onDelete, onPrepareLinkedIn, onPublish, onUnpublish }: Props) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -84,6 +85,19 @@ export function PostsRowMenu({ post, busy, onDuplicate, onDelete, onPublish, onU
               }}
             >
               Veröffentlichen
+            </button>
+          ) : null}
+          {post.status === "published" ? (
+            <button
+              type="button"
+              role="menuitem"
+              className="block w-full px-3 py-2 text-left text-sm text-[var(--apple-text)] hover:bg-black/[0.04]"
+              onClick={() => {
+                setOpen(false);
+                onPrepareLinkedIn();
+              }}
+            >
+              LinkedIn vorbereiten
             </button>
           ) : null}
           {post.status === "published" ? (
