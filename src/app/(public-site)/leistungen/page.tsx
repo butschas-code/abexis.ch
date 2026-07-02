@@ -1,5 +1,6 @@
 import { LeistungenBentoGrid } from "@/components/leistungen/LeistungenBentoGrid";
 import { MotionSection } from "@/components/motion/MotionSection";
+import { ProjectSelfTest } from "@/components/project-reality-check/ProjectSelfTest";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
 import { PageHero } from "@/components/site/PageHero";
@@ -42,6 +43,8 @@ export default function LeistungenPage() {
           <HeroProjectRealityCheckCta />
         </div>
       </PageHero>
+
+      <ProjectSelfTest />
 
       <MotionSection className="relative overflow-hidden py-16 md:py-28">
         <div

@@ -14,6 +14,7 @@ import { WelcomeSection } from "@/components/home/WelcomeSection";
 import { PartnershipsMarquee } from "@/components/home/PartnershipsMarquee";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { MotionSection } from "@/components/motion/MotionSection";
+import { ProjectSelfTest } from "@/components/project-reality-check/ProjectSelfTest";
 import { HeroHeadlineBrandAccent } from "@/components/site/HeroHeadlineBrandAccent";
 import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
 import { homeHeroContent } from "@/data/home-page-content";
@@ -70,6 +71,8 @@ export default function HomePage() {
       <HomeProcessSection />
 
       <HomeWhoWeAreSection />
+
+      <ProjectSelfTest />
 
       <HomeLeistungenGridSection />
 
