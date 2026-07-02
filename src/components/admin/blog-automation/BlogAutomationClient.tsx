@@ -572,30 +572,45 @@ export function BlogAutomationClient() {
             intro="Wenn Sie einen Entwurf freigeben, plant das CMS den Artikel automatisch auf den nächsten passenden Postingtag."
           >
             <div className="space-y-5">
-              <div className="flex flex-wrap gap-2">
-                {WEEKDAY_OPTIONS.map((d) => (
-                  <label
-                    key={d.key}
-                    className={`flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2.5 text-[14px] transition ${
-                      form.postingDays.includes(d.key)
-                        ? "border-[var(--brand-900)]/25 bg-[color-mix(in_srgb,var(--brand-900)_7%,white)] text-[var(--apple-text)]"
-                        : "border-black/[0.08] bg-white text-[var(--apple-text)] hover:border-black/14"
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={form.postingDays.includes(d.key)}
-                      onChange={(e) => togglePostingDay(d.key, e.target.checked)}
-                      className="h-4 w-4 rounded border-black/18 text-[var(--brand-900)]"
-                    />
-                    {d.label}
-                  </label>
-                ))}
+              <div className="grid gap-5 lg:grid-cols-[1fr_180px] lg:items-end">
+                <div className="space-y-2">
+                  <p className="text-[14px] font-medium text-[var(--apple-text)]">Postingtage</p>
+                  <div className="flex flex-wrap gap-2">
+                    {WEEKDAY_OPTIONS.map((d) => (
+                      <label
+                        key={d.key}
+                        className={`flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2.5 text-[14px] transition ${
+                          form.postingDays.includes(d.key)
+                            ? "border-[var(--brand-900)]/25 bg-[color-mix(in_srgb,var(--brand-900)_7%,white)] text-[var(--apple-text)]"
+                            : "border-black/[0.08] bg-white text-[var(--apple-text)] hover:border-black/14"
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={form.postingDays.includes(d.key)}
+                          onChange={(e) => togglePostingDay(d.key, e.target.checked)}
+                          className="h-4 w-4 rounded border-black/18 text-[var(--brand-900)]"
+                        />
+                        {d.label}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <label className="block space-y-2">
+                  <span className="text-[14px] font-medium text-[var(--apple-text)]">Live um</span>
+                  <input
+                    type="time"
+                    className={adminInput}
+                    value={form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime}
+                    onChange={(e) => patch({ postingTime: e.target.value })}
+                  />
+                </label>
               </div>
 
               <div className="rounded-2xl border border-black/[0.06] bg-[color-mix(in_srgb,var(--apple-bg-subtle)_55%,white)] px-5 py-4 text-[14px] leading-relaxed text-[var(--apple-text-secondary)]">
-                Freigegebene Artikel werden jeweils um {form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime} Uhr ({form.timezone || "Europe/Zurich"}) geplant.
-                Der vorbereitete LinkedIn-Post wird erst an Nuelink übergeben, wenn der Blogbeitrag live geschaltet wird.
+                Freigegebene Artikel werden am nächsten passenden Postingtag um {form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime} Uhr ({form.timezone || "Europe/Zurich"}) live geschaltet.
+                Der vorbereitete LinkedIn-Post wird erst an Nuelink übergeben, wenn der Blogbeitrag zu dieser Zeit live geht.
               </div>
             </div>
           </BlogAutomationStepCard>
