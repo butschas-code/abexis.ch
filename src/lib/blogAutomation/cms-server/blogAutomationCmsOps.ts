@@ -277,6 +277,11 @@ function parsePreferredTime(preferredTime: string): { hour: number; minute: numb
   return { hour: Number(m[1]), minute: Number(m[2]) };
 }
 
+function formatNuelinkScheduledAt(date: Date, timezone: string): string {
+  const zone = timezone.trim() || "Europe/Zurich";
+  return DateTime.fromJSDate(date, { zone }).toFormat("yyyy-LL-dd HH:mm:ss");
+}
+
 function nextSelectedPostingSlot(form: BlogAutomationFormState, from = new Date()): Date {
   const zone = form.timezone?.trim() || "Europe/Zurich";
   const postingDays = form.postingDays.map((d) => d.trim().toLowerCase()).filter(Boolean);
@@ -761,6 +766,7 @@ export async function cmsSetBlogDraftApproved(
 
   const { form } = await cmsReadBlogAutomationSettings();
   const scheduledFor = await nextApprovalPublishSlot(form);
+  const nuelinkScheduledAt = formatNuelinkScheduledAt(scheduledFor, form.timezone || "Europe/Zurich");
   const scheduledTs = Timestamp.fromDate(scheduledFor);
   const existingPostId = typeof d.publishedPostId === "string" && d.publishedPostId.trim() ? d.publishedPostId.trim() : "";
   const postId = existingPostId || adminDb.collection(COLLECTIONS.posts).doc().id;
@@ -842,7 +848,7 @@ export async function cmsSetBlogDraftApproved(
     updatedAt: now,
   });
 
-  await ensureSendableSocialPostForDraft({
+  const socialPostIdsToSchedule = await ensureSendableSocialPostForDraft({
     batch,
     draftId,
     draft: {
@@ -858,11 +864,33 @@ export async function cmsSetBlogDraftApproved(
 
   await batch.commit();
 
+  let nuelinkSent = false;
+  let nuelinkError: string | null = null;
+  for (const socialPostId of socialPostIdsToSchedule) {
+    try {
+      const snap = await adminDb.collection(COLLECTIONS.blogSocialPosts).doc(socialPostId).get();
+      if (!snap.exists || snap.get("nuelinkLastSentAt")) continue;
+      await cmsSendBlogSocialPostToNuelink(socialPostId, {
+        target: "linkedin",
+        caption: String(snap.get("linkedinPost") ?? ""),
+        publishMode: "SCHEDULE",
+        scheduledAt: nuelinkScheduledAt,
+      });
+      nuelinkSent = true;
+    } catch (e) {
+      nuelinkError = e instanceof Error ? e.message : "Nuelink-Verbindung fehlgeschlagen.";
+      await adminDb.collection(COLLECTIONS.blogSocialPosts).doc(socialPostId).update({
+        nuelinkLastError: nuelinkError,
+        updatedAt: FieldValue.serverTimestamp(),
+      }).catch(() => undefined);
+    }
+  }
+
   return {
     postId,
     scheduledFor: scheduledFor.toISOString(),
-    nuelinkSent: false,
-    nuelinkError: null,
+    nuelinkSent,
+    nuelinkError,
   };
 }
 

@@ -1,4 +1,4 @@
-import type { Firestore } from "firebase-admin/firestore";
+import { Timestamp, type Firestore } from "firebase-admin/firestore";
 import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { COLLECTIONS } from "@/cms/firestore/collections";
@@ -17,10 +17,10 @@ import { allInsightsPostSitesInClause, getResolvedPublicDeploymentSite, visibleP
 export type { PublishedPostWithId } from "@/public-site/cms/published-post";
 
 /** Cross-request cache for Firestore-backed lists (seconds). */
-const CMS_POST_LIST_REVALIDATE = 120;
+const CMS_POST_LIST_REVALIDATE = 1;
 
 /** Cross-request cache for single-slug resolution (seconds). */
-const CMS_POST_BY_SLUG_REVALIDATE = 120;
+const CMS_POST_BY_SLUG_REVALIDATE = 1;
 
 /** Decode URL segment and trim : safe for already-decoded slugs. */
 export function normalizeBlogSlugParam(raw: string): string {
@@ -33,6 +33,25 @@ export function normalizeBlogSlugParam(raw: string): string {
   }
 }
 
+function isPostPubliclyLive(post: PublishedPostWithId, now = Date.now()): boolean {
+  if (post.status === "published") return true;
+  if (post.status !== "scheduled" || !post.publishedAt) return false;
+  const publishedTime = Date.parse(post.publishedAt);
+  return Number.isFinite(publishedTime) && publishedTime <= now;
+}
+
+function asPublicPublishedPost(post: PublishedPostWithId): PublishedPostWithId {
+  return post.status === "scheduled" ? { ...post, status: "published" } : post;
+}
+
+function sortPublishedPostsDesc(rows: PublishedPostWithId[]): PublishedPostWithId[] {
+  return rows.sort((a, b) => {
+    const ta = a.publishedAt ? Date.parse(a.publishedAt) : 0;
+    const tb = b.publishedAt ? Date.parse(b.publishedAt) : 0;
+    return tb - ta;
+  });
+}
+
 /** Low-level query when you already hold an Admin Firestore instance (e.g. Route Handlers). */
 export async function listPublishedPostsFromDb(
   db: Firestore,
@@ -41,20 +60,33 @@ export async function listPublishedPostsFromDb(
 ): Promise<PublishedPostWithId[]> {
   const sites = visiblePostSitesInClause(deployment);
   const lim = Math.min(200, Math.max(1, limit));
-  const snap = await db
-    .collection(COLLECTIONS.posts)
-    .where("status", "==", "published")
-    .where("site", "in", sites)
-    .orderBy("publishedAt", "desc")
-    .limit(lim)
-    .get();
+  const [publishedSnap, scheduledSnap] = await Promise.all([
+    db
+      .collection(COLLECTIONS.posts)
+      .where("status", "==", "published")
+      .where("site", "in", sites)
+      .orderBy("publishedAt", "desc")
+      .limit(lim)
+      .get(),
+    db
+      .collection(COLLECTIONS.posts)
+      .where("status", "==", "scheduled")
+      .where("site", "in", sites)
+      .where("publishedAt", "<=", Timestamp.now())
+      .orderBy("publishedAt", "desc")
+      .limit(Math.min(200, Math.max(lim, lim * 2)))
+      .get(),
+  ]);
 
-  return snap.docs
+  const rows = [...publishedSnap.docs, ...scheduledSnap.docs]
     .map((doc) => {
       const post = mapPostDoc(doc.id, doc);
       return post ? { id: doc.id, ...post } : null;
     })
-    .filter((p): p is PublishedPostWithId => p != null && p.status === "published");
+    .filter((p): p is PublishedPostWithId => p != null && isPostPubliclyLive(p))
+    .map(asPublicPublishedPost);
+
+  return sortPublishedPostsDesc(rows).slice(0, lim);
 }
 
 /** Unified Insights: every published post (`site` is `abexis` in Firestore). */
@@ -64,20 +96,33 @@ export async function listPublishedPostsFromDbAllSites(
 ): Promise<PublishedPostWithId[]> {
   const sites = allInsightsPostSitesInClause();
   const lim = Math.min(200, Math.max(1, limit));
-  const snap = await db
-    .collection(COLLECTIONS.posts)
-    .where("status", "==", "published")
-    .where("site", "in", sites)
-    .orderBy("publishedAt", "desc")
-    .limit(lim)
-    .get();
+  const [publishedSnap, scheduledSnap] = await Promise.all([
+    db
+      .collection(COLLECTIONS.posts)
+      .where("status", "==", "published")
+      .where("site", "in", sites)
+      .orderBy("publishedAt", "desc")
+      .limit(lim)
+      .get(),
+    db
+      .collection(COLLECTIONS.posts)
+      .where("status", "==", "scheduled")
+      .where("site", "in", sites)
+      .where("publishedAt", "<=", Timestamp.now())
+      .orderBy("publishedAt", "desc")
+      .limit(Math.min(200, Math.max(lim, lim * 2)))
+      .get(),
+  ]);
 
-  return snap.docs
+  const rows = [...publishedSnap.docs, ...scheduledSnap.docs]
     .map((doc) => {
       const post = mapPostDoc(doc.id, doc);
       return post ? { id: doc.id, ...post } : null;
     })
-    .filter((p): p is PublishedPostWithId => p != null && p.status === "published");
+    .filter((p): p is PublishedPostWithId => p != null && isPostPubliclyLive(p))
+    .map(asPublicPublishedPost);
+
+  return sortPublishedPostsDesc(rows).slice(0, lim);
 }
 
 async function getPublishedCmsPostsUncached(
@@ -179,9 +224,11 @@ async function fetchPublishedPostBySlugForDeployment(
       const snap = await db.collection(COLLECTIONS.posts).where("slug", "==", normalized).limit(40).get();
       for (const doc of snap.docs) {
         const post = mapPostDoc(doc.id, doc);
-        if (!post || post.status !== "published") continue;
+        if (!post) continue;
+        const publicPost = { id: doc.id, ...post };
+        if (!isPostPubliclyLive(publicPost)) continue;
         if (!allowed.has(post.site)) continue;
-        return { id: doc.id, ...post };
+        return asPublicPublishedPost(publicPost);
       }
     } catch (err) {
       console.error("[cms] Admin Firestore post by slug failed; falling back to Web SDK.", err);

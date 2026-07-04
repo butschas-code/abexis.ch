@@ -11,7 +11,7 @@ import type { CmsPost } from "../types/post";
 import type { PostStatus } from "../types/enums";
 import type { SiteKey } from "../types/site";
 
-function normalizePostSiteForClient(_raw: unknown): SiteKey {
+function normalizePostSiteForClient(): SiteKey {
   return "abexis";
 }
 
@@ -32,8 +32,15 @@ export function mapClientDoc(id: string, d: Record<string, unknown>): CmsPostLis
     return null;
   };
   const statusRaw = d.status;
-  const status: PostStatus =
+  let status: PostStatus =
     statusRaw === "published" || statusRaw === "scheduled" || statusRaw === "archived" || statusRaw === "draft" ? statusRaw : "draft";
+  const publishedAt = toIso(d.publishedAt);
+  if (status === "scheduled" && publishedAt) {
+    const publishedTime = Date.parse(publishedAt);
+    if (Number.isFinite(publishedTime) && publishedTime <= Date.now()) {
+      status = "published";
+    }
+  }
   return {
     id,
     title: String(d.title ?? ""),
@@ -50,12 +57,12 @@ export function mapClientDoc(id: string, d: Record<string, unknown>): CmsPostLis
     authorId: String(d.authorId ?? ""),
     categoryIds: Array.isArray(d.categoryIds) ? d.categoryIds.map(String) : [],
     tags: Array.isArray(d.tags) ? d.tags.map(String) : [],
-    site: normalizePostSiteForClient(d.site),
+    site: normalizePostSiteForClient(),
     status,
     seoTitle: d.seoTitle != null ? String(d.seoTitle) : null,
     seoDescription: d.seoDescription != null ? String(d.seoDescription) : null,
     featured: d.featured === true,
-    publishedAt: toIso(d.publishedAt),
+    publishedAt,
     createdAt: toIso(d.createdAt) ?? new Date().toISOString(),
     updatedAt: toIso(d.updatedAt) ?? new Date().toISOString(),
   };
