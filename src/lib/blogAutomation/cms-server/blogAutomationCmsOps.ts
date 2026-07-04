@@ -277,7 +277,7 @@ function parsePreferredTime(preferredTime: string): { hour: number; minute: numb
   return { hour: Number(m[1]), minute: Number(m[2]) };
 }
 
-function nextApprovalPublishSlot(form: BlogAutomationFormState, from = new Date()): Date {
+function nextSelectedPostingSlot(form: BlogAutomationFormState, from = new Date()): Date {
   const zone = form.timezone?.trim() || "Europe/Zurich";
   const postingDays = form.postingDays.map((d) => d.trim().toLowerCase()).filter(Boolean);
   const days = postingDays.length ? postingDays : ["thursday"];
@@ -293,6 +293,46 @@ function nextApprovalPublishSlot(form: BlogAutomationFormState, from = new Date(
   }
 
   return now.plus({ days: 1 }).set({ hour, minute, second: 0, millisecond: 0 }).toJSDate();
+}
+
+function advancePostingSlot(dt: DateTime, recurrence: BlogAutomationFormState["postingRecurrence"]): DateTime {
+  if (recurrence === "monthly") return dt.plus({ months: 1 });
+  if (recurrence === "biweekly") return dt.plus({ weeks: 2 });
+  return dt.plus({ weeks: 1 });
+}
+
+async function latestScheduledPostDate(): Promise<Date | null> {
+  const snap = await adminDb
+    .collection(COLLECTIONS.posts)
+    .where("status", "==", "scheduled")
+    .limit(200)
+    .get();
+  let latest: Date | null = null;
+  for (const docSnap of snap.docs) {
+    const ts = docSnap.get("publishedAt");
+    if (!(ts instanceof Timestamp)) continue;
+    const date = ts.toDate();
+    if (!latest || date.getTime() > latest.getTime()) latest = date;
+  }
+  return latest;
+}
+
+async function nextApprovalPublishSlot(form: BlogAutomationFormState, from = new Date()): Promise<Date> {
+  const recurrence = form.postingRecurrence ?? "none";
+  const firstSlot = nextSelectedPostingSlot(form, from);
+  if (recurrence === "none") return firstSlot;
+
+  const zone = form.timezone?.trim() || "Europe/Zurich";
+  const latestScheduled = await latestScheduledPostDate();
+  if (!latestScheduled || latestScheduled.getTime() < firstSlot.getTime()) return firstSlot;
+
+  let candidate = DateTime.fromJSDate(latestScheduled, { zone });
+  const minTime = DateTime.fromJSDate(from, { zone }).plus({ minutes: 1 }).toMillis();
+  do {
+    candidate = advancePostingSlot(candidate, recurrence);
+  } while (candidate.toMillis() <= minTime);
+
+  return candidate.toJSDate();
 }
 
 function normalizeLinkedInCaptionForBlog(caption: string, blogUrl: string): string {
@@ -490,8 +530,9 @@ export async function cmsWriteBlogAutomationSettings(
     articlesPerWeek: 1,
     preferredDays: form.preferredDays.length ? form.preferredDays.slice(0, 1) : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays,
     preferredTime: form.preferredTime || DEFAULT_BLOG_AUTOMATION_FORM.preferredTime,
-    postingDays: form.postingDays.length ? form.postingDays : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
+    postingDays: form.postingDays.length ? form.postingDays.slice(0, 1) : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
     postingTime: form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
+    postingRecurrence: form.postingRecurrence || DEFAULT_BLOG_AUTOMATION_FORM.postingRecurrence,
     timezone: form.timezone,
     targetAudience: form.targetAudience.trim(),
     tone: form.tone,
@@ -719,7 +760,7 @@ export async function cmsSetBlogDraftApproved(
   }
 
   const { form } = await cmsReadBlogAutomationSettings();
-  const scheduledFor = nextApprovalPublishSlot(form);
+  const scheduledFor = await nextApprovalPublishSlot(form);
   const scheduledTs = Timestamp.fromDate(scheduledFor);
   const existingPostId = typeof d.publishedPostId === "string" && d.publishedPostId.trim() ? d.publishedPostId.trim() : "";
   const postId = existingPostId || adminDb.collection(COLLECTIONS.posts).doc().id;
@@ -1391,9 +1432,9 @@ export function parseBlogAutomationFormFromJson(body: unknown): BlogAutomationFo
   const preferredDays = preferredDaysRaw.length ? [preferredDaysRaw[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays;
   const postingDaysRaw = Array.isArray(o.postingDays) ? o.postingDays.map(String).filter(Boolean) : [];
   const postingDays = postingDaysRaw.length
-    ? postingDaysRaw
+    ? [postingDaysRaw[0]!]
     : preferredDaysRaw.length
-      ? preferredDaysRaw
+      ? [preferredDaysRaw[0]!]
       : DEFAULT_BLOG_AUTOMATION_FORM.postingDays;
   const socialPlatforms = Array.isArray(o.socialPlatforms) ? o.socialPlatforms.map(String) : [];
 
@@ -1409,6 +1450,10 @@ export function parseBlogAutomationFormFromJson(body: unknown): BlogAutomationFo
         : typeof o.preferredTime === "string"
           ? o.preferredTime
           : DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
+    postingRecurrence:
+      o.postingRecurrence === "weekly" || o.postingRecurrence === "biweekly" || o.postingRecurrence === "monthly"
+        ? o.postingRecurrence
+        : "none",
     timezone: typeof o.timezone === "string" ? o.timezone : DEFAULT_BLOG_AUTOMATION_FORM.timezone,
     targetAudience: typeof o.targetAudience === "string" ? o.targetAudience : "",
     tone: typeof o.tone === "string" ? o.tone : DEFAULT_BLOG_AUTOMATION_FORM.tone,

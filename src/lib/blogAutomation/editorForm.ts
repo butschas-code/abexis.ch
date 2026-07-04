@@ -1,5 +1,7 @@
 import type { BlogAutomationArticleLength, BlogAutomationTopicMode } from "@/lib/blogAutomation/types";
 
+export type BlogPostingRecurrence = "none" | "weekly" | "biweekly" | "monthly";
+
 /** CMS editor shape for `blogAutomationSettings/default` (mirrors Firestore, minus timestamps). */
 export type BlogAutomationFormState = {
   enabled: boolean;
@@ -12,6 +14,8 @@ export type BlogAutomationFormState = {
   postingDays: string[];
   /** Local wall-clock time for approved article publishing. */
   postingTime: string;
+  /** Whether approved articles should reserve the next editorial slot repeatedly. */
+  postingRecurrence: BlogPostingRecurrence;
   timezone: string;
   targetAudience: string;
   tone: string;
@@ -34,6 +38,7 @@ export const DEFAULT_BLOG_AUTOMATION_FORM: BlogAutomationFormState = {
   preferredTime: "09:00",
   postingDays: ["thursday"],
   postingTime: "09:00",
+  postingRecurrence: "none",
   timezone: "Europe/Zurich",
   targetAudience: "",
   tone: "Ruhig und exekutiv",
@@ -60,6 +65,10 @@ function readStrArr(v: unknown): string[] {
   return Array.isArray(v) ? v.map(String) : [];
 }
 
+function readPostingRecurrence(v: unknown): BlogPostingRecurrence {
+  return v === "weekly" || v === "biweekly" || v === "monthly" ? v : "none";
+}
+
 /** Maps a Firestore settings document to editor state (shared server + browser). */
 export function mapFirestoreRecordToBlogAutomationForm(data: Record<string, unknown> | undefined): BlogAutomationFormState {
   if (!data) return { ...DEFAULT_BLOG_AUTOMATION_FORM };
@@ -80,6 +89,7 @@ export function mapFirestoreRecordToBlogAutomationForm(data: Record<string, unkn
     preferredTime: readStr(data.preferredTime, DEFAULT_BLOG_AUTOMATION_FORM.preferredTime),
     postingDays: postingDaysRaw.length ? postingDaysRaw : legacyPreferredDays.length ? legacyPreferredDays : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
     postingTime: readStr(data.postingTime, readStr(data.preferredTime, DEFAULT_BLOG_AUTOMATION_FORM.postingTime)),
+    postingRecurrence: readPostingRecurrence(data.postingRecurrence),
     timezone: readStr(data.timezone, DEFAULT_BLOG_AUTOMATION_FORM.timezone),
     targetAudience: readStr(data.targetAudience, ""),
     tone: readStr(data.tone, DEFAULT_BLOG_AUTOMATION_FORM.tone),

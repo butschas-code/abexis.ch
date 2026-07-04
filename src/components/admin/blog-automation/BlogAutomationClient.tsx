@@ -81,6 +81,29 @@ const ARTICLE_LENGTH_OPTIONS = [
   { value: "long" as const, label: "Lang" },
 ];
 
+const POSTING_RECURRENCE_OPTIONS = [
+  {
+    value: "none" as const,
+    label: "Einmalig",
+    description: "Der nächste freigegebene Artikel geht am nächsten passenden Tag und zur gewählten Zeit live.",
+  },
+  {
+    value: "weekly" as const,
+    label: "Wöchentlich",
+    description: "Weitere freigegebene Artikel werden im Abstand von einer Woche eingeplant.",
+  },
+  {
+    value: "biweekly" as const,
+    label: "Alle 2 Wochen",
+    description: "Weitere freigegebene Artikel werden im Abstand von zwei Wochen eingeplant.",
+  },
+  {
+    value: "monthly" as const,
+    label: "Monatlich",
+    description: "Weitere freigegebene Artikel werden im Abstand von einem Monat eingeplant.",
+  },
+];
+
 function ChoiceCard(props: {
   checked: boolean;
   onChange: (v: boolean) => void;
@@ -209,14 +232,10 @@ export function BlogAutomationClient() {
     });
   }, []);
 
-  const togglePostingDay = useCallback((key: string, on: boolean) => {
+  const setPostingDay = useCallback((key: string) => {
     setForm((s) => {
       if (!s) return s;
-      const next = new Set(s.postingDays);
-      if (on) next.add(key);
-      else next.delete(key);
-      if (next.size === 0) return s;
-      return { ...s, postingDays: [...next] };
+      return { ...s, postingDays: [key] };
     });
   }, []);
 
@@ -246,8 +265,9 @@ export function BlogAutomationClient() {
           ...form,
           articlesPerWeek: 1,
           preferredDays: form.preferredDays.length ? [form.preferredDays[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays,
-          postingDays: form.postingDays.length ? form.postingDays : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
+          postingDays: form.postingDays.length ? [form.postingDays[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
           postingTime: form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
+          postingRecurrence: form.postingRecurrence || DEFAULT_BLOG_AUTOMATION_FORM.postingRecurrence,
           socialPlatforms: form.createSocialPosts ? ["linkedin"] : [],
         };
         await apiSaveBlogAutomationSettings(token, toSave, docExists);
@@ -275,8 +295,9 @@ export function BlogAutomationClient() {
         enabled: true,
         articlesPerWeek: 1,
         preferredDays: form.preferredDays.length ? [form.preferredDays[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays,
-        postingDays: form.postingDays.length ? form.postingDays : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
+        postingDays: form.postingDays.length ? [form.postingDays[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
         postingTime: form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
+        postingRecurrence: form.postingRecurrence || DEFAULT_BLOG_AUTOMATION_FORM.postingRecurrence,
         socialPlatforms: form.createSocialPosts ? ["linkedin"] : [],
       };
       await apiSaveBlogAutomationSettings(token, toSave, docExists);
@@ -568,34 +589,25 @@ export function BlogAutomationClient() {
         <AdminPageSection>
           <BlogAutomationStepCard
             step={3}
-            title="An welchen Tagen sollen freigegebene Artikel live gehen?"
-            intro="Wenn Sie einen Entwurf freigeben, plant das CMS den Artikel automatisch auf den nächsten passenden Postingtag."
+            title="Wann sollen freigegebene Artikel live gehen?"
+            intro="Legen Sie den Veröffentlichungszeitpunkt fest. Wenn Sie keine Wiederholung wählen, wird der nächste freigegebene Artikel einmalig auf den nächsten passenden Termin geplant."
           >
             <div className="space-y-5">
-              <div className="grid gap-5 lg:grid-cols-[1fr_180px] lg:items-end">
-                <div className="space-y-2">
-                  <p className="text-[14px] font-medium text-[var(--apple-text)]">Postingtage</p>
-                  <div className="flex flex-wrap gap-2">
+              <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_180px] md:items-end">
+                <label className="block space-y-2">
+                  <span className="text-[14px] font-medium text-[var(--apple-text)]">Publikationstag</span>
+                  <select
+                    className={adminInput}
+                    value={form.postingDays[0] ?? DEFAULT_BLOG_AUTOMATION_FORM.postingDays[0]}
+                    onChange={(e) => setPostingDay(e.target.value)}
+                  >
                     {WEEKDAY_OPTIONS.map((d) => (
-                      <label
-                        key={d.key}
-                        className={`flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2.5 text-[14px] transition ${
-                          form.postingDays.includes(d.key)
-                            ? "border-[var(--brand-900)]/25 bg-[color-mix(in_srgb,var(--brand-900)_7%,white)] text-[var(--apple-text)]"
-                            : "border-black/[0.08] bg-white text-[var(--apple-text)] hover:border-black/14"
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={form.postingDays.includes(d.key)}
-                          onChange={(e) => togglePostingDay(d.key, e.target.checked)}
-                          className="h-4 w-4 rounded border-black/18 text-[var(--brand-900)]"
-                        />
+                      <option key={d.key} value={d.key}>
                         {d.label}
-                      </label>
+                      </option>
                     ))}
-                  </div>
-                </div>
+                  </select>
+                </label>
 
                 <label className="block space-y-2">
                   <span className="text-[14px] font-medium text-[var(--apple-text)]">Live um</span>
@@ -608,9 +620,40 @@ export function BlogAutomationClient() {
                 </label>
               </div>
 
+              <fieldset className="space-y-3">
+                <legend className="text-[14px] font-medium text-[var(--apple-text)]">Wiederholung</legend>
+                <div className="grid gap-3 md:grid-cols-2">
+                  {POSTING_RECURRENCE_OPTIONS.map((option) => (
+                    <label
+                      key={option.value}
+                      className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-4 transition ${
+                        form.postingRecurrence === option.value
+                          ? "border-[var(--brand-900)]/25 bg-[color-mix(in_srgb,var(--brand-900)_7%,white)]"
+                          : "border-black/[0.08] bg-white hover:border-black/14"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="postingRecurrence"
+                        checked={form.postingRecurrence === option.value}
+                        onChange={() => patch({ postingRecurrence: option.value })}
+                        className="mt-1 h-4 w-4 border-black/18 text-[var(--brand-900)]"
+                      />
+                      <span>
+                        <span className="block text-[14px] font-medium text-[var(--apple-text)]">{option.label}</span>
+                        <span className={`mt-1 block ${adminBody} text-[13px]`}>{option.description}</span>
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+
               <div className="rounded-2xl border border-black/[0.06] bg-[color-mix(in_srgb,var(--apple-bg-subtle)_55%,white)] px-5 py-4 text-[14px] leading-relaxed text-[var(--apple-text-secondary)]">
-                Freigegebene Artikel werden am nächsten passenden Postingtag um {form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime} Uhr ({form.timezone || "Europe/Zurich"}) live geschaltet.
-                Der vorbereitete LinkedIn-Post wird erst an Nuelink übergeben, wenn der Blogbeitrag zu dieser Zeit live geht.
+                Freigegebene Artikel werden am nächsten passenden {WEEKDAY_OPTIONS.find((d) => d.key === (form.postingDays[0] ?? DEFAULT_BLOG_AUTOMATION_FORM.postingDays[0]))?.label ?? "Publikationstag"} um {form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime} Uhr ({form.timezone || "Europe/Zurich"}) live geschaltet.
+                {form.postingRecurrence === "none"
+                  ? " Ohne Wiederholung bleibt es bei diesem nächsten freien Termin."
+                  : " Bei mehreren freigegebenen Artikeln reserviert das CMS automatisch die folgenden Termine gemäss Wiederholung."}
+                {" "}Der vorbereitete LinkedIn-Post wird erst an Nuelink übergeben, wenn der Blogbeitrag live geht.
               </div>
             </div>
           </BlogAutomationStepCard>
@@ -876,7 +919,7 @@ export function BlogAutomationClient() {
                 </div>
               ) : null}
 
-              <div className={adminFeedbackInfo}>Standard: Entwürfe bleiben zur Prüfung bei Ihnen; der Zeitplan steuert nur, wann neue Entwürfe entstehen.</div>
+              <div className={adminFeedbackInfo}>Standard: Entwürfe bleiben zur Prüfung bei Ihnen. Step 3 steuert, wann freigegebene Artikel live gehen.</div>
             </div>
           </div>
         </AdminPageSection>

@@ -92,6 +92,10 @@ export function coerceBlogAutomationSettings(raw: Record<string, unknown>): Blog
     preferredTime: typeof raw.preferredTime === "string" ? raw.preferredTime : "09:00",
     postingDays,
     postingTime: typeof raw.postingTime === "string" ? raw.postingTime : typeof raw.preferredTime === "string" ? raw.preferredTime : "09:00",
+    postingRecurrence:
+      raw.postingRecurrence === "weekly" || raw.postingRecurrence === "biweekly" || raw.postingRecurrence === "monthly"
+        ? raw.postingRecurrence
+        : "none",
     timezone: typeof raw.timezone === "string" ? raw.timezone : "Europe/Zurich",
     targetAudience: typeof raw.targetAudience === "string" ? raw.targetAudience : "",
     tone: typeof raw.tone === "string" ? raw.tone : "",

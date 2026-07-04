@@ -9,7 +9,7 @@ import { adminBody, adminPanel, adminSectionLabel } from "@/components/admin/adm
 export const blogAutomationJourney = [
   { step: 1, label: "Einschalten", caption: "Automatisierung" },
   { step: 2, label: "Entwurfstag", caption: "Drafts erstellen" },
-  { step: 3, label: "Postingtage", caption: "Freigaben live" },
+  { step: 3, label: "Live-Termin", caption: "Freigaben planen" },
   { step: 4, label: "Themen", caption: "Liste oder Vorschläge" },
   { step: 5, label: "Sichern", caption: "Speichern" },
   { step: 6, label: "Prüfen", caption: "Entwürfe lesen" },

@@ -101,12 +101,12 @@ export function BlogAutomationDashboard(props: Props) {
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         <StatCard title="Vorbereitung" value={automationEnabled ? "Ein" : "Aus"} hint={automationHint} />
 
-        <StatCard title="Automatische Entwürfe" value="1 / Woche" hint="Am gewählten Entwurfstag, sofern ein Thema bereitsteht." />
+        <StatCard title="Automatische Entwürfe" value="1 / Woche" hint="Sobald Vorbereitung aktiv ist und ein Thema bereitsteht." />
 
         <StatCard
-          title="Nächste Planprüfung"
+          title="Nächste technische Prüfung"
           value={formatDateTime(snapshot?.nextAutomaticCheckAt ?? null, displayTimezone)}
-          hint="Die Uhrzeit wird beim nächsten automatischen Prüf-Lauf berücksichtigt. Für Tests bitte «Jetzt Entwurf vorbereiten» nutzen."
+          hint="Läuft im Hintergrund. Für sofortige Tests bitte «Jetzt Entwurf vorbereiten» nutzen."
         />
 
         <StatCard
@@ -159,7 +159,7 @@ export function BlogAutomationDashboard(props: Props) {
           <span className="font-medium text-[var(--apple-text)]">Orientierung nächster Entwurf: </span>
           {formatDateTime(snapshot.nextLikelyDraftAt, displayTimezone)}
           <span className="mt-2 block text-[var(--apple-text-secondary)]">
-            Keine Garantie — es müssen Entwurfstag, Uhrzeit und ein Thema zusammenpassen.
+            Keine Garantie — Vorbereitung muss aktiv sein und ein Thema muss bereitstehen.
           </span>
         </p>
       ) : null}

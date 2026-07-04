@@ -36,6 +36,7 @@ export type BlogAutomationWeekday = (typeof BLOG_AUTOMATION_WEEKDAYS)[number];
 export type BlogAutomationTopicMode = "topic_queue" | "ai_suggested";
 
 export type BlogAutomationArticleLength = "short" | "medium" | "long";
+export type BlogPostingRecurrence = "none" | "weekly" | "biweekly" | "monthly";
 
 /**
  * Single settings document : use doc id {@link BLOG_AUTOMATION_SETTINGS_DOC_ID} unless you intentionally shard by env/site later.
@@ -54,6 +55,8 @@ export type BlogAutomationSettings = {
   postingDays: string[];
   /** Local wall-clock time for approved article publishing. */
   postingTime: string;
+  /** Publishing cadence after the next selected weekday/time. */
+  postingRecurrence: BlogPostingRecurrence;
   /** IANA timezone, e.g. `Europe/Zurich`. */
   timezone: string;
   targetAudience: string;
