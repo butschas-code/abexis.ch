@@ -416,6 +416,7 @@ async function ensureSendableSocialPostForDraft(params: {
   targetStatus: "scheduled" | "published";
   publishedPostId: string;
   now: FieldValue;
+  clonePreviouslySent?: boolean;
 }): Promise<string[]> {
   const snap = await adminDb.collection(COLLECTIONS.blogSocialPosts).where("blogDraftId", "==", params.draftId.trim()).get();
   if (snap.empty) {
@@ -469,6 +470,7 @@ async function ensureSendableSocialPostForDraft(params: {
     params.batch.update(socialDoc.ref, socialPatch);
   }
   if (sendableIds.length > 0) return sendableIds;
+  if (params.clonePreviouslySent === false) return [];
 
   const sourceDoc = [...snap.docs].sort((a, b) => {
     const at = timestampMillis(a.get("createdAt")) || timestampMillis(a.get("updatedAt"));
@@ -1274,6 +1276,8 @@ export async function cmsSendBlogSocialPostToNuelink(
     nuelinkLastSentAt: sentAt,
     nuelinkLastTarget: params.target,
     nuelinkLastPostId: result.postId,
+    nuelinkLastPublishMode: result.publishMode,
+    nuelinkLastScheduledAt: params.scheduledAt?.trim() || FieldValue.delete(),
     socialImageUrl: socialImageUrl || FieldValue.delete(),
     socialImageAlt: socialImageAlt || FieldValue.delete(),
     nuelinkSends: FieldValue.arrayUnion({
@@ -1313,7 +1317,6 @@ export async function cmsPublishDueScheduledPosts(max = 20): Promise<{ published
 
   const batch = adminDb.batch();
   const postIds: string[] = [];
-  const socialPostIdsToSend: string[] = [];
   for (const docSnap of dueDocs) {
     postIds.push(docSnap.id);
     batch.update(docSnap.ref, {
@@ -1329,36 +1332,20 @@ export async function cmsPublishDueScheduledPosts(max = 20): Promise<{ published
       });
     }
     for (const draftDoc of draftSnap.docs.slice(0, 10)) {
-      const ids = await ensureSendableSocialPostForDraft({
+      // Nuelink is scheduled when the draft is approved; this reconciliation must not create/send a second post.
+      await ensureSendableSocialPostForDraft({
         batch,
         draftId: draftDoc.id,
         draft: draftDoc.data() as Record<string, unknown>,
         targetStatus: "published",
         publishedPostId: docSnap.id,
         now: FieldValue.serverTimestamp(),
+        clonePreviouslySent: false,
       });
-      socialPostIdsToSend.push(...ids);
     }
   }
 
   await batch.commit();
-
-  for (const socialPostId of socialPostIdsToSend) {
-    try {
-      const snap = await adminDb.collection(COLLECTIONS.blogSocialPosts).doc(socialPostId).get();
-      if (!snap.exists || snap.get("nuelinkLastSentAt")) continue;
-      await cmsSendBlogSocialPostToNuelink(socialPostId, {
-        target: "linkedin",
-        caption: String(snap.get("linkedinPost") ?? ""),
-        publishMode: "IMMEDIATE",
-      });
-    } catch (e) {
-      await adminDb.collection(COLLECTIONS.blogSocialPosts).doc(socialPostId).update({
-        nuelinkLastError: e instanceof Error ? e.message : "Nuelink-Verbindung fehlgeschlagen.",
-        updatedAt: FieldValue.serverTimestamp(),
-      }).catch(() => undefined);
-    }
-  }
 
   return { published: postIds.length, postIds };
 }
