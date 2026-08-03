@@ -248,7 +248,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
         tags: [],
       });
       const scheduled = formatDateTime(result.scheduledFor);
-      setSuccess(`Freigegeben und als Beitrag für ${scheduled} geplant. LinkedIn wird an Nuelink übergeben, sobald der Beitrag live geschaltet wird.`);
+      setSuccess(`Freigegeben und als Beitrag für ${scheduled} geplant. LinkedIn wird einmalig für denselben Zeitpunkt in Nuelink geplant.`);
       await reload();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Freigabe fehlgeschlagen.");
@@ -497,7 +497,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
     <AdminPageContainer>
       <AdminPageHeader
         title={draft.title || "Entwurf"}
-        description={`Status: ${friendlyDraftStatus(draft.status)} · «Freigeben» erstellt den geplanten Beitrag. LinkedIn geht erst bei Veröffentlichung an Nuelink.`}
+        description={`Status: ${friendlyDraftStatus(draft.status)} · «Freigeben» erstellt den geplanten Beitrag und plant LinkedIn für denselben Zeitpunkt in Nuelink.`}
       />
 
       <p className={`${adminBody} -mt-4 mb-6`}>
@@ -890,6 +890,51 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
           />
         )}
       </AdminPageSection>
+
+      {draft.articleHtmlEn || draft.linkedinPostEn ? (
+        <AdminPageSection>
+          <h2 className={adminSectionLabel}>English version</h2>
+          <div className={`space-y-5 ${adminPanel} p-6 sm:p-7`}>
+            <div className="grid gap-4 md:grid-cols-2">
+              <label className="block space-y-2 md:col-span-2">
+                <span className="text-[14px] font-medium text-[var(--apple-text)]">Title</span>
+                <input className={adminInput} readOnly value={draft.titleEn ?? ""} />
+              </label>
+              <label className="block space-y-2">
+                <span className="text-[14px] font-medium text-[var(--apple-text)]">Slug</span>
+                <input className={adminInput} readOnly value={draft.slugEn ?? ""} />
+              </label>
+              <label className="block space-y-2">
+                <span className="text-[14px] font-medium text-[var(--apple-text)]">SEO title</span>
+                <input className={adminInput} readOnly value={draft.metaTitleEn ?? ""} />
+              </label>
+              <label className="block space-y-2 md:col-span-2">
+                <span className="text-[14px] font-medium text-[var(--apple-text)]">Excerpt</span>
+                <textarea className={`${adminInput} min-h-[72px]`} readOnly value={draft.excerptEn ?? ""} />
+              </label>
+              <label className="block space-y-2 md:col-span-2">
+                <span className="text-[14px] font-medium text-[var(--apple-text)]">SEO description</span>
+                <textarea className={`${adminInput} min-h-[72px]`} readOnly value={draft.metaDescriptionEn ?? ""} />
+              </label>
+            </div>
+            {draft.linkedinPostEn ? (
+              <label className="block space-y-2">
+                <span className="text-[14px] font-medium text-[var(--apple-text)]">LinkedIn post</span>
+                <textarea className={`${adminInput} min-h-[130px]`} readOnly value={draft.linkedinPostEn} />
+              </label>
+            ) : null}
+            {draft.articleHtmlEn ? (
+              <label className="block space-y-2">
+                <span className="text-[14px] font-medium text-[var(--apple-text)]">Article HTML</span>
+                <textarea className="h-[min(45vh,460px)] w-full resize-y rounded-xl border border-black/[0.1] bg-white p-4 font-mono text-xs leading-relaxed text-[var(--apple-text)] shadow-inner" readOnly value={draft.articleHtmlEn} />
+              </label>
+            ) : null}
+            <p className={`${adminBody} text-[13px]`}>
+              English copy is generated for review and reuse. It is not published automatically by the German approval flow.
+            </p>
+          </div>
+        </AdminPageSection>
+      ) : null}
 
       {draft.openaiResponseId ? (
         <AdminPageSection>

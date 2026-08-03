@@ -37,6 +37,12 @@ export type BlogAutomationTopicMode = "topic_queue" | "ai_suggested";
 
 export type BlogAutomationArticleLength = "short" | "medium" | "long";
 export type BlogPostingRecurrence = "none" | "weekly" | "biweekly" | "monthly";
+export type BlogAutomationOutputMode = "de" | "de_en";
+export type BlogAutomationScheduleSlot = {
+  weekday: string;
+  time: string;
+  enabled: boolean;
+};
 
 /**
  * Single settings document : use doc id {@link BLOG_AUTOMATION_SETTINGS_DOC_ID} unless you intentionally shard by env/site later.
@@ -51,10 +57,14 @@ export type BlogAutomationSettings = {
   preferredDays: string[];
   /** Local wall-clock time for draft creation, e.g. `"09:30"`. */
   preferredTime: string;
+  /** Up to two weekday/time slots when automatic draft creation may run. */
+  draftSlots: BlogAutomationScheduleSlot[];
   /** Weekdays when approved articles should be scheduled to go live. */
   postingDays: string[];
   /** Local wall-clock time for approved article publishing. */
   postingTime: string;
+  /** Up to two weekday/time slots for approved article publishing. */
+  postingSlots: BlogAutomationScheduleSlot[];
   /** Publishing cadence after the next selected weekday/time. */
   postingRecurrence: BlogPostingRecurrence;
   /** IANA timezone, e.g. `Europe/Zurich`. */
@@ -63,6 +73,8 @@ export type BlogAutomationSettings = {
   tone: string;
   /** Content language hint for generation, e.g. `de-CH`. */
   defaultLanguage: string;
+  /** Whether to create only German copy or German plus English review copy. */
+  outputMode: BlogAutomationOutputMode;
   topicMode: BlogAutomationTopicMode;
   /** When true, drafts never promote without explicit approval (even if `autoPublish` is true elsewhere). */
   requireHumanApproval: boolean;

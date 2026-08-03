@@ -54,11 +54,36 @@ export const blogAutomationDraftOutputSchema = z.object({
   heroImageAlt: z.string(),
 });
 
-export type BlogAutomationDraftOutput = z.infer<typeof blogAutomationDraftOutputSchema>;
+const englishDraftOutputSchema = z.object({
+  titleEn: z.string(),
+  slugEn: z.string(),
+  excerptEn: z.string(),
+  metaTitleEn: z.string(),
+  metaDescriptionEn: z.string(),
+  articleHtmlEn: z.string(),
+  linkedinPostEn: z.string(),
+});
+
+export type BlogAutomationDraftOutput = z.infer<typeof blogAutomationDraftOutputSchema> & Partial<z.infer<typeof englishDraftOutputSchema>>;
 
 const directPromptMetadataSchema = blogAutomationDraftOutputSchema.omit({ articleHtml: true });
 
 type DirectPromptMetadata = z.infer<typeof directPromptMetadataSchema>;
+
+const ENGLISH_DRAFT_JSON_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["titleEn", "slugEn", "excerptEn", "metaTitleEn", "metaDescriptionEn", "articleHtmlEn", "linkedinPostEn"],
+  properties: {
+    titleEn: { type: "string" },
+    slugEn: { type: "string" },
+    excerptEn: { type: "string" },
+    metaTitleEn: { type: "string" },
+    metaDescriptionEn: { type: "string" },
+    articleHtmlEn: { type: "string" },
+    linkedinPostEn: { type: "string" },
+  },
+} as const;
 
 const DIRECT_PROMPT_METADATA_JSON_SCHEMA = {
   type: "object",
@@ -422,7 +447,7 @@ function normalizeImageSearchQueries(queries: string[]): string[] {
 }
 
 function normalizeDraftOutput(output: BlogAutomationDraftOutput): BlogAutomationDraftOutput {
-  return {
+  const normalized: BlogAutomationDraftOutput = {
     title: toSwissGerman(output.title).trim(),
     slug: output.slug.trim().toLowerCase(),
     excerpt: toSwissGerman(output.excerpt).trim(),
@@ -434,6 +459,14 @@ function normalizeDraftOutput(output: BlogAutomationDraftOutput): BlogAutomation
     imageSearchQueries: normalizeImageSearchQueries(output.imageSearchQueries),
     heroImageAlt: toSwissGerman(output.heroImageAlt).trim(),
   };
+  if (output.titleEn != null) normalized.titleEn = output.titleEn.trim();
+  if (output.slugEn != null) normalized.slugEn = output.slugEn.trim().toLowerCase();
+  if (output.excerptEn != null) normalized.excerptEn = output.excerptEn.trim();
+  if (output.metaTitleEn != null) normalized.metaTitleEn = output.metaTitleEn.trim();
+  if (output.metaDescriptionEn != null) normalized.metaDescriptionEn = output.metaDescriptionEn.trim();
+  if (output.articleHtmlEn != null) normalized.articleHtmlEn = cleanGeneratedBlogArticleHtml(stripModelCodeFences(output.articleHtmlEn));
+  if (output.linkedinPostEn != null) normalized.linkedinPostEn = normalizeLinkedinPlaceholder(output.linkedinPostEn);
+  return normalized;
 }
 
 async function createDirectMetadataResponse(params: {
@@ -513,6 +546,50 @@ type BlogDraftResponse = {
   incomplete_details?: { reason?: string } | null;
 };
 
+async function generateEnglishVersion(
+  client: OpenAI,
+  params: GenerateBlogDraftParams,
+  output: BlogAutomationDraftOutput,
+): Promise<{ english: z.infer<typeof englishDraftOutputSchema>; responseId: string }> {
+  const response = await client.responses.create({
+    model: resolveModel(),
+    instructions: `Create an English review version for an Abexis CMS blog draft.
+
+Return exactly one JSON object matching the schema.
+Translate and adapt the German article faithfully into polished English while preserving the same structure, internal Abexis links, and senior consulting tone.
+Do not add external/source/competitor links. Keep articleHtmlEn as a semantic HTML fragment only.
+linkedinPostEn must be a short English LinkedIn teaser, 300-650 characters, no hashtags unless already requested, no external links, and end with {{BLOG_URL}} on its own final line exactly once.`,
+    input: `Topic: ${params.topic.title}
+
+German title:
+${output.title}
+
+German excerpt:
+${output.excerpt}
+
+German article HTML:
+${output.articleHtml}
+
+German LinkedIn post:
+${output.linkedinPost}`,
+    max_output_tokens: 12_000,
+    text: {
+      format: {
+        type: "json_schema",
+        name: "abexis_blog_english_review_v1",
+        strict: true,
+        schema: ENGLISH_DRAFT_JSON_SCHEMA as unknown as Record<string, unknown>,
+      },
+    },
+  });
+  const raw = parseBlogDraftResponse(response as BlogDraftResponse);
+  const parsed = englishDraftOutputSchema.safeParse(raw);
+  if (!parsed.success) {
+    throw new Error(`[blogAutomation] Invalid English draft JSON: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`);
+  }
+  return { english: parsed.data, responseId: response.id };
+}
+
 async function createBlogDraftResponse(params: {
   client: OpenAI;
   generationParams: GenerateBlogDraftParams;
@@ -580,7 +657,15 @@ export async function generateBlogDraft(params: GenerateBlogDraftParams): Promis
   const client = new OpenAI({ apiKey });
 
   if (isDirectCmsPrompt(params.topic)) {
-    return generateDirectPromptBlogDraft(client, params);
+    const result = await generateDirectPromptBlogDraft(client, params);
+    if (params.settings.outputMode === "de_en") {
+      const english = await generateEnglishVersion(client, params, result.output);
+      return {
+        output: normalizeDraftOutput({ ...result.output, ...english.english }),
+        responseId: `${result.responseId}:${english.responseId}`,
+      };
+    }
+    return result;
   }
 
   let response = await createBlogDraftResponse({
@@ -611,10 +696,15 @@ export async function generateBlogDraft(params: GenerateBlogDraftParams): Promis
     throw new Error(`[blogAutomation] Invalid model JSON: ${JSON.stringify(detail)}`);
   }
 
-  return {
-    output: normalizeDraftOutput(parsed.data),
-    responseId: response.id,
-  };
+  let output = normalizeDraftOutput(parsed.data);
+  let responseId = response.id;
+  if (params.settings.outputMode === "de_en") {
+    const english = await generateEnglishVersion(client, params, output);
+    output = normalizeDraftOutput({ ...output, ...english.english });
+    responseId = `${responseId}:${english.responseId}`;
+  }
+
+  return { output, responseId };
 }
 
 function safeParseOutputText(response: BlogDraftResponse): unknown {

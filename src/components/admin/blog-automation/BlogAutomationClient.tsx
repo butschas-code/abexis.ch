@@ -14,10 +14,12 @@ import {
 import {
   apiGenerateBlogDraftFromPrompt,
   apiCreateBlogTopic,
+  apiDeleteBlogTopic,
   apiListQueuedBlogTopics,
   apiLoadBlogAutomationSettings,
   apiRunBlogAutomationNow,
   apiSaveBlogAutomationSettings,
+  apiUpdateBlogTopic,
 } from "@/cms/services/blog-automation-cms-api-client";
 import {
   loadBlogAutomationDashboardSnapshot,
@@ -69,7 +71,13 @@ const LANGUAGE_OPTIONS = [
   { value: "fr-CH", label: "Français (Suisse)" },
 ] as const;
 
+const OUTPUT_MODE_OPTIONS = [
+  { value: "de" as const, label: "Deutsch", description: "Ein deutscher Blog- und LinkedIn-Entwurf." },
+  { value: "de_en" as const, label: "Deutsch + English", description: "Deutscher Hauptentwurf plus englische Version zur Prüfung." },
+] as const;
+
 const TIMEZONE_OPTIONS = ["Europe/Zurich", "Europe/Berlin", "Europe/Paris", "Europe/Vienna", "UTC"] as const;
+const MAX_AUTOMATION_SLOTS = 2;
 
 function isKnownTimezone(tz: string): tz is (typeof TIMEZONE_OPTIONS)[number] {
   return (TIMEZONE_OPTIONS as readonly string[]).includes(tz);
@@ -133,6 +141,90 @@ function ChoiceCard(props: {
   );
 }
 
+function normalizeSlots(
+  slots: BlogAutomationFormState["draftSlots"],
+  fallbackWeekday: string,
+  fallbackTime: string,
+): BlogAutomationFormState["draftSlots"] {
+  const rows = Array.isArray(slots) ? slots.slice(0, MAX_AUTOMATION_SLOTS) : [];
+  while (rows.length < MAX_AUTOMATION_SLOTS) {
+    rows.push({ weekday: fallbackWeekday, time: fallbackTime, enabled: rows.length === 0 });
+  }
+  return rows.map((slot, idx) => ({
+    weekday: slot.weekday || fallbackWeekday,
+    time: slot.time || fallbackTime,
+    enabled: idx === 0 ? slot.enabled !== false : Boolean(slot.enabled),
+  }));
+}
+
+function ScheduleSlotRows(props: {
+  label: string;
+  slots: BlogAutomationFormState["draftSlots"];
+  fallbackWeekday: string;
+  fallbackTime: string;
+  onChange: (slots: BlogAutomationFormState["draftSlots"]) => void;
+}) {
+  const { label, slots, fallbackWeekday, fallbackTime, onChange } = props;
+  const normalized = normalizeSlots(slots, fallbackWeekday, fallbackTime);
+  const update = (index: number, patch: Partial<BlogAutomationFormState["draftSlots"][number]>) => {
+    onChange(normalized.map((slot, idx) => (idx === index ? { ...slot, ...patch } : slot)));
+  };
+
+  return (
+    <div className="space-y-3">
+      {normalized.map((slot, idx) => (
+        <div key={`${label}-${idx}`} className="grid gap-3 rounded-2xl border border-black/[0.06] bg-white/90 p-4 md:grid-cols-[130px_minmax(0,1fr)_170px] md:items-center">
+          <label className="flex items-center gap-2 text-[14px] font-medium text-[var(--apple-text)]">
+            <input
+              type="checkbox"
+              checked={slot.enabled}
+              onChange={(e) => update(idx, { enabled: e.target.checked })}
+              className="h-4 w-4 rounded border-black/18 text-[var(--brand-900)]"
+            />
+            {label} {idx + 1}
+          </label>
+          <select className={adminInput} value={slot.weekday} disabled={!slot.enabled} onChange={(e) => update(idx, { weekday: e.target.value })}>
+            {WEEKDAY_OPTIONS.map((d) => (
+              <option key={d.key} value={d.key}>
+                {d.label}
+              </option>
+            ))}
+          </select>
+          <input type="time" className={adminInput} value={slot.time} disabled={!slot.enabled} onChange={(e) => update(idx, { time: e.target.value })} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function prepareSettingsForSave(form: BlogAutomationFormState, overrides: Partial<BlogAutomationFormState> = {}): BlogAutomationFormState {
+  const draftSlots = normalizeSlots(
+    overrides.draftSlots ?? form.draftSlots,
+    DEFAULT_BLOG_AUTOMATION_FORM.preferredDays[0]!,
+    DEFAULT_BLOG_AUTOMATION_FORM.preferredTime,
+  );
+  const postingSlots = normalizeSlots(
+    overrides.postingSlots ?? form.postingSlots,
+    DEFAULT_BLOG_AUTOMATION_FORM.postingDays[0]!,
+    DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
+  );
+  const activeDraftSlots = draftSlots.filter((slot) => slot.enabled);
+  const activePostingSlots = postingSlots.filter((slot) => slot.enabled);
+  return {
+    ...form,
+    ...overrides,
+    draftSlots,
+    postingSlots,
+    articlesPerWeek: Math.min(2, Math.max(1, activeDraftSlots.length || 1)),
+    preferredDays: activeDraftSlots.length ? activeDraftSlots.map((slot) => slot.weekday) : [draftSlots[0]!.weekday],
+    preferredTime: activeDraftSlots[0]?.time || draftSlots[0]!.time,
+    postingDays: activePostingSlots.length ? activePostingSlots.map((slot) => slot.weekday) : [postingSlots[0]!.weekday],
+    postingTime: activePostingSlots[0]?.time || postingSlots[0]!.time,
+    postingRecurrence: form.postingRecurrence || DEFAULT_BLOG_AUTOMATION_FORM.postingRecurrence,
+    socialPlatforms: form.createSocialPosts ? ["linkedin"] : [],
+  };
+}
+
 export function BlogAutomationClient() {
   const { user, ready: authReady } = useCmsAuth();
   const router = useRouter();
@@ -149,6 +241,7 @@ export function BlogAutomationClient() {
   const [runNowBusy, setRunNowBusy] = useState(false);
   const [promptDraftBusy, setPromptDraftBusy] = useState(false);
   const [promptDraft, setPromptDraft] = useState({ title: "", prompt: "" });
+  const [topicActionBusy, setTopicActionBusy] = useState<string | null>(null);
 
   const [newTopic, setNewTopic] = useState({
     title: "",
@@ -225,20 +318,6 @@ export function BlogAutomationClient() {
     setForm((s) => (s ? { ...s, ...p } : s));
   }, []);
 
-  const setDraftDay = useCallback((key: string) => {
-    setForm((s) => {
-      if (!s) return s;
-      return { ...s, articlesPerWeek: 1, preferredDays: [key] };
-    });
-  }, []);
-
-  const setPostingDay = useCallback((key: string) => {
-    setForm((s) => {
-      if (!s) return s;
-      return { ...s, postingDays: [key] };
-    });
-  }, []);
-
   const linkedinOn = useMemo(() => form?.socialPlatforms.includes("linkedin") ?? false, [form?.socialPlatforms]);
 
   const setLinkedinPlatform = useCallback((on: boolean) => {
@@ -261,15 +340,7 @@ export function BlogAutomationClient() {
       setSuccess(null);
       try {
         const token = await getIdToken();
-        const toSave: BlogAutomationFormState = {
-          ...form,
-          articlesPerWeek: 1,
-          preferredDays: form.preferredDays.length ? [form.preferredDays[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays,
-          postingDays: form.postingDays.length ? [form.postingDays[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
-          postingTime: form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
-          postingRecurrence: form.postingRecurrence || DEFAULT_BLOG_AUTOMATION_FORM.postingRecurrence,
-          socialPlatforms: form.createSocialPosts ? ["linkedin"] : [],
-        };
+        const toSave = prepareSettingsForSave(form);
         await apiSaveBlogAutomationSettings(token, toSave, docExists);
         setDocExists(true);
         setSuccess("Änderungen sind gesichert.");
@@ -290,16 +361,7 @@ export function BlogAutomationClient() {
     setSuccess(null);
     try {
       const token = await getIdToken();
-      const toSave: BlogAutomationFormState = {
-        ...form,
-        enabled: true,
-        articlesPerWeek: 1,
-        preferredDays: form.preferredDays.length ? [form.preferredDays[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays,
-        postingDays: form.postingDays.length ? [form.postingDays[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
-        postingTime: form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
-        postingRecurrence: form.postingRecurrence || DEFAULT_BLOG_AUTOMATION_FORM.postingRecurrence,
-        socialPlatforms: form.createSocialPosts ? ["linkedin"] : [],
-      };
+      const toSave = prepareSettingsForSave(form, { enabled: true });
       await apiSaveBlogAutomationSettings(token, toSave, docExists);
       setForm(toSave);
       setDocExists(true);
@@ -338,11 +400,7 @@ export function BlogAutomationClient() {
     setSuccess(null);
     try {
       const token = await getIdToken();
-      const toSave: BlogAutomationFormState = {
-        ...form,
-        articlesPerWeek: Math.min(3, Math.max(1, Math.floor(form.articlesPerWeek) || 1)),
-        socialPlatforms: form.createSocialPosts ? ["linkedin"] : [],
-      };
+      const toSave = prepareSettingsForSave(form);
       await apiSaveBlogAutomationSettings(token, toSave, docExists);
       setForm(toSave);
       setDocExists(true);
@@ -389,6 +447,53 @@ export function BlogAutomationClient() {
       setAddingTopic(false);
     }
   }, [newTopic, form, refreshTopics, getIdToken]);
+
+  const onDeleteTopic = useCallback(
+    async (topicId: string) => {
+      const topic = queuedTopics.find((t) => t.id === topicId);
+      const ok = window.confirm(`Thema «${topic?.title || "ohne Titel"}» aus der Warteliste löschen?`);
+      if (!ok) return;
+      setTopicActionBusy(topicId);
+      setError(null);
+      try {
+        const token = await getIdToken();
+        await apiDeleteBlogTopic(token, topicId);
+        await refreshTopics();
+        setSuccess("Thema wurde gelöscht.");
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Thema konnte nicht gelöscht werden.");
+      } finally {
+        setTopicActionBusy(null);
+      }
+    },
+    [getIdToken, queuedTopics, refreshTopics],
+  );
+
+  const onMoveTopic = useCallback(
+    async (topicId: string, direction: -1 | 1) => {
+      const index = queuedTopics.findIndex((t) => t.id === topicId);
+      const swapIndex = index + direction;
+      const current = queuedTopics[index];
+      const other = queuedTopics[swapIndex];
+      if (!current || !other) return;
+      setTopicActionBusy(topicId);
+      setError(null);
+      try {
+        const token = await getIdToken();
+        const reordered = [...queuedTopics];
+        reordered[index] = other;
+        reordered[swapIndex] = current;
+        await Promise.all(reordered.map((topic, idx) => apiUpdateBlogTopic(token, topic.id, { priority: (idx + 1) * 10 })));
+        await refreshTopics();
+        setSuccess("Reihenfolge wurde angepasst.");
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Reihenfolge konnte nicht geändert werden.");
+      } finally {
+        setTopicActionBusy(null);
+      }
+    },
+    [getIdToken, queuedTopics, refreshTopics],
+  );
 
   if (!authReady) {
     return (
@@ -544,7 +649,7 @@ export function BlogAutomationClient() {
           <BlogAutomationStepCard
             step={2}
             title="Wann sollen neue Entwürfe entstehen?"
-            intro="Wählen Sie einen festen Tag. Die Automatisierung erstellt dann höchstens einen KI-Entwurf pro Woche, sofern ein Thema bereitsteht."
+            intro="Wählen Sie bis zu zwei feste Zeitfenster pro Woche. Pro aktivem Zeitfenster kann ein KI-Entwurf entstehen, sofern ein Thema bereitsteht."
           >
             <div className="grid gap-6 md:grid-cols-3">
               <label className="block space-y-2 md:col-span-3">
@@ -559,29 +664,27 @@ export function BlogAutomationClient() {
                 </select>
               </label>
 
-              <label className="block space-y-2 md:col-span-2">
-                <span className="text-[14px] font-medium text-[var(--apple-text)]">Entwurfstag</span>
-                <select
-                  className={adminInput}
-                  value={form.preferredDays[0] ?? DEFAULT_BLOG_AUTOMATION_FORM.preferredDays[0]}
-                  onChange={(e) => setDraftDay(e.target.value)}
-                >
-                  {WEEKDAY_OPTIONS.map((d) => (
-                    <option key={d.key} value={d.key}>
-                      {d.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="block space-y-2">
-                <span className="text-[14px] font-medium text-[var(--apple-text)]">Ab Uhrzeit</span>
-                <input type="time" className={adminInput} value={form.preferredTime} onChange={(e) => patch({ preferredTime: e.target.value })} />
-              </label>
+              <div className="md:col-span-3">
+                <ScheduleSlotRows
+                  label="Entwurf"
+                  slots={form.draftSlots}
+                  fallbackWeekday={DEFAULT_BLOG_AUTOMATION_FORM.preferredDays[0]!}
+                  fallbackTime={DEFAULT_BLOG_AUTOMATION_FORM.preferredTime}
+                  onChange={(draftSlots) => {
+                    const active = draftSlots.filter((slot) => slot.enabled);
+                    patch({
+                      draftSlots,
+                      articlesPerWeek: Math.min(2, Math.max(1, active.length || 1)),
+                      preferredDays: active.length ? active.map((slot) => slot.weekday) : [draftSlots[0]?.weekday ?? DEFAULT_BLOG_AUTOMATION_FORM.preferredDays[0]!],
+                      preferredTime: active[0]?.time ?? draftSlots[0]?.time ?? DEFAULT_BLOG_AUTOMATION_FORM.preferredTime,
+                    });
+                  }}
+                />
+              </div>
             </div>
 
             <div className="rounded-2xl border border-[var(--brand-900)]/12 bg-[color-mix(in_srgb,var(--brand-900)_6%,white)] px-5 py-4 text-[14px] leading-relaxed text-[var(--apple-text-secondary)]">
-              Dieser Schritt erstellt nur Entwürfe. Nichts wird dadurch veröffentlicht. Die automatische Prüfung läuft nicht jede Minute; für einen sofortigen Test nutzen Sie oben «Jetzt Entwurf vorbereiten».
+              Dieser Schritt erstellt nur Entwürfe. Nichts wird dadurch veröffentlicht. Für einen sofortigen Test nutzen Sie oben «Jetzt Entwurf vorbereiten».
             </div>
           </BlogAutomationStepCard>
         </AdminPageSection>
@@ -593,32 +696,20 @@ export function BlogAutomationClient() {
             intro="Legen Sie den Veröffentlichungszeitpunkt fest. Wenn Sie keine Wiederholung wählen, wird der nächste freigegebene Artikel einmalig auf den nächsten passenden Termin geplant."
           >
             <div className="space-y-5">
-              <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_180px] md:items-end">
-                <label className="block space-y-2">
-                  <span className="text-[14px] font-medium text-[var(--apple-text)]">Publikationstag</span>
-                  <select
-                    className={adminInput}
-                    value={form.postingDays[0] ?? DEFAULT_BLOG_AUTOMATION_FORM.postingDays[0]}
-                    onChange={(e) => setPostingDay(e.target.value)}
-                  >
-                    {WEEKDAY_OPTIONS.map((d) => (
-                      <option key={d.key} value={d.key}>
-                        {d.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <label className="block space-y-2">
-                  <span className="text-[14px] font-medium text-[var(--apple-text)]">Live um</span>
-                  <input
-                    type="time"
-                    className={adminInput}
-                    value={form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime}
-                    onChange={(e) => patch({ postingTime: e.target.value })}
-                  />
-                </label>
-              </div>
+              <ScheduleSlotRows
+                label="Publikation"
+                slots={form.postingSlots}
+                fallbackWeekday={DEFAULT_BLOG_AUTOMATION_FORM.postingDays[0]!}
+                fallbackTime={DEFAULT_BLOG_AUTOMATION_FORM.postingTime}
+                onChange={(postingSlots) => {
+                  const active = postingSlots.filter((slot) => slot.enabled);
+                  patch({
+                    postingSlots,
+                    postingDays: active.length ? active.map((slot) => slot.weekday) : [postingSlots[0]?.weekday ?? DEFAULT_BLOG_AUTOMATION_FORM.postingDays[0]!],
+                    postingTime: active[0]?.time ?? postingSlots[0]?.time ?? DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
+                  });
+                }}
+              />
 
               <fieldset className="space-y-3">
                 <legend className="text-[14px] font-medium text-[var(--apple-text)]">Wiederholung</legend>
@@ -649,11 +740,11 @@ export function BlogAutomationClient() {
               </fieldset>
 
               <div className="rounded-2xl border border-black/[0.06] bg-[color-mix(in_srgb,var(--apple-bg-subtle)_55%,white)] px-5 py-4 text-[14px] leading-relaxed text-[var(--apple-text-secondary)]">
-                Freigegebene Artikel werden am nächsten passenden {WEEKDAY_OPTIONS.find((d) => d.key === (form.postingDays[0] ?? DEFAULT_BLOG_AUTOMATION_FORM.postingDays[0]))?.label ?? "Publikationstag"} um {form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime} Uhr ({form.timezone || "Europe/Zurich"}) live geschaltet.
+                Freigegebene Artikel werden am nächsten freien aktiven Publikationstermin live geschaltet ({form.timezone || "Europe/Zurich"}).
                 {form.postingRecurrence === "none"
                   ? " Ohne Wiederholung bleibt es bei diesem nächsten freien Termin."
                   : " Bei mehreren freigegebenen Artikeln reserviert das CMS automatisch die folgenden Termine gemäss Wiederholung."}
-                {" "}Der vorbereitete LinkedIn-Post wird erst an Nuelink übergeben, wenn der Blogbeitrag live geht.
+                {" "}Der vorbereitete LinkedIn-Post wird bei der Freigabe einmalig für denselben Zeitpunkt in Nuelink geplant.
               </div>
             </div>
           </BlogAutomationStepCard>
@@ -702,7 +793,7 @@ export function BlogAutomationClient() {
                   </select>
                 </label>
                 <label className="block space-y-2 md:col-span-2">
-                  <span className="text-[14px] font-medium text-[var(--apple-text)]">Sprache der Entwürfe</span>
+                  <span className="text-[14px] font-medium text-[var(--apple-text)]">Hauptsprache</span>
                   <select className={adminInput} value={form.defaultLanguage} onChange={(e) => patch({ defaultLanguage: e.target.value })}>
                     {LANGUAGE_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>
@@ -711,6 +802,33 @@ export function BlogAutomationClient() {
                     ))}
                   </select>
                 </label>
+                <fieldset className="space-y-3 md:col-span-2">
+                  <legend className="text-[14px] font-medium text-[var(--apple-text)]">Sprachversionen</legend>
+                  <div className="grid gap-3 md:grid-cols-2">
+                    {OUTPUT_MODE_OPTIONS.map((option) => (
+                      <label
+                        key={option.value}
+                        className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-4 transition ${
+                          form.outputMode === option.value
+                            ? "border-[var(--brand-900)]/25 bg-[color-mix(in_srgb,var(--brand-900)_7%,white)]"
+                            : "border-black/[0.08] bg-white hover:border-black/14"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="outputMode"
+                          checked={form.outputMode === option.value}
+                          onChange={() => patch({ outputMode: option.value })}
+                          className="mt-1 h-4 w-4 border-black/18 text-[var(--brand-900)]"
+                        />
+                        <span>
+                          <span className="block text-[14px] font-medium text-[var(--apple-text)]">{option.label}</span>
+                          <span className={`mt-1 block ${adminBody} text-[13px]`}>{option.description}</span>
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
               </div>
             </div>
 
@@ -756,16 +874,45 @@ export function BlogAutomationClient() {
                         <th className="py-3 pr-3">Begriff</th>
                         <th className="py-3 pr-3">Schwerpunkt</th>
                         <th className="py-3">Notiz</th>
+                        <th className="py-3 pl-3 text-right">Aktion</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {queuedTopics.map((t) => (
+                      {queuedTopics.map((t, index) => (
                         <tr key={t.id} className="border-b border-black/[0.04] last:border-0">
                           <td className="py-3 pr-3 align-top tabular-nums text-[var(--apple-text-secondary)]">{t.priority}</td>
                           <td className="py-3 pr-3 align-top font-medium text-[var(--apple-text)]">{t.title}</td>
                           <td className="py-3 pr-3 align-top text-[var(--apple-text-secondary)]">{t.targetKeyword}</td>
                           <td className="py-3 pr-3 align-top text-[var(--apple-text-secondary)]">{t.angle}</td>
                           <td className="py-3 align-top text-[var(--apple-text-secondary)]">{t.notes}</td>
+                          <td className="py-3 pl-3 align-top">
+                            <div className="flex justify-end gap-2">
+                              <button
+                                type="button"
+                                className={`${adminBtnGhost} !min-h-[34px] px-3 text-[12px]`}
+                                disabled={topicActionBusy != null || index === 0}
+                                onClick={() => void onMoveTopic(t.id, -1)}
+                              >
+                                Hoch
+                              </button>
+                              <button
+                                type="button"
+                                className={`${adminBtnGhost} !min-h-[34px] px-3 text-[12px]`}
+                                disabled={topicActionBusy != null || index === queuedTopics.length - 1}
+                                onClick={() => void onMoveTopic(t.id, 1)}
+                              >
+                                Runter
+                              </button>
+                              <button
+                                type="button"
+                                className={`${adminBtnGhost} !min-h-[34px] px-3 text-[12px] text-red-700 hover:border-red-300`}
+                                disabled={topicActionBusy != null}
+                                onClick={() => void onDeleteTopic(t.id)}
+                              >
+                                Löschen
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                       ))}
                     </tbody>

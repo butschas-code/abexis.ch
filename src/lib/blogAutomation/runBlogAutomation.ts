@@ -18,6 +18,7 @@ import { shouldRunAutomation } from "@/lib/blogAutomation/shouldRunAutomation";
 import {
   BLOG_AUTOMATION_SETTINGS_DOC_ID,
   type BlogAutomationArticleLength,
+  type BlogAutomationScheduleSlot,
   type BlogAutomationSettings,
   type BlogAutomationTopicMode,
   type BlogPipelineLogLevel,
@@ -58,6 +59,26 @@ function asTimestamp(value: unknown): Timestamp {
   return Timestamp.now();
 }
 
+function readScheduleSlots(raw: unknown, fallbackDays: string[], fallbackTime: string): BlogAutomationScheduleSlot[] {
+  const rows = Array.isArray(raw) ? raw : [];
+  const slots = rows
+    .map((row) => {
+      const o = row && typeof row === "object" ? (row as Record<string, unknown>) : {};
+      const weekday = typeof o.weekday === "string" && o.weekday.trim() ? o.weekday.trim().toLowerCase() : "";
+      if (!weekday) return null;
+      return {
+        weekday,
+        time: typeof o.time === "string" && o.time.trim() ? o.time.trim() : fallbackTime,
+        enabled: o.enabled !== false,
+      };
+    })
+    .filter((slot): slot is BlogAutomationScheduleSlot => slot != null)
+    .slice(0, 2);
+  if (slots.length) return slots;
+  const days = fallbackDays.length ? fallbackDays : ["monday"];
+  return days.slice(0, 2).map((weekday, idx) => ({ weekday, time: fallbackTime, enabled: idx === 0 || days.length > 1 }));
+}
+
 /**
  * Maps Firestore → domain shape with **safe defaults** (human review on by default).
  */
@@ -83,15 +104,21 @@ export function coerceBlogAutomationSettings(raw: Record<string, unknown>): Blog
   if (postingDays.length === 0) {
     postingDays = legacyPreferredDays.length ? legacyPreferredDays : preferredDays;
   }
-  preferredDays = [preferredDays[0]!];
+  preferredDays = preferredDays.slice(0, 2);
+  const preferredTime = typeof raw.preferredTime === "string" ? raw.preferredTime : "09:00";
+  const postingTime = typeof raw.postingTime === "string" ? raw.postingTime : typeof raw.preferredTime === "string" ? raw.preferredTime : "09:00";
+  const draftSlots = readScheduleSlots(raw.draftSlots, preferredDays, preferredTime);
+  const postingSlots = readScheduleSlots(raw.postingSlots, postingDays, postingTime);
 
   return {
     enabled: raw.enabled === true,
-    articlesPerWeek: 1,
+    articlesPerWeek: Math.min(2, Math.max(1, Math.floor(Number(raw.articlesPerWeek)) || 1)),
     preferredDays,
-    preferredTime: typeof raw.preferredTime === "string" ? raw.preferredTime : "09:00",
+    preferredTime,
+    draftSlots,
     postingDays,
-    postingTime: typeof raw.postingTime === "string" ? raw.postingTime : typeof raw.preferredTime === "string" ? raw.preferredTime : "09:00",
+    postingTime,
+    postingSlots,
     postingRecurrence:
       raw.postingRecurrence === "weekly" || raw.postingRecurrence === "biweekly" || raw.postingRecurrence === "monthly"
         ? raw.postingRecurrence
@@ -100,6 +127,7 @@ export function coerceBlogAutomationSettings(raw: Record<string, unknown>): Blog
     targetAudience: typeof raw.targetAudience === "string" ? raw.targetAudience : "",
     tone: typeof raw.tone === "string" ? raw.tone : "",
     defaultLanguage: typeof raw.defaultLanguage === "string" ? raw.defaultLanguage : "de-CH",
+    outputMode: raw.outputMode === "de_en" ? "de_en" : "de",
     topicMode,
     /** Default true : safer for non-technical editors. */
     requireHumanApproval: raw.requireHumanApproval !== false,
@@ -776,6 +804,13 @@ export async function runBlogAutomation(
       metaDescription: draftOutput.metaDescription,
       articleHtml: sanitizeGeneratedBlogHtmlWithoutLinks(draftOutput.articleHtml),
       researchSummary: draftOutput.researchSummary,
+      titleEn: draftOutput.titleEn ?? null,
+      slugEn: draftOutput.slugEn ?? null,
+      excerptEn: draftOutput.excerptEn ?? null,
+      metaTitleEn: draftOutput.metaTitleEn ?? null,
+      metaDescriptionEn: draftOutput.metaDescriptionEn ?? null,
+      articleHtmlEn: draftOutput.articleHtmlEn ? sanitizeGeneratedBlogHtmlWithoutLinks(draftOutput.articleHtmlEn) : null,
+      linkedinPostEn: draftOutput.linkedinPostEn ?? null,
       sources: [],
       ...(defaultDraftAuthorId ? { authorId: defaultDraftAuthorId } : {}),
       status: draftStatus,

@@ -6,6 +6,7 @@ export type AutomationScheduleSettings = {
   articlesPerWeek: number;
   preferredDays: string[];
   preferredTime: string;
+  draftSlots?: Array<{ weekday: string; time: string; enabled: boolean }>;
   timezone: string;
 };
 
@@ -24,6 +25,17 @@ function parsePreferredTime(preferredTime: string): { hour: number; minute: numb
   const m = /^([01]?\d|2[0-3]):([0-5]\d)$/.exec(preferredTime.trim());
   if (!m) return null;
   return { hour: Number(m[1]), minute: Number(m[2]) };
+}
+
+function activeDraftSlots(settings: AutomationScheduleSettings): Array<{ weekday: string; time: string }> {
+  const slots = Array.isArray(settings.draftSlots)
+    ? settings.draftSlots
+        .filter((slot) => slot.enabled !== false && slot.weekday?.trim())
+        .map((slot) => ({ weekday: normalizeDayLabel(slot.weekday), time: slot.time || settings.preferredTime }))
+        .slice(0, 2)
+    : [];
+  if (slots.length) return slots;
+  return (settings.preferredDays ?? []).map(normalizeDayLabel).filter(Boolean).map((weekday) => ({ weekday, time: settings.preferredTime }));
 }
 
 function startOfIsoWeekInZone(dt: DateTime): DateTime {
@@ -46,18 +58,18 @@ export function wouldAutomationRunCreateDraftAt(settings: AutomationScheduleSett
   const dt = DateTime.fromJSDate(now, { zone: tz });
   if (!dt.isValid) return false;
 
-  const timeParts = parsePreferredTime(settings.preferredTime ?? "");
-  if (!timeParts) return false;
-
-  const preferredDays = (settings.preferredDays ?? []).map(normalizeDayLabel).filter(Boolean);
-  if (preferredDays.length === 0) return false;
+  const slots = activeDraftSlots(settings);
+  if (slots.length === 0) return false;
 
   const todayKey = WEEKDAY_KEYS[dt.weekday - 1];
-  if (!preferredDays.includes(todayKey)) return false;
-
   const minutesNow = dt.hour * 60 + dt.minute;
-  const minutesTarget = timeParts.hour * 60 + timeParts.minute;
-  if (minutesNow < minutesTarget) return false;
+  const slotToday = slots.find((slot) => {
+    if (slot.weekday !== todayKey) return false;
+    const timeParts = parsePreferredTime(slot.time ?? "");
+    if (!timeParts) return false;
+    return minutesNow >= timeParts.hour * 60 + timeParts.minute;
+  });
+  if (!slotToday) return false;
 
   const weekStart = startOfIsoWeekInZone(dt);
   const startOfToday = dt.startOf("day");
@@ -76,7 +88,7 @@ export function wouldAutomationRunCreateDraftAt(settings: AutomationScheduleSett
   }
 
   if (draftsToday >= 1) return false;
-  if (draftsThisWeek >= articlesPerWeek) return false;
+  if (draftsThisWeek >= Math.min(2, articlesPerWeek)) return false;
 
   return true;
 }

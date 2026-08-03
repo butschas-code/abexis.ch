@@ -26,6 +26,17 @@ function parsePreferredTime(preferredTime: string): { hour: number; minute: numb
   return { hour: Number(m[1]), minute: Number(m[2]) };
 }
 
+function activeDraftSlots(settings: BlogAutomationSettings): Array<{ weekday: string; time: string }> {
+  const slots = Array.isArray(settings.draftSlots)
+    ? settings.draftSlots
+        .filter((slot) => slot.enabled !== false && slot.weekday?.trim())
+        .map((slot) => ({ weekday: normalizeDayLabel(slot.weekday), time: slot.time || settings.preferredTime }))
+        .slice(0, 2)
+    : [];
+  if (slots.length) return slots;
+  return (settings.preferredDays ?? []).map(normalizeDayLabel).filter(Boolean).map((weekday) => ({ weekday, time: settings.preferredTime }));
+}
+
 /**
  * Monday 00:00 in `timezone` for the calendar week that contains `dt` (ISO-style week start).
  */
@@ -45,7 +56,7 @@ export async function shouldRunAutomation(
     return { shouldRun: false, reason: "Automation is turned off (enabled = false)." };
   }
 
-  const articlesPerWeek = Math.floor(Number(settings.articlesPerWeek));
+  const articlesPerWeek = Math.min(2, Math.floor(Number(settings.articlesPerWeek)));
   if (!Number.isFinite(articlesPerWeek) || articlesPerWeek <= 0) {
     return { shouldRun: false, reason: "articlesPerWeek must be a positive whole number." };
   }
@@ -63,33 +74,23 @@ export async function shouldRunAutomation(
     };
   }
 
-  const timeParts = parsePreferredTime(settings.preferredTime ?? "");
-  if (!timeParts) {
-    return {
-      shouldRun: false,
-      reason: `preferredTime must be 24-hour HH:mm (e.g. 09:30); got "${settings.preferredTime}".`,
-    };
-  }
-
-  const preferredDays = (settings.preferredDays ?? []).map(normalizeDayLabel).filter(Boolean);
-  if (preferredDays.length === 0) {
-    return { shouldRun: false, reason: "No draft day is configured; choose one weekday for automatic draft creation." };
+  const slots = activeDraftSlots(settings);
+  if (slots.length === 0) {
+    return { shouldRun: false, reason: "No draft slot is configured; choose at least one weekday/time for automatic draft creation." };
   }
 
   const todayKey = WEEKDAY_KEYS[dt.weekday - 1];
-  if (!preferredDays.includes(todayKey)) {
-    return {
-      shouldRun: false,
-      reason: `Today (${todayKey}) is not the configured draft day [${preferredDays.join(", ")}] (${tz}).`,
-    };
-  }
-
   const minutesNow = dt.hour * 60 + dt.minute;
-  const minutesTarget = timeParts.hour * 60 + timeParts.minute;
-  if (minutesNow < minutesTarget) {
+  const slotToday = slots.find((slot) => {
+    if (slot.weekday !== todayKey) return false;
+    const timeParts = parsePreferredTime(slot.time ?? "");
+    if (!timeParts) return false;
+    return minutesNow >= timeParts.hour * 60 + timeParts.minute;
+  });
+  if (!slotToday) {
     return {
       shouldRun: false,
-      reason: `Local time ${dt.toFormat("HH:mm")} is before preferredTime ${settings.preferredTime} (${tz}).`,
+      reason: `Today/time (${todayKey} ${dt.toFormat("HH:mm")}) does not match an active draft slot (${tz}).`,
     };
   }
 
@@ -135,6 +136,6 @@ export async function shouldRunAutomation(
 
   return {
     shouldRun: true,
-    reason: `OK: ${todayKey}, at or after ${settings.preferredTime} ${tz}, ${draftsThisWeek}/${articlesPerWeek} draft(s) used this week, none yet today.`,
+    reason: `OK: ${todayKey}, at or after ${slotToday.time} ${tz}, ${draftsThisWeek}/${articlesPerWeek} draft(s) used this week, none yet today.`,
   };
 }

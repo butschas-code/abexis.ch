@@ -15,6 +15,7 @@ import {
 import {
   BLOG_AUTOMATION_SETTINGS_DOC_ID,
   type BlogAutomationArticleLength,
+  type BlogAutomationScheduleSlot,
   type BlogAutomationTopicMode,
 } from "@/lib/blogAutomation/types";
 import {
@@ -117,6 +118,13 @@ function mapDraftDetail(id: string, d: Record<string, unknown>): BlogDraftDetail
     metaDescription: String(d.metaDescription ?? ""),
     articleHtml: normalizeEscapedBlogHtml(String(d.articleHtml ?? "")),
     researchSummary: String(d.researchSummary ?? ""),
+    titleEn: nu(d.titleEn),
+    slugEn: nu(d.slugEn),
+    excerptEn: nu(d.excerptEn),
+    metaTitleEn: nu(d.metaTitleEn),
+    metaDescriptionEn: nu(d.metaDescriptionEn),
+    articleHtmlEn: d.articleHtmlEn != null ? normalizeEscapedBlogHtml(String(d.articleHtmlEn)) : null,
+    linkedinPostEn: nu(d.linkedinPostEn),
     sources: [],
     authorId: nu(d.authorId),
     openaiResponseId: d.openaiResponseId != null ? String(d.openaiResponseId) : null,
@@ -282,21 +290,36 @@ function formatNuelinkScheduledAt(date: Date, timezone: string): string {
   return DateTime.fromJSDate(date, { zone }).toFormat("yyyy-LL-dd HH:mm:ss");
 }
 
+function activePostingSlots(form: BlogAutomationFormState): BlogAutomationScheduleSlot[] {
+  const slots = Array.isArray(form.postingSlots)
+    ? form.postingSlots.filter((slot) => slot.enabled !== false && slot.weekday?.trim()).slice(0, 2)
+    : [];
+  if (slots.length) return slots;
+  const days = form.postingDays.length ? form.postingDays : DEFAULT_BLOG_AUTOMATION_FORM.postingDays;
+  return days.slice(0, 2).map((weekday) => ({ weekday, time: form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime, enabled: true }));
+}
+
 function nextSelectedPostingSlot(form: BlogAutomationFormState, from = new Date()): Date {
   const zone = form.timezone?.trim() || "Europe/Zurich";
-  const postingDays = form.postingDays.map((d) => d.trim().toLowerCase()).filter(Boolean);
-  const days = postingDays.length ? postingDays : ["thursday"];
-  const { hour, minute } = parsePreferredTime(form.postingTime || "09:00");
   const now = DateTime.fromJSDate(from, { zone });
+  const slots = activePostingSlots(form);
+  let best: DateTime | null = null;
 
-  for (let offset = 0; offset < 28; offset += 1) {
-    const candidateDay = now.plus({ days: offset });
-    const key = WEEKDAY_KEYS[candidateDay.weekday - 1];
-    if (!key || !days.includes(key)) continue;
-    const candidate = candidateDay.set({ hour, minute, second: 0, millisecond: 0 });
-    if (candidate.toMillis() > now.toMillis() + 60_000) return candidate.toJSDate();
+  for (const slot of slots) {
+    const { hour, minute } = parsePreferredTime(slot.time || form.postingTime || "09:00");
+    for (let offset = 0; offset < 28; offset += 1) {
+      const candidateDay = now.plus({ days: offset });
+      const key = WEEKDAY_KEYS[candidateDay.weekday - 1];
+      if (!key || key !== slot.weekday.trim().toLowerCase()) continue;
+      const candidate = candidateDay.set({ hour, minute, second: 0, millisecond: 0 });
+      if (candidate.toMillis() <= now.toMillis() + 60_000) continue;
+      if (!best || candidate.toMillis() < best.toMillis()) best = candidate;
+      break;
+    }
   }
 
+  if (best) return best.toJSDate();
+  const { hour, minute } = parsePreferredTime(form.postingTime || "09:00");
   return now.plus({ days: 1 }).set({ hour, minute, second: 0, millisecond: 0 }).toJSDate();
 }
 
@@ -330,6 +353,11 @@ async function nextApprovalPublishSlot(form: BlogAutomationFormState, from = new
   const zone = form.timezone?.trim() || "Europe/Zurich";
   const latestScheduled = await latestScheduledPostDate();
   if (!latestScheduled || latestScheduled.getTime() < firstSlot.getTime()) return firstSlot;
+
+  const slots = activePostingSlots(form);
+  if (slots.length > 1 || recurrence === "weekly") {
+    return nextSelectedPostingSlot(form, new Date(Math.max(latestScheduled.getTime() + 60_000, from.getTime())));
+  }
 
   let candidate = DateTime.fromJSDate(latestScheduled, { zone });
   const minTime = DateTime.fromJSDate(from, { zone }).plus({ minutes: 1 }).toMillis();
@@ -532,18 +560,25 @@ export async function cmsWriteBlogAutomationSettings(
   opts: { docExists: boolean },
 ): Promise<void> {
   const ref = adminDb.doc(`${COLLECTIONS.blogAutomationSettings}/${BLOG_AUTOMATION_SETTINGS_DOC_ID}`);
+  const draftSlots = normalizeScheduleSlots(form.draftSlots, form.preferredDays, form.preferredTime, DEFAULT_BLOG_AUTOMATION_FORM.draftSlots);
+  const postingSlots = normalizeScheduleSlots(form.postingSlots, form.postingDays, form.postingTime, DEFAULT_BLOG_AUTOMATION_FORM.postingSlots);
+  const activeDraftSlots = draftSlots.filter((slot) => slot.enabled);
+  const activePostingSlots = postingSlots.filter((slot) => slot.enabled);
   const payload: Record<string, unknown> = {
     enabled: form.enabled,
-    articlesPerWeek: 1,
-    preferredDays: form.preferredDays.length ? form.preferredDays.slice(0, 1) : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays,
-    preferredTime: form.preferredTime || DEFAULT_BLOG_AUTOMATION_FORM.preferredTime,
-    postingDays: form.postingDays.length ? form.postingDays.slice(0, 1) : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
-    postingTime: form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
+    articlesPerWeek: Math.min(2, Math.max(1, activeDraftSlots.length || 1)),
+    preferredDays: activeDraftSlots.length ? activeDraftSlots.map((slot) => slot.weekday) : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays,
+    preferredTime: activeDraftSlots[0]?.time || form.preferredTime || DEFAULT_BLOG_AUTOMATION_FORM.preferredTime,
+    draftSlots,
+    postingDays: activePostingSlots.length ? activePostingSlots.map((slot) => slot.weekday) : DEFAULT_BLOG_AUTOMATION_FORM.postingDays,
+    postingTime: activePostingSlots[0]?.time || form.postingTime || DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
+    postingSlots,
     postingRecurrence: form.postingRecurrence || DEFAULT_BLOG_AUTOMATION_FORM.postingRecurrence,
     timezone: form.timezone,
     targetAudience: form.targetAudience.trim(),
     tone: form.tone,
     defaultLanguage: form.defaultLanguage,
+    outputMode: form.outputMode,
     topicMode: form.topicMode,
     requireHumanApproval: form.requireHumanApproval,
     autoPublish: form.autoPublish,
@@ -558,6 +593,36 @@ export async function cmsWriteBlogAutomationSettings(
     payload.createdAt = FieldValue.serverTimestamp();
   }
   await ref.set(payload, { merge: true });
+}
+
+function normalizeScheduleSlots(
+  slots: BlogAutomationScheduleSlot[] | undefined,
+  fallbackDays: string[],
+  fallbackTime: string,
+  fallbackSlots: BlogAutomationScheduleSlot[],
+): BlogAutomationScheduleSlot[] {
+  const raw = Array.isArray(slots) ? slots : [];
+  const normalized = raw
+    .map((slot) => ({
+      weekday: String(slot.weekday ?? "").trim().toLowerCase(),
+      time: String(slot.time ?? fallbackTime ?? "09:00").trim() || "09:00",
+      enabled: slot.enabled !== false,
+    }))
+    .filter((slot) => slot.weekday)
+    .slice(0, 2);
+  if (normalized.length > 0) {
+    while (normalized.length < 2) {
+      const fill = fallbackSlots[normalized.length] ?? fallbackSlots[0]!;
+      normalized.push({ ...fill, enabled: false });
+    }
+    return normalized;
+  }
+  const days = fallbackDays.length ? fallbackDays : [fallbackSlots[0]?.weekday ?? "monday"];
+  return [0, 1].map((idx) => ({
+    weekday: days[idx] ?? fallbackSlots[idx]?.weekday ?? days[0] ?? "monday",
+    time: fallbackTime || fallbackSlots[idx]?.time || "09:00",
+    enabled: idx === 0,
+  }));
 }
 
 // ——— Topics ———
@@ -1353,11 +1418,13 @@ export async function cmsPublishDueScheduledPosts(max = 20): Promise<{ published
 // ——— Dashboard snapshot ———
 
 function formToScheduleSettings(form: BlogAutomationFormState): AutomationScheduleSettings {
+  const activeDraftSlots = form.draftSlots.filter((slot) => slot.enabled !== false && slot.weekday.trim()).slice(0, 2);
   return {
     enabled: form.enabled,
-    articlesPerWeek: 1,
-    preferredDays: form.preferredDays.slice(0, 1),
-    preferredTime: form.preferredTime,
+    articlesPerWeek: Math.min(2, Math.max(1, activeDraftSlots.length || form.articlesPerWeek || 1)),
+    preferredDays: activeDraftSlots.length ? activeDraftSlots.map((slot) => slot.weekday) : form.preferredDays.slice(0, 2),
+    preferredTime: activeDraftSlots[0]?.time || form.preferredTime,
+    draftSlots: activeDraftSlots,
     timezone: form.timezone,
   };
 }
@@ -1444,27 +1511,43 @@ export function parseBlogAutomationFormFromJson(body: unknown): BlogAutomationFo
     articleLengthRaw === "short" || articleLengthRaw === "long" ? articleLengthRaw : "medium";
 
   const preferredDaysRaw = Array.isArray(o.preferredDays) ? o.preferredDays.map(String) : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays;
-  const preferredDays = preferredDaysRaw.length ? [preferredDaysRaw[0]!] : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays;
+  const preferredDays = preferredDaysRaw.length ? preferredDaysRaw.slice(0, 2) : DEFAULT_BLOG_AUTOMATION_FORM.preferredDays;
   const postingDaysRaw = Array.isArray(o.postingDays) ? o.postingDays.map(String).filter(Boolean) : [];
   const postingDays = postingDaysRaw.length
-    ? [postingDaysRaw[0]!]
+    ? postingDaysRaw.slice(0, 2)
     : preferredDaysRaw.length
-      ? [preferredDaysRaw[0]!]
+      ? preferredDaysRaw.slice(0, 2)
       : DEFAULT_BLOG_AUTOMATION_FORM.postingDays;
   const socialPlatforms = Array.isArray(o.socialPlatforms) ? o.socialPlatforms.map(String) : [];
+  const preferredTime = typeof o.preferredTime === "string" ? o.preferredTime : DEFAULT_BLOG_AUTOMATION_FORM.preferredTime;
+  const postingTime =
+    typeof o.postingTime === "string"
+      ? o.postingTime
+      : typeof o.preferredTime === "string"
+        ? o.preferredTime
+        : DEFAULT_BLOG_AUTOMATION_FORM.postingTime;
+  const draftSlots = normalizeScheduleSlots(
+    Array.isArray(o.draftSlots) ? (o.draftSlots as BlogAutomationScheduleSlot[]) : undefined,
+    preferredDays,
+    preferredTime,
+    DEFAULT_BLOG_AUTOMATION_FORM.draftSlots,
+  );
+  const postingSlots = normalizeScheduleSlots(
+    Array.isArray(o.postingSlots) ? (o.postingSlots as BlogAutomationScheduleSlot[]) : undefined,
+    postingDays,
+    postingTime,
+    DEFAULT_BLOG_AUTOMATION_FORM.postingSlots,
+  );
 
   return {
     enabled: !!o.enabled,
-    articlesPerWeek: 1,
+    articlesPerWeek: Math.min(2, Math.max(1, draftSlots.filter((slot) => slot.enabled).length || Number(o.articlesPerWeek) || 1)),
     preferredDays,
-    preferredTime: typeof o.preferredTime === "string" ? o.preferredTime : DEFAULT_BLOG_AUTOMATION_FORM.preferredTime,
+    preferredTime,
+    draftSlots,
     postingDays,
-    postingTime:
-      typeof o.postingTime === "string"
-        ? o.postingTime
-        : typeof o.preferredTime === "string"
-          ? o.preferredTime
-          : DEFAULT_BLOG_AUTOMATION_FORM.postingTime,
+    postingTime,
+    postingSlots,
     postingRecurrence:
       o.postingRecurrence === "weekly" || o.postingRecurrence === "biweekly" || o.postingRecurrence === "monthly"
         ? o.postingRecurrence
@@ -1473,6 +1556,7 @@ export function parseBlogAutomationFormFromJson(body: unknown): BlogAutomationFo
     targetAudience: typeof o.targetAudience === "string" ? o.targetAudience : "",
     tone: typeof o.tone === "string" ? o.tone : DEFAULT_BLOG_AUTOMATION_FORM.tone,
     defaultLanguage: typeof o.defaultLanguage === "string" ? o.defaultLanguage : DEFAULT_BLOG_AUTOMATION_FORM.defaultLanguage,
+    outputMode: o.outputMode === "de_en" ? "de_en" : "de",
     topicMode,
     requireHumanApproval: o.requireHumanApproval !== false,
     autoPublish: !!o.autoPublish,

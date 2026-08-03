@@ -13,6 +13,13 @@ export type BlogDraftDetail = BlogDraftListItem & {
   metaDescription: string;
   articleHtml: string;
   researchSummary: string;
+  titleEn: string | null;
+  slugEn: string | null;
+  excerptEn: string | null;
+  metaTitleEn: string | null;
+  metaDescriptionEn: string | null;
+  articleHtmlEn: string | null;
+  linkedinPostEn: string | null;
   sources: Array<{ title: string; url: string }>;
   authorId: string | null;
   openaiResponseId: string | null;
