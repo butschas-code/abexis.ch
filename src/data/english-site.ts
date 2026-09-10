@@ -23,6 +23,24 @@ export const englishTopics = [
     ],
   },
   {
+    slug: "risk-management",
+    deSlug: "risikomanagement",
+    title: "Risk Management in Projects",
+    subtitle: "Risk support",
+    excerpt:
+      "External risk manager for demanding projects: ongoing support at roughly 10 to 20 percent capacity or a focused Project Reality Check.",
+    sections: [
+      {
+        title: "Independent risk perspective",
+        body: "Projects need someone who keeps risks visible without being caught in day-to-day delivery. Abexis supports leadership with structured risk reviews, clear escalation and practical next steps.",
+      },
+      {
+        title: "Typical work",
+        bullets: ["External risk manager role", "Risk reviews and workshops", "Project Reality Check for risk focus", "Governance and reporting support"],
+      },
+    ],
+  },
+  {
     slug: "corporate-strategy",
     deSlug: "unternehmensstrategie",
     title: "Corporate Strategy",

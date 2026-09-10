@@ -354,6 +354,14 @@ export const fokusthemenMeta = [
       "Themen wie Künstliche Intelligenz, Business Analytics, Industrie 4.0 / 5.0 und Cloud Transformation verändern unsere Gesellschaft. Nicht alle Themen bringen jedem Unternehmen und deren Kunden dieselben Vorteile. Deshalb ist es wichtig zuerst die Ziele und Erwartungen festzulegen und dann die Strategie zu erarbeiten.",
   },
   {
+    slug: "risikomanagement",
+    href: "/fokusthemen/risikomanagement",
+    title: "Risikomanagement in Projekten und externer Risk Manager",
+    subtitle: "Risikobegleitung",
+    excerpt:
+      "Externer Risk Manager für anspruchsvolle Projekte: laufende Begleitung mit 10 bis 20 Prozent Pensum oder punktueller Project Reality Check.",
+  },
+  {
     slug: "unternehmensstrategie",
     href: "/fokusthemen/unternehmensstrategie",
     title: "Unternehmensstrategie, Strategieprozess",
@@ -392,14 +400,6 @@ export const fokusthemenMeta = [
     subtitle: "Umsetzung",
     excerpt:
       "Wir unterstützen Sie bei Projektumsetzungen, sollten Sie Ressourcenengpässen haben. Fachkompetenz, Methodenwissen und die Erfahrung aus verschiedensten erfolgreich durchgeführten Projekten machen uns zu einem starken Partner für Sie und Ihr Unternehmen.",
-  },
-  {
-    slug: "risikomanagement",
-    href: "/fokusthemen/risikomanagement",
-    title: "Risikomanagement in Projekten und externer Risk Manager",
-    subtitle: "Risikobegleitung",
-    excerpt:
-      "Externer Risk Manager für anspruchsvolle Projekte: laufende Begleitung mit 10 bis 20 Prozent Pensum oder punktueller Project Reality Check.",
   },
   {
     slug: "executive-search",
