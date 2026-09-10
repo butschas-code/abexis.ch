@@ -18,10 +18,6 @@ type BentoItem = {
   i: number;
 };
 
-function indexLabel(i: number) {
-  return String(i + 1).padStart(2, "0");
-}
-
 function buildItems(items: readonly BentoItem["s"][]): BentoItem[] {
   return items.map((s, i) => ({
     s,
@@ -120,14 +116,9 @@ function LeistungenBentoCard({
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col px-6 pb-7 pt-5 sm:px-7 sm:pb-8 sm:pt-6">
-        <div className="flex items-start justify-between gap-3">
-          <p className="min-w-0 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">
-            {s.subtitle}
-          </p>
-          <span className="shrink-0 font-mono text-[10px] font-medium tabular-nums tracking-[0.15em] text-[#c7c7cc]">
-            {indexLabel(i)}
-          </span>
-        </div>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">
+          {s.subtitle}
+        </p>
 
         {i === 0 && (
           <span className="mb-1.5 mt-3 inline-flex w-fit items-center rounded-full bg-brand-900 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white sm:mb-2">
