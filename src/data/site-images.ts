@@ -26,9 +26,8 @@ export const serviceCardImages = {
   veränderungsmanagement: HOME[5],
   prozessoptimierung: HOME[6],
   projektmanagement: HOME[7],
-  risikomanagement: resolvePublicImageUrl(
-    "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Feditorial-insights.jpg?alt=media",
-  ),
+  /** Hand-drawn hero illustration — `public/images/focus/risikomanagement.webp` */
+  risikomanagement: "/images/focus/risikomanagement.webp",
 } as const;
 
 /** Breites Teaser-Bild unter der Blog-Liste (nicht HOME[8] / 68671b2e : dort früheres Blog-Teaser) */
@@ -48,7 +47,7 @@ export const fokusPageHeroImages = {
   veränderungsmanagement: (scraped["https://www.abexis.ch/fokusthemen/ver%C3%A4nderungsmanagement"] as string[])[1],
   prozessoptimierung: (scraped["https://www.abexis.ch/fokusthemen/prozessoptimierung"] as string[])[1],
   projektmanagement: (scraped["https://www.abexis.ch/fokusthemen/projektmanagement"] as string[])[1],
-  risikomanagement: (scraped["https://www.abexis.ch/fokusthemen/projektmanagement"] as string[])[1],
+  risikomanagement: "/images/focus/risikomanagement.webp",
 } as const;
 
 /** Startseiten-Hero: lokale Kopie, damit die gemeinsame Hero-Grafik nicht von Storage-Rechten abhängt. */
