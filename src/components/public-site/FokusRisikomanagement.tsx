@@ -401,7 +401,7 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
         </MotionSection>
       </section>
 
-      {/* ── 7. UNSERE ROLLE ──────────────────────────────────────────────── */}
+      {/* ── 7. UNSERE ROLLE + LEITFRAGEN ─────────────────────────────────── */}
       <section className="bg-white">
         <MotionSection>
           <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
@@ -414,87 +414,26 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
                   {c.problem.title}
                 </h2>
               </div>
-              <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">{c.challengeAreas.intro}</p>
+              <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">{c.problem.intro}</p>
             </div>
 
-            <div className="mt-12">
-              <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+            <div className="mt-12 rounded-2xl bg-[#f5f5f7] p-6 md:p-8">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                 {labels.typischeFragen}
               </p>
-              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2 lg:grid-cols-3">
+              <div className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-black/[0.08] bg-black/[0.06] sm:grid-cols-2 lg:grid-cols-3">
                 {c.problem.questions.map((q, i) => (
-                  <div key={q} className="relative bg-white px-7 py-8">
+                  <div
+                    key={q}
+                    className="relative bg-white px-7 py-8 shadow-[0_1px_0_rgba(0,0,0,0.03)]"
+                  >
                     <LCorner className="top-4 right-4 text-[#c9a96e]/30" />
                     <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
                       {String(i + 1).padStart(2, "0")}
                     </p>
-                    <p className="mt-4 text-[15px] leading-relaxed text-[#1d1d1f]">{q}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-14">
-              <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                {c.deliverables.eyebrow}
-              </p>
-              <h3 className="mb-8 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold tracking-[-0.03em] text-[#1d1d1f]">
-                {c.deliverables.title}
-              </h3>
-              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2 lg:grid-cols-3">
-                {c.deliverables.items.map((item, i) => (
-                  <div key={item.title} className="relative bg-white px-7 py-8">
-                    <LCorner className="top-4 right-4 text-[#c9a96e]/30" />
-                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                      {String(i + 1).padStart(2, "0")}
+                    <p className="mt-4 text-[15px] font-semibold leading-snug tracking-[-0.01em] text-[#1d1d1f]">
+                      {q}
                     </p>
-                    <h4 className="mt-4 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-                      {item.title}
-                    </h4>
-                    <p className="mt-3 text-[15px] leading-relaxed text-[#6e6e73]">{item.body}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-14">
-              <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                {c.challengeAreas.eyebrow}
-              </p>
-              <h3 className="mb-8 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold tracking-[-0.03em] text-[#1d1d1f]">
-                {c.challengeAreas.title}
-              </h3>
-              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2 lg:grid-cols-3">
-                {c.challengeAreas.items.map((item, i) => (
-                  <div key={item.title} className="relative bg-white px-7 py-8">
-                    <LCorner className="top-4 right-4 text-[#c9a96e]/30" />
-                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                      {String(i + 1).padStart(2, "0")}
-                    </p>
-                    <h4 className="mt-4 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-                      {item.title}
-                    </h4>
-                    <p className="mt-3 text-[15px] leading-relaxed text-[#6e6e73]">{item.body}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-14">
-              <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                {c.useCases.eyebrow}
-              </p>
-              <h3 className="mb-8 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold tracking-[-0.03em] text-[#1d1d1f]">
-                {c.useCases.title}
-              </h3>
-              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.06] bg-black/[0.04] sm:grid-cols-2 lg:grid-cols-3">
-                {c.useCases.items.map((item, i) => (
-                  <div key={item} className="relative bg-white px-7 py-8">
-                    <LCorner className="top-4 right-4 text-[#c9a96e]/30" />
-                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                      {String(i + 1).padStart(2, "0")}
-                    </p>
-                    <p className="mt-4 text-[15px] leading-relaxed text-[#1d1d1f]">{item}</p>
                   </div>
                 ))}
               </div>
@@ -503,7 +442,128 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
         </MotionSection>
       </section>
 
-      {/* ── 8. FAQ ───────────────────────────────────────────────────────── */}
+      {/* ── 8. ERGEBNISSE ────────────────────────────────────────────────── */}
+      <section className="bg-[#f5f5f7]">
+        <MotionSection>
+          <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
+            <div className="grid gap-12 lg:grid-cols-[1fr_1.8fr] lg:gap-20 lg:items-start">
+              <div className="lg:sticky lg:top-28">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+                  {c.deliverables.eyebrow}
+                </p>
+                <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
+                  {c.deliverables.title}
+                </h2>
+                <div className="mt-7 h-px w-full bg-black/[0.06]" />
+                <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
+                  {locale === "en"
+                    ? "Structured artefacts and reporting formats that make risks, measures and decisions visible."
+                    : "Strukturierte Artefakte und Berichtsformate, die Risiken, Massnahmen und Entscheidungen sichtbar machen."}
+                </p>
+              </div>
+              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.08] bg-black/[0.06] sm:grid-cols-2">
+                {c.deliverables.items.map((item, i) => (
+                  <div key={item.title} className="relative bg-white px-6 py-6">
+                    <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
+                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
+                      {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{item.body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </MotionSection>
+      </section>
+
+      {/* ── 9. BLICKWINKEL ───────────────────────────────────────────────── */}
+      <section className="bg-white">
+        <MotionSection>
+          <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
+            <div className="grid gap-12 lg:grid-cols-[1fr_1.8fr] lg:gap-20 lg:items-start">
+              <div className="lg:sticky lg:top-28">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+                  {c.challengeAreas.eyebrow}
+                </p>
+                <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
+                  {c.challengeAreas.title}
+                </h2>
+                <div className="mt-7 h-px w-full bg-black/[0.06]" />
+                <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">{c.challengeAreas.intro}</p>
+                <Link
+                  href={contactHref}
+                  className="mt-8 inline-flex items-center gap-3 text-[14px] font-semibold text-[#26337c] transition-all hover:gap-4"
+                >
+                  {labels.gespraech}
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+                    <path
+                      d="M3 8h10M8 3l5 5-5 5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+              </div>
+              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.08] bg-black/[0.06] sm:grid-cols-2 lg:grid-cols-3">
+                {c.challengeAreas.items.map((item, i) => (
+                  <div key={item.title} className="relative bg-[#fafafa] px-6 py-6">
+                    <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
+                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
+                      {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{item.body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </MotionSection>
+      </section>
+
+      {/* ── 10. EINSATZGEBIETE ─────────────────────────────────────────────── */}
+      <section className="bg-[#f5f5f7]">
+        <MotionSection>
+          <div className="mx-auto max-w-[1068px] px-6 py-16 md:py-28">
+            <div className="grid gap-12 lg:grid-cols-[1fr_1.8fr] lg:gap-20 lg:items-start">
+              <div className="lg:sticky lg:top-28">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+                  {c.useCases.eyebrow}
+                </p>
+                <h2 className="mt-4 text-[clamp(1.625rem,3.5vw+0.5rem,2.375rem)] font-semibold leading-[1.09] tracking-[-0.03em] text-[#1d1d1f]">
+                  {c.useCases.title}
+                </h2>
+                <div className="mt-7 h-px w-full bg-black/[0.06]" />
+                <p className="mt-6 text-[15px] leading-relaxed text-[#6e6e73]">
+                  {locale === "en"
+                    ? "From ERP rollouts to multi-vendor programmes — wherever independent risk oversight adds value."
+                    : "Von ERP-Einführungen bis zu Multi-Lieferanten-Programmen — überall dort, wo unabhängige Risikobegleitung Mehrwert schafft."}
+                </p>
+              </div>
+              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.08] bg-black/[0.06] sm:grid-cols-2 lg:grid-cols-3">
+                {c.useCases.items.map((item, i) => (
+                  <div key={item} className="relative flex items-start gap-3 bg-white px-6 py-5">
+                    <span className="mt-0.5 text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <p className="text-[15px] leading-snug text-[#1d1d1f]">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </MotionSection>
+      </section>
+
+      {/* ── 11. FAQ ──────────────────────────────────────────────────────── */}
       <section className="bg-[#f5f5f7]">
         <MotionSection>
           <div className="mx-auto max-w-[820px] px-6 py-16 md:py-24">
@@ -518,7 +578,7 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
         </MotionSection>
       </section>
 
-      {/* ── 9. CTA ───────────────────────────────────────────────────────── */}
+      {/* ── 12. CTA ──────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden">
         <div
           className="absolute inset-0 -z-10"
