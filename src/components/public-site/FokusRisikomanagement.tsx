@@ -144,8 +144,6 @@ function QuestionRail({ questions }: { questions: readonly string[] }) {
   );
 }
 
-const useCaseAccents = ["from-[#26337c] to-[#45b3e2]", "from-[#c9a96e] to-[#45b3e2]", "from-[#45b3e2] to-[#26337c]"] as const;
-
 type Props = { locale?: RisikomanagementLocale };
 
 export function FokusRisikomanagement({ locale = "de" }: Props) {
