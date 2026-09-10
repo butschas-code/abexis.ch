@@ -11,6 +11,7 @@ import { FokusVertriebMarketing } from "@/components/public-site/FokusVertriebMa
 import { FokusVeraenderungsmanagement } from "@/components/public-site/FokusVeraenderungsmanagement";
 import { FokusProzessoptimierung } from "@/components/public-site/FokusProzessoptimierung";
 import { FokusProjektmanagement } from "@/components/public-site/FokusProjektmanagement";
+import { FokusRisikomanagement } from "@/components/public-site/FokusRisikomanagement";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -41,6 +42,8 @@ export async function generateMetadata({ params }: Props) {
 export default async function FokusthemaPage({ params }: Props) {
   const { slug } = await params;
   const n = normalizeFokusSlug(slug);
+  if (n === "risikomanagement") return <FokusRisikomanagement locale="de" />;
+
   const html = getFokusthemaHtml(n);
   if (!html) notFound();
 

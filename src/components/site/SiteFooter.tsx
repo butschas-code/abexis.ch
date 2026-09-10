@@ -41,6 +41,7 @@ export function SiteFooter() {
         { href: "/en/fokusthemen/veränderungsmanagement", label: "Change Management" },
         { href: "/en/fokusthemen/prozessoptimierung", label: "Process Optimization" },
         { href: "/en/fokusthemen/projektmanagement", label: "Project Management" },
+        { href: "/en/fokusthemen/risikomanagement", label: "Risk Management" },
       ]
     : [
         { href: "/leistungen", label: "Überblick" },
@@ -51,6 +52,7 @@ export function SiteFooter() {
         { href: "/fokusthemen/veränderungsmanagement", label: "Veränderungsmanagement" },
         { href: "/fokusthemen/prozessoptimierung", label: "Prozessoptimierung" },
         { href: "/fokusthemen/projektmanagement", label: "Projektmanagement" },
+        { href: "/fokusthemen/risikomanagement", label: "Risikomanagement" },
       ];
   const companyLinks = english
     ? [

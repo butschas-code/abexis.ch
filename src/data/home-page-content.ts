@@ -167,6 +167,11 @@ export const homeLeistungenBlock = {
       href: "/fokusthemen/digitale-transformation",
     },
     {
+      title: "Risikomanagement in Projekten",
+      body: "Externe Risikobegleitung für anspruchsvolle Projekte. Laufend mit etwa 10 bis 20 Prozent Pensum oder als punktuelle unabhängige Prüfung.",
+      href: "/fokusthemen/risikomanagement",
+    },
+    {
       title: "Unternehmensstrategie",
       body: "Strukturierte Strategiearbeit mit klarer Priorisierung. Grundlage für Entscheidungen und Umsetzung.",
       href: "/fokusthemen/unternehmensstrategie",
@@ -387,6 +392,11 @@ export const homeLeistungenBlockEn = {
       title: "Digital Transformation",
       body: "Introduction and development of digital solutions, AI and analytics. Focused on value, integration and implementation.",
       href: "/en/fokusthemen/digitale-transformation",
+    },
+    {
+      title: "Project risk management",
+      body: "External risk support for demanding projects. Ongoing at roughly 10 to 20 percent capacity, or as a focused independent review.",
+      href: "/en/fokusthemen/risikomanagement",
     },
     {
       title: "Corporate Strategy",

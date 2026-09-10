@@ -297,6 +297,33 @@ export function FokusProjektmanagement() {
         </div>
       </MotionSection>
 
+      {/* ── 2b. LEISTUNG 3 : Externes Risikomanagement ─────────────────── */}
+      <MotionSection>
+        <div className="relative overflow-hidden bg-[#26337c]">
+          <div className="mx-auto max-w-[1068px] px-8 py-14 md:px-12 md:py-20">
+            <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
+            <div className="mb-6 h-[3px] w-10 rounded-full bg-[#45b3e2]/50" />
+            <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">Leistung 3</h2>
+            <h3 className="mt-3 max-w-[40ch] text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
+              Externes Risikomanagement
+            </h3>
+            <p className="mt-5 max-w-[62ch] text-[16px] leading-relaxed text-white/65">
+              Wir begleiten anspruchsvolle Projekte als unabhängiger Risk Manager. Mit einem flexiblen Pensum von etwa 10
+              bis 20 Prozent identifizieren und bewerten wir Risiken, verfolgen Massnahmen und schaffen Transparenz für
+              Projektleitung, Steuerungsgremium und Geschäftsleitung.
+            </p>
+            <Link
+              href="/fokusthemen/risikomanagement"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 text-[14px] font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
+            >
+              Risikomanagement ansehen
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#45b3e2]/60 via-[#c9a96e]/40 to-transparent" />
+        </div>
+      </MotionSection>
+
       {/* ── 3. HANDLUNGSFELDER ───────────────────────────────────────────── */}
       <section id="handlungsfelder" className="bg-[#f5f5f7]">
         <MotionSection>

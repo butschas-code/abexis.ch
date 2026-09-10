@@ -341,6 +341,12 @@ const prcCopyEn = {
     recommendationLabel: "Clear recommendation",
     possiblePaths: "3 possible paths",
     recommendationHeadline: "Every Project Reality Check ends with a clear recommendation for action.",
+    riskBridgeEyebrow: "After the check",
+    riskBridgeTitle: "Clarity is the first step. Consistent steering is the next.",
+    riskBridgeBody:
+      "The Project Reality Check shows where the project stands, which risks must be prioritized and which decisions are pending. If requested, we subsequently support implementation of agreed measures as an external risk manager. At roughly 10 to 20 percent capacity, we monitor key risks, challenge changes and report regularly to project leadership, steering committees or executive management. The independent view is not limited to the moment of the check.",
+    riskBridgeCta: "View ongoing risk support",
+    riskBridgeHref: "/en/fokusthemen/risikomanagement",
     processEyebrow: "Abexis Project Reality Check",
     processHeadline: "Process: three phases, one coherent flow",
     processIntro:
@@ -501,6 +507,12 @@ export function ProjectFitCheck({ locale = "de", afterHero }: { locale?: "de" | 
           recommendationLabel: "Klare Empfehlung",
           possiblePaths: "3 mögliche Pfade",
           recommendationHeadline: "Jeder Project Reality Check endet mit einer klaren Handlungsempfehlung.",
+          riskBridgeEyebrow: "Nach dem Check",
+          riskBridgeTitle: "Klarheit ist der erste Schritt. Konsequente Steuerung die nächste.",
+          riskBridgeBody:
+            "Der Project Reality Check zeigt, wo das Projekt steht, welche Risiken priorisiert werden müssen und welche Entscheidungen anstehen. Auf Wunsch begleiten wir anschliessend die Umsetzung der vereinbarten Massnahmen als externer Risk Manager. Mit einem flexiblen Pensum von etwa 10 bis 20 Prozent überwachen wir die wichtigsten Risiken, hinterfragen Veränderungen und berichten regelmässig an Projektleitung, Steuerungsgremium oder Geschäftsleitung. So bleibt die unabhängige Sicht nicht auf den Zeitpunkt des Checks beschränkt.",
+          riskBridgeCta: "Laufende Risikobegleitung ansehen",
+          riskBridgeHref: "/fokusthemen/risikomanagement",
           processEyebrow: "Abexis Project Reality Check",
           processHeadline: "Ablauf: drei Phasen, ein zusammenhängender Prozess",
           processIntro:
@@ -848,6 +860,25 @@ export function ProjectFitCheck({ locale = "de", afterHero }: { locale?: "de" | 
                 </div>
               ))}
             </div>
+          </div>
+        </MotionSection>
+      </section>
+
+      {/* ── 6b. BRIDGE : laufende Risikobegleitung nach dem Check ─────────── */}
+      <section className="bg-white">
+        <MotionSection>
+          <div className="mx-auto max-w-[1068px] px-4 py-14 sm:px-6 sm:py-16 md:py-24">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">{s.riskBridgeEyebrow}</p>
+            <h2 className="mt-4 max-w-[40ch] text-[clamp(1.375rem,3.2vw+0.5rem,2.25rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-[#1d1d1f]">
+              {s.riskBridgeTitle}
+            </h2>
+            <p className="mt-6 max-w-[62ch] text-[16px] leading-relaxed text-[#6e6e73] sm:text-[17px]">{s.riskBridgeBody}</p>
+            <Link
+              href={s.riskBridgeHref}
+              className="mt-8 inline-flex min-h-12 items-center justify-center rounded-full bg-brand-900 px-7 text-[15px] font-medium text-white shadow-md shadow-brand-900/20 transition hover:bg-[var(--brand-900-hover)]"
+            >
+              {s.riskBridgeCta}
+            </Link>
           </div>
         </MotionSection>
       </section>

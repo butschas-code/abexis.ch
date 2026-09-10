@@ -31,6 +31,7 @@ const ABEXIS_INTERNAL_LINK_GUIDANCE = `Internal Abexis links:
   /fokusthemen/digitale-transformation for digital transformation, software, IT, technology change
   /fokusthemen/unternehmensstrategie for strategy, governance, board-level direction, priorities
   /fokusthemen/projektmanagement for project execution, implementation, project leadership
+  /fokusthemen/risikomanagement for project risk management, external risk manager, ongoing risk support
   /fokusthemen/prozessoptimierung for process optimization, automation, workflow, operational excellence
   /fokusthemen/vertriebmarketing for sales, go-to-market, marketing, growth topics
   /fokusthemen/veränderungsmanagement for change management, adoption, organizational change

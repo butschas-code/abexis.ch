@@ -75,6 +75,13 @@ export type EnglishFocusPage = {
     title: string;
     body: string;
   };
+  serviceThree?: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    ctaLabel: string;
+    ctaHref: string;
+  };
 };
 
 const salesFrameworkImage =
@@ -1109,6 +1116,14 @@ export const englishFocusPages: readonly EnglishFocusPage[] = [
           "When projects drift, an independent view helps separate symptoms from causes and creates a basis for stabilization or reset.",
         tone: "dark",
       },
+    },
+    serviceThree: {
+      eyebrow: "Mode 3",
+      title: "External risk management",
+      body:
+        "We support demanding projects as an independent risk manager. At roughly 10 to 20 percent capacity, we identify and assess risks, track measures and create transparency for project leadership, steering committees and executive management.",
+      ctaLabel: "View risk management",
+      ctaHref: "/en/fokusthemen/risikomanagement",
     },
     focus: {
       eyebrow: "Project levers",

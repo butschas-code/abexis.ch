@@ -63,6 +63,7 @@ export const mainNav: MainNavItem[] = [
       { href: "/fokusthemen/veränderungsmanagement", label: "Veränderung" },
       { href: "/fokusthemen/prozessoptimierung", label: "Optimierung" },
       { href: "/fokusthemen/projektmanagement", label: "Projektmanagement" },
+      { href: "/fokusthemen/risikomanagement", label: "Risikomanagement" },
     ],
   },
   {
@@ -93,6 +94,7 @@ export const mainNavEn: MainNavItem[] = [
       { href: "/en/fokusthemen/veränderungsmanagement", label: "Change Management" },
       { href: "/en/fokusthemen/prozessoptimierung", label: "Process Optimization" },
       { href: "/en/fokusthemen/projektmanagement", label: "Project Management" },
+      { href: "/en/fokusthemen/risikomanagement", label: "Risk Management" },
     ],
   },
   {
@@ -390,6 +392,14 @@ export const fokusthemenMeta = [
     subtitle: "Umsetzung",
     excerpt:
       "Wir unterstützen Sie bei Projektumsetzungen, sollten Sie Ressourcenengpässen haben. Fachkompetenz, Methodenwissen und die Erfahrung aus verschiedensten erfolgreich durchgeführten Projekten machen uns zu einem starken Partner für Sie und Ihr Unternehmen.",
+  },
+  {
+    slug: "risikomanagement",
+    href: "/fokusthemen/risikomanagement",
+    title: "Risikomanagement in Projekten und externer Risk Manager",
+    subtitle: "Risikobegleitung",
+    excerpt:
+      "Externer Risk Manager für anspruchsvolle Projekte: laufende Begleitung mit 10 bis 20 Prozent Pensum oder punktueller Project Reality Check.",
   },
   {
     slug: "executive-search",

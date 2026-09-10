@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { BookingCta } from "@/components/site/BookingCta";
 import { KontaktPageForm } from "@/components/site/KontaktPageForm";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
@@ -95,7 +96,15 @@ export default async function KontaktPage() {
           </div>
           <BookingCta />
         </div>
-        <KontaktPageForm bookingUrl={siteConfig.bookingUrlDe} />
+        <Suspense
+          fallback={
+            <div className="rounded-[28px] bg-white p-8 shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] md:p-10">
+              Formular wird geladen…
+            </div>
+          }
+        >
+          <KontaktPageForm bookingUrl={siteConfig.bookingUrlDe} />
+        </Suspense>
       </div>
     </InteriorPageLayout>
   );
