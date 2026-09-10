@@ -377,24 +377,24 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
         </MotionSection>
       </section>
 
-      {/* ── 4. PULL QUOTE ────────────────────────────────────────────────── */}
+      {/* ── 4+5. GRUNDSATZ + PROZESS (single dark band) ───────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
         <div
           className="pointer-events-none absolute inset-0"
           aria-hidden
           style={{
             background:
-              "radial-gradient(ellipse 90% 60% at 50% 50%, rgba(38,51,124,0.6) 0%, transparent 70%)",
+              "radial-gradient(ellipse 90% 60% at 50% 35%, rgba(38,51,124,0.6) 0%, transparent 70%), radial-gradient(ellipse 70% 60% at 15% 75%, rgba(69,179,226,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 70% at 85% 80%, rgba(38,51,124,0.4) 0%, transparent 60%)",
           }}
         />
-        <div className="relative mx-auto max-w-[800px] px-6 py-20 text-center md:py-32">
+        <div className="relative mx-auto max-w-[800px] px-6 pt-16 pb-10 text-center md:pt-28 md:pb-14">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#c9a96e]/60">
             {labels.grundsatz}
           </p>
-          <blockquote className="mt-8 text-[clamp(1.375rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.22] tracking-[-0.025em] text-white text-balance">
+          <blockquote className="mt-6 text-[clamp(1.375rem,3.5vw+0.5rem,2.25rem)] font-semibold leading-[1.22] tracking-[-0.025em] text-white text-balance md:mt-8">
             &ldquo;{c.positioning.title}&rdquo;
           </blockquote>
-          <div className="mt-10 flex items-center justify-center gap-5">
+          <div className="mt-8 flex items-center justify-center gap-5 md:mt-10">
             <div className="h-px w-12 bg-[#c9a96e]/35" />
             <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-white/30">
               {labels.grundsatzTag}
@@ -402,20 +402,11 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
             <div className="h-px w-12 bg-[#c9a96e]/35" />
           </div>
         </div>
-      </section>
-
-      {/* ── 5. PROZESSPHASEN ─────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#1a1f38]">
-        <div
-          className="pointer-events-none absolute inset-0"
-          aria-hidden
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 60% at 15% 50%, rgba(69,179,226,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 70% at 85% 30%, rgba(38,51,124,0.4) 0%, transparent 60%)",
-          }}
-        />
+        <div className="relative mx-auto max-w-[1068px] px-6">
+          <div className="h-px bg-white/[0.08]" />
+        </div>
         <MotionSection>
-          <div className="relative mx-auto max-w-[1068px] px-6 py-16 md:py-28">
+          <div className="relative mx-auto max-w-[1068px] px-6 pt-10 pb-16 md:pt-14 md:pb-28">
             <div className="flex items-baseline gap-4 border-b border-white/[0.08] pb-6">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#45b3e2]/70">
                 {c.process.eyebrow}
