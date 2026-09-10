@@ -400,12 +400,9 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
             <div className="h-px w-12 bg-[#c9a96e]/35" />
           </div>
         </div>
-        <div className="relative mx-auto max-w-[1068px] px-6">
-          <div className="h-px bg-white/[0.08]" />
-        </div>
         <MotionSection>
           <div className="relative mx-auto max-w-[1068px] px-6 pt-10 pb-16 md:pt-14 md:pb-28">
-            <div className="flex items-baseline gap-4 border-b border-white/[0.08] pb-6">
+            <div className="flex items-baseline gap-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#45b3e2]/70">
                 {c.process.eyebrow}
               </p>
