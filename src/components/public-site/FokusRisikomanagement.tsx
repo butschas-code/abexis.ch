@@ -47,6 +47,105 @@ function SpineCard({ item }: { item: SpineItem }) {
   );
 }
 
+function SpineTimeline({ items }: { items: SpineItem[] }) {
+  return (
+    <>
+      <div className="hidden lg:block">
+        <div className="relative">
+          <div
+            className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(201,169,110,0.05), rgba(201,169,110,0.25) 8%, rgba(201,169,110,0.25) 92%, rgba(201,169,110,0.05))",
+            }}
+          />
+          <div className="space-y-8">
+            {items.map((item, i) => {
+              const isLeft = i % 2 === 0;
+              return (
+                <div key={item.num} className="relative grid grid-cols-2">
+                  <div className="absolute left-1/2 top-5 z-10 -translate-x-1/2">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c9a96e]/40 bg-white text-[11px] font-semibold tabular-nums text-[#26337c] shadow-sm">
+                      {item.num}
+                    </div>
+                  </div>
+                  <div className="pr-10">{isLeft ? <SpineCard item={item} /> : null}</div>
+                  <div className="pl-10">{!isLeft ? <SpineCard item={item} /> : null}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-4 lg:hidden">
+        {items.map((item) => (
+          <SpineCard key={item.num} item={item} />
+        ))}
+      </div>
+    </>
+  );
+}
+
+function QuestionRail({ questions }: { questions: readonly string[] }) {
+  return (
+    <div className="relative">
+      <div
+        className="absolute bottom-4 left-5 top-4 w-px md:left-6"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(69,179,226,0.15), rgba(201,169,110,0.35) 50%, rgba(38,51,124,0.15))",
+        }}
+        aria-hidden
+      />
+      <div className="space-y-4">
+        {questions.map((q, i) => {
+          const num = String(i + 1).padStart(2, "0");
+          const isLead = i === 0;
+          const isLinen = i % 2 === 1;
+          return (
+            <div key={q} className="relative flex gap-4 md:gap-5">
+              <div
+                className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-[11px] font-semibold tabular-nums shadow-sm md:h-11 md:w-11 ${
+                  isLead
+                    ? "border-[#45b3e2]/50 bg-[#26337c] text-white"
+                    : "border-[#c9a96e]/40 bg-white text-[#26337c]"
+                }`}
+              >
+                {num}
+              </div>
+              <div
+                className={`group relative min-w-0 flex-1 overflow-hidden rounded-2xl px-5 py-5 transition-all duration-300 md:px-6 md:py-6 ${
+                  isLead
+                    ? "bg-[#1a2260] text-white shadow-[0_12px_40px_rgba(38,51,124,0.18)]"
+                    : isLinen
+                      ? "border border-black/[0.06] bg-[#faf8f2] hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(38,51,124,0.08)]"
+                      : "border border-black/[0.06] bg-white hover:-translate-y-0.5 hover:border-[#26337c]/15 hover:shadow-[0_12px_32px_rgba(38,51,124,0.08)]"
+                }`}
+              >
+                {!isLead ? <LCorner className="top-3 right-3 text-[#c9a96e]/25" /> : null}
+                <p
+                  className={`relative text-[15px] font-semibold leading-snug tracking-[-0.01em] md:text-[16px] ${
+                    isLead ? "text-white" : "text-[#1d1d1f]"
+                  }`}
+                >
+                  {q}
+                </p>
+                {!isLead ? (
+                  <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#26337c] to-[#45b3e2] transition-all duration-500 group-hover:w-full" />
+                ) : (
+                  <div className="mt-4 h-px w-10 bg-[#45b3e2]/40" />
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+const useCaseAccents = ["from-[#26337c] to-[#45b3e2]", "from-[#c9a96e] to-[#45b3e2]", "from-[#45b3e2] to-[#26337c]"] as const;
+
 type Props = { locale?: RisikomanagementLocale };
 
 export function FokusRisikomanagement({ locale = "de" }: Props) {
@@ -63,6 +162,12 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
     num: sign.num,
     title: sign.title,
     items: [sign.body],
+  }));
+
+  const blickwinkelSpine: SpineItem[] = c.challengeAreas.items.map((item, i) => ({
+    num: String(i + 1).padStart(2, "0"),
+    title: item.title,
+    items: [item.body],
   }));
 
   const labels = {
@@ -417,25 +522,18 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">{c.problem.intro}</p>
             </div>
 
-            <div className="mt-12 rounded-2xl bg-[#f5f5f7] p-6 md:p-8">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
-                {labels.typischeFragen}
-              </p>
-              <div className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-black/[0.08] bg-black/[0.06] sm:grid-cols-2 lg:grid-cols-3">
-                {c.problem.questions.map((q, i) => (
-                  <div
-                    key={q}
-                    className="relative bg-white px-7 py-8 shadow-[0_1px_0_rgba(0,0,0,0.03)]"
-                  >
-                    <LCorner className="top-4 right-4 text-[#c9a96e]/30" />
-                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                      {String(i + 1).padStart(2, "0")}
-                    </p>
-                    <p className="mt-4 text-[15px] font-semibold leading-snug tracking-[-0.01em] text-[#1d1d1f]">
-                      {q}
-                    </p>
-                  </div>
-                ))}
+            <div className="mt-12 rounded-2xl border border-black/[0.06] bg-[#f5f5f7] p-6 md:p-8">
+              <div className="flex flex-wrap items-baseline justify-between gap-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
+                  {labels.typischeFragen}
+                </p>
+                <span className="text-[11px] tabular-nums text-[#86868b]">
+                  {c.problem.questions.length}{" "}
+                  {locale === "en" ? "questions" : "Fragen"}
+                </span>
+              </div>
+              <div className="mt-6">
+                <QuestionRail questions={c.problem.questions} />
               </div>
             </div>
           </div>
@@ -461,19 +559,90 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
                     : "Strukturierte Artefakte und Berichtsformate, die Risiken, Massnahmen und Entscheidungen sichtbar machen."}
                 </p>
               </div>
-              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.08] bg-black/[0.06] sm:grid-cols-2">
-                {c.deliverables.items.map((item, i) => (
-                  <div key={item.title} className="relative bg-white px-6 py-6">
-                    <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
-                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                      {String(i + 1).padStart(2, "0")}
-                    </p>
-                    <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{item.body}</p>
-                  </div>
-                ))}
+              <div className="grid gap-4 sm:grid-cols-2">
+                {c.deliverables.items.map((item, i) => {
+                  const num = String(i + 1).padStart(2, "0");
+                  const isLead = i === 0;
+                  const isExecutive = i === 2;
+                  if (isLead) {
+                    return (
+                      <div
+                        key={item.title}
+                        className="group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-[#faf8f2] px-7 py-8 sm:col-span-2"
+                      >
+                        <LCorner className="top-4 left-4 text-[#c9a96e]/40" />
+                        <span
+                          className="pointer-events-none absolute -bottom-3 right-4 select-none text-[6rem] font-semibold leading-none tabular-nums text-[#c9a96e]/[0.12]"
+                          aria-hidden
+                        >
+                          {num}
+                        </span>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">
+                          {locale === "en" ? "Foundation" : "Grundlage"}
+                        </p>
+                        <h3 className="relative mt-3 max-w-[28ch] text-[clamp(1.25rem,2.5vw+0.5rem,1.625rem)] font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f]">
+                          {item.title}
+                        </h3>
+                        <p className="relative mt-3 max-w-[52ch] text-[15px] leading-relaxed text-[#6e6e73]">
+                          {item.body}
+                        </p>
+                        <div className="absolute bottom-0 left-0 h-[2px] w-16 bg-gradient-to-r from-[#c9a96e]/70 to-transparent" />
+                      </div>
+                    );
+                  }
+                  if (isExecutive) {
+                    return (
+                      <div
+                        key={item.title}
+                        className="relative overflow-hidden rounded-2xl bg-[#1a2260] px-7 py-8 sm:col-span-2"
+                      >
+                        <div
+                          className="pointer-events-none absolute inset-0"
+                          aria-hidden
+                          style={{
+                            background:
+                              "radial-gradient(ellipse 70% 80% at 100% 0%, rgba(69,179,226,0.12) 0%, transparent 55%)",
+                          }}
+                        />
+                        <LCorner className="top-4 right-4 text-[#45b3e2]/30" />
+                        <p className="relative text-[11px] font-semibold uppercase tracking-[0.16em] text-[#45b3e2]/70">
+                          {locale === "en" ? "For management" : "Für die Geschäftsleitung"}
+                        </p>
+                        <h3 className="relative mt-3 text-[clamp(1.125rem,2vw+0.5rem,1.5rem)] font-semibold leading-snug tracking-[-0.02em] text-white">
+                          {item.title}
+                        </h3>
+                        <p className="relative mt-3 max-w-[52ch] text-[15px] leading-relaxed text-white/70">
+                          {item.body}
+                        </p>
+                        <p
+                          className="pointer-events-none absolute bottom-2 right-4 select-none text-[4rem] font-semibold leading-none tabular-nums text-white/[0.06]"
+                          aria-hidden
+                        >
+                          {num}
+                        </p>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div
+                      key={item.title}
+                      className="group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white px-6 py-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#26337c]/15 hover:shadow-[0_12px_32px_rgba(38,51,124,0.08)]"
+                    >
+                      <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
+                      <span
+                        className="pointer-events-none absolute -bottom-2 right-3 select-none text-[4rem] font-semibold leading-none tabular-nums text-[#c9a96e]/[0.08] transition-opacity duration-300 group-hover:opacity-60"
+                        aria-hidden
+                      >
+                        {num}
+                      </span>
+                      <h3 className="relative text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
+                        {item.title}
+                      </h3>
+                      <p className="relative mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{item.body}</p>
+                      <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#26337c] to-[#45b3e2] transition-all duration-500 group-hover:w-full" />
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -510,20 +679,7 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
                   </svg>
                 </Link>
               </div>
-              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.08] bg-black/[0.06] sm:grid-cols-2 lg:grid-cols-3">
-                {c.challengeAreas.items.map((item, i) => (
-                  <div key={item.title} className="relative bg-[#fafafa] px-6 py-6">
-                    <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
-                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                      {String(i + 1).padStart(2, "0")}
-                    </p>
-                    <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{item.body}</p>
-                  </div>
-                ))}
-              </div>
+              <SpineTimeline items={blickwinkelSpine} />
             </div>
           </div>
         </MotionSection>
@@ -548,15 +704,35 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
                     : "Von ERP-Einführungen bis zu Multi-Lieferanten-Programmen — überall dort, wo unabhängige Risikobegleitung Mehrwert schafft."}
                 </p>
               </div>
-              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.08] bg-black/[0.06] sm:grid-cols-2 lg:grid-cols-3">
-                {c.useCases.items.map((item, i) => (
-                  <div key={item} className="relative flex items-start gap-3 bg-white px-6 py-5">
-                    <span className="mt-0.5 text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <p className="text-[15px] leading-snug text-[#1d1d1f]">{item}</p>
-                  </div>
-                ))}
+              <div className="grid gap-3 sm:grid-cols-2">
+                {c.useCases.items.map((item, i) => {
+                  const num = String(i + 1).padStart(2, "0");
+                  const isWide = i === 0 || i === c.useCases.items.length - 1;
+                  const accent = useCaseAccents[i % useCaseAccents.length];
+                  return (
+                    <div
+                      key={item}
+                      className={`group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white transition-all duration-300 hover:-translate-y-0.5 hover:border-[#26337c]/12 hover:shadow-[0_10px_28px_rgba(38,51,124,0.08)] ${
+                        isWide ? "sm:col-span-2" : ""
+                      }`}
+                    >
+                      <div className={`h-[3px] bg-gradient-to-r ${accent}`} aria-hidden />
+                      <div className={`flex items-start gap-4 px-5 py-5 ${isWide ? "md:px-7 md:py-6" : ""}`}>
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#c9a96e]/35 bg-[#faf8f2] text-[11px] font-semibold tabular-nums text-[#26337c]">
+                          {num}
+                        </span>
+                        <p
+                          className={`pt-1 leading-snug text-[#1d1d1f] ${
+                            isWide ? "text-[16px] font-medium md:max-w-[62ch]" : "text-[15px]"
+                          }`}
+                        >
+                          {item}
+                        </p>
+                      </div>
+                      <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#26337c] to-[#45b3e2] transition-all duration-500 group-hover:w-full" />
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
