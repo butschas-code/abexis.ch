@@ -779,17 +779,14 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
                 {c.closing.title}
               </h2>
               <p className="mt-5 max-w-[50ch] text-[16px] leading-relaxed text-white/65">{c.closing.body}</p>
-              <div className="mt-7 flex flex-wrap gap-4">
+              <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-2">
                 {c.closing.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-4 py-1.5 text-[12px] font-medium text-white/70"
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#c9a96e]/70" aria-hidden />
+                  <li key={tag} className="flex items-center gap-2 text-[13px] font-medium text-white/70">
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#c9a96e]/70" aria-hidden />
                     {tag}
-                  </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
             <div className="flex flex-col gap-3 md:shrink-0">
               <Link
@@ -812,13 +809,6 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
               >
                 {labels.kalender}
               </Link>
-            </div>
-          </div>
-          <div className="mt-16 flex items-center gap-4 opacity-20">
-            <div className="h-px flex-1 bg-white" />
-            <div className="relative h-4 w-4">
-              <div className="absolute top-0 left-0 h-4 w-px bg-white" />
-              <div className="absolute top-0 left-0 h-px w-4 bg-white" />
             </div>
           </div>
         </div>
