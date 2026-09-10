@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { KontaktPageForm } from "@/components/site/KontaktPageForm";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { siteConfig } from "@/data/pages";
@@ -72,7 +73,15 @@ export default function EnglishContactPage() {
             </a>
           </div>
         </div>
-        <KontaktPageForm bookingUrl={siteConfig.bookingUrlEn} locale="en" />
+        <Suspense
+          fallback={
+            <div className="rounded-[28px] bg-white p-8 shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] md:p-10">
+              Loading form…
+            </div>
+          }
+        >
+          <KontaktPageForm bookingUrl={siteConfig.bookingUrlEn} locale="en" />
+        </Suspense>
       </div>
     </InteriorPageLayout>
   );

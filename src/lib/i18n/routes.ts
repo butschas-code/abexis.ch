@@ -20,6 +20,7 @@ const germanToEnglish: Record<string, string> = {
   "/fokusthemen/veränderungsmanagement": "/en/fokusthemen/veränderungsmanagement",
   "/fokusthemen/prozessoptimierung": "/en/fokusthemen/prozessoptimierung",
   "/fokusthemen/projektmanagement": "/en/fokusthemen/projektmanagement",
+  "/fokusthemen/risikomanagement": "/en/fokusthemen/risikomanagement",
 };
 
 const englishAliasesToCanonical: Record<string, string> = {
@@ -38,6 +39,7 @@ const englishAliasesToCanonical: Record<string, string> = {
   "/en/topics/change-management": "/en/fokusthemen/veränderungsmanagement",
   "/en/topics/process-optimization": "/en/fokusthemen/prozessoptimierung",
   "/en/topics/project-management": "/en/fokusthemen/projektmanagement",
+  "/en/topics/risk-management": "/en/fokusthemen/risikomanagement",
 };
 
 const teamProfileSlugs = new Set([
@@ -74,6 +76,8 @@ englishToGerman["/en/topics/sales-marketing"] = "/fokusthemen/vertriebmarketing"
 englishToGerman["/en/topics/change-management"] = "/fokusthemen/veränderungsmanagement";
 englishToGerman["/en/topics/process-optimization"] = "/fokusthemen/prozessoptimierung";
 englishToGerman["/en/topics/project-management"] = "/fokusthemen/projektmanagement";
+englishToGerman["/en/fokusthemen/risikomanagement"] = "/fokusthemen/risikomanagement";
+englishToGerman["/en/topics/risk-management"] = "/fokusthemen/risikomanagement";
 
 export function isEnglishPath(pathname: string) {
   return pathname === "/en" || pathname.startsWith("/en/");

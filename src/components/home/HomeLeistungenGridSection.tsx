@@ -7,6 +7,7 @@ import { homeImagery } from "@/executive-search/lib/images/homeImagery";
 
 const SERVICE_KEYS = [
   "digitale-transformation",
+  "risikomanagement",
   "unternehmensstrategie",
   "vertriebmarketing",
   "veränderungsmanagement",

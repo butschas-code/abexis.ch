@@ -1,10 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useId, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useId, useMemo, useState } from "react";
 import { z } from "zod";
 import { submitPublicForm } from "@/cms/services/form-submission-public-client";
 import { isTurnstileConfigured, TurnstileField } from "@/components/site/TurnstileField";
+import {
+  contactMeetingInterests,
+  parseContactInterestParam,
+  type ContactMeetingInterestId,
+} from "@/data/contact-meeting-interests";
 
 const formCopy = {
   de: {
@@ -30,6 +36,8 @@ const formCopy = {
     phone: "Telefon",
     optional: "optional",
     phoneHint: "Optional.",
+    interestsLabel: "Gewünschter Gesprächsfokus",
+    interestsHint: "Optional: Wählen Sie die Bereiche, die Sie besprechen möchten.",
     messageLabel: "Ihre Nachricht",
     messagePlaceholder: "Thema und wie wir Sie am besten erreichen.",
     privacyBefore: "Ich habe die",
@@ -61,6 +69,8 @@ const formCopy = {
     phone: "Phone",
     optional: "optional",
     phoneHint: "Optional.",
+    interestsLabel: "Preferred conversation focus",
+    interestsHint: "Optional: select the areas you would like to discuss.",
     messageLabel: "Your message",
     messagePlaceholder: "Topic and how we can best reach you.",
     privacyBefore: "I have read the",
@@ -107,6 +117,12 @@ export function KontaktPageForm({ bookingUrl, locale = "de" }: KontaktPageFormPr
   const activeSchema = makeSchema(copy);
   const privacyHref = locale === "en" ? "/en/privacy-policy" : "/privacy-policy";
   const formId = useId();
+  const searchParams = useSearchParams();
+  const preselectedInterests = useMemo(
+    () => parseContactInterestParam(searchParams.get("interest")),
+    [searchParams],
+  );
+  const [selectedInterests, setSelectedInterests] = useState<ContactMeetingInterestId[]>(preselectedInterests);
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState<Partial<Record<keyof Values | "privacyAccepted", string>>>({});
   const [formError, setFormError] = useState<string | null>(null);
@@ -160,6 +176,10 @@ export function KontaktPageForm({ bookingUrl, locale = "de" }: KontaktPageFormPr
       ...(parsed.data.company?.trim() ? { company: parsed.data.company.trim() } : {}),
       ...(parsed.data.phone?.trim() ? { phone: parsed.data.phone.trim() } : {}),
     };
+    const interestLabels = selectedInterests.map((id) => {
+      const row = contactMeetingInterests.find((item) => item.id === id);
+      return row ? (locale === "en" ? row.labelEn : row.labelDe) : id;
+    });
 
     try {
       await submitPublicForm({
@@ -168,13 +188,22 @@ export function KontaktPageForm({ bookingUrl, locale = "de" }: KontaktPageFormPr
         formId: "kontakt-page",
         payload: {
           ...payload,
-          extra: { privacyConsent: "true" },
+          extra: {
+            privacyConsent: "true",
+            ...(selectedInterests.length
+              ? {
+                  meetingInterests: selectedInterests.join(", "),
+                  meetingInterestLabels: interestLabels.join(" · "),
+                }
+              : {}),
+          },
         },
         turnstileToken,
       });
 
       setPhase("success");
       setValues(initial);
+      setSelectedInterests([]);
       setTurnstileToken(null);
       setTurnstileResetSignal((n) => n + 1);
     } catch (err) {
@@ -281,6 +310,39 @@ export function KontaktPageForm({ bookingUrl, locale = "de" }: KontaktPageFormPr
             optionalLabel={copy.optional}
           />
         </div>
+
+        <fieldset className="rounded-2xl border border-black/[0.06] bg-[#fafafa] p-4 md:p-5">
+          <legend className="px-1 text-[13px] font-medium text-[#1d1d1f]">{copy.interestsLabel}</legend>
+          <p className="mt-1 px-1 text-[12px] leading-relaxed text-[#86868b]">{copy.interestsHint}</p>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            {contactMeetingInterests.map((item) => {
+              const checked = selectedInterests.includes(item.id);
+              const label = locale === "en" ? item.labelEn : item.labelDe;
+              return (
+                <label
+                  key={item.id}
+                  className={`flex cursor-pointer items-start gap-3 rounded-xl border px-3 py-3 text-[13px] leading-snug transition ${
+                    checked
+                      ? "border-brand-900/20 bg-white text-[#1d1d1f] shadow-sm"
+                      : "border-black/[0.06] bg-white/70 text-[#6e6e73] hover:border-black/10"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    className="mt-0.5 h-[16px] w-[16px] shrink-0 rounded border-black/25 text-brand-900 focus:ring-brand-500/30"
+                    checked={checked}
+                    onChange={() => {
+                      setSelectedInterests((prev) =>
+                        checked ? prev.filter((id) => id !== item.id) : [...prev, item.id],
+                      );
+                    }}
+                  />
+                  <span>{label}</span>
+                </label>
+              );
+            })}
+          </div>
+        </fieldset>
 
         <div>
           <label htmlFor={`${formId}-msg`} className="block text-[13px] font-medium text-[#1d1d1f]">
