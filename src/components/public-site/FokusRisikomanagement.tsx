@@ -545,90 +545,19 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
                     : "Strukturierte Artefakte und Berichtsformate, die Risiken, Massnahmen und Entscheidungen sichtbar machen."}
                 </p>
               </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {c.deliverables.items.map((item, i) => {
-                  const num = String(i + 1).padStart(2, "0");
-                  const isLead = i === 0;
-                  const isExecutive = i === 2;
-                  if (isLead) {
-                    return (
-                      <div
-                        key={item.title}
-                        className="group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-[#faf8f2] px-7 py-8 sm:col-span-2"
-                      >
-                        <LCorner className="top-4 left-4 text-[#c9a96e]/40" />
-                        <span
-                          className="pointer-events-none absolute -bottom-3 right-4 select-none text-[6rem] font-semibold leading-none tabular-nums text-[#c9a96e]/[0.12]"
-                          aria-hidden
-                        >
-                          {num}
-                        </span>
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">
-                          {locale === "en" ? "Foundation" : "Grundlage"}
-                        </p>
-                        <h3 className="relative mt-3 max-w-[28ch] text-[clamp(1.25rem,2.5vw+0.5rem,1.625rem)] font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f]">
-                          {item.title}
-                        </h3>
-                        <p className="relative mt-3 max-w-[52ch] text-[15px] leading-relaxed text-[#6e6e73]">
-                          {item.body}
-                        </p>
-                        <div className="absolute bottom-0 left-0 h-[2px] w-16 bg-gradient-to-r from-[#c9a96e]/70 to-transparent" />
-                      </div>
-                    );
-                  }
-                  if (isExecutive) {
-                    return (
-                      <div
-                        key={item.title}
-                        className="relative overflow-hidden rounded-2xl bg-[#1a2260] px-7 py-8 sm:col-span-2"
-                      >
-                        <div
-                          className="pointer-events-none absolute inset-0"
-                          aria-hidden
-                          style={{
-                            background:
-                              "radial-gradient(ellipse 70% 80% at 100% 0%, rgba(69,179,226,0.12) 0%, transparent 55%)",
-                          }}
-                        />
-                        <LCorner className="top-4 right-4 text-[#45b3e2]/30" />
-                        <p className="relative text-[11px] font-semibold uppercase tracking-[0.16em] text-[#45b3e2]/70">
-                          {locale === "en" ? "For management" : "Für die Geschäftsleitung"}
-                        </p>
-                        <h3 className="relative mt-3 text-[clamp(1.125rem,2vw+0.5rem,1.5rem)] font-semibold leading-snug tracking-[-0.02em] text-white">
-                          {item.title}
-                        </h3>
-                        <p className="relative mt-3 max-w-[52ch] text-[15px] leading-relaxed text-white/70">
-                          {item.body}
-                        </p>
-                        <p
-                          className="pointer-events-none absolute bottom-2 right-4 select-none text-[4rem] font-semibold leading-none tabular-nums text-white/[0.06]"
-                          aria-hidden
-                        >
-                          {num}
-                        </p>
-                      </div>
-                    );
-                  }
-                  return (
-                    <div
-                      key={item.title}
-                      className="group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white px-6 py-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#26337c]/15 hover:shadow-[0_12px_32px_rgba(38,51,124,0.08)]"
-                    >
-                      <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
-                      <span
-                        className="pointer-events-none absolute -bottom-2 right-3 select-none text-[4rem] font-semibold leading-none tabular-nums text-[#c9a96e]/[0.08] transition-opacity duration-300 group-hover:opacity-60"
-                        aria-hidden
-                      >
-                        {num}
-                      </span>
-                      <h3 className="relative text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
-                        {item.title}
-                      </h3>
-                      <p className="relative mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{item.body}</p>
-                      <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#26337c] to-[#45b3e2] transition-all duration-500 group-hover:w-full" />
-                    </div>
-                  );
-                })}
+              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.08] bg-black/[0.06] sm:grid-cols-2">
+                {c.deliverables.items.map((item, i) => (
+                  <div key={item.title} className="relative bg-white px-6 py-6">
+                    <LCorner className="top-3 right-3 text-[#c9a96e]/20" />
+                    <p className="text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
+                      {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <h3 className="mt-3 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-[#1d1d1f]">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{item.body}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
