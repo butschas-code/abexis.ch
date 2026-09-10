@@ -704,30 +704,22 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
                     : "Von ERP-Einführungen bis zu Multi-Lieferanten-Programmen — überall dort, wo unabhängige Risikobegleitung Mehrwert schafft."}
                 </p>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-px overflow-hidden rounded-2xl border border-black/[0.08] bg-black/[0.06] sm:grid-cols-2">
                 {c.useCases.items.map((item, i) => {
                   const num = String(i + 1).padStart(2, "0");
-                  const isWide = i === 0 || i === c.useCases.items.length - 1;
+                  const isWide = item.length > 44 || i === 0 || i === c.useCases.items.length - 1;
                   const accent = useCaseAccents[i % useCaseAccents.length];
                   return (
                     <div
                       key={item}
-                      className={`group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white transition-all duration-300 hover:-translate-y-0.5 hover:border-[#26337c]/12 hover:shadow-[0_10px_28px_rgba(38,51,124,0.08)] ${
-                        isWide ? "sm:col-span-2" : ""
-                      }`}
+                      className={`group relative bg-white ${isWide ? "sm:col-span-2" : ""}`}
                     >
-                      <div className={`h-[3px] bg-gradient-to-r ${accent}`} aria-hidden />
-                      <div className={`flex items-start gap-4 px-5 py-5 ${isWide ? "md:px-7 md:py-6" : ""}`}>
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#c9a96e]/35 bg-[#faf8f2] text-[11px] font-semibold tabular-nums text-[#26337c]">
+                      <div className={`h-[2px] bg-gradient-to-r ${accent} opacity-80`} aria-hidden />
+                      <div className="flex items-start gap-3 px-5 py-5 md:gap-4 md:px-6 md:py-6">
+                        <span className="mt-0.5 shrink-0 text-[11px] font-semibold tabular-nums tracking-[0.14em] text-[#45b3e2]">
                           {num}
                         </span>
-                        <p
-                          className={`pt-1 leading-snug text-[#1d1d1f] ${
-                            isWide ? "text-[16px] font-medium md:max-w-[62ch]" : "text-[15px]"
-                          }`}
-                        >
-                          {item}
-                        </p>
+                        <p className="min-w-0 flex-1 text-[15px] leading-relaxed text-[#1d1d1f]">{item}</p>
                       </div>
                       <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#26337c] to-[#45b3e2] transition-all duration-500 group-hover:w-full" />
                     </div>
