@@ -258,6 +258,16 @@ function navSubPanelId(href: string) {
   return `m-nav-sub-${href.replace(/^\//, "").replaceAll("/", "-")}`;
 }
 
+/** Full-bleed hero pages: hide the mobile top wash until the user scrolls (same as home). */
+function hasFullBleedHero(pathname: string) {
+  if (pathname === "/" || pathname === "/en/home") return true;
+  if (pathname.startsWith("/fokusthemen/") || pathname.startsWith("/en/fokusthemen/")) return true;
+  if (pathname === "/leistungen" || pathname === "/en/leistungen") return true;
+  if (pathname === "/kontakt" || pathname === "/en/kontakt") return true;
+  if (pathname.startsWith("/projectrealitycheck") || pathname.startsWith("/en/projectrealitycheck")) return true;
+  return false;
+}
+
 function LanguageSwitcher({
   pathname,
   onNavigate,
@@ -295,17 +305,17 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [mobileSubOpenHref, setMobileSubOpenHref] = useState<string | null>(null);
-  const isHome = pathname === "/";
+  const heroPage = hasFullBleedHero(pathname);
   const english = isEnglishPath(pathname);
   const navItems = english ? mainNavEn : mainNav;
   const contactHref = english ? "/en/kontakt" : "/kontakt";
   const contactLabel = english ? "Book a call" : "Termin buchen";
-  const [mobileTopWash, setMobileTopWash] = useState(!isHome);
+  const [mobileTopWash, setMobileTopWash] = useState(!heroPage);
   const reduce = useReducedMotion();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (!isHome) {
+    if (!heroPage) {
       setMobileTopWash(true);
       return;
     }
@@ -313,24 +323,20 @@ export function SiteHeader() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [isHome, pathname]);
+  }, [heroPage, pathname]);
 
   return (
     <>
-      {/**
-       * Mobile: full-bleed top layer so body copy cannot show through the “empty” sticky region
-       * (the pill is the only element with its own background; the header has h-0).
-       * Hidden on the home hero until the user has scrolled, so the first screen stays open.
-       */}
-      <div
-        aria-hidden
-        className={`pointer-events-none fixed inset-x-0 top-0 z-[35] h-[min(5.75rem,calc(3.25rem+env(safe-area-inset-top,0px)))] bg-white/90 backdrop-blur-md transition-opacity duration-200 md:hidden ${
-          mobileTopWash || open ? "opacity-100" : "opacity-0"
-        }`}
-      />
       {/* Floating pill nav : sticky, zero height so content flows under it */}
       <header className="pointer-events-none sticky top-0 z-40 h-0 overflow-visible">
-        <div className="px-4 md:px-6" style={{ paddingTop: "calc(0.75rem + env(safe-area-inset-top, 0px))" }}>
+        <div
+          className={`px-4 md:px-6 ${
+            mobileTopWash || open
+              ? "max-md:bg-gradient-to-b max-md:from-white max-md:via-white/95 max-md:to-transparent max-md:pb-2"
+              : ""
+          }`}
+          style={{ paddingTop: "calc(0.75rem + env(safe-area-inset-top, 0px))" }}
+        >
           <div className="pointer-events-auto mx-auto flex w-full max-w-[1068px] items-center justify-between gap-2 rounded-full border border-black/[0.07] bg-white px-3 py-2 shadow-[0_4px_24px_rgba(0,0,0,0.07)] md:gap-4 md:px-4">
             <Link href={english ? "/en/home" : "/"} className="flex shrink-0 items-center">
               <Image
