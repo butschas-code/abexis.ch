@@ -38,7 +38,8 @@ import {
 } from "@/lib/blogAutomation/findUnsplashImage";
 import type { UnsplashPhotoBrief } from "@/lib/blogAutomation/unsplash-photo-types";
 import { adminDb } from "@/lib/firebaseAdmin";
-import { createNuelinkSocialPost, type NuelinkPublishMode, type NuelinkSocialTarget } from "@/lib/nuelink/client";
+import { createNuelinkSocialPostWithRetry, type NuelinkPublishMode, type NuelinkSocialTarget } from "@/lib/nuelink/client";
+import { withNuelinkSendLock } from "@/lib/nuelink/rate-limit";
 import { POST_SITE_FIRESTORE_IN } from "@/public-site/site/filters";
 
 import type {
@@ -1325,19 +1326,22 @@ export async function cmsSendBlogSocialPostToNuelink(
   const socialImageUrl = params.socialImageUrl?.trim() || (typeof row.socialImageUrl === "string" ? row.socialImageUrl.trim() : "") || (typeof draft?.heroImageUrl === "string" ? draft.heroImageUrl.trim() : "");
   const socialImageAlt = params.socialImageAlt?.trim() || (typeof row.socialImageAlt === "string" ? row.socialImageAlt.trim() : "") || (typeof draft?.heroImageAlt === "string" ? draft.heroImageAlt.trim() : "");
 
-  const result = await createNuelinkSocialPost({
-    target: params.target,
-    caption,
-    link: blogUrl || undefined,
-    title: typeof draft?.title === "string" ? draft.title : undefined,
-    alt: socialImageAlt || undefined,
-    mediaUrl: socialImageUrl || undefined,
-    publishMode: params.publishMode,
-    scheduledAt: params.scheduledAt,
-  });
+  const result = await withNuelinkSendLock(() =>
+    createNuelinkSocialPostWithRetry({
+      target: params.target,
+      caption,
+      link: blogUrl || undefined,
+      title: typeof draft?.title === "string" ? draft.title : undefined,
+      alt: socialImageAlt || undefined,
+      mediaUrl: socialImageUrl || undefined,
+      publishMode: params.publishMode,
+      scheduledAt: params.scheduledAt,
+    }),
+  );
   const sentAt = Timestamp.now();
   const update: Record<string, unknown> = {
     updatedAt: FieldValue.serverTimestamp(),
+    nuelinkLastError: FieldValue.delete(),
     nuelinkLastSentAt: sentAt,
     nuelinkLastTarget: params.target,
     nuelinkLastPostId: result.postId,

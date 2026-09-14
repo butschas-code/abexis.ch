@@ -14,6 +14,32 @@ export type NuelinkCreatePostResult = {
   target: NuelinkSocialTarget;
 };
 
+export class NuelinkApiError extends Error {
+  readonly status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "NuelinkApiError";
+    this.status = status;
+  }
+}
+
+const NUELINK_RETRY_DELAYS_MS = [2_000, 5_000, 10_000] as const;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function isRetryableNuelinkError(error: unknown): boolean {
+  if (error instanceof NuelinkApiError) {
+    return error.status === 429 || error.status >= 500;
+  }
+  if (error instanceof Error) {
+    return /too many requests|429|rate limit/i.test(error.message);
+  }
+  return false;
+}
+
 type NuelinkCreatePostBody = {
   caption: string;
   publishMode: NuelinkPublishMode;
@@ -128,7 +154,7 @@ export async function createNuelinkSocialPost(params: {
   const data = (await response.json().catch(() => null)) as unknown;
   if (!response.ok) {
     const message = readResponseMessage(data) ?? `Nuelink-Anfrage fehlgeschlagen (${response.status}).`;
-    throw new Error(message);
+    throw new NuelinkApiError(message, response.status);
   }
 
   const postId = readPostId(data);
@@ -142,4 +168,23 @@ export async function createNuelinkSocialPost(params: {
     publishMode,
     target: params.target,
   };
+}
+
+/** {@link createNuelinkSocialPost} with automatic retry on HTTP 429 / 5xx. */
+export async function createNuelinkSocialPostWithRetry(
+  params: Parameters<typeof createNuelinkSocialPost>[0],
+): Promise<NuelinkCreatePostResult> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= NUELINK_RETRY_DELAYS_MS.length; attempt++) {
+    try {
+      return await createNuelinkSocialPost(params);
+    } catch (error) {
+      lastError = error;
+      if (!isRetryableNuelinkError(error) || attempt >= NUELINK_RETRY_DELAYS_MS.length) {
+        throw error;
+      }
+      await sleep(NUELINK_RETRY_DELAYS_MS[attempt]);
+    }
+  }
+  throw lastError instanceof Error ? lastError : new Error("Nuelink-Anfrage fehlgeschlagen.");
 }
