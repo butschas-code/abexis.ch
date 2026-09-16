@@ -33,11 +33,11 @@ function buildItems(items: readonly BentoItem["s"][]): BentoItem[] {
 export function LeistungenBentoGrid({
   items = fokusthemenMeta,
   lang = "de",
-  startLabel = "Hier beginnen",
   moreLabel = "Mehr erfahren",
 }: {
   items?: readonly BentoItem["s"][];
   lang?: "de" | "en";
+  /** @deprecated Badge removed — kept so existing call sites stay valid. */
   startLabel?: string;
   moreLabel?: string;
 }) {
@@ -56,7 +56,6 @@ export function LeistungenBentoGrid({
             item={item}
             imagePriority={idx === 0}
             isFullWidth={isFullWidth}
-            startLabel={startLabel}
             moreLabel={moreLabel}
           />
         );
@@ -69,13 +68,11 @@ function LeistungenBentoCard({
   item,
   imagePriority,
   isFullWidth,
-  startLabel,
   moreLabel,
 }: {
   item: BentoItem;
   imagePriority?: boolean;
   isFullWidth?: boolean;
-  startLabel: string;
   moreLabel: string;
 }) {
   const { s, img, i } = item;
@@ -87,7 +84,7 @@ function LeistungenBentoCard({
         isFullWidth
           ? "col-span-full flex-col sm:flex-row min-h-[22rem]"
           : "flex-col self-stretch min-h-[30rem] sm:min-h-[31rem] xl:min-h-[32rem]"
-      } ${i === 0 ? "ring-brand-900/15 hover:ring-brand-500/30" : "ring-black/[0.06] hover:ring-brand-500/20"}`}
+      } ring-black/[0.06] hover:ring-brand-500/20`}
     >
       <div
         className={`relative shrink-0 overflow-hidden bg-[#ececf0] ${
@@ -119,12 +116,6 @@ function LeistungenBentoCard({
         <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">
           {s.subtitle}
         </p>
-
-        {i === 0 && (
-          <span className="mb-1.5 mt-3 inline-flex w-fit items-center rounded-full bg-brand-900 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white sm:mb-2">
-            {startLabel}
-          </span>
-        )}
 
         <h2
           className={`text-balance break-words font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f] transition group-hover:text-brand-900 ${

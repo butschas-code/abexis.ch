@@ -30,7 +30,7 @@ type HomeServicesCopy = {
 
 export function HomeLeistungenGridSection({
   content = homeLeistungenBlock,
-  startLabel = "Hier beginnen",
+  startLabel: _startLabel = "Hier beginnen",
   moreLabel = "Mehr erfahren",
 }: {
   content?: HomeServicesCopy;
@@ -54,7 +54,7 @@ export function HomeLeistungenGridSection({
               <Link
                 key={s.href}
                 href={s.href}
-                className={`group flex overflow-hidden rounded-[22px] bg-white shadow-[var(--apple-shadow)] ring-1 transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--apple-shadow-lg)] sm:rounded-[28px] active:scale-[0.99]${isFullWidth ? " col-span-full flex-col sm:flex-row" : " flex-col"}${i === 0 ? " ring-brand-900/20 hover:ring-brand-500/40" : " ring-black/[0.04] hover:ring-brand-500/25"}`}
+                className={`group flex overflow-hidden rounded-[22px] bg-white shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--apple-shadow-lg)] hover:ring-brand-500/25 sm:rounded-[28px] active:scale-[0.99]${isFullWidth ? " col-span-full flex-col sm:flex-row" : " flex-col"}`}
               >
                 <div className={`relative isolate overflow-hidden bg-[#f5f5f7]${isFullWidth ? " aspect-[16/10] w-full sm:aspect-auto sm:w-[44%] sm:flex-shrink-0" : " aspect-[16/10] w-full"}`}>
                   <Image
@@ -67,11 +67,6 @@ export function HomeLeistungenGridSection({
                   <div className="abexis-tint-overlay" />
                 </div>
                 <div className="flex flex-1 flex-col px-5 pb-7 pt-5 sm:px-6 sm:pb-8 sm:pt-6">
-                  {i === 0 && (
-                    <span className="mb-3 inline-flex w-fit items-center rounded-full bg-brand-900 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
-                      {startLabel}
-                    </span>
-                  )}
                   <h3 className={`font-semibold leading-snug tracking-[-0.02em] text-[#1d1d1f]${isFullWidth ? " text-[19px] sm:text-[22px]" : " text-[17px] sm:text-[19px]"}`}>{s.title}</h3>
                   <p className="mt-2.5 flex-1 text-[14px] leading-relaxed text-[#6e6e73] sm:mt-3">{s.body}</p>
                   <span className="mt-4 inline-flex min-h-11 items-center text-[14px] font-medium text-brand-900 transition group-hover:translate-x-0.5 group-hover:text-brand-500 sm:mt-5">

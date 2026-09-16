@@ -100,41 +100,24 @@ function QuestionRail({ questions }: { questions: readonly string[] }) {
       <div className="space-y-4">
         {questions.map((q, i) => {
           const num = String(i + 1).padStart(2, "0");
-          const isLead = i === 0;
           const isLinen = i % 2 === 1;
           return (
             <div key={q} className="relative flex gap-4 md:gap-5">
-              <div
-                className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-[11px] font-semibold tabular-nums shadow-sm md:h-11 md:w-11 ${
-                  isLead
-                    ? "border-[#45b3e2]/50 bg-[#26337c] text-white"
-                    : "border-[#c9a96e]/40 bg-white text-[#26337c]"
-                }`}
-              >
+              <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#c9a96e]/40 bg-white text-[11px] font-semibold tabular-nums text-[#26337c] shadow-sm md:h-11 md:w-11">
                 {num}
               </div>
               <div
-                className={`group relative min-w-0 flex-1 overflow-hidden rounded-2xl px-5 py-5 transition-all duration-300 md:px-6 md:py-6 ${
-                  isLead
-                    ? "bg-[#1a2260] text-white shadow-[0_12px_40px_rgba(38,51,124,0.18)]"
-                    : isLinen
-                      ? "border border-black/[0.06] bg-[#faf8f2] hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(38,51,124,0.08)]"
-                      : "border border-black/[0.06] bg-white hover:-translate-y-0.5 hover:border-[#26337c]/15 hover:shadow-[0_12px_32px_rgba(38,51,124,0.08)]"
+                className={`group relative min-w-0 flex-1 overflow-hidden rounded-2xl border border-black/[0.06] px-5 py-5 transition-all duration-300 md:px-6 md:py-6 ${
+                  isLinen
+                    ? "bg-[#faf8f2] hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(38,51,124,0.08)]"
+                    : "bg-white hover:-translate-y-0.5 hover:border-[#26337c]/15 hover:shadow-[0_12px_32px_rgba(38,51,124,0.08)]"
                 }`}
               >
-                {!isLead ? <LCorner className="top-3 right-3 text-[#c9a96e]/25" /> : null}
-                <p
-                  className={`relative text-[15px] font-semibold leading-snug tracking-[-0.01em] md:text-[16px] ${
-                    isLead ? "text-white" : "text-[#1d1d1f]"
-                  }`}
-                >
+                <LCorner className="top-3 right-3 text-[#c9a96e]/25" />
+                <p className="relative text-[15px] font-semibold leading-snug tracking-[-0.01em] text-[#1d1d1f] md:text-[16px]">
                   {q}
                 </p>
-                {!isLead ? (
-                  <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#26337c] to-[#45b3e2] transition-all duration-500 group-hover:w-full" />
-                ) : (
-                  <div className="mt-4 h-px w-10 bg-[#45b3e2]/40" />
-                )}
+                <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#26337c] to-[#45b3e2] transition-all duration-500 group-hover:w-full" />
               </div>
             </div>
           );

@@ -15,17 +15,23 @@ export const logoUrl = HOME[0];
 /** Dekoratives Element von der Startseite (optional als Textur) */
 export const homeTextureBar = HOME[1];
 
+/** Editorial hero (Executive Search + legacy home hero) — self-hosted under /public/images/legacy. */
+export const executiveSearchHeroImage = "/images/legacy/home-hero.webp";
+
+/** Projektmanagement card + Fokus-Hero — team editorial, self-hosted. */
+export const projektmanagementHeroImage = "/images/focus/projektmanagement.webp";
+
 /** Kachel-Bilder der sechs Fokusthemen, Reihenfolge wie auf der alten Startseite */
 export const serviceCardImages = {
   projectfitcheck: resolvePublicImageUrl("https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Feditorial-insights.jpg?alt=media"),
   projectrealitycheck: resolvePublicImageUrl("https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Feditorial-insights.jpg?alt=media"),
-  "executive-search": resolvePublicImageUrl("https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Fexecutive-unsplash.jpg?alt=media"),
+  "executive-search": executiveSearchHeroImage,
   "digitale-transformation": HOME[2],
   unternehmensstrategie: HOME[3],
   vertriebmarketing: HOME[4],
   veränderungsmanagement: HOME[5],
   prozessoptimierung: HOME[6],
-  projektmanagement: HOME[7],
+  projektmanagement: projektmanagementHeroImage,
   /** Hand-drawn hero illustration — `public/images/focus/risikomanagement.webp` */
   risikomanagement: "/images/focus/risikomanagement.webp",
 } as const;
@@ -46,12 +52,12 @@ export const fokusPageHeroImages = {
   vertriebmarketing: (scraped["https://www.abexis.ch/fokusthemen/vertriebmarketing"] as string[])[1],
   veränderungsmanagement: (scraped["https://www.abexis.ch/fokusthemen/ver%C3%A4nderungsmanagement"] as string[])[1],
   prozessoptimierung: (scraped["https://www.abexis.ch/fokusthemen/prozessoptimierung"] as string[])[1],
-  projektmanagement: (scraped["https://www.abexis.ch/fokusthemen/projektmanagement"] as string[])[1],
+  projektmanagement: projektmanagementHeroImage,
   risikomanagement: "/images/focus/risikomanagement.webp",
 } as const;
 
 /** Startseiten-Hero: lokale Kopie, damit die gemeinsame Hero-Grafik nicht von Storage-Rechten abhängt. */
-export const homeHeroImage = "/images/legacy/home-hero.webp";
+export const homeHeroImage = executiveSearchHeroImage;
 
 /** Kontaktseite : separates Hero-Motiv (nicht Startseiten-Hero). */
 export const kontaktPageHeroImage = fokusPageHeroImages.unternehmensstrategie;

@@ -28,6 +28,14 @@ function isNavItemActive(item: MainNavItem, pathname: string): boolean {
   return pathname === item.href || (item.href !== "/" && pathname.startsWith(`${item.href}/`));
 }
 
+/** Dropdown-only parents (`parentIsLink: false`) highlight only on the overview URL, not every child route. */
+function isNavTriggerActive(item: MainNavItem, pathname: string): boolean {
+  if ("children" in item && item.children && item.parentIsLink === false) {
+    return pathname === item.href;
+  }
+  return isNavItemActive(item, pathname);
+}
+
 function subLinkClassName(active: boolean) {
   return `block w-full rounded-xl px-3 py-2.5 text-left text-[15px] leading-tight ${
     active ? "bg-black/[0.06] font-medium text-[#1d1d1f]" : "text-[#6e6e73] hover:bg-black/[0.04] hover:text-[#1d1d1f]"
@@ -351,7 +359,7 @@ export function SiteHeader() {
 
             <nav className="hidden flex-1 items-center justify-center gap-0.5 md:flex" aria-label="Hauptnavigation">
               {navItems.map((item) => {
-                const groupActive = isNavItemActive(item, pathname);
+                const groupActive = isNavTriggerActive(item, pathname);
                 if ("children" in item && item.children) {
                   return (
                     <DesktopSubmenu
@@ -363,7 +371,7 @@ export function SiteHeader() {
                   );
                 }
                 const external = isExternalNavHref(item.href);
-                const baseActive = isNavItemActive(item, pathname);
+                const baseActive = isNavTriggerActive(item, pathname);
                 const className = `rounded-full px-4 py-1.5 text-[14px] leading-tight tracking-[-0.01em] transition-all duration-200 ${
                   baseActive
                     ? "bg-brand-900 font-medium text-white"
@@ -413,7 +421,7 @@ export function SiteHeader() {
                 <nav className="flex flex-col p-3 text-[18px] font-medium" aria-label="Hauptnavigation mobil">
                   {navItems.map((item) => {
                     if ("children" in item && item.children) {
-                      const gActive = isNavItemActive(item, pathname);
+                      const gActive = isNavTriggerActive(item, pathname);
                       const subOpen = mobileSubOpenHref === item.href;
                       const subId = navSubPanelId(item.href);
                       const parentIsLink = item.parentIsLink !== false;
