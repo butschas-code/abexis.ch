@@ -57,7 +57,7 @@ export const fokusPageHeroImages = {
 } as const;
 
 /** Startseiten-Hero: lokale Kopie, damit die gemeinsame Hero-Grafik nicht von Storage-Rechten abhängt. */
-export const homeHeroImage = executiveSearchHeroImage;
+export const homeHeroImage = "/images/legacy/glass-office-towers.webp";
 
 /** Kontaktseite : separates Hero-Motiv (nicht Startseiten-Hero). */
 export const kontaktPageHeroImage = fokusPageHeroImages.unternehmensstrategie;

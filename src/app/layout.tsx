@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { homeHeroImage } from "@/data/site-images";
+import { logoUrl } from "@/data/site-images";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -23,10 +23,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: homeHeroImage,
-        width: 1200,
-        height: 630,
-        alt: "Abexis : Managementberatung",
+        url: logoUrl,
+        width: 1592,
+        height: 759,
+        alt: "Abexis",
       },
     ],
   },

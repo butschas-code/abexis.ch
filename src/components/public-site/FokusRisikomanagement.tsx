@@ -227,6 +227,7 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
                 {c.models.ongoing.title}
               </h3>
+              <p className="mt-2 text-[14px] font-medium text-[#26337c]">{c.models.ongoing.subtitle}</p>
               <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">{c.models.ongoing.intro}</p>
               <p className="mt-4 text-[16px] leading-relaxed text-[#6e6e73]">{c.models.ongoing.note}</p>
             </div>

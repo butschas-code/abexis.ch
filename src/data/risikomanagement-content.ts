@@ -15,7 +15,7 @@ export type RisikomanagementPageContent = {
   models: {
     eyebrow: string;
     title: string;
-    ongoing: { title: string; intro: string; note: string; bullets: readonly string[] };
+    ongoing: { title: string; subtitle: string; intro: string; note: string; bullets: readonly string[] };
     prc: { title: string; body: string; cta: { label: string; href: string } };
   };
   deliverables: { eyebrow: string; title: string; items: readonly { title: string; body: string }[] };
@@ -103,6 +103,7 @@ const de: RisikomanagementPageContent = {
     title: "Zwei Einsatzformen, passend zu Ihrer Projektsituation",
     ongoing: {
       title: "Laufende Risikobegleitung",
+      subtitle: "Risikomanagement as a Service",
       intro:
         "Abexis begleitet Ihr Projekt regelmässig als externer Risk Manager. Der typische Umfang liegt je nach Projektgrösse und Risikosituation bei etwa 10 bis 20 Prozent — das entspricht beispielsweise einem halben bis einem ganzen Tag pro Woche.",
       note: "Die Begleitung eignet sich für strategisch wichtige, komplexe oder risikoreiche Vorhaben, bei denen eine kontinuierliche Früherkennung und unabhängige Beurteilung erforderlich ist.",
@@ -308,6 +309,7 @@ const en: RisikomanagementPageContent = {
     title: "Two models for your project situation",
     ongoing: {
       title: "Ongoing risk support",
+      subtitle: "Risk Management as a Service",
       intro:
         "Abexis supports your project regularly as an external risk manager. Typical scope is roughly 10 to 20 percent depending on project size and risk profile — for example half a day to one full day per week.",
       note: "This model suits strategically important, complex or high-risk initiatives that require continuous early detection and independent assessment.",
