@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
+import { PublicImage as Image } from "@/components/site/PublicImage";
+import { danielSengstagImages } from "@/data/daniel-sengstag";
 
 const QUESTIONS = [
   {
@@ -64,7 +66,7 @@ const OPTIONS = [
 const CRITICAL_INDEXES = [1, 2, 11] as const;
 const MAX_SCORE = QUESTIONS.length * 3;
 
-type Step = "intro" | "quiz" | "result";
+type Step = "quiz" | "result";
 
 function resultForScore(total: number) {
   if (total >= 28) {
@@ -92,7 +94,7 @@ function resultForScore(total: number) {
 }
 
 export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) {
-  const [step, setStep] = useState<Step>("intro");
+  const [step, setStep] = useState<Step>("quiz");
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Array<number | null>>(() => Array(QUESTIONS.length).fill(null));
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -108,19 +110,13 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
     [answers],
   );
   const hasCriticalSignal = CRITICAL_INDEXES.some((i) => (answers[i] ?? 0) <= 1);
-  const progress = step === "result" ? 100 : Math.round((index / QUESTIONS.length) * 100);
+  const progress = step === "result" ? 100 : Math.round(((index + 1) / QUESTIONS.length) * 100);
   const ringDash = 352 * (1 - total / MAX_SCORE);
 
   function keepBlockInView() {
     window.setTimeout(() => {
       sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
     }, 90);
-  }
-
-  function start() {
-    setIndex(0);
-    setStep("quiz");
-    keepBlockInView();
   }
 
   function answer(value: number) {
@@ -140,18 +136,14 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
   }
 
   function back() {
-    if (index === 0) {
-      setStep("intro");
-      keepBlockInView();
-      return;
-    }
+    if (index === 0) return;
     setIndex((current) => current - 1);
   }
 
   function restart() {
     setAnswers(Array(QUESTIONS.length).fill(null));
     setIndex(0);
-    setStep("intro");
+    setStep("quiz");
     keepBlockInView();
   }
 
@@ -164,101 +156,81 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
       className="relative isolate overflow-hidden bg-[radial-gradient(ellipse_100%_70%_at_50%_-10%,rgba(38,51,124,0.09),transparent_52%),linear-gradient(180deg,#fbfbfd_0%,#f1f4fb_100%)] py-14 sm:py-20 md:py-24"
     >
       <div className="mx-auto max-w-[1068px] px-4 sm:px-6">
-        <div className="overflow-hidden rounded-[24px] border border-[#dfe5f0] bg-white shadow-[0_24px_70px_-42px_rgba(27,37,92,0.62)]">
-          {step === "intro" ? (
-            <div className="px-6 py-8 sm:px-9 sm:py-10 md:px-14 md:py-14">
-              <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-[#4A90D9]">
-                Selbsttest · 12 Fragen
-              </p>
-              <h2 className="mt-4 max-w-[24ch] text-[30px] font-semibold leading-[1.08] tracking-[-0.03em] text-brand-900 sm:text-[40px] md:text-[48px]">
-                Ist Ihr kritisches Projekt wirklich auf Kurs?
-              </h2>
-              <p className="mt-5 max-w-[66ch] text-[18px] leading-[1.75] text-[#2f3441] sm:text-[20px]">
-                Statusberichte zeigen oft Grün, während ein Vorhaben längst Rot ist. Dieser Selbsttest gibt Ihnen in
-                fünf Minuten eine ehrliche Standortbestimmung über zwölf der Punkte, an denen Projekte tatsächlich
-                scheitern.
-              </p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                {["5 Minuten", "12 Fragen", "Sofortiges Ergebnis"].map((label) => (
-                  <span
-                    key={label}
-                    className="rounded-full bg-[#eaf0f9] px-5 py-2 text-[15px] font-semibold text-brand-900"
-                  >
-                    {label}
-                  </span>
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={start}
-                className="mt-9 inline-flex min-h-12 items-center justify-center rounded-[14px] bg-brand-900 px-8 text-[17px] font-semibold text-white shadow-[0_18px_32px_-20px_rgba(38,51,124,0.95)] transition hover:-translate-y-0.5 hover:bg-[#1b255c] active:translate-y-0"
-              >
-                Selbsttest starten
-              </button>
-              <p className="mt-8 max-w-[78ch] text-[16px] leading-relaxed text-[#6b7180]">
-                Antworten Sie spontan und ehrlich aus Sicht der Person, die das Vorhaben verantwortet. Es werden keine
-                Daten gespeichert oder übermittelt.
-              </p>
-            </div>
-          ) : null}
-
-          {step === "quiz" ? (
-            <div className="px-6 py-8 sm:px-9 sm:py-10 md:px-14 md:py-14">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <p className="text-[14px] font-semibold text-brand-900">
-                  Frage <span className="text-[#4A90D9]">{index + 1}</span> von {QUESTIONS.length}
+        <div className="grid items-stretch gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(250px,300px)] lg:gap-6">
+          <div className="overflow-hidden rounded-[24px] border border-[#dfe5f0] bg-white shadow-[0_24px_70px_-42px_rgba(27,37,92,0.62)]">
+            {step === "quiz" ? (
+              <div className="px-6 py-8 sm:px-9 md:px-10 md:py-9">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-[#4A90D9]">
+                  Selbsttest · 12 Fragen
                 </p>
-                <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#6b7180]">{question.dim}</p>
-              </div>
-              <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#e3e8f0]">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#4A90D9] to-brand-900 transition-[width] duration-300"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
+                <div className="mt-4 border-t border-[#e3e8f0] pt-5">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <p className="text-[14px] font-semibold text-brand-900">
+                      Frage <span className="text-[#4A90D9]">{index + 1}</span> von {QUESTIONS.length}
+                    </p>
+                    <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#6b7180]">{question.dim}</p>
+                  </div>
+                  <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#e3e8f0]">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-[#4A90D9] to-brand-900 transition-[width] duration-300"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
 
-              <div key={index} className="mt-8">
-                <h3 className="max-w-[34ch] text-[25px] font-semibold leading-snug tracking-[-0.02em] text-brand-900 md:text-[31px]">
-                  {question.text}
-                </h3>
-                <div className="mt-8 grid gap-3">
-                  {OPTIONS.map((option) => {
-                    const selected = answers[index] === option.value;
-                    return (
-                      <button
-                        type="button"
-                        key={option.value}
-                        onClick={() => answer(option.value)}
-                        className={`flex min-h-14 w-full items-center gap-4 rounded-[14px] border px-5 py-4 text-left text-[16px] font-semibold transition hover:border-[#4A90D9] hover:bg-[#fafcff] ${
-                          selected
-                            ? "border-brand-900 bg-[#eaf0f9] text-brand-900"
-                            : "border-[#dfe5f0] bg-white text-[#1e2330]"
-                        }`}
-                      >
-                        <span
-                          aria-hidden
-                          className={`h-[18px] w-[18px] rounded-full border-2 ${
-                            selected ? "border-brand-900 bg-brand-900 shadow-[inset_0_0_0_3px_white]" : "border-[#c4ccdb]"
-                          }`}
-                        />
-                        <span>{option.label}</span>
-                      </button>
-                    );
-                  })}
+                  <div key={index} className="mt-5">
+                    <h2 className="text-[22px] font-semibold leading-snug tracking-[-0.02em] text-brand-900 md:text-[25px]">
+                      {question.text}
+                    </h2>
+                    <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                      {OPTIONS.map((option) => {
+                        const selected = answers[index] === option.value;
+                        return (
+                          <button
+                            type="button"
+                            key={option.value}
+                            onClick={() => answer(option.value)}
+                            className={`flex min-h-12 w-full items-center gap-3 rounded-[14px] border px-4 py-3 text-left text-[15px] font-semibold transition hover:border-[#4A90D9] hover:bg-[#fafcff] ${
+                              selected
+                                ? "border-brand-900 bg-[#eaf0f9] text-brand-900"
+                                : "border-[#dfe5f0] bg-white text-[#1e2330]"
+                            }`}
+                          >
+                            <span
+                              aria-hidden
+                              className={`h-[18px] w-[18px] shrink-0 rounded-full border-2 ${
+                                selected
+                                  ? "border-brand-900 bg-brand-900 shadow-[inset_0_0_0_3px_white]"
+                                  : "border-[#c4ccdb]"
+                              }`}
+                            />
+                            <span>{option.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {index === 0 ? (
+                      <p className="mt-5 border-t border-[#e3e8f0] pt-4 text-[14px] leading-relaxed text-[#6b7180]">
+                        Zwölf kurze Aussagen geben Ihnen in fünf Minuten eine ehrliche Standortbestimmung. Es werden
+                        keine Daten gespeichert oder übermittelt.
+                      </p>
+                    ) : null}
+                  </div>
+
                 </div>
-              </div>
 
-              <div className="mt-8 flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={back}
-                  className="inline-flex min-h-11 items-center rounded-full px-1 text-[15px] font-semibold text-brand-900 transition hover:text-[#4A90D9]"
-                >
-                  {index === 0 ? "← Einleitung" : "← Zurück"}
-                </button>
+                {index > 0 ? (
+                  <div className="mt-6 flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={back}
+                    className="inline-flex min-h-11 items-center rounded-full px-1 text-[15px] font-semibold text-brand-900 transition hover:text-[#4A90D9]"
+                  >
+                    ← Zurück
+                  </button>
+                  </div>
+                ) : null}
               </div>
-            </div>
-          ) : null}
+            ) : null}
 
           {step === "result" ? (
             <div className="px-6 py-8 sm:px-9 sm:py-10 md:px-14 md:py-14">
@@ -302,7 +274,7 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
               </div>
 
               {hasCriticalSignal ? (
-                <div className="mt-8 rounded-r-[14px] border-l-4 border-[#E0A526] bg-[#fdf7ea] px-5 py-4 text-[15px] leading-relaxed text-[#6a5417]">
+                <div className="mt-8 rounded-[14px] border border-[#E0A526]/35 bg-[#fdf7ea] px-5 py-4 text-[15px] leading-relaxed text-[#6a5417]">
                   <b className="font-semibold text-[#8a6a12]">Einzelne Antworten wiegen schwer.</b> Fehlendes Vertrauen
                   in den Status, ein schwacher Sponsor oder geringe Liefer-Zuversicht sind Warnsignale, unabhängig vom
                   Gesamtergebnis.
@@ -357,6 +329,21 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
               </button>
             </div>
           ) : null}
+          </div>
+
+          <aside className="relative min-h-[360px] overflow-hidden rounded-[24px] bg-brand-900 shadow-[0_24px_70px_-42px_rgba(27,37,92,0.62)] lg:min-h-full">
+            <Image
+              src={danielSengstagImages.editorial}
+              alt="Daniel Sengstag"
+              fill
+              className="object-cover object-[center_18%]"
+              sizes="(max-width: 1023px) 100vw, 300px"
+            />
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#11183f] via-[#11183f]/85 to-transparent px-6 pb-6 pt-20 text-white">
+              <p className="text-[18px] font-semibold">Daniel Sengstag</p>
+              <p className="mt-1 text-[14px] text-white/75">Gründer und Inhaber</p>
+            </div>
+          </aside>
         </div>
       </div>
     </section>

@@ -227,12 +227,14 @@ export function FokusProjektmanagement() {
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
           Projekte scheitern selten an der Idee : sie scheitern an der Führung.
         </h1>
-        <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
-          Unklare Ziele, fehlende Ressourcen, schwache Governance und zu späte Eskalation
-          kosten Unternehmen täglich Zeit und Geld. Wir bringen Fachkompetenz, Methodik und
-          Erfahrung mit : damit Ihre Projekte liefern, was sie versprechen.
-        </p>
-        <div className="mt-10 flex flex-wrap items-center gap-3">
+        <div className="mt-6 max-w-[54ch] rounded-3xl border border-white/25 bg-white/[0.12] px-6 py-6 shadow-[0_8px_32px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.22)] backdrop-blur-2xl backdrop-saturate-150 sm:px-8 sm:py-7">
+          <p className="text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/90 text-balance">
+            Unklare Ziele, fehlende Ressourcen, schwache Governance und zu späte Eskalation kosten Unternehmen täglich
+            Zeit und Geld. Wir bringen Fachkompetenz, Methodik und Erfahrung mit : damit Ihre Projekte liefern, was sie
+            versprechen.
+          </p>
+        </div>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
           <HeroProjectRealityCheckCta />
           <Link
             href="/kontakt"
