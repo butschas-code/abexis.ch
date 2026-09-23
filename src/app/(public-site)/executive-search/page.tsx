@@ -15,7 +15,7 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { InsightPostCard } from "@/components/public-site/insights/InsightPostCard";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
-import { legacySiteImages } from "@/executive-search/data/legacy-site-images";
+import { executiveSearchHeroImage } from "@/data/site-images";
 import { homeImagery } from "@/executive-search/lib/images/homeImagery";
 import { listSearchSitePublishedPosts } from "@/public-site/cms";
 
@@ -79,7 +79,7 @@ export default async function ExecutiveSearchPage() {
         title="Executive Search"
         subtitle="Wir finden Persönlichkeiten, nicht nur Profile."
         mainLead={HERO_LEAD}
-        imageSrc={legacySiteImages.homeHero}
+        imageSrc={executiveSearchHeroImage}
         primaryHref="#suchmandat"
         primaryLabel="Suchmandat anfragen"
         secondaryHref="/kontakt"

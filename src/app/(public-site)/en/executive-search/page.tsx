@@ -15,7 +15,7 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { InsightPostCard } from "@/components/public-site/insights/InsightPostCard";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
-import { legacySiteImages } from "@/executive-search/data/legacy-site-images";
+import { executiveSearchHeroImage } from "@/data/site-images";
 import { homeImagery } from "@/executive-search/lib/images/homeImagery";
 import { listSearchSitePublishedPosts } from "@/public-site/cms";
 
@@ -118,7 +118,7 @@ export default async function EnglishExecutiveSearchPage() {
         title="Executive Search"
         subtitle="We find personalities, not just profiles."
         mainLead={HERO_LEAD}
-        imageSrc={legacySiteImages.homeHero}
+        imageSrc={executiveSearchHeroImage}
         primaryHref="#search-mandate"
         primaryLabel="Discuss a search mandate"
         secondaryHref="/en/kontakt"

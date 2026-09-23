@@ -15,8 +15,8 @@ export const logoUrl = HOME[0];
 /** Dekoratives Element von der Startseite (optional als Textur) */
 export const homeTextureBar = HOME[1];
 
-/** Editorial hero (Executive Search + legacy home hero) — self-hosted under /public/images/legacy. */
-export const executiveSearchHeroImage = "/images/legacy/home-hero.webp";
+/** Executive Search hero: restrained corporate architecture instead of generic office stock. */
+export const executiveSearchHeroImage = "/images/daniel-sengstag/hero.webp";
 
 /** Projektmanagement card + Fokus-Hero — team editorial, self-hosted. */
 export const projektmanagementHeroImage = "/images/focus/projektmanagement.webp";
