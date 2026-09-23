@@ -20,7 +20,7 @@ import { homeImagery } from "@/executive-search/lib/images/homeImagery";
 import { listSearchSitePublishedPosts } from "@/public-site/cms";
 
 const HERO_LEAD =
-  "Abexis SEARCH fills leadership and key positions discreetly, precisely and with genuine advisory competence. Many of our mandates are deliberately not advertised publicly. That is why we work with confidential direct search, a clearly led search process and a deep understanding of role, market and organization. We bring companies together with personalities who are convincing professionally, fit culturally and create strategic impact.";
+  "This page explains how we fill leadership and key positions: from confidential direct search and rigorous assessment to placements built for lasting impact.";
 
 const INTRO_BODY =
   "For us, Executive Search is more than finding suitable profiles. It is about identifying personalities who can take responsibility, connect with the culture and create impact in their role, with precision in approach, clarity in assessment and care in placement.";
@@ -115,6 +115,7 @@ export default async function EnglishExecutiveSearchPage() {
         ]}
       />
       <HeroPanel
+        eyebrow="Abexis Search"
         title="Executive Search"
         subtitle="We find personalities, not just profiles."
         mainLead={HERO_LEAD}

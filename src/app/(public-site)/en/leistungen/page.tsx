@@ -33,11 +33,11 @@ export default function EnglishServicesPage() {
       />
       <PageHero
         imageSrc={fokusPageHeroImages["digitale-transformation"]}
+        priority
         intro={
           <p>
-            When decisions have weight, standard solutions are not enough. Abexis stands for substantive consulting in
-            central leadership and people topics, precise in analysis, discreet in support and consistent in
-            implementation.
+            This page gives you an overview of our consulting areas: from strategy, digital transformation and project
+            leadership to change, sales, process optimization and risk management.
           </p>
         }
         actions={<HeroProjectRealityCheckCta href="/en/projectrealitycheck" label="Request a Project Reality Check" />}
@@ -46,6 +46,9 @@ export default function EnglishServicesPage() {
         <h1 className="mt-3 max-w-[22ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance md:max-w-[32ch] md:text-[56px] md:leading-[1.02]">
           <HeroHeadlineText>Consulting with substance for decisions that create lasting impact.</HeroHeadlineText>
         </h1>
+        <p className="mt-5 max-w-[48ch] text-[17px] leading-relaxed text-white/88 text-balance sm:text-[19px]">
+          Strategy, transformation and execution – where important decisions need substance.
+        </p>
       </PageHero>
 
       <MotionSection className="relative overflow-hidden py-16 md:py-28">

@@ -20,7 +20,7 @@ import { homeImagery } from "@/executive-search/lib/images/homeImagery";
 import { listSearchSitePublishedPosts } from "@/public-site/cms";
 
 const HERO_LEAD =
-  "Abexis SEARCH besetzt Führungs- und Schlüsselpositionen diskret, präzise und mit echter Beratungskompetenz. Viele unserer Mandate werden bewusst nicht öffentlich ausgeschrieben. Deshalb arbeiten wir mit vertraulicher Direktansprache, einem klar geführten Suchprozess und einem tiefen Verständnis für Rolle, Markt und Organisation. Wir bringen Unternehmen mit Persönlichkeiten zusammen, die fachlich überzeugen, menschlich passen und strategisch Wirkung entfalten.";
+  "Auf dieser Seite erfahren Sie, wie wir Führungs- und Schlüsselpositionen besetzen: von der vertraulichen Direktansprache über die fundierte Beurteilung bis zur nachhaltigen Besetzung.";
 
 const INTRO_BODY =
   "Executive Search ist für uns mehr als die Suche nach passenden Profilen. Es geht darum, Persönlichkeiten zu identifizieren, die Verantwortung übernehmen können, kulturell anschlussfähig sind und in ihrer Rolle Wirkung entfalten, mit Präzision in der Ansprache, Klarheit in der Einschätzung und Sorgfalt in der Besetzung.";
@@ -76,6 +76,7 @@ export default async function ExecutiveSearchPage() {
         ]}
       />
       <HeroPanel
+        eyebrow="Abexis Search"
         title="Executive Search"
         subtitle="Wir finden Persönlichkeiten, nicht nur Profile."
         mainLead={HERO_LEAD}

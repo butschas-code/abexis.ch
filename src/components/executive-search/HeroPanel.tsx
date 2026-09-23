@@ -33,7 +33,6 @@ export function HeroPanel({
       priority
       intro={
         <div className="space-y-4">
-          <p className="font-medium text-[#1d1d1f]">{subtitle}</p>
           <p>{mainLead}</p>
           {supportingLead ? <p className="text-[16px] text-[#6e6e73] md:text-[17px]">{supportingLead}</p> : null}
         </div>
@@ -63,6 +62,9 @@ export function HeroPanel({
       >
         <HeroHeadlineText>{title}</HeroHeadlineText>
       </h1>
+      <p className="mt-5 max-w-[48ch] text-[17px] leading-relaxed text-white/88 text-balance sm:text-[19px]">
+        {subtitle}
+      </p>
     </PageHero>
   );
 }
