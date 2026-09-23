@@ -2,6 +2,7 @@ import { LeistungenBentoGrid } from "@/components/leistungen/LeistungenBentoGrid
 import { MotionSection } from "@/components/motion/MotionSection";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
+import { HeroHeadlineText } from "@/components/site/HeroHeadlineBrandAccent";
 import { PageHero } from "@/components/site/PageHero";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { englishServiceTeasers } from "@/data/english-site";
@@ -41,8 +42,9 @@ export default function EnglishServicesPage() {
         }
         actions={<HeroProjectRealityCheckCta href="/en/projectrealitycheck" label="Request a Project Reality Check" />}
       >
-        <h1 className="max-w-[22ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance md:max-w-[32ch] md:text-[56px] md:leading-[1.02]">
-          Consulting with substance
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Services</p>
+        <h1 className="mt-3 max-w-[22ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance md:max-w-[32ch] md:text-[56px] md:leading-[1.02]">
+          <HeroHeadlineText>Consulting with substance for decisions that create lasting impact.</HeroHeadlineText>
         </h1>
       </PageHero>
 

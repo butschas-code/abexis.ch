@@ -4,6 +4,7 @@ import { ConfidentialMandatesNotice } from "@/components/executive-search/Confid
 import { MotionSection } from "@/components/motion/MotionSection";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
+import { HeroHeadlineText } from "@/components/site/HeroHeadlineBrandAccent";
 import { PageHero } from "@/components/site/PageHero";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
 import { unsplash } from "@/executive-search/lib/images/unsplash";
@@ -68,7 +69,7 @@ export default async function EnglishExecutiveSearchVacanciesPage() {
       >
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Executive Search</p>
         <h1 className="mt-3 max-w-[32ch] text-[clamp(1.875rem,6vw+0.65rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:max-w-[40ch] md:text-[56px] md:leading-[1.02]">
-          Current vacancies
+          <HeroHeadlineText>Current vacancies</HeroHeadlineText>
         </h1>
       </PageHero>
 

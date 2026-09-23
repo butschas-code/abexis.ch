@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
+import { HeroHeadlineText } from "@/components/site/HeroHeadlineBrandAccent";
 import { PageHero } from "@/components/site/PageHero";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { fokusPageHeroImages } from "@/data/site-images";
@@ -203,7 +204,7 @@ export function FokusUnternehmensstrategie() {
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          Strategie entsteht dort, wo Perspektiven auseinandergehen.
+          <HeroHeadlineText>Strategie entsteht dort, wo Perspektiven auseinandergehen.</HeroHeadlineText>
         </h1>
       </PageHero>
 

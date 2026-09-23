@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HeroHeadlineText } from "@/components/site/HeroHeadlineBrandAccent";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PageHero } from "@/components/site/PageHero";
 import { homeHeroImage } from "@/data/site-images";
@@ -20,7 +21,7 @@ export default function NotFound() {
       >
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">404</p>
         <h1 className="mt-3 max-w-[20ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-white md:text-[56px] md:leading-[1.02]">
-          Seite nicht gefunden
+          <HeroHeadlineText>Seite nicht gefunden</HeroHeadlineText>
         </h1>
       </PageHero>
     </InteriorPageRoot>

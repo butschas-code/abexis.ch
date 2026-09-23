@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { homeHeroImage } from "@/data/site-images";
+import { HeroHeadlineText } from "./HeroHeadlineBrandAccent";
 import { PageHero } from "./PageHero";
 
 const maxMap = {
@@ -89,7 +90,7 @@ export function InteriorPageLayout({
       >
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{eyebrow}</p>
         <h1 className="mt-3 max-w-[28ch] text-[clamp(1.875rem,6vw+0.65rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:max-w-[40ch] md:text-[56px] md:leading-[1.02]">
-          {title}
+          <HeroHeadlineText>{title}</HeroHeadlineText>
         </h1>
       </PageHero>
       {wrapContentInMotion ? <MotionSection>{inner}</MotionSection> : inner}

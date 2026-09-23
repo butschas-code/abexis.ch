@@ -2,6 +2,7 @@ import { PublicImage as Image } from "@/components/site/PublicImage";
 import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
+import { HeroHeadlineText } from "@/components/site/HeroHeadlineBrandAccent";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PageHero } from "@/components/site/PageHero";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
@@ -480,7 +481,7 @@ export function FokusEnglishPage({ page }: { page: EnglishFocusPageData }) {
       >
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{page.subtitle}</p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
-          {page.heroTitle}
+          <HeroHeadlineText>{page.heroTitle}</HeroHeadlineText>
         </h1>
       </PageHero>
 
