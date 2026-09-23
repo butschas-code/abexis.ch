@@ -58,35 +58,26 @@ export default async function VacancyDetailPage({ params }: Props) {
         ]}
       />
 
-      <PageHero imageSrc={unsplash.vakanzen} priority>
+      <PageHero
+        imageSrc={unsplash.vakanzen}
+        priority
+        intro={
+          <div className="space-y-5">
+            {(v.sector || v.location || v.employmentType) && (
+              <div className="flex flex-wrap items-center gap-2">
+                {v.sector && <span className="rounded-full bg-[#26337c]/[0.08] px-3 py-1 text-[12px] font-medium text-[#26337c]">{v.sector}</span>}
+                {v.location && <span className="rounded-full bg-[#26337c]/[0.08] px-3 py-1 text-[12px] font-medium text-[#26337c]">{v.location}</span>}
+                {v.employmentType && <span className="rounded-full bg-[#26337c]/[0.08] px-3 py-1 text-[12px] font-medium text-[#26337c]">{v.employmentType}</span>}
+              </div>
+            )}
+            {v.hook ? <p>{v.hook}</p> : null}
+          </div>
+        }
+      >
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Aktuelles Mandat</p>
         <h1 className="mt-3 max-w-[36ch] text-[clamp(1.875rem,6vw+0.65rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:text-[56px] md:leading-[1.02]">
           {v.title}
         </h1>
-        {(v.sector || v.location || v.employmentType) && (
-          <div className="mt-5 flex flex-wrap items-center gap-2">
-            {v.sector && (
-              <span className="rounded-full bg-white/15 px-3 py-1 text-[12px] font-medium text-white/90 backdrop-blur-sm">
-                {v.sector}
-              </span>
-            )}
-            {v.location && (
-              <span className="rounded-full bg-white/15 px-3 py-1 text-[12px] font-medium text-white/90 backdrop-blur-sm">
-                {v.location}
-              </span>
-            )}
-            {v.employmentType && (
-              <span className="rounded-full bg-white/15 px-3 py-1 text-[12px] font-medium text-white/90 backdrop-blur-sm">
-                {v.employmentType}
-              </span>
-            )}
-          </div>
-        )}
-        {v.hook && (
-          <p className="mt-5 max-w-2xl text-[17px] font-normal leading-relaxed text-white/88 sm:text-[19px] md:text-[21px]">
-            {v.hook}
-          </p>
-        )}
       </PageHero>
 
       {/* Back link */}

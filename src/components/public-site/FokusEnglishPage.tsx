@@ -459,32 +459,29 @@ export function FokusEnglishPage({ page }: { page: EnglishFocusPageData }) {
         ]}
       />
 
-      <PageHero imageSrc={heroImage} priority>
+      <PageHero
+        imageSrc={heroImage}
+        priority
+        intro={<p>{page.heroBody}</p>}
+        actions={
+          <>
+            <HeroProjectRealityCheckCta href="/en/projectrealitycheck" label="Request a Project Reality Check" />
+            <Link href="/en/kontakt" className="inline-flex h-11 items-center gap-2 rounded-full border border-[#26337c]/15 bg-white px-7 text-sm font-semibold text-[#26337c] transition-all hover:border-[#26337c]/30 hover:bg-[#f7f8fc]">
+              30-minute introductory call
+            </Link>
+            <Link href={`#${page.anchorId}`} className="inline-flex h-11 items-center gap-2 rounded-full border border-[#26337c]/20 px-7 text-sm font-semibold text-[#26337c] transition-all hover:border-[#26337c]/40 hover:bg-[#f7f8fc]">
+              {page.anchorLabel}
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+                <path d="M7 2v10M2 7l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+          </>
+        }
+      >
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{page.subtitle}</p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
           {page.heroTitle}
         </h1>
-        <p className="mt-6 max-w-[50ch] text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/80 text-balance">
-          {page.heroBody}
-        </p>
-        <div className="mt-10 flex flex-wrap items-center gap-3">
-          <HeroProjectRealityCheckCta href="/en/projectrealitycheck" label="Request a Project Reality Check" />
-          <Link
-            href="/en/kontakt"
-            className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-7 text-sm font-semibold text-[#26337c] transition-all hover:bg-white/90 hover:scale-[1.02]"
-          >
-            30-minute introductory call
-          </Link>
-          <Link
-            href={`#${page.anchorId}`}
-            className="inline-flex h-11 items-center gap-2 rounded-full border border-white/30 px-7 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:border-white/60 hover:bg-white/10"
-          >
-            {page.anchorLabel}
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-              <path d="M7 2v10M2 7l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </Link>
-        </div>
       </PageHero>
 
       <SplitPanel page={page} />

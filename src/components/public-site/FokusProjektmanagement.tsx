@@ -220,38 +220,37 @@ export function FokusProjektmanagement() {
       />
 
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
-      <PageHero imageSrc={heroImage} priority>
+      <PageHero
+        imageSrc={heroImage}
+        priority
+        intro={
+          <p>
+            Unklare Ziele, fehlende Ressourcen, schwache Governance und zu späte Eskalation kosten Unternehmen täglich
+            Zeit und Geld. Wir bringen Fachkompetenz, Methodik und Erfahrung mit : damit Ihre Projekte liefern, was sie
+            versprechen.
+          </p>
+        }
+        actions={
+          <>
+            <HeroProjectRealityCheckCta />
+            <Link href="/kontakt" className="inline-flex h-11 items-center gap-2 rounded-full border border-[#26337c]/15 bg-white px-7 text-sm font-semibold text-[#26337c] transition-all hover:border-[#26337c]/30 hover:bg-[#f7f8fc]">
+              30-Minuten-Erstgespräch
+            </Link>
+            <Link href="#handlungsfelder" className="inline-flex h-11 items-center gap-2 rounded-full border border-[#26337c]/20 px-7 text-sm font-semibold text-[#26337c] transition-all hover:border-[#26337c]/40 hover:bg-[#f7f8fc]">
+              Handlungsfelder
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+                <path d="M7 2v10M2 7l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+          </>
+        }
+      >
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">
           {meta.subtitle}
         </p>
         <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
           Projekte scheitern selten an der Idee : sie scheitern an der Führung.
         </h1>
-        <div className="mt-6 max-w-[54ch] rounded-3xl border border-white/25 bg-white/[0.12] px-6 py-6 shadow-[0_8px_32px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.22)] backdrop-blur-2xl backdrop-saturate-150 sm:px-8 sm:py-7">
-          <p className="text-[clamp(1rem,1.5vw+0.5rem,1.175rem)] leading-relaxed text-white/90 text-balance">
-            Unklare Ziele, fehlende Ressourcen, schwache Governance und zu späte Eskalation kosten Unternehmen täglich
-            Zeit und Geld. Wir bringen Fachkompetenz, Methodik und Erfahrung mit : damit Ihre Projekte liefern, was sie
-            versprechen.
-          </p>
-        </div>
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <HeroProjectRealityCheckCta />
-          <Link
-            href="/kontakt"
-            className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-7 text-sm font-semibold text-[#26337c] transition-all hover:bg-white/90 hover:scale-[1.02]"
-          >
-            30-Minuten-Erstgespräch
-          </Link>
-          <Link
-            href="#handlungsfelder"
-            className="inline-flex h-11 items-center gap-2 rounded-full border border-white/30 px-7 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:border-white/60 hover:bg-white/10"
-          >
-            Handlungsfelder
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-              <path d="M7 2v10M2 7l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </Link>
-        </div>
       </PageHero>
 
       {/* ── 2. SPLIT PANEL : Projektleitung vs. Projektassessment ────────── */}

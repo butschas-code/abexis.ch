@@ -106,22 +106,30 @@ export function DanielSengstagProfilePage({
   const labels = uiCopy[locale];
   return (
     <>
-      <PageHero imageSrc={images.hero} priority imageObjectClassName="object-[center_22%]">
+      <PageHero
+        imageSrc={images.hero}
+        priority
+        imageObjectClassName="object-[center_22%]"
+        intro={
+          <div className="space-y-3">
+            <p className="font-medium text-[#1d1d1f]">{copy.hero.line}</p>
+            <p className="text-[16px] text-[#6e6e73] md:text-[17px]">{copy.hero.lead}</p>
+          </div>
+        }
+        actions={
+          <a
+            href="#kontakt"
+            className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-[#26337c]/20 px-7 text-[17px] font-medium text-[#26337c] transition-all duration-200 ease-out hover:border-[#26337c]/40 hover:bg-[#f7f8fc] hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:min-h-[48px] sm:px-8"
+          >
+            {copy.hero.ctaSecondary}
+          </a>
+        }
+      >
         <div className="max-w-[40rem]">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{copy.hero.credentials}</p>
           <h1 className="mt-3 text-[clamp(1.875rem,6.5vw+0.6rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:text-[52px] md:leading-[1.02]">
             {copy.hero.name}
           </h1>
-          <p className="mt-6 text-[17px] font-normal leading-relaxed text-white/88 sm:text-[19px] md:text-[21px]">{copy.hero.line}</p>
-          <p className="mt-4 text-[15px] leading-relaxed text-white/75 sm:text-[16px]">{copy.hero.lead}</p>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-            <a
-              href="#kontakt"
-              className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/35 bg-white/10 px-7 text-[17px] font-medium text-white backdrop-blur-sm transition-all duration-200 ease-out hover:border-white/60 hover:bg-white/22 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:min-h-[48px] sm:px-8"
-            >
-              {copy.hero.ctaSecondary}
-            </a>
-          </div>
         </div>
       </PageHero>
 

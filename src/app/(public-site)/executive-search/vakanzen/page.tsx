@@ -36,14 +36,20 @@ export default async function ExecutiveSearchVakanzenPage() {
           { name: "Vakanzen", url: "/executive-search/vakanzen" },
         ]}
       />
-      <PageHero imageSrc={unsplash.vakanzen} priority>
+      <PageHero
+        imageSrc={unsplash.vakanzen}
+        priority
+        intro={
+          <p>
+            Im Auftrag unserer Mandant:innen suchen wir Persönlichkeiten für Führungs- und Schlüsselpositionen :
+            diskret, präzise und auf Augenhöhe.
+          </p>
+        }
+      >
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Executive Search</p>
         <h1 className="mt-3 max-w-[32ch] text-[clamp(1.875rem,6vw+0.65rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:max-w-[40ch] md:text-[56px] md:leading-[1.02]">
           Aktuelle Vakanzen
         </h1>
-        <p className="mt-6 max-w-2xl text-[17px] font-normal leading-relaxed text-white/88 sm:text-[19px] md:text-[21px]">
-          Im Auftrag unserer Mandant:innen suchen wir Persönlichkeiten für Führungs- und Schlüsselpositionen : diskret, präzise und auf Augenhöhe.
-        </p>
       </PageHero>
 
       <MotionSection>

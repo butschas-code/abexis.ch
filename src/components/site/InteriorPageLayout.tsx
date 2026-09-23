@@ -72,27 +72,25 @@ export function InteriorPageLayout({
   const contentMx = maxMap[contentMaxWidth ?? maxWidth];
   const contentTopPad = wrapContentInMotion ? "pt-12 md:pt-16" : "";
   const inner = (
-      <div className={`mx-auto ${contentMx} px-4 pb-16 sm:px-6 sm:pb-20 md:pb-28 ${contentTopPad} ${contentClassName}`.trim()}>
+    <div
+      className={`mx-auto ${contentMx} px-4 pb-16 sm:px-6 sm:pb-20 md:pb-28 ${contentTopPad} ${contentClassName}`.trim()}
+    >
       {children}
     </div>
   );
   return (
     <InteriorPageRoot>
-      <PageHero imageSrc={heroImage} priority={heroPriority} imageObjectClassName={heroImageObjectClassName}>
+      <PageHero
+        imageSrc={heroImage}
+        priority={heroPriority}
+        imageObjectClassName={heroImageObjectClassName}
+        intro={description}
+        actions={heroActions}
+      >
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{eyebrow}</p>
         <h1 className="mt-3 max-w-[28ch] text-[clamp(1.875rem,6vw+0.65rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:max-w-[40ch] md:text-[56px] md:leading-[1.02]">
           {title}
         </h1>
-        {description != null ? (
-          <div className="mt-6 max-w-2xl text-[17px] font-normal leading-relaxed text-white/88 sm:text-[19px] md:text-[21px] [&_a]:font-medium [&_a]:text-white [&_a]:underline [&_a]:underline-offset-4 [&_a]:transition-colors [&_a:hover]:text-[#b8e8f7] [&_strong]:font-semibold [&_strong]:text-white">
-            {description}
-          </div>
-        ) : null}
-        {heroActions != null ? (
-          <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-            {heroActions}
-          </div>
-        ) : null}
       </PageHero>
       {wrapContentInMotion ? <MotionSection>{inner}</MotionSection> : inner}
     </InteriorPageRoot>

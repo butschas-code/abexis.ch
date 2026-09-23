@@ -30,17 +30,20 @@ export default function EnglishServicesPage() {
           { name: "Services", url: "/en/leistungen" },
         ]}
       />
-      <PageHero imageSrc={fokusPageHeroImages["digitale-transformation"]}>
+      <PageHero
+        imageSrc={fokusPageHeroImages["digitale-transformation"]}
+        intro={
+          <p>
+            When decisions have weight, standard solutions are not enough. Abexis stands for substantive consulting in
+            central leadership and people topics, precise in analysis, discreet in support and consistent in
+            implementation.
+          </p>
+        }
+        actions={<HeroProjectRealityCheckCta href="/en/projectrealitycheck" label="Request a Project Reality Check" />}
+      >
         <h1 className="max-w-[22ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance md:max-w-[32ch] md:text-[56px] md:leading-[1.02]">
           Consulting with substance
         </h1>
-        <p className="mt-6 max-w-2xl text-[19px] font-normal leading-relaxed text-white/88 md:text-[21px]">
-          When decisions have weight, standard solutions are not enough. Abexis stands for substantive consulting in
-          central leadership and people topics, precise in analysis, discreet in support and consistent in implementation.
-        </p>
-        <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-          <HeroProjectRealityCheckCta href="/en/projectrealitycheck" label="Request a Project Reality Check" />
-        </div>
       </PageHero>
 
       <MotionSection className="relative overflow-hidden py-16 md:py-28">

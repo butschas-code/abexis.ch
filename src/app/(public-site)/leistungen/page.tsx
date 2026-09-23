@@ -30,18 +30,20 @@ export default function LeistungenPage() {
           { name: "Leistungen", url: "/leistungen" },
         ]}
       />
-      <PageHero imageSrc={fokusPageHeroImages["digitale-transformation"]}>
+      <PageHero
+        imageSrc={fokusPageHeroImages["digitale-transformation"]}
+        intro={
+          <p>
+            Wenn Entscheidungen Tragweite haben, braucht es mehr als Standardlösungen. Abexis steht für substanzielle
+            Beratung in zentralen Führungs- und Personalthemen, präzise in der Analyse, diskret in der Begleitung und
+            konsequent in der Umsetzung.
+          </p>
+        }
+        actions={<HeroProjectRealityCheckCta />}
+      >
         <h1 className="max-w-[22ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance md:max-w-[32ch] md:text-[56px] md:leading-[1.02]">
           Beratung mit Substanz
         </h1>
-        <p className="mt-6 max-w-2xl text-[19px] font-normal leading-relaxed text-white/88 md:text-[21px]">
-          Wenn Entscheidungen Tragweite haben, braucht es mehr als Standardlösungen.           Abexis steht für substanzielle
-          Beratung in zentralen Führungs- und Personalthemen, präzise in der Analyse, diskret in der Begleitung und
-          konsequent in der Umsetzung.
-        </p>
-        <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-          <HeroProjectRealityCheckCta />
-        </div>
       </PageHero>
 
       <ProjectSelfTest />

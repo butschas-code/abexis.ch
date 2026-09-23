@@ -556,33 +556,36 @@ export function ProjectFitCheck({ locale = "de", afterHero }: { locale?: "de" | 
   return (
     <InteriorPageRoot>
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
-      <PageHero imageSrc={homeHeroImage} priority>
+      <PageHero
+        imageSrc={homeHeroImage}
+        priority
+        intro={<p>{s.heroBody}</p>}
+        actions={
+          <>
+            <Link
+              href={s.contactHref}
+              className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-full bg-brand-900 px-6 text-[15px] font-medium text-white shadow-lg shadow-brand-900/25 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:min-h-[48px] sm:px-8 sm:text-[16px]"
+            >
+              {s.contactCta}
+            </Link>
+            <Link
+              href="#ablauf"
+              className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-full border border-[#26337c]/20 px-6 text-[15px] font-medium text-[#26337c] transition-all duration-200 ease-out hover:border-[#26337c]/40 hover:bg-[#f7f8fc] sm:w-auto sm:min-h-[48px] sm:px-7 sm:text-[16px]"
+            >
+              {s.flowCta}
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+                <path d="M7 2v10M2 7l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+          </>
+        }
+      >
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{s.heroEyebrow}</p>
         <h1 className="mt-3 max-w-[22rem] text-[clamp(1.75rem,6vw+0.35rem,3.5rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-balance sm:max-w-[28ch] sm:leading-[1.06]">
           <span className="text-white">{s.heroTitle1}</span>
           <br />
           <HeroHeadlineBrandAccent>{s.heroTitle2}</HeroHeadlineBrandAccent>
         </h1>
-        <p className="mt-5 max-w-[52ch] text-[clamp(0.9375rem,2.8vw+0.35rem,1.175rem)] leading-[1.55] text-white/88 text-balance sm:mt-6 sm:leading-relaxed">
-          {s.heroBody}
-        </p>
-        <div className="mt-8 flex w-full max-w-lg flex-col gap-3 sm:mt-10 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center">
-          <Link
-            href={s.contactHref}
-            className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-full bg-brand-900 px-6 text-[15px] font-medium text-white shadow-lg shadow-brand-900/35 transition-all duration-200 ease-out hover:bg-[var(--brand-900-hover)] hover:shadow-xl hover:shadow-brand-500/25 hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:min-h-[48px] sm:px-8 sm:text-[16px]"
-          >
-            {s.contactCta}
-          </Link>
-          <Link
-            href="#ablauf"
-            className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-full border border-white/35 bg-white/10 px-6 text-[15px] font-medium text-white backdrop-blur-sm transition-all duration-200 ease-out hover:border-white/55 hover:bg-white/18 sm:w-auto sm:min-h-[48px] sm:px-7 sm:text-[16px]"
-          >
-            {s.flowCta}
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-              <path d="M7 2v10M2 7l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </Link>
-        </div>
       </PageHero>
 
       {afterHero}
