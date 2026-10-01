@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
 import {
@@ -65,15 +65,41 @@ function formatNuelinkTarget(target: string | null): string {
   return "Nuelink";
 }
 
+export type BlogSocialPostsFlush = () => Promise<void>;
+
 type Props = {
   rows: BlogSocialListItem[];
   onRefresh: () => Promise<void>;
   onFlashSuccess: (message: string) => void;
   onFlashError: (message: string) => void;
+  /**
+   * Draft-level actions («Änderungen speichern», Freigabe, Veröffentlichung) reload this
+   * screen. They must flush LinkedIn edits first, otherwise the reload restores the
+   * last stored caption and the adjustment disappears.
+   */
+  flushRef?: { current: BlogSocialPostsFlush | null };
 };
 
 export function BlogAutomationDraftSocialPosts(props: Props) {
-  const { rows, onRefresh, onFlashSuccess, onFlashError } = props;
+  const { rows, onRefresh, onFlashSuccess, onFlashError, flushRef } = props;
+  const saversRef = useRef(new Map<string, () => Promise<void>>());
+
+  const registerSave = useCallback((id: string, save: (() => Promise<void>) | null) => {
+    if (save) saversRef.current.set(id, save);
+    else saversRef.current.delete(id);
+  }, []);
+
+  useEffect(() => {
+    if (!flushRef) return;
+    flushRef.current = async () => {
+      for (const save of saversRef.current.values()) {
+        await save();
+      }
+    };
+    return () => {
+      flushRef.current = null;
+    };
+  }, [flushRef]);
 
   if (rows.length === 0) {
     return (
@@ -91,7 +117,7 @@ export function BlogAutomationDraftSocialPosts(props: Props) {
       <div>
         <h2 className={adminSectionLabel}>Social-Posts</h2>
         <p className={`mt-1 max-w-[52rem] ${adminBody}`}>
-          Text und Bild prüfen. Beim Freigeben wird der LinkedIn-Post vorbereitet; an Nuelink geht er erst, wenn der Blogbeitrag live geschaltet wird.
+          Text und Bild prüfen. «Änderungen speichern» sichert den LinkedIn-Text mit. Beim Freigeben wird der Post vorbereitet; an Nuelink geht er erst, wenn der Blogbeitrag live geschaltet wird.
         </p>
       </div>
 
@@ -103,6 +129,7 @@ export function BlogAutomationDraftSocialPosts(props: Props) {
             onRefresh={onRefresh}
             onFlashSuccess={onFlashSuccess}
             onFlashError={onFlashError}
+            registerSave={registerSave}
           />
         ))}
       </div>
@@ -110,26 +137,116 @@ export function BlogAutomationDraftSocialPosts(props: Props) {
   );
 }
 
+type SocialFieldSnapshot = {
+  id: string;
+  linkedinPost: string;
+  socialImageUrl: string;
+  socialImageAlt: string;
+};
+
+function snapshotFromRow(row: BlogSocialListItem): SocialFieldSnapshot {
+  return {
+    id: row.id,
+    linkedinPost: row.linkedinPost,
+    socialImageUrl: row.socialImageUrl ?? "",
+    socialImageAlt: row.socialImageAlt ?? "",
+  };
+}
+
 function BlogSocialPostCard(props: {
   row: BlogSocialListItem;
   onRefresh: () => Promise<void>;
   onFlashSuccess: (message: string) => void;
   onFlashError: (message: string) => void;
+  registerSave: (id: string, save: (() => Promise<void>) | null) => void;
 }) {
-  const { row, onRefresh, onFlashSuccess, onFlashError } = props;
+  const { row, onRefresh, onFlashSuccess, onFlashError, registerSave } = props;
   const { user } = useCmsAuth();
   const [linkedinPost, setLinkedinPost] = useState(row.linkedinPost);
   const [socialImageUrl, setSocialImageUrl] = useState(row.socialImageUrl ?? "");
   const [socialImageAlt, setSocialImageAlt] = useState(row.socialImageAlt ?? "");
   const [busy, setBusy] = useState(false);
+  const linkedinRef = useRef(row.linkedinPost);
+  const imageUrlRef = useRef(row.socialImageUrl ?? "");
+  const imageAltRef = useRef(row.socialImageAlt ?? "");
+  const baselineRef = useRef<SocialFieldSnapshot>(snapshotFromRow(row));
+  const dirtyRef = useRef(false);
+  const syncGen = useRef(0);
+  const serverId = row.id;
+  const serverLinkedin = row.linkedinPost;
+  const serverImageUrl = row.socialImageUrl ?? "";
+  const serverImageAlt = row.socialImageAlt ?? "";
+
+  const markDirty = useCallback(() => {
+    const base = baselineRef.current;
+    dirtyRef.current =
+      linkedinRef.current !== base.linkedinPost ||
+      imageUrlRef.current !== base.socialImageUrl ||
+      imageAltRef.current !== base.socialImageAlt;
+  }, []);
+
+  const applyLinkedin = useCallback(
+    (value: string) => {
+      linkedinRef.current = value;
+      setLinkedinPost(value);
+      markDirty();
+    },
+    [markDirty],
+  );
+
+  const applyImageUrl = useCallback(
+    (value: string) => {
+      imageUrlRef.current = value;
+      setSocialImageUrl(value);
+      markDirty();
+    },
+    [markDirty],
+  );
+
+  const applyImageAlt = useCallback(
+    (value: string) => {
+      imageAltRef.current = value;
+      setSocialImageAlt(value);
+      markDirty();
+    },
+    [markDirty],
+  );
 
   useEffect(() => {
+    const next: SocialFieldSnapshot = {
+      id: serverId,
+      linkedinPost: serverLinkedin,
+      socialImageUrl: serverImageUrl,
+      socialImageAlt: serverImageAlt,
+    };
+    const gen = ++syncGen.current;
     queueMicrotask(() => {
-      setLinkedinPost(row.linkedinPost);
-      setSocialImageUrl(row.socialImageUrl ?? "");
-      setSocialImageAlt(row.socialImageAlt ?? "");
+      if (syncGen.current !== gen) return;
+      // A draft reload must not put the stored caption back over text the editor has not saved yet.
+      const switchedRow = baselineRef.current.id !== next.id;
+      const textDirty = !switchedRow && linkedinRef.current !== baselineRef.current.linkedinPost;
+      const imageDirty =
+        !switchedRow &&
+        (imageUrlRef.current !== baselineRef.current.socialImageUrl ||
+          imageAltRef.current !== baselineRef.current.socialImageAlt);
+      const linkedin = textDirty ? linkedinRef.current : next.linkedinPost;
+      const imageUrl = imageDirty ? imageUrlRef.current : next.socialImageUrl;
+      const imageAlt = imageDirty ? imageAltRef.current : next.socialImageAlt;
+      baselineRef.current = {
+        id: next.id,
+        linkedinPost: textDirty ? baselineRef.current.linkedinPost : next.linkedinPost,
+        socialImageUrl: imageDirty ? baselineRef.current.socialImageUrl : next.socialImageUrl,
+        socialImageAlt: imageDirty ? baselineRef.current.socialImageAlt : next.socialImageAlt,
+      };
+      dirtyRef.current = textDirty || imageDirty;
+      linkedinRef.current = linkedin;
+      imageUrlRef.current = imageUrl;
+      imageAltRef.current = imageAlt;
+      setLinkedinPost(linkedin);
+      setSocialImageUrl(imageUrl);
+      setSocialImageAlt(imageAlt);
     });
-  }, [row.id, row.linkedinPost, row.socialImageAlt, row.socialImageUrl, row.usedAt]);
+  }, [serverId, serverImageAlt, serverImageUrl, serverLinkedin]);
 
   const getToken = useCallback(async () => {
     if (!user) throw new Error("Bitte melden Sie sich an.");
@@ -148,18 +265,43 @@ function BlogSocialPostCard(props: {
     [onFlashError, onFlashSuccess],
   );
 
+  const writeFields = useCallback(async () => {
+    const token = await getToken();
+    const imageUrlRaw = imageUrlRef.current;
+    const imageUrl = imageUrlRaw.trim();
+    const caption = linkedinRef.current;
+    const alt = imageAltRef.current;
+    const inheritedBlogImage =
+      !row.socialImageManualOverride && !!row.blogHeroImageUrl && imageUrl === row.blogHeroImageUrl;
+    await apiPatchBlogSocialPost(token, row.id, {
+      linkedinPost: caption,
+      socialImageUrl: inheritedBlogImage ? null : imageUrl || null,
+      socialImageAlt: inheritedBlogImage ? null : alt.trim() || null,
+    });
+    baselineRef.current = {
+      id: row.id,
+      linkedinPost: caption,
+      socialImageUrl: imageUrlRaw,
+      socialImageAlt: alt,
+    };
+    dirtyRef.current =
+      linkedinRef.current !== caption || imageUrlRef.current !== imageUrlRaw || imageAltRef.current !== alt;
+  }, [getToken, row.blogHeroImageUrl, row.id, row.socialImageManualOverride]);
+
+  const persistIfDirty = useCallback(async () => {
+    if (!dirtyRef.current) return;
+    await writeFields();
+  }, [writeFields]);
+
+  useEffect(() => {
+    registerSave(row.id, persistIfDirty);
+    return () => registerSave(row.id, null);
+  }, [persistIfDirty, registerSave, row.id]);
+
   const onSave = useCallback(async () => {
     setBusy(true);
     try {
-      const token = await getToken();
-      const imageUrl = socialImageUrl.trim();
-      const inheritedBlogImage =
-        !row.socialImageManualOverride && !!row.blogHeroImageUrl && imageUrl === row.blogHeroImageUrl;
-      await apiPatchBlogSocialPost(token, row.id, {
-        linkedinPost,
-        socialImageUrl: inheritedBlogImage ? null : imageUrl || null,
-        socialImageAlt: inheritedBlogImage ? null : socialImageAlt.trim() || null,
-      });
+      await writeFields();
       onFlashSuccess("LinkedIn-Text und Bild gespeichert.");
       await onRefresh();
     } catch (e) {
@@ -167,7 +309,7 @@ function BlogSocialPostCard(props: {
     } finally {
       setBusy(false);
     }
-  }, [getToken, linkedinPost, onFlashError, onFlashSuccess, onRefresh, row.blogHeroImageUrl, row.id, row.socialImageManualOverride, socialImageAlt, socialImageUrl]);
+  }, [onFlashError, onFlashSuccess, onRefresh, writeFields]);
 
   const onUseBlogImage = useCallback(async () => {
     setBusy(true);
@@ -231,10 +373,10 @@ function BlogSocialPostCard(props: {
       } catch {
         /* The social row can still use the uploaded URL. */
       }
-      setSocialImageUrl(url);
-      if (!socialImageAlt.trim()) setSocialImageAlt(meta.file.name.replace(/\.[^.]+$/, ""));
+      applyImageUrl(url);
+      if (!imageAltRef.current.trim()) applyImageAlt(meta.file.name.replace(/\.[^.]+$/, ""));
     },
-    [socialImageAlt],
+    [applyImageAlt, applyImageUrl],
   );
 
   return (
@@ -297,11 +439,11 @@ function BlogSocialPostCard(props: {
           ) : null}
           <label className="block space-y-2">
             <span className="text-[14px] font-medium text-[var(--apple-text)]">LinkedIn-Bild URL</span>
-            <input className={adminInput} value={socialImageUrl} onChange={(e) => setSocialImageUrl(e.target.value)} />
+            <input className={adminInput} value={socialImageUrl} onChange={(e) => applyImageUrl(e.target.value)} />
           </label>
           <label className="block space-y-2">
             <span className="text-[14px] font-medium text-[var(--apple-text)]">Bildbeschreibung</span>
-            <input className={adminInput} value={socialImageAlt} onChange={(e) => setSocialImageAlt(e.target.value)} />
+            <input className={adminInput} value={socialImageAlt} onChange={(e) => applyImageAlt(e.target.value)} />
           </label>
           <AdminFileUpload
             path={`cms/media/social/${row.blogDraftId}/`}
@@ -312,7 +454,7 @@ function BlogSocialPostCard(props: {
         </div>
       </div>
 
-      <LinkedInPostEditor value={linkedinPost} onChange={setLinkedinPost} imageUrl={socialImageUrl} />
+      <LinkedInPostEditor value={linkedinPost} onChange={applyLinkedin} imageUrl={socialImageUrl} />
     </div>
   );
 }

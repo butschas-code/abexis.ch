@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { CMS_PATHS } from "@/admin/paths";
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
@@ -31,7 +31,10 @@ import {
   adminPanel,
   adminSectionLabel,
 } from "@/components/admin/admin-ui";
-import { BlogAutomationDraftSocialPosts } from "@/components/admin/blog-automation/BlogAutomationDraftSocialPosts";
+import {
+  BlogAutomationDraftSocialPosts,
+  type BlogSocialPostsFlush,
+} from "@/components/admin/blog-automation/BlogAutomationDraftSocialPosts";
 import { BlogDraftArticleEditor } from "@/components/admin/blog-automation/BlogDraftArticleEditor";
 import { AdminFileUpload } from "@/components/admin/AdminFileUpload";
 import { AdminLoading } from "@/components/admin/AdminLoading";
@@ -125,6 +128,11 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
   const [mediaRows, setMediaRows] = useState<MediaAssetListItem[]>([]);
   const [mediaBusy, setMediaBusy] = useState(false);
   const [mediaLibraryOpen, setMediaLibraryOpen] = useState(false);
+  const flushSocialRef = useRef<BlogSocialPostsFlush | null>(null);
+
+  const flushSocialEdits = useCallback(async () => {
+    await flushSocialRef.current?.();
+  }, []);
 
   const reload = useCallback(async () => {
     if (!user) return;
@@ -210,6 +218,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
       setError(null);
       setSuccess(null);
       try {
+        await flushSocialEdits();
         const token = await user.getIdToken();
         await apiUpdateBlogDraftFields(token, draftId, collectEditable());
         setSuccess(successMsg);
@@ -220,7 +229,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
         setBusy(false);
       }
     },
-    [collectEditable, draftId, form, readOnly, reload, user],
+    [collectEditable, draftId, flushSocialEdits, form, readOnly, reload, user],
   );
 
   const onSave = useCallback(async () => {
@@ -237,6 +246,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
     setError(null);
     setSuccess(null);
     try {
+      await flushSocialEdits();
       const token = await user.getIdToken();
       await apiUpdateBlogDraftFields(token, draftId, collectEditable());
       if (!authorId.trim()) {
@@ -255,7 +265,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
     } finally {
       setBusy(false);
     }
-  }, [authorId, collectEditable, draftId, form, readOnly, reload, user]);
+  }, [authorId, collectEditable, draftId, flushSocialEdits, form, readOnly, reload, user]);
 
   const onSendBack = useCallback(async () => {
     if (readOnly || !user) return;
@@ -263,6 +273,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
     setError(null);
     setSuccess(null);
     try {
+      await flushSocialEdits();
       const token = await user.getIdToken();
       await apiUpdateBlogDraftFields(token, draftId, collectEditable());
       await apiSendBackBlogDraft(token, draftId);
@@ -273,7 +284,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
     } finally {
       setBusy(false);
     }
-  }, [collectEditable, draftId, readOnly, reload, user]);
+  }, [collectEditable, draftId, flushSocialEdits, readOnly, reload, user]);
 
   const onPublish = useCallback(async () => {
     if (!form || readOnly || !user) return;
@@ -285,6 +296,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
     setError(null);
     setSuccess(null);
     try {
+      await flushSocialEdits();
       const token = await user.getIdToken();
       await apiUpdateBlogDraftFields(token, draftId, collectEditable());
       const editable = collectEditable();
@@ -305,7 +317,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
     } finally {
       setBusy(false);
     }
-  }, [authorId, collectEditable, draftId, form, readOnly, reload, user]);
+  }, [authorId, collectEditable, draftId, flushSocialEdits, form, readOnly, reload, user]);
 
   const onSearchUnsplash = useCallback(async () => {
     if (!user || readOnly) return;
@@ -334,6 +346,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
       if (!user || readOnly) return;
       setUnsplashBusy(true);
       try {
+        await flushSocialEdits();
         const token = await user.getIdToken();
         await apiSelectBlogDraftUnsplashPhoto(token, draftId, photoId, unsplashQuery.trim());
         flashSuccess("Bild wurde gewechselt.");
@@ -346,7 +359,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
         setUnsplashBusy(false);
       }
     },
-    [draftId, flashError, flashSuccess, readOnly, reload, unsplashQuery, user],
+    [draftId, flashError, flashSuccess, flushSocialEdits, readOnly, reload, unsplashQuery, user],
   );
 
   const onRemoveHero = useCallback(async () => {
@@ -356,6 +369,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
     setError(null);
     setSuccess(null);
     try {
+      await flushSocialEdits();
       const token = await user.getIdToken();
       await apiUpdateBlogDraftFields(token, draftId, { ...collectEditable(), heroImageClear: true });
       setSuccess("Titelbild entfernt.");
@@ -365,7 +379,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
     } finally {
       setBusy(false);
     }
-  }, [collectEditable, draftId, form, readOnly, reload, user]);
+  }, [collectEditable, draftId, flushSocialEdits, form, readOnly, reload, user]);
 
   const loadMedia = useCallback(async () => {
     setMediaLibraryOpen(true);
@@ -387,6 +401,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
       setError(null);
       setSuccess(null);
       try {
+        await flushSocialEdits();
         const token = await user.getIdToken();
         await apiUpdateBlogDraftFields(token, draftId, {
           ...collectEditable(),
@@ -403,7 +418,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
         setBusy(false);
       }
     },
-    [collectEditable, draftId, form, readOnly, reload, user],
+    [collectEditable, draftId, flushSocialEdits, form, readOnly, reload, user],
   );
 
   const onHeroUpload = useCallback(
@@ -784,6 +799,7 @@ export function BlogAutomationDraftEditor({ draftId }: Props) {
           onRefresh={reload}
           onFlashSuccess={flashSuccess}
           onFlashError={flashError}
+          flushRef={flushSocialRef}
         />
       </AdminPageSection>
 
