@@ -180,6 +180,9 @@ export default function EnglishAboutPage() {
           eyebrow="References"
           headline="Results from practice."
           intro="Voices from executives and partners, published with permission."
+          listLabel="All voices"
+          prevLabel="Previous statement"
+          nextLabel="Next statement"
           items={homeTestimonialsEn}
         />
       </MotionSection>
