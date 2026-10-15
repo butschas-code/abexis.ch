@@ -167,6 +167,33 @@ export function removeGeneratedArticleResidue(html: string): string {
 }
 
 /**
+ * The citation sweep below deletes every non-Abexis URL. Editorial <img> tags
+ * from the CMS ("Bild (URL)" / "Bild hochladen") must survive that sweep,
+ * otherwise the upload stays in Storage but the saved article loses src.
+ */
+function shieldImgTags(html: string): { html: string; tags: string[] } {
+  const tags: string[] = [];
+  return {
+    html: html.replace(/<img\b[^>]*>/gi, (tag) => {
+      const token = `%%ABEXISIMG${tags.length}%%`;
+      tags.push(tag);
+      return token;
+    }),
+    tags,
+  };
+}
+
+function restoreImgTags(html: string, tags: string[]): string {
+  if (!tags.length) return html;
+  return html.replace(/%%ABEXISIMG(\d+)%%/g, (_match, index: string) => tags[Number(index)] ?? "");
+}
+
+/** Earlier saves wiped `src` and left a broken image in the article. */
+function dropImgWithoutSrc(frame: { tag: string; attribs?: Record<string, string> }): boolean {
+  return frame.tag === "img" && !frame.attribs?.src?.trim();
+}
+
+/**
  * Normalizes AI-generated article bodies before they are stored or published.
  * It keeps semantic article HTML, removes source/competitor residue, and leaves
  * final rendering to the strict sanitizer below.
@@ -175,17 +202,21 @@ export function cleanGeneratedBlogArticleHtml(html: string): string {
   let out = restoreInternalMarkdownLinks(removeGeneratedArticleResidue(html)
     .replace(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi, (_m, text) => `<h2>${String(text).trim()}</h2>`));
 
-  out = out
+  const shieldedImages = shieldImgTags(out);
+  out = shieldedImages.html
     .replace(/\[([^\]]+)\]\((?:https?:\/\/[^\s)]+|[^)\s]+)\)/g, "$1")
     .replace(/\(\s*(?:Quelle|Source|vgl\.?|see|https?:\/\/)[^)]+\)/gi, "")
     .replace(EXTERNAL_URL_PATTERN, "");
 
   out = stripHtmlBlocksMatching(out, COMPETITOR_REFERENCE_PATTERN);
 
-  return normalizeSwissGermanText(out)
-    .replace(/[ \t]+\n/g, "\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
+  return restoreImgTags(
+    normalizeSwissGermanText(out)
+      .replace(/[ \t]+\n/g, "\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim(),
+    shieldedImages.tags,
+  );
 }
 
 export function sanitizeBlogHtml(html: string): string {
@@ -198,6 +229,7 @@ export function sanitizeBlogHtml(html: string): string {
       allowedSchemesByTag: ALLOWED_SCHEMES_BY_TAG,
       allowProtocolRelative: true,
       disallowedTagsMode: "discard",
+      exclusiveFilter: dropImgWithoutSrc,
       transformTags: {
         a: (tagName, attribs) => ({
           tagName,
@@ -238,6 +270,7 @@ export function sanitizeGeneratedBlogHtmlWithoutLinks(html: string): string {
       allowedSchemesByTag: ALLOWED_SCHEMES_BY_TAG,
       allowProtocolRelative: true,
       disallowedTagsMode: "discard",
+      exclusiveFilter: dropImgWithoutSrc,
       transformTags: {
         a: (_tagName, attribs) => {
           const href = normalizeAbexisInternalHref(attribs.href);
