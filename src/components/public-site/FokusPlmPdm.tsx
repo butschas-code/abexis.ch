@@ -6,6 +6,7 @@ import { HeroHeadlineText } from "@/components/site/HeroHeadlineBrandAccent";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PageHero } from "@/components/site/PageHero";
 import { getPlmPdmContent, type PlmPdmLocale } from "@/data/plm-pdm-content";
+import { getPlmSeoCards } from "@/data/plm-seo-pages";
 import { siteConfig } from "@/data/pages";
 import { plmPdmHeroImage } from "@/data/site-images";
 
@@ -42,6 +43,7 @@ export function FokusPlmPdm({ locale = "de" }: { locale?: PlmPdmLocale }) {
   const contactPath = english ? "/en/kontakt" : "/kontakt";
   const profilePath = english ? "/en/danielsengstag" : "/danielsengstag";
   const bookingUrl = english ? siteConfig.bookingUrlEn : siteConfig.bookingUrlDe;
+  const seoCards = getPlmSeoCards(locale);
 
   return (
     <div lang={english ? "en" : "de"}>
@@ -50,6 +52,7 @@ export function FokusPlmPdm({ locale = "de" }: { locale?: PlmPdmLocale }) {
         type="Service"
         path={path}
         data={c.meta}
+        faqItems={c.faq.items}
         breadcrumbs={[
           { name: c.breadcrumbs.home, url: homePath },
           { name: c.breadcrumbs.services, url: servicesPath },
@@ -205,6 +208,25 @@ export function FokusPlmPdm({ locale = "de" }: { locale?: PlmPdmLocale }) {
           <SectionHeading eyebrow={c.faq.eyebrow} title={c.faq.title} />
           <div className="rounded-[22px] bg-white px-6 shadow-[0_12px_40px_rgba(38,51,124,0.06)] sm:px-8">
             <RisikomanagementFaqList items={c.faq.items} />
+          </div>
+        </div>
+      </MotionSection>
+
+      <MotionSection className="bg-white">
+        <div className="mx-auto max-w-[1068px] px-5 py-16 sm:px-6 md:py-24">
+          <SectionHeading
+            eyebrow={english ? "PLM/PDM guidance" : "PLM/PDM Wissen"}
+            title={english ? "Answers for the decisions behind your initiative." : "Antworten für die Entscheidungen hinter Ihrem Vorhaben."}
+            intro={english ? "Explore the differences, the implementation approach and the specific role of Siemens Teamcenter." : "Vertiefen Sie die Unterschiede, das Vorgehen bei der Einführung und die besondere Rolle von Siemens Teamcenter."}
+          />
+          <div className="mt-10 grid gap-5 md:mt-14 md:grid-cols-3">
+            {seoCards.map((card) => (
+              <Link key={card.slug} href={`${path}/${card.slug}`} className="group flex flex-col rounded-[22px] border border-black/[0.07] bg-[#fbfbfd] p-7 transition hover:-translate-y-0.5 hover:border-[#26337c]/20 hover:shadow-[0_16px_45px_rgba(38,51,124,0.08)]">
+                <h3 className="text-[21px] font-semibold leading-tight tracking-[-0.02em] text-[#1d1d1f] group-hover:text-[#26337c]">{card.title}</h3>
+                <p className="mt-4 flex-1 text-[15px] leading-relaxed text-[#6e6e73]">{card.excerpt}</p>
+                <span className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold text-[#26337c]">{english ? "Read guide" : "Ratgeber lesen"} →</span>
+              </Link>
+            ))}
           </div>
         </div>
       </MotionSection>

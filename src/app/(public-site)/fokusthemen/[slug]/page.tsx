@@ -28,13 +28,17 @@ export async function generateMetadata({ params }: Props) {
 
   const heroKey = n as keyof typeof fokusPageHeroImages;
   const heroImage = heroKey in fokusPageHeroImages ? fokusPageHeroImages[heroKey] : homeHeroImage;
+  const canonical = `/fokusthemen/${n}`;
+  const english = `/en/fokusthemen/${n}`;
 
   return {
     title: meta.title,
     description: meta.excerpt,
+    ...(n === "plm-pdm" ? { alternates: { canonical, languages: { "de-CH": canonical, "en-CH": english, "x-default": canonical } } } : {}),
     openGraph: {
       title: `${meta.title} | Abexis`,
       description: meta.excerpt,
+      ...(n === "plm-pdm" ? { url: canonical, locale: "de_CH", alternateLocale: ["en_CH"] } : {}),
       images: [{ url: heroImage }],
     },
   };

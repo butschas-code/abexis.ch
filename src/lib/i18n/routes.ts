@@ -22,6 +22,9 @@ const germanToEnglish: Record<string, string> = {
   "/fokusthemen/projektmanagement": "/en/fokusthemen/projektmanagement",
   "/fokusthemen/risikomanagement": "/en/fokusthemen/risikomanagement",
   "/fokusthemen/plm-pdm": "/en/fokusthemen/plm-pdm",
+  "/fokusthemen/plm-pdm/teamcenter-beratung-schweiz": "/en/fokusthemen/plm-pdm/teamcenter-beratung-schweiz",
+  "/fokusthemen/plm-pdm/plm-pdm-einfuehrung": "/en/fokusthemen/plm-pdm/plm-pdm-einfuehrung",
+  "/fokusthemen/plm-pdm/plm-vs-pdm": "/en/fokusthemen/plm-pdm/plm-vs-pdm",
 };
 
 const englishAliasesToCanonical: Record<string, string> = {

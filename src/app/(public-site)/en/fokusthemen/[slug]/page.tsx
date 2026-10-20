@@ -31,12 +31,18 @@ export async function generateMetadata({ params }: Props) {
   if (slug === "plm-pdm") {
     const content = getPlmPdmContent("en");
     const heroImage = fokusPageHeroImages["plm-pdm"];
+    const canonical = "/en/fokusthemen/plm-pdm";
+    const german = "/fokusthemen/plm-pdm";
     return {
       title: content.meta.title,
       description: content.meta.excerpt,
+      alternates: { canonical, languages: { "de-CH": german, "en-CH": canonical, "x-default": german } },
       openGraph: {
         title: `${content.meta.title} | Abexis`,
         description: content.meta.excerpt,
+        url: canonical,
+        locale: "en_CH",
+        alternateLocale: ["de_CH"],
         images: [{ url: heroImage }],
       },
     };

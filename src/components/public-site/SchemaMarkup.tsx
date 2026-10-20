@@ -14,6 +14,7 @@ interface SchemaMarkupProps {
   type?: SchemaType;
   data?: unknown;
   breadcrumbs?: { name: string; url: string }[];
+  faqItems?: readonly { q: string; a: string }[];
 }
 
 type SchemaRecord = Record<string, unknown>;
@@ -46,7 +47,7 @@ function readLinks(value: unknown): string[] {
  * 
  * All entities are linked via stable @id values to ensure AI and Search Engine comprehension.
  */
-export function SchemaMarkup({ path = "", name, description, type, data, breadcrumbs }: SchemaMarkupProps) {
+export function SchemaMarkup({ path = "", name, description, type, data, breadcrumbs, faqItems }: SchemaMarkupProps) {
   const currentUrl = `${BASE_URL}${path === "/" ? "" : path}`;
   const pageId = `${currentUrl}/#webpage`;
   const entityId = `${currentUrl}/#entity`;
@@ -245,6 +246,22 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
         "name": item.name,
         "item": item.url.startsWith("http") ? item.url : `${BASE_URL}${item.url}`
       }))
+    });
+  }
+
+  if (faqItems?.length) {
+    const faqId = `${currentUrl}/#faq`;
+    webPageSchema.hasPart = { "@id": faqId };
+    schemas.push({
+      "@type": "FAQPage",
+      "@id": faqId,
+      "url": currentUrl,
+      "inLanguage": language,
+      "mainEntity": faqItems.map((item) => ({
+        "@type": "Question",
+        "name": item.q,
+        "acceptedAnswer": { "@type": "Answer", "text": item.a },
+      })),
     });
   }
 

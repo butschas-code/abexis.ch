@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { fokusthemenMeta, getAllBlogPosts, teamOrder } from "@/data/pages";
 import { englishTopics } from "@/data/english-site";
 import { getPublishedCmsPostsAllSites, listPublicCategoriesForInsights } from "@/public-site/cms";
+import { plmSeoSlugs } from "@/data/plm-seo-pages";
 
 const base = "https://www.abexis.ch";
 
@@ -59,6 +60,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
   ];
+
+  const plmTopics = plmSeoSlugs.flatMap((slug) => [
+    {
+      url: `${base}/fokusthemen/plm-pdm/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
+    {
+      url: `${base}/en/fokusthemen/plm-pdm/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.65,
+    },
+  ]);
 
   const team = teamOrder.flatMap((p) => [
     {
@@ -139,5 +155,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     byUrl.set(row.url, row);
   }
 
-  return [...staticRoutes, ...fokus, ...englishFokus, ...team, ...byUrl.values()];
+  return [...staticRoutes, ...fokus, ...englishFokus, ...plmTopics, ...team, ...byUrl.values()];
 }
