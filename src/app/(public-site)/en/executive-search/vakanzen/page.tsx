@@ -9,6 +9,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
 import { unsplash } from "@/executive-search/lib/images/unsplash";
 import { listPublishedVacancies } from "@/public-site/cms/vacancy";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 const DESCRIPTION =
   "Current Executive Search mandates: Abexis SEARCH fills leadership and key positions discreetly and precisely.";
@@ -33,8 +34,9 @@ const CONFIDENTIAL_COPY = {
 export const revalidate = 120;
 
 export const metadata: Metadata = {
-  title: "Vacancies | Executive Search | Abexis",
+  title: "Vacancies | Executive Search",
   description: DESCRIPTION,
+  alternates: localizedAlternates("/executive-search/vakanzen", "/en/executive-search/vakanzen", "en"),
   openGraph: {
     title: "Vacancies | Executive Search | Abexis",
     description: "Current leadership and key positions in Executive Search.",

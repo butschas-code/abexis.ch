@@ -3,8 +3,9 @@ import path from "node:path";
 import { SafeHtml } from "@/components/content/SafeHtml";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
-export const metadata = { title: "Impressum" };
+export const metadata = { title: "Impressum", description: "Impressum und Unternehmensangaben der Abexis GmbH in Hinwil, Schweiz.", alternates: localizedAlternates("/legal-policy", "/en/legal-policy", "de") };
 
 export default function LegalPolicyPage() {
   const html = readFileSync(path.join(process.cwd(), "src/data/impressum-body.html"), "utf8");

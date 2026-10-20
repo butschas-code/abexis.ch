@@ -29,6 +29,7 @@ import {
 import { homeTestimonialsEn } from "@/data/home-testimonials";
 import { homeWelcomeSectionEn, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const revalidate = 60;
 
@@ -36,6 +37,7 @@ export const metadata: Metadata = {
   title: { absolute: "Abexis : Clarity when it is missing" },
   description:
     "Abexis creates clarity when projects lose orientation: with Project Reality Check, consulting and executive search. Switzerland.",
+  alternates: localizedAlternates("/", "/en/home", "en"),
 };
 
 export default function EnglishHomePage() {

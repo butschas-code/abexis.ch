@@ -9,10 +9,13 @@ import {
   partitionFeaturedForGrid,
   pickFeaturedPosts,
 } from "@/public-site/cms";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
+import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
 export const metadata = {
   title: "Insights",
   description: "Perspektiven zu Strategie, Transformation und Führung : kuratiert von Abexis.",
+  alternates: localizedAlternates("/blog", "/en/blog", "de"),
   openGraph: {
     title: "Insights | Abexis",
     description: "Perspektiven zu Strategie, Transformation und Führung.",
@@ -57,6 +60,7 @@ export default async function BlogIndexPage() {
         </p>
       }
     >
+      <SchemaMarkup type="Collection" path="/blog" name="Insights" description="Perspektiven zu Strategie, Transformation und Führung." breadcrumbs={[{ name: "Startseite", url: "/" }, { name: "Insights", url: "/blog" }]} />
       {posts.length === 0 ? (
         <div className="rounded-[28px] border border-dashed border-black/[0.1] bg-white/60 px-8 py-16 text-center">
           <p className="font-serif text-[22px] text-[#1d1d1f]">Noch keine Beiträge</p>

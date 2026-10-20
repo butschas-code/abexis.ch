@@ -9,6 +9,16 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/leistungen/executive-search",
+        destination: "/executive-search",
+        statusCode: 301,
+      },
+      {
+        source: "/en/leistungen/executive-search",
+        destination: "/en/executive-search",
+        statusCode: 301,
+      },
+      {
         source: "/projectfitcheck",
         destination: "/projectrealitycheck",
         statusCode: 301,
@@ -25,7 +35,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/en/services/executive-search",
-        destination: "/en/leistungen/executive-search",
+        destination: "/en/executive-search",
         statusCode: 301,
       },
       {

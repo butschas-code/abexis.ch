@@ -3,10 +3,12 @@ import path from "node:path";
 import { SafeHtml } from "@/components/content/SafeHtml";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const metadata = {
-  title: "Privacy policy | Abexis",
+  title: "Privacy policy",
   description: "Privacy policy for the Abexis website, contact forms and applications.",
+  alternates: localizedAlternates("/privacy-policy", "/en/privacy-policy", "en"),
 };
 
 export default function EnglishPrivacyPolicyPage() {

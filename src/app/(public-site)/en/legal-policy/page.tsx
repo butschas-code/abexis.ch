@@ -3,10 +3,12 @@ import path from "node:path";
 import { SafeHtml } from "@/components/content/SafeHtml";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const metadata = {
-  title: "Legal notice | Abexis",
+  title: "Legal notice",
   description: "Legal notice and company information for Abexis GmbH.",
+  alternates: localizedAlternates("/legal-policy", "/en/legal-policy", "en"),
 };
 
 export default function EnglishLegalPolicyPage() {

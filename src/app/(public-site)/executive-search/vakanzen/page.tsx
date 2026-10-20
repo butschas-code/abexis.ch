@@ -9,12 +9,14 @@ import { PublicContentWidth } from "@/components/site/PublicContentWidth";
 import { ConfidentialMandatesNotice } from "@/components/executive-search/ConfidentialMandatesNotice";
 import { listPublishedVacancies } from "@/public-site/cms/vacancy";
 import { unsplash } from "@/executive-search/lib/images/unsplash";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const revalidate = 120;
 
 export const metadata: Metadata = {
   title: "Vakanzen",
   description: "Aktuelle Executive Search Mandate : Abexis SEARCH besetzt Führungs- und Schlüsselpositionen diskret und präzise.",
+  alternates: localizedAlternates("/executive-search/vakanzen", "/en/executive-search/vakanzen", "de"),
   openGraph: {
     title: "Vakanzen | Executive Search | Abexis",
     description: "Aktuelle Führungs- und Schlüsselpositionen im Executive Search.",

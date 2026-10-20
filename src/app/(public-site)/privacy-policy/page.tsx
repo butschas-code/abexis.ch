@@ -3,8 +3,9 @@ import path from "node:path";
 import { SafeHtml } from "@/components/content/SafeHtml";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
-export const metadata = { title: "Datenschutzerklärung" };
+export const metadata = { title: "Datenschutzerklärung", description: "Datenschutzerklärung der Abexis Website, Kontaktformulare und Bewerbungen.", alternates: localizedAlternates("/privacy-policy", "/en/privacy-policy", "de") };
 
 export default function PrivacyPolicyPage() {
   const html = readFileSync(path.join(process.cwd(), "src/data/privacy-bodies.html"), "utf8");

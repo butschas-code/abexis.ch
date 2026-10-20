@@ -13,6 +13,7 @@ import { FokusProzessoptimierung } from "@/components/public-site/FokusProzessop
 import { FokusProjektmanagement } from "@/components/public-site/FokusProjektmanagement";
 import { FokusRisikomanagement } from "@/components/public-site/FokusRisikomanagement";
 import { FokusPlmPdm } from "@/components/public-site/FokusPlmPdm";
+import { ServiceGuidePromo } from "@/components/public-site/ServiceGuidePage";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -34,11 +35,13 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: meta.title,
     description: meta.excerpt,
-    ...(n === "plm-pdm" ? { alternates: { canonical, languages: { "de-CH": canonical, "en-CH": english, "x-default": canonical } } } : {}),
+    alternates: { canonical, languages: { "de-CH": canonical, "en-CH": english, "x-default": canonical } },
     openGraph: {
       title: `${meta.title} | Abexis`,
       description: meta.excerpt,
-      ...(n === "plm-pdm" ? { url: canonical, locale: "de_CH", alternateLocale: ["en_CH"] } : {}),
+      url: canonical,
+      locale: "de_CH",
+      alternateLocale: ["en_CH"],
       images: [{ url: heroImage }],
     },
   };
@@ -47,25 +50,25 @@ export async function generateMetadata({ params }: Props) {
 export default async function FokusthemaPage({ params }: Props) {
   const { slug } = await params;
   const n = normalizeFokusSlug(slug);
-  if (n === "risikomanagement") return <FokusRisikomanagement locale="de" />;
+  if (n === "risikomanagement") return <><FokusRisikomanagement locale="de" /><ServiceGuidePromo parent={n} locale="de" /></>;
   if (n === "plm-pdm") return <FokusPlmPdm locale="de" />;
 
   const html = getFokusthemaHtml(n);
   if (!html) notFound();
 
-  if (n === "digitale-transformation") return <FokusDigitaleTransformation />;
-  if (n === "unternehmensstrategie") return <FokusUnternehmensstrategie />;
-  if (n === "vertriebmarketing") return <FokusVertriebMarketing />;
-  if (n === "veränderungsmanagement") return <FokusVeraenderungsmanagement />;
-  if (n === "prozessoptimierung") return <FokusProzessoptimierung />;
-  if (n === "projektmanagement") return <FokusProjektmanagement />;
+  if (n === "digitale-transformation") return <><FokusDigitaleTransformation /><ServiceGuidePromo parent={n} locale="de" /></>;
+  if (n === "unternehmensstrategie") return <><FokusUnternehmensstrategie /><ServiceGuidePromo parent={n} locale="de" /></>;
+  if (n === "vertriebmarketing") return <><FokusVertriebMarketing /><ServiceGuidePromo parent={n} locale="de" /></>;
+  if (n === "veränderungsmanagement") return <><FokusVeraenderungsmanagement /><ServiceGuidePromo parent={n} locale="de" /></>;
+  if (n === "prozessoptimierung") return <><FokusProzessoptimierung /><ServiceGuidePromo parent={n} locale="de" /></>;
+  if (n === "projektmanagement") return <><FokusProjektmanagement /><ServiceGuidePromo parent={n} locale="de" /></>;
 
   const meta = fokusthemenMeta.find((m) => m.slug === n);
   const heroKey = n as keyof typeof fokusPageHeroImages;
   const heroImage = heroKey in fokusPageHeroImages ? fokusPageHeroImages[heroKey] : homeHeroImage;
 
   return (
-    <InteriorPageLayout
+    <><InteriorPageLayout
       eyebrow={meta?.subtitle ?? "Fokusthemen"}
       title={meta?.title ?? "Thema"}
       description={meta ? <p>{meta.excerpt}</p> : undefined}
@@ -86,6 +89,6 @@ export default async function FokusthemaPage({ params }: Props) {
         ]}
       />
       <SafeHtml html={html} />
-    </InteriorPageLayout>
+    </InteriorPageLayout><ServiceGuidePromo parent={n} locale="de" /></>
   );
 }

@@ -12,12 +12,14 @@ import { SectionShell } from "@/components/executive-search/SectionShell";
 import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { ServiceGuidePromo } from "@/components/public-site/ServiceGuidePage";
 import { InsightPostCard } from "@/components/public-site/insights/InsightPostCard";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
 import { executiveSearchHeroImage } from "@/data/site-images";
 import { homeImagery } from "@/executive-search/lib/images/homeImagery";
 import { listSearchSitePublishedPosts } from "@/public-site/cms";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 const HERO_LEAD =
   "Auf dieser Seite erfahren Sie, wie wir Führungs- und Schlüsselpositionen besetzen: von der vertraulichen Direktansprache über die fundierte Beurteilung bis zur nachhaltigen Besetzung.";
@@ -54,6 +56,7 @@ export const revalidate = 120;
 export const metadata: Metadata = {
   title: "Executive Search",
   description: DESCRIPTION,
+  alternates: localizedAlternates("/executive-search", "/en/executive-search", "de"),
   openGraph: {
     title: "Executive Search | Abexis",
     description: DESCRIPTION,
@@ -190,6 +193,7 @@ export default async function ExecutiveSearchPage() {
         </MotionSection>
       )}
 
+      <ServiceGuidePromo parent="executive-search" locale="de" />
       <ExecutiveSearchClosingSection />
     </InteriorPageRoot>
   );

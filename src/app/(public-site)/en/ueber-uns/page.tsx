@@ -8,10 +8,12 @@ import { danielSengstagContentEn } from "@/data/daniel-sengstag";
 import { homeTestimonialsEn } from "@/data/home-testimonials";
 import { footerPartners, teamOrder, teamProfiles } from "@/data/pages";
 import { teamProfilesEn } from "@/data/team-profiles-en";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const metadata = {
-  title: "About us | Abexis",
+  title: "About us",
   description: "Meet the team behind Abexis: management consulting with substance.",
+  alternates: localizedAlternates("/ueber-uns", "/en/ueber-uns", "en"),
   openGraph: {
     title: "About us | Abexis",
     description: "Experienced guidance with substance: meet our team.",

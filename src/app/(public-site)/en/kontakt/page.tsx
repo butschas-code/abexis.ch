@@ -3,10 +3,13 @@ import { KontaktPageForm } from "@/components/site/KontaktPageForm";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { siteConfig } from "@/data/pages";
 import { kontaktPageHeroImage } from "@/data/site-images";
+import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const metadata = {
-  title: "Contact | Abexis",
+  title: "Contact",
   description: "Contact Abexis by email, phone or schedule an introductory call.",
+  alternates: localizedAlternates("/kontakt", "/en/kontakt", "en"),
 };
 
 export default function EnglishContactPage() {
@@ -17,6 +20,7 @@ export default function EnglishContactPage() {
       heroImage={kontaktPageHeroImage}
       description={<p>Reach us directly by email or phone, or schedule a non-binding introductory call online.</p>}
     >
+      <SchemaMarkup type="Contact" path="/en/kontakt" breadcrumbs={[{ name: "Home", url: "/en/home" }, { name: "Contact", url: "/en/kontakt" }]} />
       <div className="flex flex-col gap-8">
         <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
           <div className="rounded-[28px] bg-white p-8 shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] md:p-10">

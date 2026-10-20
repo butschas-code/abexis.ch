@@ -53,12 +53,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const v = await getPublishedVacancyBySlug(slug);
   if (!v) return {};
   const description = v.excerpt || v.hook || `${v.title}: Abexis Executive Search`;
+  const canonical = `/en/executive-search/vakanzen/${encodeURIComponent(v.slug)}`;
+  const german = `/executive-search/vakanzen/${encodeURIComponent(v.slug)}`;
   return {
-    title: `${v.title} | Vacancies | Abexis`,
+    title: `${v.title} | Vacancies`,
     description,
+    alternates: { canonical, languages: { "de-CH": german, "en-CH": canonical, "x-default": german } },
     openGraph: {
       title: `${v.title} | Vacancies | Abexis`,
       description,
+      url: canonical,
+      locale: "en_CH",
+      alternateLocale: ["de_CH"],
     },
   };
 }

@@ -5,10 +5,12 @@ import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { siteConfig } from "@/data/pages";
 import { kontaktPageHeroImage } from "@/data/site-images";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const metadata = {
   title: "Kontakt",
   description: "Wir freuen uns auf Ihre Kontaktaufnahme : per Telefon, E-Mail oder Kontaktformular.",
+  alternates: localizedAlternates("/kontakt", "/en/kontakt", "de"),
   openGraph: {
     title: "Kontakt | Abexis",
     description: "Wir freuen uns auf Ihre Kontaktaufnahme : Unverbindlicher Austausch oder konkrete Anfrage.",

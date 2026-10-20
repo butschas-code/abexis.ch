@@ -13,7 +13,6 @@ const germanToEnglish: Record<string, string> = {
   "/privacy-policy": "/en/privacy-policy",
   "/executive-search": "/en/executive-search",
   "/executive-search/vakanzen": "/en/executive-search/vakanzen",
-  "/leistungen/executive-search": "/en/leistungen/executive-search",
   "/fokusthemen/digitale-transformation": "/en/fokusthemen/digitale-transformation",
   "/fokusthemen/unternehmensstrategie": "/en/fokusthemen/unternehmensstrategie",
   "/fokusthemen/vertriebmarketing": "/en/fokusthemen/vertriebmarketing",
@@ -25,6 +24,14 @@ const germanToEnglish: Record<string, string> = {
   "/fokusthemen/plm-pdm/teamcenter-beratung-schweiz": "/en/fokusthemen/plm-pdm/teamcenter-beratung-schweiz",
   "/fokusthemen/plm-pdm/plm-pdm-einfuehrung": "/en/fokusthemen/plm-pdm/plm-pdm-einfuehrung",
   "/fokusthemen/plm-pdm/plm-vs-pdm": "/en/fokusthemen/plm-pdm/plm-vs-pdm",
+  "/fokusthemen/digitale-transformation/digitalisierungsstrategie-kmu": "/en/fokusthemen/digitale-transformation/digitalisierungsstrategie-kmu",
+  "/fokusthemen/unternehmensstrategie/strategieprozess-kmu": "/en/fokusthemen/unternehmensstrategie/strategieprozess-kmu",
+  "/fokusthemen/vertriebmarketing/b2b-vertriebsstrategie": "/en/fokusthemen/vertriebmarketing/b2b-vertriebsstrategie",
+  "/fokusthemen/veränderungsmanagement/change-management-vorgehen": "/en/fokusthemen/veränderungsmanagement/change-management-vorgehen",
+  "/fokusthemen/prozessoptimierung/prozesse-analysieren-optimieren": "/en/fokusthemen/prozessoptimierung/prozesse-analysieren-optimieren",
+  "/fokusthemen/projektmanagement/projekt-in-schieflage": "/en/fokusthemen/projektmanagement/projekt-in-schieflage",
+  "/fokusthemen/risikomanagement/projektrisiken-frueh-erkennen": "/en/fokusthemen/risikomanagement/projektrisiken-frueh-erkennen",
+  "/executive-search/fuehrungskraefte-finden": "/en/executive-search/fuehrungskraefte-finden",
 };
 
 const englishAliasesToCanonical: Record<string, string> = {
@@ -36,7 +43,7 @@ const englishAliasesToCanonical: Record<string, string> = {
   "/en/legal": "/en/legal-policy",
   "/en/privacy": "/en/privacy-policy",
   "/en/executive-search/vacancies": "/en/executive-search/vakanzen",
-  "/en/services/executive-search": "/en/leistungen/executive-search",
+  "/en/services/executive-search": "/en/executive-search",
   "/en/topics/digital-transformation": "/en/fokusthemen/digitale-transformation",
   "/en/topics/corporate-strategy": "/en/fokusthemen/unternehmensstrategie",
   "/en/topics/sales-marketing": "/en/fokusthemen/vertriebmarketing",
@@ -73,7 +80,7 @@ englishToGerman["/en/privacy-policy"] = "/privacy-policy";
 englishToGerman["/en/legal"] = "/legal-policy";
 englishToGerman["/en/privacy"] = "/privacy-policy";
 englishToGerman["/en/executive-search/vacancies"] = "/executive-search/vakanzen";
-englishToGerman["/en/services/executive-search"] = "/leistungen/executive-search";
+englishToGerman["/en/services/executive-search"] = "/executive-search";
 englishToGerman["/en/topics/digital-transformation"] = "/fokusthemen/digitale-transformation";
 englishToGerman["/en/topics/corporate-strategy"] = "/fokusthemen/unternehmensstrategie";
 englishToGerman["/en/topics/sales-marketing"] = "/fokusthemen/vertriebmarketing";

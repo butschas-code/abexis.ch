@@ -5,10 +5,12 @@ import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { footerPartners, teamOrder, teamProfiles } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const metadata = {
   title: "Über uns",
   description: "Erfahren Sie mehr über das Team hinter Abexis : Managementberatung mit Substanz.",
+  alternates: localizedAlternates("/ueber-uns", "/en/ueber-uns", "de"),
   openGraph: {
     title: "Über uns | Abexis",
     description: "Begleitung mit Erfahrung und Substanz : Lernen Sie unser Team kennen.",

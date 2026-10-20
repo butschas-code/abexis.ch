@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
 import { fokusthemenMeta, getAllBlogPosts, teamOrder } from "@/data/pages";
 import { englishTopics } from "@/data/english-site";
-import { getPublishedCmsPostsAllSites, listPublicCategoriesForInsights } from "@/public-site/cms";
+import { getPublishedCmsPostsAllSites } from "@/public-site/cms";
 import { plmSeoSlugs } from "@/data/plm-seo-pages";
+import { getAllServiceGuides } from "@/data/service-guide-pages";
 
 const base = "https://www.abexis.ch";
 
@@ -11,7 +12,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [
     "/",
     "/leistungen",
-    "/leistungen/executive-search",
     "/blog",
     "/ueber-uns",
     "/kontakt",
@@ -21,7 +21,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/privacy-policy",
     "/en/home",
     "/en/leistungen",
-    "/en/leistungen/executive-search",
     "/en/projectrealitycheck",
     "/en/ueber-uns",
     "/en/kontakt",
@@ -75,6 +74,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.65,
     },
   ]);
+
+  const serviceGuides = getAllServiceGuides("de").flatMap((guide) => {
+    const dePath = guide.parent === "executive-search" ? `/executive-search/${guide.slug}` : `/fokusthemen/${guide.parent}/${guide.slug}`;
+    const enPath = guide.parent === "executive-search" ? `/en/executive-search/${guide.slug}` : `/en/fokusthemen/${guide.parent}/${guide.slug}`;
+    const alternates = { languages: { de: `${base}${dePath}`, en: `${base}${enPath}` } };
+    return [
+      { url: `${base}${dePath}`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.7, alternates },
+      { url: `${base}${enPath}`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.65, alternates },
+    ];
+  });
 
   const team = teamOrder.flatMap((p) => [
     {
@@ -136,24 +145,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("[sitemap] Failed to fetch vacancies", err);
   }
 
-  let categories: MetadataRoute.Sitemap = [];
-  try {
-    const cats = await listPublicCategoriesForInsights();
-    categories = cats.map((c) => ({
-      url: `${base}/blog?category=${encodeURIComponent(c.slug)}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.4,
-    }));
-  } catch (err) {
-    console.error("[sitemap] Failed to fetch categories", err);
-  }
-
   const byUrl = new Map<string, MetadataRoute.Sitemap[number]>();
   // Prioritize CMS posts over legacy if slugs match (unlikely but safe)
-  for (const row of [...legacyPosts, ...cmsPosts, ...vacancies, ...categories]) {
+  for (const row of [...legacyPosts, ...cmsPosts, ...vacancies]) {
     byUrl.set(row.url, row);
   }
 
-  return [...staticRoutes, ...fokus, ...englishFokus, ...plmTopics, ...team, ...byUrl.values()];
+  const allRoutes = [...staticRoutes, ...fokus, ...englishFokus, ...plmTopics, ...serviceGuides, ...team, ...byUrl.values()];
+  return [...new Map(allRoutes.map((row) => [row.url, row])).values()];
 }

@@ -19,6 +19,7 @@ import { HeroHeadlineBrandAccent } from "@/components/site/HeroHeadlineBrandAcce
 import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
 import { homeHeroContent } from "@/data/home-page-content";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 /**
  * Home teasers use cached `getPublishedCmsPosts` (see `get-published-posts.ts`). Short ISR keeps
@@ -30,6 +31,7 @@ export const metadata: Metadata = {
   title: { absolute: "Abexis : Klarheit, wenn sie fehlt" },
   description:
     "Abexis schafft Klarheit, wenn Projekte die Orientierung verlieren : mit Project Reality Check, Beratung und Executive Search. Schweiz.",
+  alternates: localizedAlternates("/", "/en/home", "de"),
 };
 export default function HomePage() {
   const h = homeHeroContent;

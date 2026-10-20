@@ -7,11 +7,14 @@ import { HeroHeadlineText } from "@/components/site/HeroHeadlineBrandAccent";
 import { PageHero } from "@/components/site/PageHero";
 import { fokusPageHeroImages } from "@/data/site-images";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { ServiceGuidesGrid } from "@/components/leistungen/ServiceGuidesGrid";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const metadata = {
   title: "Leistungen",
   description:
     "Abexis: substanzielle Beratung in Führungs- und Personalthemen, präzise, diskret, konsequent. Schwerpunkte: Digitale Transformation, Strategie, Vertrieb & Marketing u. a.",
+  alternates: localizedAlternates("/leistungen", "/en/leistungen", "de"),
   openGraph: {
     title: "Leistungen | Abexis",
     description:
@@ -71,6 +74,7 @@ export default function LeistungenPage() {
           <LeistungenBentoGrid />
         </div>
       </MotionSection>
+      <ServiceGuidesGrid locale="de" />
     </InteriorPageRoot>
   );
 }

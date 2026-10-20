@@ -26,12 +26,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const v = await getPublishedVacancyBySlug(slug);
   if (!v) return {};
+  const canonical = `/executive-search/vakanzen/${encodeURIComponent(v.slug)}`;
+  const english = `/en/executive-search/vakanzen/${encodeURIComponent(v.slug)}`;
   return {
     title: v.title,
     description: v.excerpt || v.hook || `${v.title} : Abexis Executive Search`,
+    alternates: { canonical, languages: { "de-CH": canonical, "en-CH": english, "x-default": canonical } },
     openGraph: {
       title: `${v.title} | Vakanzen | Abexis`,
       description: v.excerpt || v.hook || "",
+      url: canonical,
+      locale: "de_CH",
+      alternateLocale: ["en_CH"],
     },
   };
 }

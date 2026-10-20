@@ -6,6 +6,7 @@ import { getRisikomanagementContent } from "@/data/risikomanagement-content";
 import { getPlmPdmContent } from "@/data/plm-pdm-content";
 import { englishFocusPages, getEnglishFocusPage } from "@/data/english-focus-pages";
 import { fokusPageHeroImages } from "@/data/site-images";
+import { ServiceGuidePromo } from "@/components/public-site/ServiceGuidePage";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -21,9 +22,13 @@ export async function generateMetadata({ params }: Props) {
     return {
       title: content.meta.title,
       description: content.meta.excerpt,
+      alternates: { canonical: `/en/fokusthemen/${slug}`, languages: { "de-CH": `/fokusthemen/${slug}`, "en-CH": `/en/fokusthemen/${slug}`, "x-default": `/fokusthemen/${slug}` } },
       openGraph: {
-        title: `${content.meta.title} | Abexis`,
+        title: content.meta.title,
         description: content.meta.excerpt,
+        url: `/en/fokusthemen/${slug}`,
+        locale: "en_CH",
+        alternateLocale: ["de_CH"],
         images: [{ url: heroImage }],
       },
     };
@@ -51,11 +56,15 @@ export async function generateMetadata({ params }: Props) {
   if (!page) return {};
 
   return {
-    title: `${page.title} | Abexis`,
+    title: page.title,
     description: page.excerpt,
+    alternates: { canonical: `/en/fokusthemen/${slug}`, languages: { "de-CH": `/fokusthemen/${slug}`, "en-CH": `/en/fokusthemen/${slug}`, "x-default": `/fokusthemen/${slug}` } },
     openGraph: {
-      title: `${page.title} | Abexis`,
+      title: page.title,
       description: page.excerpt,
+      url: `/en/fokusthemen/${slug}`,
+      locale: "en_CH",
+      alternateLocale: ["de_CH"],
       images: [{ url: fokusPageHeroImages[page.slug] }],
     },
   };
@@ -63,11 +72,11 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function EnglishTopicPage({ params }: Props) {
   const { slug } = await params;
-  if (slug === "risikomanagement") return <FokusRisikomanagement locale="en" />;
+  if (slug === "risikomanagement") return <><FokusRisikomanagement locale="en" /><ServiceGuidePromo parent={slug} locale="en" /></>;
   if (slug === "plm-pdm") return <FokusPlmPdm locale="en" />;
 
   const page = getEnglishFocusPage(slug);
   if (!page) notFound();
 
-  return <FokusEnglishPage page={page} />;
+  return <><FokusEnglishPage page={page} /><ServiceGuidePromo parent={slug} locale="en" /></>;
 }

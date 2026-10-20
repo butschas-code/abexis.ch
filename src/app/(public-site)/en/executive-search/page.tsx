@@ -12,12 +12,14 @@ import { SectionShell } from "@/components/executive-search/SectionShell";
 import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { ServiceGuidePromo } from "@/components/public-site/ServiceGuidePage";
 import { InsightPostCard } from "@/components/public-site/insights/InsightPostCard";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PublicContentWidth } from "@/components/site/PublicContentWidth";
 import { executiveSearchHeroImage } from "@/data/site-images";
 import { homeImagery } from "@/executive-search/lib/images/homeImagery";
 import { listSearchSitePublishedPosts } from "@/public-site/cms";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 const HERO_LEAD =
   "This page explains how we fill leadership and key positions: from confidential direct search and rigorous assessment to placements built for lasting impact.";
@@ -91,8 +93,9 @@ const CLOSING_COPY = {
 export const revalidate = 120;
 
 export const metadata: Metadata = {
-  title: "Executive Search | Abexis",
+  title: "Executive Search",
   description: DESCRIPTION,
+  alternates: localizedAlternates("/executive-search", "/en/executive-search", "en"),
   openGraph: {
     title: "Executive Search | Abexis",
     description: DESCRIPTION,
@@ -237,6 +240,7 @@ export default async function EnglishExecutiveSearchPage() {
         </MotionSection>
       )}
 
+      <ServiceGuidePromo parent="executive-search" locale="en" />
       <ExecutiveSearchClosingSection copy={CLOSING_COPY} />
     </InteriorPageRoot>
   );

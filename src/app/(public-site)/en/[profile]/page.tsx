@@ -21,10 +21,12 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { profile } = await params;
   if (!isTeamSlug(profile)) return {};
+  const alternates = { canonical: `/en/${profile}`, languages: { "de-CH": `/${profile}`, "en-CH": `/en/${profile}`, "x-default": `/${profile}` } };
   if (profile === "danielsengstag") {
     return {
       title: danielSengstagContentEn.meta.title,
       description: danielSengstagContentEn.meta.description,
+      alternates,
       openGraph: {
         title: `${danielSengstagContentEn.meta.title} | Abexis`,
         description: danielSengstagContentEn.meta.description,
@@ -36,8 +38,9 @@ export async function generateMetadata({ params }: Props) {
   const p = teamProfiles[profile];
   const english = teamProfilesEn[profile];
   return {
-    title: `${p.name} | Abexis`,
+    title: p.name,
     description: `${p.name}: ${english.title} at Abexis.`,
+    alternates,
     openGraph: {
       title: `${p.name} | Abexis`,
       description: english.title,

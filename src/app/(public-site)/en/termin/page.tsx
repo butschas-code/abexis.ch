@@ -1,10 +1,12 @@
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { siteConfig } from "@/data/pages";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const metadata = {
-  title: "Book a call | Abexis",
+  title: "Book a call",
   description: "Schedule a non-binding introductory conversation with Abexis.",
+  alternates: localizedAlternates("/termin", "/en/termin", "en"),
 };
 
 export default function EnglishTerminPage() {

@@ -94,6 +94,24 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
       "@type": "Country",
       "name": "CH"
     },
+    "founder": {
+      "@type": "Person",
+      "name": "Daniel Sengstag",
+      "url": `${BASE_URL}/danielsengstag`
+    },
+    "knowsAbout": [
+      "Management consulting",
+      "Project management",
+      "Project risk management",
+      "Digital transformation",
+      "Corporate strategy",
+      "Process optimization",
+      "Change management",
+      "B2B sales strategy",
+      "Executive search",
+      "Product lifecycle management",
+      "Siemens Teamcenter"
+    ],
     "additionalType": english
       ? "https://en.wikipedia.org/wiki/Management_consulting"
       : "https://de.wikipedia.org/wiki/Unternehmensberatung",
@@ -109,7 +127,7 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
     "url": BASE_URL,
     "name": "Abexis",
     "publisher": { "@id": ORG_ID },
-    "inLanguage": language
+    "inLanguage": ["de-CH", "en-CH"]
   };
 
   // 3. WEBPAGE LAYER (Required on every page)
@@ -141,7 +159,7 @@ export function SchemaMarkup({ path = "", name, description, type, data, breadcr
       "name": asText(schemaData.title) || name,
       "description": asText(schemaData.excerpt) || description,
       "provider": { "@id": ORG_ID },
-      "areaServed": "CH",
+      "areaServed": { "@type": "Country", "name": "CH" },
       "offers": {
         "@type": "Offer",
         "itemOffered": {

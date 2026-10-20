@@ -7,11 +7,14 @@ import { PageHero } from "@/components/site/PageHero";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { englishServiceTeasers } from "@/data/english-site";
 import { fokusPageHeroImages } from "@/data/site-images";
+import { ServiceGuidesGrid } from "@/components/leistungen/ServiceGuidesGrid";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const metadata = {
-  title: "Services | Abexis",
+  title: "Services",
   description:
     "Abexis: substantive consulting for leadership and people topics, precise, discreet and implementation-focused.",
+  alternates: localizedAlternates("/leistungen", "/en/leistungen", "en"),
   openGraph: {
     title: "Services | Abexis",
     description:
@@ -74,6 +77,7 @@ export default function EnglishServicesPage() {
           />
         </div>
       </MotionSection>
+      <ServiceGuidesGrid locale="en" />
     </InteriorPageRoot>
   );
 }

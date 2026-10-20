@@ -1,8 +1,9 @@
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
-export const metadata = { title: "Termin buchen" };
+export const metadata = { title: "Termin buchen", description: "Vereinbaren Sie ein unverbindliches Erstgespräch mit Abexis zu Strategie, Transformation, Projekten oder Executive Search.", alternates: localizedAlternates("/termin", "/en/termin", "de") };
 
 export default function TerminPage() {
   return (

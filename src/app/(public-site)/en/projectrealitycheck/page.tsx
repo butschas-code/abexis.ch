@@ -1,9 +1,11 @@
 import { ProjectFitCheck } from "@/components/public-site/ProjectFitCheck";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const metadata = {
-  title: "Project Reality Check | Abexis",
+  title: "Project Reality Check",
   description: "A compact Abexis assessment for projects that need clarity on risks, governance and next decisions.",
+  alternates: localizedAlternates("/projectrealitycheck", "/en/projectrealitycheck", "en"),
 };
 
 export default function EnglishProjectRealityCheckPage() {
