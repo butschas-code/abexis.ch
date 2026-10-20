@@ -45,12 +45,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.75,
   }));
 
-  const englishFokus = englishTopics.map((f) => ({
-    url: `${base}/en/fokusthemen/${f.deSlug}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }));
+  const englishFokus = [
+    ...englishTopics.map((f) => ({
+      url: `${base}/en/fokusthemen/${f.deSlug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+    {
+      url: `${base}/en/fokusthemen/plm-pdm`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
+  ];
 
   const team = teamOrder.flatMap((p) => [
     {

@@ -402,6 +402,14 @@ export const fokusthemenMeta = [
       "Wir unterstützen Sie bei Projektumsetzungen, sollten Sie Ressourcenengpässen haben. Fachkompetenz, Methodenwissen und die Erfahrung aus verschiedensten erfolgreich durchgeführten Projekten machen uns zu einem starken Partner für Sie und Ihr Unternehmen.",
   },
   {
+    slug: "plm-pdm",
+    href: "/fokusthemen/plm-pdm",
+    title: "PLM/PDM Beratung und Projektleitung",
+    subtitle: "Product Lifecycle Management",
+    excerpt:
+      "Wir begleiten die Einführung und Weiterentwicklung von PLM/PDM von der fachlichen Vorbereitung bis zur produktiven Nutzung.",
+  },
+  {
     slug: "executive-search",
     href: "/executive-search",
     title: "Executive Search",

@@ -21,6 +21,9 @@ export const executiveSearchHeroImage = "/images/daniel-sengstag/hero.webp";
 /** Projektmanagement card + Fokus-Hero — team editorial, self-hosted. */
 export const projektmanagementHeroImage = "/images/focus/projektmanagement.webp";
 
+/** PLM/PDM consulting hero supplied by the client. */
+export const plmPdmHeroImage = "/images/focus/plm-pdm.webp";
+
 /** Kachel-Bilder der sechs Fokusthemen, Reihenfolge wie auf der alten Startseite */
 export const serviceCardImages = {
   projectfitcheck: resolvePublicImageUrl("https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Feditorial-insights.jpg?alt=media"),
@@ -32,6 +35,7 @@ export const serviceCardImages = {
   veränderungsmanagement: HOME[5],
   prozessoptimierung: HOME[6],
   projektmanagement: projektmanagementHeroImage,
+  "plm-pdm": plmPdmHeroImage,
   /** Hand-drawn hero illustration — `public/images/focus/risikomanagement.webp` */
   risikomanagement: "/images/focus/risikomanagement.webp",
 } as const;
@@ -53,6 +57,7 @@ export const fokusPageHeroImages = {
   veränderungsmanagement: (scraped["https://www.abexis.ch/fokusthemen/ver%C3%A4nderungsmanagement"] as string[])[1],
   prozessoptimierung: (scraped["https://www.abexis.ch/fokusthemen/prozessoptimierung"] as string[])[1],
   projektmanagement: projektmanagementHeroImage,
+  "plm-pdm": plmPdmHeroImage,
   risikomanagement: "/images/focus/risikomanagement.webp",
 } as const;
 

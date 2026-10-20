@@ -13,6 +13,7 @@ const SERVICE_KEYS = [
   "veränderungsmanagement",
   "prozessoptimierung",
   "projektmanagement",
+  "plm-pdm",
 ] as const;
 
 const LEISTUNG_IMAGES: readonly string[] = [
@@ -30,7 +31,6 @@ type HomeServicesCopy = {
 
 export function HomeLeistungenGridSection({
   content = homeLeistungenBlock,
-  startLabel: _startLabel = "Hier beginnen",
   moreLabel = "Mehr erfahren",
 }: {
   content?: HomeServicesCopy;

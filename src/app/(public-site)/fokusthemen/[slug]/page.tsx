@@ -12,6 +12,7 @@ import { FokusVeraenderungsmanagement } from "@/components/public-site/FokusVera
 import { FokusProzessoptimierung } from "@/components/public-site/FokusProzessoptimierung";
 import { FokusProjektmanagement } from "@/components/public-site/FokusProjektmanagement";
 import { FokusRisikomanagement } from "@/components/public-site/FokusRisikomanagement";
+import { FokusPlmPdm } from "@/components/public-site/FokusPlmPdm";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -43,6 +44,7 @@ export default async function FokusthemaPage({ params }: Props) {
   const { slug } = await params;
   const n = normalizeFokusSlug(slug);
   if (n === "risikomanagement") return <FokusRisikomanagement locale="de" />;
+  if (n === "plm-pdm") return <FokusPlmPdm locale="de" />;
 
   const html = getFokusthemaHtml(n);
   if (!html) notFound();

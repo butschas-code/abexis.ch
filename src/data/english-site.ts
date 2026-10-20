@@ -151,6 +151,15 @@ export const englishServiceTeasers = [
     excerpt: topic.excerpt,
   })),
   {
+    slug: "plm-pdm",
+    imageKey: "plm-pdm",
+    href: "/en/fokusthemen/plm-pdm",
+    title: "PLM/PDM Consulting and Project Leadership",
+    subtitle: "Product Lifecycle Management",
+    excerpt:
+      "We support the implementation and further development of PLM/PDM, from business preparation through to productive use.",
+  },
+  {
     slug: "executive-search",
     imageKey: "executive-search",
     href: "/en/executive-search",

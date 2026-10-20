@@ -197,6 +197,11 @@ export const homeLeistungenBlock = {
       href: "/fokusthemen/projektmanagement",
     },
     {
+      title: "PLM/PDM Beratung und Projektleitung",
+      body: "Wir begleiten die Einführung und Weiterentwicklung von PLM/PDM von der fachlichen Vorbereitung bis zur produktiven Nutzung.",
+      href: "/fokusthemen/plm-pdm",
+    },
+    {
       title: "Executive Search (Abexis SEARCH)",
       body: "Besetzung von Schlüsselpositionen in anspruchsvollen Situationen. Fokus auf Persönlichkeiten mit Verantwortung.",
       href: "/executive-search",
@@ -422,6 +427,11 @@ export const homeLeistungenBlockEn = {
       title: "Project Management",
       body: "Leadership and stabilization of critical projects. Clear structure and transparent steering.",
       href: "/en/fokusthemen/projektmanagement",
+    },
+    {
+      title: "PLM/PDM Consulting and Project Leadership",
+      body: "We support the implementation and further development of PLM/PDM, from business preparation through to productive use.",
+      href: "/en/fokusthemen/plm-pdm",
     },
     {
       title: "Executive Search (Abexis SEARCH)",
