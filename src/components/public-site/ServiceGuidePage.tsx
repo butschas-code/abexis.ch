@@ -8,6 +8,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { type ServiceGuideLocale, type ServiceGuidePage as Guide, getAllServiceGuides } from "@/data/service-guide-pages";
 import { siteConfig } from "@/data/pages";
 import { executiveSearchHeroImage, fokusPageHeroImages } from "@/data/site-images";
+import { guideHubPath, guidePath } from "@/lib/seo/guide-routes";
 
 const parentLabels: Record<string, { de: string; en: string }> = {
   "digitale-transformation": { de: "Digitale Transformation", en: "Digital Transformation" },
@@ -29,7 +30,8 @@ export function ServiceGuidePage({ content: c }: { content: Guide }) {
   const localeKey = english ? "en" : "de";
   const focusParent = c.parent !== "executive-search";
   const parentPath = focusParent ? `${english ? "/en" : ""}/fokusthemen/${c.parent}` : `${english ? "/en" : ""}/executive-search`;
-  const path = `${parentPath}/${c.slug}`;
+  const path = guidePath(c.slug, c.locale);
+  const hubPath = guideHubPath(c.locale);
   const heroImage = focusParent ? fokusPageHeroImages[c.parent as keyof typeof fokusPageHeroImages] : executiveSearchHeroImage;
   const bookingUrl = english ? siteConfig.bookingUrlEn : siteConfig.bookingUrlDe;
   const related = getAllServiceGuides(c.locale).filter((page) => page.parent !== c.parent).slice(0, 3);
@@ -39,8 +41,7 @@ export function ServiceGuidePage({ content: c }: { content: Guide }) {
       <InteriorPageRoot>
         <SchemaMarkup type="Service" path={path} data={c.meta} faqItems={c.faq} breadcrumbs={[
           { name: english ? "Home" : "Startseite", url: english ? "/en/home" : "/" },
-          { name: english ? "Services" : "Leistungen", url: english ? "/en/leistungen" : "/leistungen" },
-          { name: parentLabels[c.parent][localeKey], url: parentPath },
+          { name: english ? "Guides" : "Ratgeber", url: hubPath },
           { name: c.meta.title, url: path },
         ]} />
 
@@ -59,7 +60,7 @@ export function ServiceGuidePage({ content: c }: { content: Guide }) {
         <MotionSection className="bg-[#151d52]"><div className="mx-auto grid max-w-[1068px] gap-8 px-5 py-16 sm:px-6 md:grid-cols-[0.78fr_1.22fr] md:gap-16 md:py-24"><Heading eyebrow={english ? "Frequently asked questions" : "Häufige Fragen"} title={english ? "Useful answers for your next decision." : "Klare Antworten für Ihre nächste Entscheidung."} light /><div className="rounded-[22px] bg-white px-6 sm:px-8"><RisikomanagementFaqList items={c.faq} /></div></div></MotionSection>
 
         <MotionSection className="bg-white"><div className="mx-auto max-w-[1068px] px-5 py-16 sm:px-6 md:py-24"><Heading eyebrow={english ? "Related guidance" : "Weitere Entscheidungshilfen"} title={english ? "Explore connected management questions." : "Vertiefen Sie zusammenhängende Managementfragen."} /><div className="mt-10 grid gap-5 md:grid-cols-3">{related.map((page) => {
-          const href = page.parent === "executive-search" ? `${english ? "/en" : ""}/executive-search/${page.slug}` : `${english ? "/en" : ""}/fokusthemen/${page.parent}/${page.slug}`;
+          const href = guidePath(page.slug, c.locale);
           return <Link key={page.parent} href={href} className="group rounded-[22px] border border-black/[0.07] bg-[#fbfbfd] p-7 transition hover:-translate-y-0.5 hover:border-[#26337c]/20"><p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">{parentLabels[page.parent][localeKey]}</p><h3 className="mt-3 text-[20px] font-semibold leading-tight tracking-[-0.02em] text-[#1d1d1f] group-hover:text-[#26337c]">{page.meta.title}</h3><span className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold text-[#26337c]">{english ? "Read guide" : "Ratgeber lesen"} →</span></Link>;
         })}</div></div></MotionSection>
 
@@ -73,6 +74,6 @@ export function ServiceGuidePromo({ parent, locale }: { parent: string; locale: 
   const guide = getAllServiceGuides(locale).find((page) => page.parent === parent);
   if (!guide) return null;
   const english = locale === "en";
-  const href = parent === "executive-search" ? `${english ? "/en" : ""}/executive-search/${guide.slug}` : `${english ? "/en" : ""}/fokusthemen/${parent}/${guide.slug}`;
+  const href = guidePath(guide.slug, locale);
   return <section className="border-t border-black/[0.06] bg-[#f5f6fa]"><div className="mx-auto max-w-[1068px] px-5 py-12 sm:px-6 md:py-16"><p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#86868b]">{english ? "Decision guide" : "Entscheidungshilfe"}</p><div className="mt-3 flex flex-col gap-5 md:flex-row md:items-end md:justify-between"><div className="max-w-[720px]"><h2 className="text-[27px] font-semibold leading-tight tracking-[-0.025em] text-[#1d1d1f]">{guide.meta.title}</h2><p className="mt-3 text-[15px] leading-relaxed text-[#6e6e73]">{guide.meta.excerpt}</p></div><Link href={href} className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-full bg-[#26337c] px-6 text-sm font-semibold text-white transition hover:bg-[#3550a4]">{english ? "Read guide" : "Ratgeber lesen"} →</Link></div></div></section>;
 }

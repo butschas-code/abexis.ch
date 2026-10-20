@@ -7,6 +7,7 @@ import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PageHero } from "@/components/site/PageHero";
 import { getPlmPdmContent, type PlmPdmLocale } from "@/data/plm-pdm-content";
 import { getPlmSeoCards } from "@/data/plm-seo-pages";
+import { guidePath } from "@/lib/seo/guide-routes";
 import { siteConfig } from "@/data/pages";
 import { plmPdmHeroImage } from "@/data/site-images";
 
@@ -221,7 +222,7 @@ export function FokusPlmPdm({ locale = "de" }: { locale?: PlmPdmLocale }) {
           />
           <div className="mt-10 grid gap-5 md:mt-14 md:grid-cols-3">
             {seoCards.map((card) => (
-              <Link key={card.slug} href={`${path}/${card.slug}`} className="group flex flex-col rounded-[22px] border border-black/[0.07] bg-[#fbfbfd] p-7 transition hover:-translate-y-0.5 hover:border-[#26337c]/20 hover:shadow-[0_16px_45px_rgba(38,51,124,0.08)]">
+              <Link key={card.slug} href={guidePath(card.slug, locale)} className="group flex flex-col rounded-[22px] border border-black/[0.07] bg-[#fbfbfd] p-7 transition hover:-translate-y-0.5 hover:border-[#26337c]/20 hover:shadow-[0_16px_45px_rgba(38,51,124,0.08)]">
                 <h3 className="text-[21px] font-semibold leading-tight tracking-[-0.02em] text-[#1d1d1f] group-hover:text-[#26337c]">{card.title}</h3>
                 <p className="mt-4 flex-1 text-[15px] leading-relaxed text-[#6e6e73]">{card.excerpt}</p>
                 <span className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold text-[#26337c]">{english ? "Read guide" : "Ratgeber lesen"} →</span>

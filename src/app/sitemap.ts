@@ -4,6 +4,7 @@ import { englishTopics } from "@/data/english-site";
 import { getPublishedCmsPostsAllSites } from "@/public-site/cms";
 import { plmSeoSlugs } from "@/data/plm-seo-pages";
 import { getAllServiceGuides } from "@/data/service-guide-pages";
+import { guidePath } from "@/lib/seo/guide-routes";
 
 const base = "https://www.abexis.ch";
 
@@ -19,6 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/projectrealitycheck",
     "/legal-policy",
     "/privacy-policy",
+    "/ratgeber",
     "/en/home",
     "/en/leistungen",
     "/en/projectrealitycheck",
@@ -28,6 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/en/blog",
     "/en/legal-policy",
     "/en/privacy-policy",
+    "/en/guides",
     "/en/executive-search",
     "/en/executive-search/vakanzen",
     "/executive-search/vakanzen",
@@ -62,13 +65,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const plmTopics = plmSeoSlugs.flatMap((slug) => [
     {
-      url: `${base}/fokusthemen/plm-pdm/${slug}`,
+      url: `${base}${guidePath(slug, "de")}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.7,
     },
     {
-      url: `${base}/en/fokusthemen/plm-pdm/${slug}`,
+      url: `${base}${guidePath(slug, "en")}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.65,
@@ -76,8 +79,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]);
 
   const serviceGuides = getAllServiceGuides("de").flatMap((guide) => {
-    const dePath = guide.parent === "executive-search" ? `/executive-search/${guide.slug}` : `/fokusthemen/${guide.parent}/${guide.slug}`;
-    const enPath = guide.parent === "executive-search" ? `/en/executive-search/${guide.slug}` : `/en/fokusthemen/${guide.parent}/${guide.slug}`;
+    const dePath = guidePath(guide.slug, "de");
+    const enPath = guidePath(guide.slug, "en");
     const alternates = { languages: { de: `${base}${dePath}`, en: `${base}${enPath}` } };
     return [
       { url: `${base}${dePath}`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.7, alternates },

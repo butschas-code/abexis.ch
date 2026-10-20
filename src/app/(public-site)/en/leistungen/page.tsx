@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { LeistungenBentoGrid } from "@/components/leistungen/LeistungenBentoGrid";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
@@ -7,7 +8,6 @@ import { PageHero } from "@/components/site/PageHero";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { englishServiceTeasers } from "@/data/english-site";
 import { fokusPageHeroImages } from "@/data/site-images";
-import { ServiceGuidesGrid } from "@/components/leistungen/ServiceGuidesGrid";
 import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const metadata = {
@@ -75,9 +75,13 @@ export default function EnglishServicesPage() {
             startLabel="Start here"
             moreLabel="Learn more"
           />
+          <div className="mt-10">
+            <Link href="/en/guides" className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#26337c]/20 bg-white px-6 text-sm font-semibold text-[#26337c] transition hover:border-[#26337c]/40 hover:bg-[#f7f8fc]">
+              View all guides →
+            </Link>
+          </div>
         </div>
       </MotionSection>
-      <ServiceGuidesGrid locale="en" />
     </InteriorPageRoot>
   );
 }

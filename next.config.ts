@@ -1,8 +1,34 @@
 import type { NextConfig } from "next";
 
+const legacyGuideRedirects = [
+  ["/fokusthemen/digitale-transformation/digitalisierungsstrategie-kmu", "/ratgeber/digitalisierungsstrategie-kmu"],
+  ["/en/fokusthemen/digitale-transformation/digitalisierungsstrategie-kmu", "/en/guides/digital-strategy-smes"],
+  ["/fokusthemen/unternehmensstrategie/strategieprozess-kmu", "/ratgeber/strategieprozess-kmu"],
+  ["/en/fokusthemen/unternehmensstrategie/strategieprozess-kmu", "/en/guides/strategy-process-smes"],
+  ["/fokusthemen/vertriebmarketing/b2b-vertriebsstrategie", "/ratgeber/b2b-vertriebsstrategie"],
+  ["/en/fokusthemen/vertriebmarketing/b2b-vertriebsstrategie", "/en/guides/b2b-sales-strategy"],
+  ["/fokusthemen/veränderungsmanagement/change-management-vorgehen", "/ratgeber/change-management-vorgehen"],
+  ["/en/fokusthemen/veränderungsmanagement/change-management-vorgehen", "/en/guides/change-management-approach"],
+  ["/fokusthemen/prozessoptimierung/prozesse-analysieren-optimieren", "/ratgeber/prozesse-analysieren-optimieren"],
+  ["/en/fokusthemen/prozessoptimierung/prozesse-analysieren-optimieren", "/en/guides/business-process-optimization"],
+  ["/fokusthemen/projektmanagement/projekt-in-schieflage", "/ratgeber/projekt-in-schieflage"],
+  ["/en/fokusthemen/projektmanagement/projekt-in-schieflage", "/en/guides/project-in-trouble"],
+  ["/fokusthemen/risikomanagement/projektrisiken-frueh-erkennen", "/ratgeber/projektrisiken-frueh-erkennen"],
+  ["/en/fokusthemen/risikomanagement/projektrisiken-frueh-erkennen", "/en/guides/identify-project-risks-early"],
+  ["/executive-search/fuehrungskraefte-finden", "/ratgeber/fuehrungskraefte-finden"],
+  ["/en/executive-search/fuehrungskraefte-finden", "/en/guides/finding-executives"],
+  ["/fokusthemen/plm-pdm/teamcenter-beratung-schweiz", "/ratgeber/teamcenter-beratung-schweiz"],
+  ["/en/fokusthemen/plm-pdm/teamcenter-beratung-schweiz", "/en/guides/teamcenter-consulting-switzerland"],
+  ["/fokusthemen/plm-pdm/plm-pdm-einfuehrung", "/ratgeber/plm-pdm-einfuehrung"],
+  ["/en/fokusthemen/plm-pdm/plm-pdm-einfuehrung", "/en/guides/plm-pdm-implementation"],
+  ["/fokusthemen/plm-pdm/plm-vs-pdm", "/ratgeber/plm-vs-pdm"],
+  ["/en/fokusthemen/plm-pdm/plm-vs-pdm", "/en/guides/plm-vs-pdm"],
+].map(([source, destination]) => ({ source, destination, permanent: true }));
+
 const nextConfig: NextConfig = {
   async redirects() {
     return [
+      ...legacyGuideRedirects,
       {
         source: "/executive-search/expertise",
         destination: "/executive-search",

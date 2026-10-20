@@ -8,6 +8,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { getPlmSeoCards, type PlmSeoPageContent } from "@/data/plm-seo-pages";
 import { siteConfig } from "@/data/pages";
 import { plmPdmHeroImage } from "@/data/site-images";
+import { guideHubPath, guidePath } from "@/lib/seo/guide-routes";
 
 function Heading({ eyebrow, title, intro, light = false }: { eyebrow: string; title: string; intro?: string; light?: boolean }) {
   return (
@@ -22,9 +23,9 @@ function Heading({ eyebrow, title, intro, light = false }: { eyebrow: string; ti
 export function PlmSeoPage({ content: c }: { content: PlmSeoPageContent }) {
   const english = c.locale === "en";
   const basePath = english ? "/en/fokusthemen/plm-pdm" : "/fokusthemen/plm-pdm";
-  const path = `${basePath}/${c.slug}`;
+  const path = guidePath(c.slug, c.locale);
+  const hubPath = guideHubPath(c.locale);
   const homePath = english ? "/en/home" : "/";
-  const servicesPath = english ? "/en/leistungen" : "/leistungen";
   const contactPath = english ? "/en/kontakt" : "/kontakt";
   const bookingUrl = english ? siteConfig.bookingUrlEn : siteConfig.bookingUrlDe;
   const cards = getPlmSeoCards(c.locale).filter((card) => card.slug !== c.slug);
@@ -39,8 +40,7 @@ export function PlmSeoPage({ content: c }: { content: PlmSeoPageContent }) {
           faqItems={c.faq.items}
           breadcrumbs={[
             { name: english ? "Home" : "Startseite", url: homePath },
-            { name: english ? "Services" : "Leistungen", url: servicesPath },
-            { name: "PLM/PDM", url: basePath },
+            { name: english ? "Guides" : "Ratgeber", url: hubPath },
             { name: c.meta.title, url: path },
           ]}
         />
@@ -143,7 +143,7 @@ export function PlmSeoPage({ content: c }: { content: PlmSeoPageContent }) {
             <Heading eyebrow={c.related.eyebrow} title={c.related.title} />
             <div className="mt-10 grid gap-5 md:grid-cols-2">
               {cards.map((card) => (
-                <Link key={card.slug} href={`${basePath}/${card.slug}`} className="group rounded-[22px] border border-black/[0.07] bg-[#fbfbfd] p-7 transition hover:-translate-y-0.5 hover:border-[#26337c]/20 hover:shadow-[0_16px_45px_rgba(38,51,124,0.08)] sm:p-8">
+                <Link key={card.slug} href={guidePath(card.slug, c.locale)} className="group rounded-[22px] border border-black/[0.07] bg-[#fbfbfd] p-7 transition hover:-translate-y-0.5 hover:border-[#26337c]/20 hover:shadow-[0_16px_45px_rgba(38,51,124,0.08)] sm:p-8">
                   <h3 className="text-[21px] font-semibold tracking-[-0.02em] text-[#1d1d1f] group-hover:text-[#26337c]">{card.title}</h3>
                   <p className="mt-3 text-[15px] leading-relaxed text-[#6e6e73]">{card.excerpt}</p>
                   <span className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold text-[#26337c]">{english ? "Read more" : "Mehr erfahren"} →</span>
