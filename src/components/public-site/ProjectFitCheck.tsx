@@ -4,7 +4,8 @@ import { MotionSection } from "@/components/motion/MotionSection";
 import { PageHero } from "@/components/site/PageHero";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { HeroHeadlineBrandAccent } from "@/components/site/HeroHeadlineBrandAccent";
-import { homeHeroImage } from "@/data/site-images";
+import { PublicImage as Image } from "@/components/site/PublicImage";
+import { homeHeroImage, projectRealityCheckTeaserImage } from "@/data/site-images";
 import { siteConfig } from "@/data/pages";
 
 /** Same ambient layer as Leistungen / interior long-form pages (`apple-section-mesh` sits on the root). */
@@ -326,6 +327,8 @@ const prcCopyEn = {
     resultHeadline: "The result can be used immediately.",
     youReceive: "You receive",
     resultClosing: "So you know what needs to be done and what happens if nothing happens.",
+    dimensionsImageAlt:
+      "Project Reality Check dashboard: status across strategy, governance, execution, risks, change and technology, with key findings and a project roadmap",
     approachLabel: "Approach",
     approachHeadline: "Clarity instead of assumptions",
     approachBody:
@@ -491,6 +494,8 @@ export function ProjectFitCheck({ locale = "de", afterHero }: { locale?: "de" | 
           resultHeadline: "Das Ergebnis ist sofort nutzbar.",
           youReceive: "Sie erhalten",
           resultClosing: "Damit Sie wissen, was zu tun ist : und was passiert, wenn nichts passiert.",
+          dimensionsImageAlt:
+            "Project Reality Check Dashboard: Status entlang Strategie, Governance, Execution, Risiken, Change und Technologie, mit wesentlichen Erkenntnissen und Projektroadmap",
           approachLabel: "Ansatz",
           approachHeadline: "Klarheit statt Vermutung",
           approachBody:
@@ -749,6 +754,19 @@ export function ProjectFitCheck({ locale = "de", afterHero }: { locale?: "de" | 
 
             </div>
 
+            <div>
+            {/* Client artwork (text baked in, so not usable as a hero background): it shows the six dimensions with status, findings and roadmap. */}
+            <figure className="mb-5 overflow-hidden rounded-[24px] bg-[#151d52] shadow-[0_24px_60px_rgba(38,51,124,0.14)] ring-1 ring-black/[0.06] sm:mb-6">
+              <div className="relative aspect-square w-full">
+                <Image
+                  src={projectRealityCheckTeaserImage}
+                  alt={s.dimensionsImageAlt}
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 1024px) 640px, 100vw"
+                />
+              </div>
+            </figure>
             <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-2">
               {c.dimensionen.map((dim) => (
                 <div
@@ -768,6 +786,7 @@ export function ProjectFitCheck({ locale = "de", afterHero }: { locale?: "de" | 
                   <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#26337c] to-[#45b3e2] transition-all duration-500 group-hover:w-full" />
                 </div>
               ))}
+            </div>
             </div>
           </div>
         </div>
