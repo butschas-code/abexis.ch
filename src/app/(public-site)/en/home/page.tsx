@@ -1,42 +1,35 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { HomeBlogTeasers } from "@/components/home/HomeBlogTeasers";
-import { HomeChallengeSection } from "@/components/home/HomeChallengeSection";
-import { HomeClaritySection } from "@/components/home/HomeClaritySection";
 import { HomeFinalCtaSection } from "@/components/home/HomeFinalCtaSection";
 import { HomeHero } from "@/components/home/HomeHero";
-import { HomeLeistungenGridSection } from "@/components/home/HomeLeistungenGridSection";
-import { HomePrcSection } from "@/components/home/HomePrcSection";
 import { HomeProcessSection } from "@/components/home/HomeProcessSection";
 import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { HomeWhoWeAreSection } from "@/components/home/HomeWhoWeAreSection";
-import { WelcomeSection } from "@/components/home/WelcomeSection";
 import { PartnershipsMarquee, partnershipsIntroEn } from "@/components/home/PartnershipsMarquee";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { FeaturedOffersSection } from "@/components/leistungen/FeaturedOffersSection";
+import { ServiceGroupsSection } from "@/components/leistungen/ServiceGroupsSection";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { HeroHeadlineBrandAccent } from "@/components/site/HeroHeadlineBrandAccent";
 import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
 import {
-  homeChallengeContentEn,
-  homeClarityContentEn,
   homeClosingContentEn,
   homeHeroContentEn,
-  homeLeistungenBlockEn,
-  homePrcContentEn,
   homeProcessContentEn,
   homeWhoWeAreContentEn,
 } from "@/data/home-page-content";
 import { homeTestimonialsEn } from "@/data/home-testimonials";
-import { homeWelcomeSectionEn, siteConfig } from "@/data/pages";
+import { siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: { absolute: "Abexis : Clarity when it is missing" },
+  title: { absolute: "Abexis : Strengthen management. Deliver change." },
   description:
-    "Abexis creates clarity when projects lose orientation: with Project Reality Check, consulting and executive search. Switzerland.",
+    "Management consulting and delivery for executive teams in Switzerland: strategy, Virtual Management Office, transformation, projects, change and executive search.",
   alternates: localizedAlternates("/", "/en/home", "en"),
 };
 
@@ -71,20 +64,9 @@ export default function EnglishHomePage() {
         </div>
       </HomeHero>
 
-      <WelcomeSection content={homeWelcomeSectionEn} contactHref="/en/kontakt" contactLabel="Contact Abexis" />
+      <ServiceGroupsSection locale="en" id="leistungen" />
 
-      <HomeChallengeSection
-        content={homeChallengeContentEn}
-        situationsLabel="Typical situations"
-        situationsAriaLabel="Typical project situations"
-      />
-
-      <HomePrcSection
-        content={homePrcContentEn}
-        bookingUrl={siteConfig.bookingUrlEn}
-        packagesLabel="Packages"
-        recommendedLabel="Recommended"
-      />
+      <FeaturedOffersSection locale="en" />
 
       <HomeProcessSection content={homeProcessContentEn} />
 
@@ -94,8 +76,6 @@ export default function EnglishHomePage() {
         profileLabel="Profile"
         teamProfileLabel="Profile"
       />
-
-      <HomeLeistungenGridSection content={homeLeistungenBlockEn} startLabel="Start here" moreLabel="Learn more" />
 
       <HomeBlogTeasers heading="From the blog" allLabel="All articles" allHref="/en/blog" dateLocale="en-GB" />
 
@@ -117,8 +97,6 @@ export default function EnglishHomePage() {
           items={homeTestimonialsEn}
         />
       </MotionSection>
-
-      <HomeClaritySection content={homeClarityContentEn} />
 
       <MotionSection>
         <PartnershipsMarquee eyebrow="Partnerships" headline="Partnerships" intro={partnershipsIntroEn} />

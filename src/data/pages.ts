@@ -56,15 +56,16 @@ export const mainNav: MainNavItem[] = [
     parentIsLink: false,
     children: [
       { href: "/leistungen", label: "Überblick" },
-      { href: "/projectrealitycheck", label: "Project Reality Check" },
-      { href: "/fokusthemen/digitale-transformation", label: "Digitale Transformation" },
+      { href: "/fokusthemen/virtual-management-office", label: "Virtual Management Office" },
       { href: "/fokusthemen/unternehmensstrategie", label: "Unternehmensstrategie" },
       { href: "/fokusthemen/vertriebmarketing", label: "Vertrieb & Marketing" },
-      { href: "/fokusthemen/veränderungsmanagement", label: "Veränderung" },
-      { href: "/fokusthemen/prozessoptimierung", label: "Optimierung" },
+      { href: "/fokusthemen/digitale-transformation", label: "Digitale Transformation" },
+      { href: "/fokusthemen/plm-pdm", label: "PLM/PDM Beratung" },
+      { href: "/fokusthemen/prozessoptimierung", label: "Prozessoptimierung" },
       { href: "/fokusthemen/projektmanagement", label: "Projektmanagement" },
       { href: "/fokusthemen/risikomanagement", label: "Risikomanagement" },
-      { href: "/fokusthemen/plm-pdm", label: "PLM/PDM Beratung" },
+      { href: "/projectrealitycheck", label: "Project Reality Check" },
+      { href: "/fokusthemen/veränderungsmanagement", label: "Veränderungsmanagement" },
     ],
   },
   {
@@ -88,15 +89,16 @@ export const mainNavEn: MainNavItem[] = [
     parentIsLink: false,
     children: [
       { href: "/en/leistungen", label: "Overview" },
-      { href: "/en/projectrealitycheck", label: "Project Reality Check" },
-      { href: "/en/fokusthemen/digitale-transformation", label: "Digital Transformation" },
+      { href: "/en/fokusthemen/virtual-management-office", label: "Virtual Management Office" },
       { href: "/en/fokusthemen/unternehmensstrategie", label: "Corporate Strategy" },
       { href: "/en/fokusthemen/vertriebmarketing", label: "Sales & Marketing" },
-      { href: "/en/fokusthemen/veränderungsmanagement", label: "Change Management" },
+      { href: "/en/fokusthemen/digitale-transformation", label: "Digital Transformation" },
+      { href: "/en/fokusthemen/plm-pdm", label: "PLM/PDM Consulting" },
       { href: "/en/fokusthemen/prozessoptimierung", label: "Process Optimization" },
       { href: "/en/fokusthemen/projektmanagement", label: "Project Management" },
       { href: "/en/fokusthemen/risikomanagement", label: "Risk Management" },
-      { href: "/en/fokusthemen/plm-pdm", label: "PLM/PDM Consulting" },
+      { href: "/en/projectrealitycheck", label: "Project Reality Check" },
+      { href: "/en/fokusthemen/veränderungsmanagement", label: "Change Management" },
     ],
   },
   {
@@ -147,26 +149,6 @@ export const homeLeadParagraph =
   "Als gefragte Managementberatung helfen wir Ihrem Unternehmen strategisch voranzukommen, Wachstumspotenziale konsequent zu nutzen, Umsatz- und Ertragsziele zu erreichen, wirksame Strukturen und Prozesse zu etablieren und Ihr Unternehmen noch fitter für die Zukunft zu gestalten.";
 
 /** Begrüssung unter dem Hero (ersetzt den früheren «Impulse»-Block mit Blog-Titeln) */
-export const homeWelcomeSection = {
-  eyebrow: "Willkommen",
-  title: "Schön, dass Sie zu uns finden, ",
-  titleAccent: "herzlich willkommen.",
-  paragraphs: [
-    "Bei Abexis begleiten wir Unternehmen und Führungsteams dort, wo es zählt: Strategie, Digitalisierung, Veränderung, Vertrieb und Projekte, immer mit dem Fokus auf greifbare Resultate und eine Zusammenarbeit auf Augenhöhe.",
-    "Schauen Sie sich unsere Schwerpunkte an, lesen Sie einen Beitrag im Blog oder nehmen Sie Kontakt auf, wenn Sie den Austausch suchen. Wir freuen uns, von Ihnen zu hören.",
-  ],
-} as const;
-
-export const homeWelcomeSectionEn = {
-  eyebrow: "Welcome",
-  title: "Good to have you here, ",
-  titleAccent: "welcome to Abexis.",
-  paragraphs: [
-    "At Abexis, we support companies and leadership teams where it counts: strategy, digitalization, change, sales and projects, always with a focus on tangible results and collaboration at eye level.",
-    "Explore our areas of focus, read an insight from the blog or contact us if you would like to start a conversation. We look forward to hearing from you.",
-  ],
-} as const;
-
 export const homeDifferentiators = [
   {
     label: "Strategie vor Technologie",
@@ -339,6 +321,14 @@ Erfahrung & Projekte (Auszug):
 };
 
 export const fokusthemenMeta = [
+  {
+    slug: "virtual-management-office",
+    href: "/fokusthemen/virtual-management-office",
+    title: "Virtual Management Office",
+    subtitle: "Managementunterstützung",
+    excerpt:
+      "Zusätzliche Managementkapazität ohne zusätzliche Managementstelle. Abexis unterstützt CEO und Geschäftsleitung bei Prioritäten, Entscheiden und der Umsetzung wichtiger Vorhaben.",
+  },
   {
     slug: "projectrealitycheck",
     href: "/projectrealitycheck",

@@ -132,44 +132,6 @@ export const englishTopics = [
   },
 ] as const;
 
-export const englishServiceTeasers = [
-  {
-    slug: "projectrealitycheck",
-    imageKey: "projectrealitycheck",
-    href: "/en/projectrealitycheck",
-    title: "Project Reality Check",
-    subtitle: "Create clarity",
-    excerpt:
-      "The Abexis Project Reality Check quickly shows where your project really stands and what needs to be decided now: precise analysis, clear recommendations.",
-  },
-  ...englishTopics.map((topic) => ({
-    slug: topic.slug,
-    imageKey: topic.deSlug,
-    href: `/en/fokusthemen/${topic.deSlug}`,
-    title: topic.title,
-    subtitle: topic.subtitle,
-    excerpt: topic.excerpt,
-  })),
-  {
-    slug: "plm-pdm",
-    imageKey: "plm-pdm",
-    href: "/en/fokusthemen/plm-pdm",
-    title: "PLM/PDM Consulting and Project Leadership",
-    subtitle: "Product Lifecycle Management",
-    excerpt:
-      "We support the implementation and further development of PLM/PDM, from business preparation through to productive use.",
-  },
-  {
-    slug: "executive-search",
-    imageKey: "executive-search",
-    href: "/en/executive-search",
-    title: "Executive Search",
-    subtitle: "People",
-    excerpt:
-      "We find personalities, not just profiles. Discreet search and precise placement of leadership and key positions with genuine business understanding.",
-  },
-] as const;
-
 export type EnglishTopic = (typeof englishTopics)[number];
 
 export function getEnglishTopic(slug: string): EnglishTopic | undefined {

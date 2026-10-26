@@ -13,6 +13,8 @@ import { FokusProzessoptimierung } from "@/components/public-site/FokusProzessop
 import { FokusProjektmanagement } from "@/components/public-site/FokusProjektmanagement";
 import { FokusRisikomanagement } from "@/components/public-site/FokusRisikomanagement";
 import { FokusPlmPdm } from "@/components/public-site/FokusPlmPdm";
+import { FokusVirtualManagementOffice } from "@/components/public-site/FokusVirtualManagementOffice";
+import { getVmoContent } from "@/data/vmo-content";
 import { ServiceGuidePromo } from "@/components/public-site/ServiceGuidePage";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -31,13 +33,14 @@ export async function generateMetadata({ params }: Props) {
   const heroImage = heroKey in fokusPageHeroImages ? fokusPageHeroImages[heroKey] : homeHeroImage;
   const canonical = `/fokusthemen/${n}`;
   const english = `/en/fokusthemen/${n}`;
+  const title = n === "virtual-management-office" ? getVmoContent("de").meta.seoTitle : meta.title;
 
   return {
-    title: meta.title,
+    title,
     description: meta.excerpt,
     alternates: { canonical, languages: { "de-CH": canonical, "en-CH": english, "x-default": canonical } },
     openGraph: {
-      title: `${meta.title} | Abexis`,
+      title: `${title} | Abexis`,
       description: meta.excerpt,
       url: canonical,
       locale: "de_CH",
@@ -52,6 +55,7 @@ export default async function FokusthemaPage({ params }: Props) {
   const n = normalizeFokusSlug(slug);
   if (n === "risikomanagement") return <><FokusRisikomanagement locale="de" /><ServiceGuidePromo parent={n} locale="de" /></>;
   if (n === "plm-pdm") return <FokusPlmPdm locale="de" />;
+  if (n === "virtual-management-office") return <FokusVirtualManagementOffice locale="de" />;
 
   const html = getFokusthemaHtml(n);
   if (!html) notFound();

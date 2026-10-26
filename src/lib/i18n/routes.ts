@@ -21,6 +21,7 @@ const germanToEnglish: Record<string, string> = {
   "/fokusthemen/projektmanagement": "/en/fokusthemen/projektmanagement",
   "/fokusthemen/risikomanagement": "/en/fokusthemen/risikomanagement",
   "/fokusthemen/plm-pdm": "/en/fokusthemen/plm-pdm",
+  "/fokusthemen/virtual-management-office": "/en/fokusthemen/virtual-management-office",
   "/ratgeber": "/en/guides",
   "/ratgeber/digitalisierungsstrategie-kmu": "/en/guides/digital-strategy-smes",
   "/ratgeber/strategieprozess-kmu": "/en/guides/strategy-process-smes",
@@ -91,6 +92,7 @@ englishToGerman["/en/topics/project-management"] = "/fokusthemen/projektmanageme
 englishToGerman["/en/fokusthemen/risikomanagement"] = "/fokusthemen/risikomanagement";
 englishToGerman["/en/topics/risk-management"] = "/fokusthemen/risikomanagement";
 englishToGerman["/en/fokusthemen/plm-pdm"] = "/fokusthemen/plm-pdm";
+englishToGerman["/en/fokusthemen/virtual-management-office"] = "/fokusthemen/virtual-management-office";
 
 export function isEnglishPath(pathname: string) {
   return pathname === "/en" || pathname.startsWith("/en/");

@@ -5,63 +5,12 @@
  * Externe Termin-Links: in Komponenten via {@link siteConfig} aus `data/pages`, nicht hardcoden.
  */
 export const homeHeroContent = {
-  eyebrow: "Abexis Consulting",
-  titleLines: [
-    "Projekte laufen selten falsch",
-    "aber oft in eine Richtung, die niemand so geplant hat.",
-  ] as const,
-  sub: "Abexis schafft Klarheit, wenn sie fehlt.",
-  body: "Viele Projekte scheitern nicht an einem einzelnen Fehler. Sie verlieren schrittweise die Orientierung und das bleibt oft lange unklar.",
-  primaryCta: { href: "/projectrealitycheck" as const, label: "Project Reality Check anfragen" },
+  eyebrow: "Abexis · Managementberatung und Umsetzung",
+  titleLines: ["Management stärken.", "Veränderung umsetzen."] as const,
+  sub: "Wenn wichtige Vorhaben mehr Erfahrung oder Kapazität brauchen, ist Abexis an Ihrer Seite.",
+  body: "Wir beraten Geschäftsleitungen und übernehmen Verantwortung in der Umsetzung.",
+  primaryCta: { href: "#leistungen" as const, label: "Leistungen entdecken" },
   secondaryCta: { href: "/kontakt" as const, label: "Unverbindliches Gespräch" },
-} as const;
-
-export const homeChallengeContent = {
-  eyebrow: "Die Herausforderung",
-  headline: "Projekte bewegen sich, aber die Lage bleibt unklar.",
-  intro:
-    "Meetings finden statt. Berichte werden erstellt. Und trotzdem bleibt oft offen, wie das Projekt tatsächlich steht.",
-  situationsSubline: "Vier Muster, die wir in kritischen Projekten immer wieder sehen.",
-  groups: [
-    {
-      title: "Transparenz fehlt",
-      bullets: [
-        "Statusberichte zeigen nur einen Teil der Realität",
-        "Probleme werden eingeordnet, aber nicht geklärt",
-        "Risiken sind vorhanden, aber schwer greifbar",
-      ],
-    },
-    {
-      title: "Unterschiedliche Sichtweisen",
-      lines: ["IT sieht Fortschritt", "Business erlebt Stillstand", "Im Steering fehlt ein gemeinsames Bild"],
-    },
-    {
-      title: "Signale kommen zu spät",
-      bullets: [
-        "Budget entwickelt sich anders als geplant",
-        "Zeitpläne bleiben optimistisch",
-        "Schlüsselpersonen verlieren Vertrauen oder steigen aus",
-      ],
-    },
-    {
-      title: "Entscheidungen verzögern sich",
-      bullets: [
-        "Kritische Punkte werden nicht klar benannt",
-        "Eskalationen erfolgen spät",
-        "Zeit geht verloren, ohne dass es sichtbar wird",
-      ],
-    },
-  ] as const,
-  whatIsMissing: {
-    title: "Was fehlt",
-    line: "Ein klarer, unabhängiger Blick auf das Projekt",
-    sub: "als Grundlage für fundierte Entscheidungen",
-  },
-  whenExternal: {
-    title: "Wann ein externer Blick sinnvoll ist",
-    bullets: ["Wenn Unsicherheit zunimmt", "Wenn der Druck steigt", "Wenn wichtige Entscheidungen offen bleiben"],
-  },
-  framing: "Das grösste Risiko ist nicht der Fehler, sondern fehlende Klarheit.",
 } as const;
 
 export const homeWhoWeAreContent = {
@@ -82,153 +31,15 @@ export const homeWhoWeAreContent = {
   },
 } as const;
 
-export const homePrcContent = {
-  eyebrow: "Angebot",
-  headline: "Klarheit über den tatsächlichen Stand Ihres Projekts.",
-  sub: "In 3 Tagen bis 4 Wochen erhalten Sie eine belastbare Einschätzung und konkrete nächste Schritte.",
-  context:
-    "Der Project Reality Check wird eingesetzt, wenn Unsicherheit besteht oder Entscheidungen anstehen. Er schafft eine gemeinsame Grundlage, bevor sich Risiken weiter verfestigen.",
-  youGet: {
-    title: "Was Sie erhalten",
-    bullets: [
-      "Executive Summary für Geschäftsleitung und Verwaltungsrat",
-      "Bewertung entlang von 6 Dimensionen",
-      "Priorisierte Risiken mit Eintrittswahrscheinlichkeit",
-      "Einschätzung von Governance und Entscheidungsstruktur",
-      "Analyse der Umsetzungs- und Veränderungsfähigkeit",
-      "Massnahmenplan für 30, 60 und 90 Tage",
-      "Klare Empfehlung: Continue, Stabilize oder Reset",
-    ],
-  },
-  dimensionsLabel: "Bewertungsdimensionen",
-  dimensions: "Strategie · Governance · Umsetzung · Risiken · Veränderung · Technologie",
-  packages: [
-    {
-      name: "LIGHT",
-      sub: "Schnelle Standortbestimmung",
-      duration: "3-5 Tage",
-      body: "Erste strukturierte Einschätzung mit Fokus auf kritische Punkte",
-      outcome: "Überblick, zentrale Risiken, erste Empfehlungen",
-    },
-    {
-      name: "CORE",
-      sub: "Management Klarheit (empfohlen)",
-      duration: "1-2 Wochen",
-      body: "Interviews, Dokumentenreview, vollständige Bewertung",
-      outcome: "Klare Lageeinschätzung und konkrete Entscheidungsgrundlage",
-      recommended: true,
-    },
-    {
-      name: "DEEP DIVE",
-      sub: "Stabilisierung und Ausrichtung",
-      duration: "3-4 Wochen",
-      body: "Vertiefte Analyse und Workshops",
-      outcome: "Gesamtbild, klare Prioritäten und umsetzbare Roadmap",
-    },
-  ] as const,
-  secondaryCta: { href: "/projectrealitycheck" as const, label: "Mehr erfahren" },
-  /** Primär-CTA = Outlook Booking; `href` in UI aus {@link siteConfig.bookingUrlDe} */
-  primaryCtaLabel: "Unverbindlichen Termin vereinbaren",
-} as const;
-
 export const homeProcessContent = {
-  eyebrow: "Vorgehen",
-  headline: "Drei Schritte zu einer klaren Entscheidungsgrundlage.",
+  eyebrow: "Zusammenarbeit",
+  headline: "Ein klarer Auftrag. Eine verbindliche Zusammenarbeit.",
   steps: [
-    {
-      title: "Erstgespräch",
-      body: "Sie schildern die Situation. Wir stellen gezielte Fragen. Am Ende ist klar, ob eine Analyse sinnvoll ist.",
-    },
-    {
-      title: "Analyse",
-      body: "Interviews, Dokumentenreview und strukturierte Bewertung. Der Umfang richtet sich nach Situation und Paket.",
-    },
-    {
-      title: "Ergebnis",
-      body: "Sie erhalten eine klare Einschätzung, priorisierte Risiken und konkrete nächste Schritte.",
-    },
+    { title: "Ausgangslage verstehen", body: "Wir hören zu und klären, welche Aufgabe tatsächlich gelöst werden soll." },
+    { title: "Auftrag abgrenzen", body: "Sie wissen, welche Verantwortung Abexis übernimmt und wer entscheidet." },
+    { title: "Umsetzung führen", body: "Wir arbeiten mit Ihren Verantwortlichen zusammen und machen Fortschritte sichtbar." },
+    { title: "Ergebnisse nachhalten", body: "Wir überprüfen die vereinbarten Ziele und regeln die Übergabe." },
   ] as const,
-} as const;
-
-export const homeLeistungenBlock = {
-  eyebrow: "Leistungen",
-  headline: "Unterstützung in entscheidenden Situationen.",
-  intro:
-    "Der Project Reality Check ist der Einstieg. Darüber hinaus arbeiten wir in folgenden Bereichen.",
-  items: [
-    {
-      title: "Project Reality Check",
-      body: "Unabhängige Beurteilung Ihres Projekts: Risiken, Lücken und konkrete Handlungsempfehlungen in kompakter Form.",
-      href: "/projectrealitycheck",
-    },
-    {
-      title: "Digitale Transformation",
-      body: "Einführung und Weiterentwicklung von digitalen Lösungen, KI und Analytics. Fokus auf Nutzen, Integration und Umsetzung.",
-      href: "/fokusthemen/digitale-transformation",
-    },
-    {
-      title: "Risikomanagement in Projekten",
-      body: "Externe Risikobegleitung für anspruchsvolle Projekte. Laufend mit etwa 10 bis 20 Prozent Pensum oder als punktuelle unabhängige Prüfung.",
-      href: "/fokusthemen/risikomanagement",
-    },
-    {
-      title: "Unternehmensstrategie",
-      body: "Strukturierte Strategiearbeit mit klarer Priorisierung. Grundlage für Entscheidungen und Umsetzung.",
-      href: "/fokusthemen/unternehmensstrategie",
-    },
-    {
-      title: "Vertrieb und Marketing",
-      body: "Analyse und Weiterentwicklung von Marktansprache und Vertrieb. Ziel: nachvollziehbares und steuerbares Wachstum.",
-      href: "/fokusthemen/vertriebmarketing",
-    },
-    {
-      title: "Veränderungsmanagement",
-      body: "Begleitung von Transformationen auf organisatorischer und menschlicher Ebene. Fokus auf Klarheit und Akzeptanz.",
-      href: "/fokusthemen/veränderungsmanagement",
-    },
-    {
-      title: "Prozessoptimierung",
-      body: "Analyse und Verbesserung bestehender Abläufe. Reduktion von Komplexität und Steigerung der Effizienz.",
-      href: "/fokusthemen/prozessoptimierung",
-    },
-    {
-      title: "Projektmanagement",
-      body: "Führung und Stabilisierung kritischer Projekte. Klare Struktur und transparente Steuerung.",
-      href: "/fokusthemen/projektmanagement",
-    },
-    {
-      title: "PLM/PDM Beratung und Projektleitung",
-      body: "Wir begleiten die Einführung und Weiterentwicklung von PLM/PDM von der fachlichen Vorbereitung bis zur produktiven Nutzung.",
-      href: "/fokusthemen/plm-pdm",
-    },
-    {
-      title: "Executive Search (Abexis SEARCH)",
-      body: "Besetzung von Schlüsselpositionen in anspruchsvollen Situationen. Fokus auf Persönlichkeiten mit Verantwortung.",
-      href: "/executive-search",
-    },
-  ] as const,
-} as const;
-
-export const homeClarityContent = {
-  eyebrow: "Einordnung",
-  without: {
-    title: "Ohne klare Einordnung:",
-    bullets: [
-      "Risiken werden spät erkannt",
-      "Entscheidungen verzögern sich",
-      "Unterschiedliche Sichtweisen im Management",
-      "Fortschritt ist schwer einzuordnen",
-    ],
-  },
-  with: {
-    title: "Mit klarer Einordnung:",
-    bullets: [
-      "Klare Sicht auf die tatsächliche Situation",
-      "Risiken sind benannt und priorisiert",
-      "Gemeinsames Verständnis entsteht",
-      "Entscheidungen können getroffen werden",
-    ],
-  },
 } as const;
 
 export const homeClosingContent = {
@@ -238,63 +49,12 @@ export const homeClosingContent = {
 } as const;
 
 export const homeHeroContentEn = {
-  eyebrow: "Abexis Consulting",
-  titleLines: [
-    "Projects rarely fail outright",
-    "but often drift in a direction nobody intended.",
-  ] as const,
-  sub: "Abexis creates clarity when it is missing.",
-  body: "Many projects do not fail because of one single mistake. They gradually lose orientation, and that often remains unclear for too long.",
-  primaryCta: { href: "/en/projectrealitycheck" as const, label: "Request a Project Reality Check" },
+  eyebrow: "Abexis · Management consulting and delivery",
+  titleLines: ["Strengthen management.", "Deliver change."] as const,
+  sub: "When important initiatives need more experience or capacity, Abexis is at your side.",
+  body: "We advise executive teams and take responsibility for delivery.",
+  primaryCta: { href: "#leistungen" as const, label: "Explore our services" },
   secondaryCta: { href: "/en/kontakt" as const, label: "Non-binding conversation" },
-} as const;
-
-export const homeChallengeContentEn = {
-  eyebrow: "The challenge",
-  headline: "Projects keep moving, but the real situation remains unclear.",
-  intro:
-    "Meetings take place. Reports are written. And still it often remains unclear where the project really stands.",
-  situationsSubline: "Four patterns we repeatedly see in critical projects.",
-  groups: [
-    {
-      title: "Transparency is missing",
-      bullets: [
-        "Status reports show only part of reality",
-        "Problems are categorized but not resolved",
-        "Risks exist, but are hard to grasp",
-      ],
-    },
-    {
-      title: "Different perspectives",
-      lines: ["IT sees progress", "The business experiences standstill", "Steering lacks a shared picture"],
-    },
-    {
-      title: "Signals arrive too late",
-      bullets: [
-        "Budgets develop differently than planned",
-        "Timelines remain optimistic",
-        "Key people lose trust or leave the project",
-      ],
-    },
-    {
-      title: "Decisions are delayed",
-      bullets: [
-        "Critical points are not named clearly",
-        "Escalations happen late",
-        "Time is lost before it becomes visible",
-      ],
-    },
-  ] as const,
-  whatIsMissing: {
-    title: "What is missing",
-    line: "A clear, independent view of the project",
-    sub: "as the basis for sound decisions",
-  },
-  whenExternal: {
-    title: "When an external view makes sense",
-    bullets: ["When uncertainty grows", "When pressure increases", "When important decisions remain open"],
-  },
-  framing: "The greatest risk is not the mistake, but missing clarity.",
 } as const;
 
 export const homeWhoWeAreContentEn = {
@@ -315,152 +75,15 @@ export const homeWhoWeAreContentEn = {
   },
 } as const;
 
-export const homePrcContentEn = {
-  eyebrow: "Offering",
-  headline: "Clarity about the real status of your project.",
-  sub: "Within 3 days to 4 weeks, you receive a reliable assessment and concrete next steps.",
-  context:
-    "The Project Reality Check is used when uncertainty exists or decisions are pending. It creates a shared basis before risks become more deeply embedded.",
-  youGet: {
-    title: "What you receive",
-    bullets: [
-      "Executive summary for management and board",
-      "Assessment across 6 dimensions",
-      "Prioritized risks with probability",
-      "Assessment of governance and decision structures",
-      "Analysis of implementation and change readiness",
-      "Action plan for 30, 60 and 90 days",
-      "Clear recommendation: Continue, Stabilize or Reset",
-    ],
-  },
-  dimensionsLabel: "Assessment dimensions",
-  dimensions: "Strategy · Governance · Execution · Risks · Change · Technology",
-  packages: [
-    {
-      name: "LIGHT",
-      sub: "Quick status assessment",
-      duration: "3-5 days",
-      body: "First structured assessment focused on critical points",
-      outcome: "Overview, central risks, initial recommendations",
-    },
-    {
-      name: "CORE",
-      sub: "Management clarity (recommended)",
-      duration: "1-2 weeks",
-      body: "Interviews, document review and full assessment",
-      outcome: "Clear situation assessment and concrete decision basis",
-      recommended: true,
-    },
-    {
-      name: "DEEP DIVE",
-      sub: "Stabilization and alignment",
-      duration: "3-4 weeks",
-      body: "In-depth analysis and workshops",
-      outcome: "Overall picture, clear priorities and actionable roadmap",
-    },
-  ] as const,
-  secondaryCta: { href: "/en/projectrealitycheck" as const, label: "Learn more" },
-  primaryCtaLabel: "Schedule a non-binding call",
-} as const;
-
 export const homeProcessContentEn = {
-  eyebrow: "Approach",
-  headline: "Three steps to a clear decision basis.",
+  eyebrow: "Working together",
+  headline: "A clear mandate. A committed collaboration.",
   steps: [
-    {
-      title: "Initial conversation",
-      body: "You describe the situation. We ask targeted questions. At the end, it is clear whether an assessment makes sense.",
-    },
-    {
-      title: "Analysis",
-      body: "Interviews, document review and structured assessment. The scope depends on the situation and selected phase.",
-    },
-    {
-      title: "Result",
-      body: "You receive a clear assessment, prioritized risks and concrete next steps.",
-    },
+    { title: "Understand the situation", body: "We listen and clarify which task actually needs to be solved." },
+    { title: "Define the mandate", body: "You know which responsibilities Abexis takes on and who decides." },
+    { title: "Lead delivery", body: "We work with your people in charge and make progress visible." },
+    { title: "Follow through on results", body: "We review the agreed goals and organise the handover." },
   ] as const,
-} as const;
-
-export const homeLeistungenBlockEn = {
-  eyebrow: "Services",
-  headline: "Support in situations where decisions matter.",
-  intro:
-    "The Project Reality Check is the starting point. Beyond that, we work in the following areas.",
-  items: [
-    {
-      title: "Project Reality Check",
-      body: "Independent assessment of your project: risks, gaps and concrete recommendations in a compact format.",
-      href: "/en/projectrealitycheck",
-    },
-    {
-      title: "Digital Transformation",
-      body: "Introduction and development of digital solutions, AI and analytics. Focused on value, integration and implementation.",
-      href: "/en/fokusthemen/digitale-transformation",
-    },
-    {
-      title: "Project risk management",
-      body: "External risk support for demanding projects. Ongoing at roughly 10 to 20 percent capacity, or as a focused independent review.",
-      href: "/en/fokusthemen/risikomanagement",
-    },
-    {
-      title: "Corporate Strategy",
-      body: "Structured strategy work with clear prioritization. A basis for decisions and implementation.",
-      href: "/en/fokusthemen/unternehmensstrategie",
-    },
-    {
-      title: "Sales and Marketing",
-      body: "Analysis and development of market approach and sales. Goal: understandable and manageable growth.",
-      href: "/en/fokusthemen/vertriebmarketing",
-    },
-    {
-      title: "Change Management",
-      body: "Support for transformations at organizational and human level. Focused on clarity and acceptance.",
-      href: "/en/fokusthemen/veränderungsmanagement",
-    },
-    {
-      title: "Process Optimization",
-      body: "Analysis and improvement of existing workflows. Reducing complexity and increasing efficiency.",
-      href: "/en/fokusthemen/prozessoptimierung",
-    },
-    {
-      title: "Project Management",
-      body: "Leadership and stabilization of critical projects. Clear structure and transparent steering.",
-      href: "/en/fokusthemen/projektmanagement",
-    },
-    {
-      title: "PLM/PDM Consulting and Project Leadership",
-      body: "We support the implementation and further development of PLM/PDM, from business preparation through to productive use.",
-      href: "/en/fokusthemen/plm-pdm",
-    },
-    {
-      title: "Executive Search (Abexis SEARCH)",
-      body: "Filling key positions in demanding situations. Focused on personalities who take responsibility.",
-      href: "/en/executive-search",
-    },
-  ] as const,
-} as const;
-
-export const homeClarityContentEn = {
-  eyebrow: "Perspective",
-  without: {
-    title: "Without clear classification:",
-    bullets: [
-      "Risks are recognized late",
-      "Decisions are delayed",
-      "Different views emerge in management",
-      "Progress is hard to judge",
-    ],
-  },
-  with: {
-    title: "With clear classification:",
-    bullets: [
-      "Clear view of the real situation",
-      "Risks are named and prioritized",
-      "A shared understanding emerges",
-      "Decisions can be made",
-    ],
-  },
 } as const;
 
 export const homeClosingContentEn = {

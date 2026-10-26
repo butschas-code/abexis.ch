@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { homeHeroContent } from "@/data/home-page-content";
 
-/** Same primary CTA as the home hero : used on Leistungen and Fokusthemen heroes. */
+/** Primary hero CTA on the Fokusthemen pages (the home hero no longer leads with the Reality Check). */
 export function HeroProjectRealityCheckCta({
-  href = homeHeroContent.primaryCta.href,
-  label = homeHeroContent.primaryCta.label,
+  href = "/projectrealitycheck",
+  label = "Project Reality Check anfragen",
 }: {
   href?: string;
   label?: string;

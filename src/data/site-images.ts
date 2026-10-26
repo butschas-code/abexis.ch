@@ -24,10 +24,17 @@ export const projektmanagementHeroImage = "/images/focus/projektmanagement.webp"
 /** PLM/PDM consulting hero supplied by the client. */
 export const plmPdmHeroImage = "/images/focus/plm-pdm.webp";
 
+/**
+ * Client-supplied teaser artwork with headline text baked in, so use as card images only
+ * (never behind a hero headline).
+ */
+export const vmoTeaserImage = "/images/focus/virtual-management-office.webp";
+export const projectRealityCheckTeaserImage = "/images/focus/project-reality-check.webp";
+
 /** Kachel-Bilder der sechs Fokusthemen, Reihenfolge wie auf der alten Startseite */
 export const serviceCardImages = {
   projectfitcheck: resolvePublicImageUrl("https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Feditorial-insights.jpg?alt=media"),
-  projectrealitycheck: resolvePublicImageUrl("https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fsite%2Feditorial-insights.jpg?alt=media"),
+  projectrealitycheck: projectRealityCheckTeaserImage,
   "executive-search": executiveSearchHeroImage,
   "digitale-transformation": HOME[2],
   unternehmensstrategie: HOME[3],
@@ -36,6 +43,7 @@ export const serviceCardImages = {
   prozessoptimierung: HOME[6],
   projektmanagement: projektmanagementHeroImage,
   "plm-pdm": plmPdmHeroImage,
+  "virtual-management-office": vmoTeaserImage,
   /** Hand-drawn hero illustration — `public/images/focus/risikomanagement.webp` */
   risikomanagement: "/images/focus/risikomanagement.webp",
 } as const;
@@ -58,6 +66,7 @@ export const fokusPageHeroImages = {
   prozessoptimierung: (scraped["https://www.abexis.ch/fokusthemen/prozessoptimierung"] as string[])[1],
   projektmanagement: projektmanagementHeroImage,
   "plm-pdm": plmPdmHeroImage,
+  "virtual-management-office": vmoTeaserImage,
   risikomanagement: "/images/focus/risikomanagement.webp",
 } as const;
 

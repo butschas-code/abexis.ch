@@ -1,20 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { HomeBlogTeasers } from "@/components/home/HomeBlogTeasers";
-import { HomeChallengeSection } from "@/components/home/HomeChallengeSection";
-import { HomeClaritySection } from "@/components/home/HomeClaritySection";
 import { HomeFinalCtaSection } from "@/components/home/HomeFinalCtaSection";
 import { HomeHero } from "@/components/home/HomeHero";
-import { HomeLeistungenGridSection } from "@/components/home/HomeLeistungenGridSection";
-import { HomePrcSection } from "@/components/home/HomePrcSection";
 import { HomeProcessSection } from "@/components/home/HomeProcessSection";
 import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { HomeWhoWeAreSection } from "@/components/home/HomeWhoWeAreSection";
-import { WelcomeSection } from "@/components/home/WelcomeSection";
 import { PartnershipsMarquee } from "@/components/home/PartnershipsMarquee";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { FeaturedOffersSection } from "@/components/leistungen/FeaturedOffersSection";
+import { ServiceGroupsSection } from "@/components/leistungen/ServiceGroupsSection";
 import { MotionSection } from "@/components/motion/MotionSection";
-import { ProjectSelfTest } from "@/components/project-reality-check/ProjectSelfTest";
 import { HeroHeadlineBrandAccent } from "@/components/site/HeroHeadlineBrandAccent";
 import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
 import { homeHeroContent } from "@/data/home-page-content";
@@ -28,9 +24,9 @@ import { localizedAlternates } from "@/lib/seo/localized-metadata";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: { absolute: "Abexis : Klarheit, wenn sie fehlt" },
+  title: { absolute: "Abexis : Management stärken. Veränderung umsetzen." },
   description:
-    "Abexis schafft Klarheit, wenn Projekte die Orientierung verlieren : mit Project Reality Check, Beratung und Executive Search. Schweiz.",
+    "Managementberatung und Umsetzung für Geschäftsleitungen in der Schweiz: Strategie, Virtual Management Office, Transformation, Projekte, Veränderung und Executive Search.",
   alternates: localizedAlternates("/", "/en/home", "de"),
 };
 export default function HomePage() {
@@ -47,13 +43,13 @@ export default function HomePage() {
             <HeroHeadlineBrandAccent>{h.titleLines[1]}</HeroHeadlineBrandAccent>
           </h1>
           <p className="hero-home-body-shadow mt-5 text-[17px] font-medium leading-relaxed text-white/92 sm:mt-6 sm:text-[20px] md:text-[22px]">
-            Abexis schafft Klarheit, wenn sie fehlt.
+            {h.sub}
           </p>
           <p className="hero-home-body-shadow mt-4 text-[15px] font-normal leading-[1.65] text-white/84 sm:mt-5 sm:text-[17px] sm:leading-relaxed md:text-[19px]">
             {h.body}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-            <HeroProjectRealityCheckCta />
+            <HeroProjectRealityCheckCta href={h.primaryCta.href} label={h.primaryCta.label} />
             <Link
               href={h.secondaryCta.href}
               className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-full border border-white/35 bg-white/10 px-5 text-[16px] font-medium text-white backdrop-blur-sm transition-all duration-200 ease-out hover:border-white/60 hover:bg-white/22 hover:shadow-lg hover:shadow-black/15 hover:-translate-y-0.5 active:translate-y-0 sm:w-auto sm:min-h-[48px] sm:px-8 sm:text-[17px]"
@@ -64,30 +60,21 @@ export default function HomePage() {
         </div>
       </HomeHero>
 
-      <WelcomeSection />
+      <ServiceGroupsSection id="leistungen" />
 
-      <HomeChallengeSection />
-
-      <HomePrcSection />
+      <FeaturedOffersSection />
 
       <HomeProcessSection />
 
       <HomeWhoWeAreSection />
 
-      <ProjectSelfTest />
-
-      <HomeLeistungenGridSection />
-
       <HomeBlogTeasers />
 
       <HomeVacancyTeasers />
 
-
       <MotionSection>
         <TestimonialsSection />
       </MotionSection>
-
-      <HomeClaritySection />
 
       <MotionSection>
         <PartnershipsMarquee />

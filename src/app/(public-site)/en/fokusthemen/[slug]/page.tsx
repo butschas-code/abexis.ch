@@ -2,8 +2,10 @@ import { notFound } from "next/navigation";
 import { FokusEnglishPage } from "@/components/public-site/FokusEnglishPage";
 import { FokusRisikomanagement } from "@/components/public-site/FokusRisikomanagement";
 import { FokusPlmPdm } from "@/components/public-site/FokusPlmPdm";
+import { FokusVirtualManagementOffice } from "@/components/public-site/FokusVirtualManagementOffice";
 import { getRisikomanagementContent } from "@/data/risikomanagement-content";
 import { getPlmPdmContent } from "@/data/plm-pdm-content";
+import { getVmoContent } from "@/data/vmo-content";
 import { englishFocusPages, getEnglishFocusPage } from "@/data/english-focus-pages";
 import { fokusPageHeroImages } from "@/data/site-images";
 import { ServiceGuidePromo } from "@/components/public-site/ServiceGuidePage";
@@ -11,7 +13,7 @@ import { ServiceGuidePromo } from "@/components/public-site/ServiceGuidePage";
 type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return [...englishFocusPages.map((page) => ({ slug: page.slug })), { slug: "risikomanagement" }, { slug: "plm-pdm" }];
+  return [...englishFocusPages.map((page) => ({ slug: page.slug })), { slug: "risikomanagement" }, { slug: "plm-pdm" }, { slug: "virtual-management-office" }];
 }
 
 export async function generateMetadata({ params }: Props) {
@@ -52,6 +54,24 @@ export async function generateMetadata({ params }: Props) {
       },
     };
   }
+  if (slug === "virtual-management-office") {
+    const content = getVmoContent("en");
+    const canonical = "/en/fokusthemen/virtual-management-office";
+    const german = "/fokusthemen/virtual-management-office";
+    return {
+      title: content.meta.seoTitle,
+      description: content.meta.excerpt,
+      alternates: { canonical, languages: { "de-CH": german, "en-CH": canonical, "x-default": german } },
+      openGraph: {
+        title: `${content.meta.seoTitle} | Abexis`,
+        description: content.meta.excerpt,
+        url: canonical,
+        locale: "en_CH",
+        alternateLocale: ["de_CH"],
+        images: [{ url: fokusPageHeroImages["virtual-management-office"] }],
+      },
+    };
+  }
   const page = getEnglishFocusPage(slug);
   if (!page) return {};
 
@@ -74,6 +94,7 @@ export default async function EnglishTopicPage({ params }: Props) {
   const { slug } = await params;
   if (slug === "risikomanagement") return <><FokusRisikomanagement locale="en" /><ServiceGuidePromo parent={slug} locale="en" /></>;
   if (slug === "plm-pdm") return <FokusPlmPdm locale="en" />;
+  if (slug === "virtual-management-office") return <FokusVirtualManagementOffice locale="en" />;
 
   const page = getEnglishFocusPage(slug);
   if (!page) notFound();
