@@ -1,11 +1,11 @@
 import { PublicImage as Image } from "@/components/site/PublicImage";
 import Link from "next/link";
 import { getServiceGroupsContent, type ServiceGroupsLocale } from "@/data/service-groups";
-import { serviceCardImages } from "@/data/site-images";
+import { localizedServiceCardImage } from "@/data/site-images";
 
 /**
  * Leistungen overview: image cards arranged in the client's four service groups.
- * Card images come from `serviceCardImages`; VMO and Project Reality Check use the client's artwork.
+ * Card images come from `serviceCardImages`; VMO and Project Reality Check use the client's artwork (EN variants on /en).
  */
 export function LeistungenBentoGrid({
   locale = "de",
@@ -36,7 +36,7 @@ export function LeistungenBentoGrid({
               >
                 <div className="relative h-48 w-full shrink-0 overflow-hidden bg-[#ececf0] xl:h-[12.5rem]">
                   <Image
-                    src={serviceCardImages[item.imageKey]}
+                    src={localizedServiceCardImage(item.imageKey, locale)}
                     alt=""
                     fill
                     priority={gi === 0 && ii === 0}

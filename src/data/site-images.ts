@@ -30,6 +30,9 @@ export const plmPdmHeroImage = "/images/focus/plm-pdm.webp";
  */
 export const vmoTeaserImage = "/images/focus/virtual-management-office.webp";
 export const projectRealityCheckTeaserImage = "/images/focus/project-reality-check.webp";
+/** English recreations of the two client images (same scene, translated text). */
+export const vmoTeaserImageEn = "/images/focus/virtual-management-office-en.webp";
+export const projectRealityCheckTeaserImageEn = "/images/focus/project-reality-check-en.webp";
 
 /** Kachel-Bilder der sechs Fokusthemen, Reihenfolge wie auf der alten Startseite */
 export const serviceCardImages = {
@@ -47,6 +50,16 @@ export const serviceCardImages = {
   /** Hand-drawn hero illustration — `public/images/focus/risikomanagement.webp` */
   risikomanagement: "/images/focus/risikomanagement.webp",
 } as const;
+
+/** Images with baked-in German text get an English variant on `/en` pages. */
+const serviceCardImagesEn: Partial<Record<keyof typeof serviceCardImages, string>> = {
+  "virtual-management-office": vmoTeaserImageEn,
+  projectrealitycheck: projectRealityCheckTeaserImageEn,
+};
+
+export function localizedServiceCardImage(key: keyof typeof serviceCardImages, locale: "de" | "en") {
+  return (locale === "en" ? serviceCardImagesEn[key] : undefined) ?? serviceCardImages[key];
+}
 
 /** Breites Teaser-Bild unter der Blog-Liste (nicht HOME[8] / 68671b2e : dort früheres Blog-Teaser) */
 export const homeBlogTeaserImage = HOME[29];

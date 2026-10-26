@@ -7,7 +7,7 @@ import { getRisikomanagementContent } from "@/data/risikomanagement-content";
 import { getPlmPdmContent } from "@/data/plm-pdm-content";
 import { getVmoContent } from "@/data/vmo-content";
 import { englishFocusPages, getEnglishFocusPage } from "@/data/english-focus-pages";
-import { fokusPageHeroImages } from "@/data/site-images";
+import { fokusPageHeroImages, vmoTeaserImageEn } from "@/data/site-images";
 import { ServiceGuidePromo } from "@/components/public-site/ServiceGuidePage";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -68,7 +68,7 @@ export async function generateMetadata({ params }: Props) {
         url: canonical,
         locale: "en_CH",
         alternateLocale: ["de_CH"],
-        images: [{ url: fokusPageHeroImages["virtual-management-office"] }],
+        images: [{ url: vmoTeaserImageEn }],
       },
     };
   }

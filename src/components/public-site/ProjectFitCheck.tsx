@@ -5,7 +5,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { HeroHeadlineBrandAccent } from "@/components/site/HeroHeadlineBrandAccent";
 import { PublicImage as Image } from "@/components/site/PublicImage";
-import { homeHeroImage, projectRealityCheckTeaserImage } from "@/data/site-images";
+import { homeHeroImage, projectRealityCheckTeaserImage, projectRealityCheckTeaserImageEn } from "@/data/site-images";
 import { siteConfig } from "@/data/pages";
 
 /** Same ambient layer as Leistungen / interior long-form pages (`apple-section-mesh` sits on the root). */
@@ -759,7 +759,7 @@ export function ProjectFitCheck({ locale = "de", afterHero }: { locale?: "de" | 
             <figure className="mb-5 overflow-hidden rounded-[24px] bg-[#151d52] shadow-[0_24px_60px_rgba(38,51,124,0.14)] ring-1 ring-black/[0.06] sm:mb-6">
               <div className="relative aspect-square w-full">
                 <Image
-                  src={projectRealityCheckTeaserImage}
+                  src={isEnglish ? projectRealityCheckTeaserImageEn : projectRealityCheckTeaserImage}
                   alt={s.dimensionsImageAlt}
                   fill
                   className="object-cover"
