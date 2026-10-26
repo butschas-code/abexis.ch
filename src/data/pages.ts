@@ -152,26 +152,6 @@ export const homeLeadParagraph =
   "Als gefragte Managementberatung helfen wir Ihrem Unternehmen strategisch voranzukommen, Wachstumspotenziale konsequent zu nutzen, Umsatz- und Ertragsziele zu erreichen, wirksame Strukturen und Prozesse zu etablieren und Ihr Unternehmen noch fitter für die Zukunft zu gestalten.";
 
 /** Begrüssung unter dem Hero (ersetzt den früheren «Impulse»-Block mit Blog-Titeln) */
-export const homeWelcomeSection = {
-  eyebrow: "Willkommen",
-  title: "Schön, dass Sie zu uns finden, ",
-  titleAccent: "herzlich willkommen.",
-  paragraphs: [
-    "Bei Abexis begleiten wir Unternehmen und Führungsteams dort, wo es zählt: Strategie, Digitalisierung, Veränderung, Vertrieb und Projekte, immer mit dem Fokus auf greifbare Resultate und eine Zusammenarbeit auf Augenhöhe.",
-    "Schauen Sie sich unsere Schwerpunkte an, lesen Sie einen Beitrag im Blog oder nehmen Sie Kontakt auf, wenn Sie den Austausch suchen. Wir freuen uns, von Ihnen zu hören.",
-  ],
-} as const;
-
-export const homeWelcomeSectionEn = {
-  eyebrow: "Welcome",
-  title: "Good to have you here, ",
-  titleAccent: "welcome to Abexis.",
-  paragraphs: [
-    "At Abexis, we support companies and leadership teams where it counts: strategy, digitalization, change, sales and projects, always with a focus on tangible results and collaboration at eye level.",
-    "Explore our areas of focus, read an insight from the blog or contact us if you would like to start a conversation. We look forward to hearing from you.",
-  ],
-} as const;
-
 export const homeDifferentiators = [
   {
     label: "Strategie vor Technologie",

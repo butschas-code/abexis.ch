@@ -44,21 +44,9 @@ export default async function EnglishBlogIndexPage() {
 
   return (
     <InteriorPageLayout
-      eyebrow="Insights"
-      title={
-        <span className="font-serif font-medium tracking-[-0.03em]">
-          Perspectives<span className="text-white/70">.</span>
-        </span>
-      }
+      eyebrow="Abexis Blog"
+      title="Insights"
       heroPriority
-      description={
-        <p className="max-w-xl text-[17px] leading-relaxed text-white/78">
-          <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50">abexis.ch</span>
-          <span className="mt-3 block">
-            Strategy, transformation and leadership in compact form. Blog articles remain available in their original language.
-          </span>
-        </p>
-      }
     >
       <SchemaMarkup type="Collection" path="/en/blog" name="Insights" description="Perspectives on strategy, transformation and leadership." breadcrumbs={[{ name: "Home", url: "/en/home" }, { name: "Insights", url: "/en/blog" }]} />
       {posts.length === 0 ? (

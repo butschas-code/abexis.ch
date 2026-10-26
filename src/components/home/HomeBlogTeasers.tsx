@@ -1,5 +1,5 @@
-import { PublicImage as Image } from "@/components/site/PublicImage";
 import Link from "next/link";
+import { BlogThumbnail } from "@/components/public-site/insights/BlogThumbnail";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { getAllBlogPosts } from "@/data/pages";
 import { getBlogListCoverByIndex } from "@/data/site-images";
@@ -95,16 +95,7 @@ export async function HomeBlogTeasers({
               href={`${itemBaseHref}/${p.slug}`}
               className="group overflow-hidden rounded-[22px] bg-white shadow-[var(--apple-shadow)] ring-1 ring-black/[0.04] transition hover:-translate-y-0.5 hover:shadow-[var(--apple-shadow-lg)] sm:rounded-[28px] active:scale-[0.99]"
             >
-              <div className="relative isolate aspect-[16/9] w-full overflow-hidden bg-[#f5f5f7]">
-                <Image
-                  src={p.coverSrc}
-                  alt=""
-                  fill
-                  className="object-cover saturate-[0.78] contrast-[1.08] transition duration-700 group-hover:scale-[1.03]"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <div className="abexis-tint-overlay" />
-              </div>
+              <BlogThumbnail src={p.coverSrc} sizes="(max-width: 768px) 100vw, 50vw" />
               <div className="px-5 pb-6 pt-4 sm:px-6 sm:pb-7 sm:pt-5">
                 <time className="text-[11px] font-medium uppercase tracking-widest text-[#86868b]">
                   {p.publishedISO ? new Date(p.publishedISO).toLocaleDateString(dateLocale) : ""}

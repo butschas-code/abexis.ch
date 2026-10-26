@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ArticleBody } from "@/components/content/ArticleBody";
 import { MotionSection } from "@/components/motion/MotionSection";
-import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
+import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
+import { PublicImage as Image } from "@/components/site/PublicImage";
 import { resolvePostHeroImageUrl } from "@/lib/cms/resolve-post-hero-image";
 import type { PublishedPostPageData, PublishedPostWithId } from "@/public-site/cms";
 import { RelatedInsights } from "./RelatedInsights";
@@ -36,45 +37,13 @@ export function CmsBlogPostView({ data, related, backHref = "/blog", backLabel =
   const hasTags = tagList.length > 0;
   const hasCategories = categories.length > 0;
 
+  // Post images are LinkedIn thumbnails with text baked in, so they are not used as a full-bleed
+  // hero (title would repeat over it). Shown in full inside the article instead.
+  const ownImage = post.heroImageUrl?.trim() ? heroImage : null;
+
   return (
-    <InteriorPageLayout
-      eyebrow="Insights"
-      title={<span className="font-serif font-medium tracking-[-0.03em] text-balance">{post.title}</span>}
-      maxWidth="1068"
-      contentMaxWidth="3xl"
-      heroImage={heroImage}
-      heroPriority
-      wrapContentInMotion={false}
-      contentClassName="pt-8 md:pt-10"
-      description={
-        <div className="space-y-4">
-          {dateLong ? (
-            <time className="block text-[12px] font-medium uppercase tracking-[0.18em] text-white/70" dateTime={post.publishedAt ?? undefined}>
-              {dateLong}
-            </time>
-          ) : null}
-          {(authorName || hasCategories) && (
-            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[15px] text-white/85">
-              {authorName ? <span>{authorName}</span> : null}
-              {authorName && hasCategories ? <span className="text-white/40">·</span> : null}
-              {hasCategories ? (
-                <span className="inline-flex flex-wrap gap-2">
-                  {categories.map((c) => (
-                    <Link
-                      key={c.id}
-                      href={`/blog?category=${encodeURIComponent(c.id)}`}
-                      className="rounded-full border border-white/25 bg-white/10 px-2.5 py-0.5 text-[13px] font-medium text-white/95 backdrop-blur-sm transition hover:border-white/40 hover:bg-white/15"
-                    >
-                      {c.name}
-                    </Link>
-                  ))}
-                </span>
-              ) : null}
-            </p>
-          )}
-        </div>
-      }
-    >
+    <InteriorPageRoot>
+      <article className="mx-auto max-w-3xl px-4 pb-16 pt-28 sm:px-6 sm:pb-20 md:pb-28 md:pt-36">
       <SchemaMarkup
         type="Article"
         path={`/blog/${post.slug}`}
@@ -100,10 +69,41 @@ export function CmsBlogPostView({ data, related, backHref = "/blog", backLabel =
         </Link>
       </nav>
 
+      <header className="mt-8">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">Insights</p>
+        <h1 className="mt-3 text-[clamp(1.875rem,3.5vw+1rem,3rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1d1d1f] text-balance">
+          {post.title}
+        </h1>
+        {dateLong || authorName || hasCategories ? (
+          <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-[14px] text-[#6e6e73]">
+            {dateLong ? <time dateTime={post.publishedAt ?? undefined}>{dateLong}</time> : null}
+            {dateLong && authorName ? <span className="text-black/20">·</span> : null}
+            {authorName ? <span>{authorName}</span> : null}
+            {hasCategories ? (
+              <span className="inline-flex flex-wrap gap-2">
+                {categories.map((c) => (
+                  <Link
+                    key={c.id}
+                    href={`/blog?category=${encodeURIComponent(c.id)}`}
+                    className="rounded-full border border-black/[0.08] px-2.5 py-0.5 text-[13px] font-medium text-[var(--brand-900)] transition hover:border-[var(--brand-900)]/30"
+                  >
+                    {c.name}
+                  </Link>
+                ))}
+              </span>
+            ) : null}
+          </div>
+        ) : null}
+      </header>
+
       {post.excerpt?.trim() ? (
-        <p className="mt-8 max-w-3xl font-serif text-[1.35rem] leading-[1.45] tracking-[-0.015em] text-[#3d3d41] md:text-[1.45rem]">
-          {post.excerpt.trim()}
-        </p>
+        <p className="mt-8 text-[19px] leading-relaxed text-[#3d3d41] md:text-[21px]">{post.excerpt.trim()}</p>
+      ) : null}
+
+      {ownImage ? (
+        <figure className="mt-10 overflow-hidden rounded-[20px] bg-[#f5f6fa] ring-1 ring-black/[0.06]">
+          <Image src={ownImage} alt="" width={1600} height={1000} priority className="h-auto w-full" sizes="(min-width: 768px) 720px, 100vw" />
+        </figure>
       ) : null}
 
       <MotionSection className={post.excerpt?.trim() ? "mt-10 border-t border-black/[0.06] pt-10" : "mt-8 border-t border-black/[0.06] pt-10"}>
@@ -140,6 +140,7 @@ export function CmsBlogPostView({ data, related, backHref = "/blog", backLabel =
       )}
 
       <RelatedInsights posts={related} />
-    </InteriorPageLayout>
+      </article>
+    </InteriorPageRoot>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { HomeBlogTeasers } from "@/components/home/HomeBlogTeasers";
+import { HomeClaritySection } from "@/components/home/HomeClaritySection";
 import { HomeFinalCtaSection } from "@/components/home/HomeFinalCtaSection";
 import { HomeHero } from "@/components/home/HomeHero";
 import { HomeProcessSection } from "@/components/home/HomeProcessSection";
@@ -8,9 +9,10 @@ import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { HomeWhoWeAreSection } from "@/components/home/HomeWhoWeAreSection";
 import { PartnershipsMarquee } from "@/components/home/PartnershipsMarquee";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { WelcomeSection } from "@/components/home/WelcomeSection";
+import { HomeIntroStrip } from "@/components/home/HomeIntroStrip";
 import { ServiceGroupsSection } from "@/components/leistungen/ServiceGroupsSection";
 import { MotionSection } from "@/components/motion/MotionSection";
+import { ProjectSelfTest } from "@/components/project-reality-check/ProjectSelfTest";
 import { HeroHeadlineBrandAccent } from "@/components/site/HeroHeadlineBrandAccent";
 import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
 import { homeHeroContent } from "@/data/home-page-content";
@@ -60,13 +62,15 @@ export default function HomePage() {
         </div>
       </HomeHero>
 
-      <WelcomeSection />
+      <HomeIntroStrip />
 
       <ServiceGroupsSection id="leistungen" />
 
       <HomeProcessSection />
 
       <HomeWhoWeAreSection />
+
+      <ProjectSelfTest />
 
       <HomeBlogTeasers />
 
@@ -75,6 +79,8 @@ export default function HomePage() {
       <MotionSection>
         <TestimonialsSection />
       </MotionSection>
+
+      <HomeClaritySection />
 
       <MotionSection>
         <PartnershipsMarquee />

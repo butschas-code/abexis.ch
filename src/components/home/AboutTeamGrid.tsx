@@ -3,6 +3,7 @@
 import { PublicImage as Image } from "@/components/site/PublicImage";
 import Link from "next/link";
 import { teamOrder, teamProfiles } from "@/data/pages";
+import { teamPortraitThumb } from "@/data/site-images";
 
 export function AboutTeamGrid({ profileLabel = "Zum Profil" }: { profileLabel?: string }) {
   return (
@@ -19,10 +20,9 @@ export function AboutTeamGrid({ profileLabel = "Zum Profil" }: { profileLabel?: 
             >
               <div className="relative aspect-[5/4] w-full min-w-0 overflow-hidden bg-[#f5f5f7] min-[420px]:aspect-[4/5]">
                 <Image
-                  src={p.image}
+                  src={teamPortraitThumb(slug)}
                   alt=""
                   fill
-                  quality={95}
                   sizes="(min-width: 1280px) 400px, (min-width: 1024px) 32vw, (min-width: 640px) 33vw, (min-width: 420px) 50vw, 100vw"
                   className="h-full w-full object-cover object-center"
                   priority={false}

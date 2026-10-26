@@ -44,21 +44,9 @@ export default async function BlogIndexPage() {
 
   return (
     <InteriorPageLayout
-      eyebrow="Insights"
-      title={
-        <span className="font-serif font-medium tracking-[-0.03em]">
-          Perspektiven<span className="text-white/70">.</span>
-        </span>
-      }
+      eyebrow="Abexis Blog"
+      title="Insights"
       heroPriority
-      description={
-        <p className="max-w-xl text-[17px] leading-relaxed text-white/78">
-          <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50">abexis.ch</span>
-          <span className="mt-3 block">
-            Strategie, Transformation und Führung : kompakt aufbereitet. Hier finden Sie alle veröffentlichten Beiträge.
-          </span>
-        </p>
-      }
     >
       <SchemaMarkup type="Collection" path="/blog" name="Insights" description="Perspektiven zu Strategie, Transformation und Führung." breadcrumbs={[{ name: "Startseite", url: "/" }, { name: "Insights", url: "/blog" }]} />
       {posts.length === 0 ? (

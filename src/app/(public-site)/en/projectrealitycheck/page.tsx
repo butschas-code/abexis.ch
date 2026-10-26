@@ -1,5 +1,6 @@
 import { ProjectFitCheck } from "@/components/public-site/ProjectFitCheck";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
+import { ProjectSelfTest } from "@/components/project-reality-check/ProjectSelfTest";
 import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
 export const metadata = {
@@ -21,7 +22,7 @@ export default function EnglishProjectRealityCheckPage() {
           { name: "Project Reality Check", url: "/en/projectrealitycheck" },
         ]}
       />
-      <ProjectFitCheck locale="en" />
+      <ProjectFitCheck locale="en" afterHero={<ProjectSelfTest locale="en" id="project-self-test" />} />
     </>
   );
 }

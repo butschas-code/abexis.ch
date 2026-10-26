@@ -5,109 +5,126 @@ import { useMemo, useRef, useState } from "react";
 import { PublicImage as Image } from "@/components/site/PublicImage";
 import { danielSengstagImages } from "@/data/daniel-sengstag";
 
-const QUESTIONS = [
-  {
-    dim: "Zielklarheit & Scope",
-    text: "Ziele, Umfang und Erfolgskriterien des Vorhabens sind klar definiert und alle zentralen Stakeholder verstehen darunter dasselbe.",
-  },
-  {
-    dim: "Sponsorship & Governance",
-    text: "Das Vorhaben hat einen aktiven Sponsor und ein funktionierendes Steuerungsgremium, das Entscheide zeitnah trifft.",
-  },
-  {
-    dim: "Status-Transparenz",
-    text: "Ich vertraue der Statusberichterstattung. Wenn ein Bericht grün zeigt, ist es auch wirklich grün.",
-  },
-  {
-    dim: "Planungsrealismus",
-    text: "Der Termin- und Kostenplan beruht auf einer fundierten Schätzung, nicht auf einem Wunschtermin.",
-  },
-  {
-    dim: "Ressourcen & Team",
-    text: "Die richtigen Personen sind mit ausreichend Kapazität im Projekt. Schlüsselrollen sind besetzt und nicht überlastet.",
-  },
-  {
-    dim: "Risikomanagement",
-    text: "Die wichtigsten Risiken sind bekannt, haben einen Verantwortlichen und werden aktiv gesteuert, nicht nur in einer Liste verwaltet.",
-  },
-  {
-    dim: "Termin & Budget",
-    text: "Das Vorhaben liegt im Plan, ohne wiederholte Termin- oder Budgetverschiebungen.",
-  },
-  {
-    dim: "Entscheidungstempo",
-    text: "Notwendige Entscheide werden schnell getroffen. Das Projekt wartet selten auf Beschlüsse.",
-  },
-  {
-    dim: "Anforderungen & Änderungen",
-    text: "Anforderungen sind stabil und Änderungen werden kontrolliert bewertet, ohne schleichenden Scope-Zuwachs.",
-  },
-  {
-    dim: "Akzeptanz & Change",
-    text: "Die betroffene Organisation ist eingebunden und auf die Veränderung vorbereitet. Die Akzeptanz ist sichergestellt.",
-  },
-  {
-    dim: "Abhängigkeiten & Lieferanten",
-    text: "Abhängigkeiten zu anderen Projekten, Lieferanten und Systemen sind transparent und unter Kontrolle.",
-  },
-  {
-    dim: "Liefer-Zuversicht",
-    text: "Wenn ich ehrlich bin, bin ich zuversichtlich, dass das Vorhaben in Zeit, Budget und Qualität liefert.",
-  },
-] as const;
+type SelfTestLocale = "de" | "en";
 
-const OPTIONS = [
-  { label: "Trifft voll zu", value: 3 },
-  { label: "Trifft eher zu", value: 2 },
-  { label: "Trifft eher nicht zu", value: 1 },
-  { label: "Trifft nicht zu", value: 0 },
-] as const;
+const COPY = {
+  de: {
+    questions: [
+      { dim: "Zielklarheit & Scope", text: "Ziele, Umfang und Erfolgskriterien des Vorhabens sind klar definiert und alle zentralen Stakeholder verstehen darunter dasselbe." },
+      { dim: "Sponsorship & Governance", text: "Das Vorhaben hat einen aktiven Sponsor und ein funktionierendes Steuerungsgremium, das Entscheide zeitnah trifft." },
+      { dim: "Status-Transparenz", text: "Ich vertraue der Statusberichterstattung. Wenn ein Bericht grün zeigt, ist es auch wirklich grün." },
+      { dim: "Planungsrealismus", text: "Der Termin- und Kostenplan beruht auf einer fundierten Schätzung, nicht auf einem Wunschtermin." },
+      { dim: "Ressourcen & Team", text: "Die richtigen Personen sind mit ausreichend Kapazität im Projekt. Schlüsselrollen sind besetzt und nicht überlastet." },
+      { dim: "Risikomanagement", text: "Die wichtigsten Risiken sind bekannt, haben einen Verantwortlichen und werden aktiv gesteuert, nicht nur in einer Liste verwaltet." },
+      { dim: "Termin & Budget", text: "Das Vorhaben liegt im Plan, ohne wiederholte Termin- oder Budgetverschiebungen." },
+      { dim: "Entscheidungstempo", text: "Notwendige Entscheide werden schnell getroffen. Das Projekt wartet selten auf Beschlüsse." },
+      { dim: "Anforderungen & Änderungen", text: "Anforderungen sind stabil und Änderungen werden kontrolliert bewertet, ohne schleichenden Scope-Zuwachs." },
+      { dim: "Akzeptanz & Change", text: "Die betroffene Organisation ist eingebunden und auf die Veränderung vorbereitet. Die Akzeptanz ist sichergestellt." },
+      { dim: "Abhängigkeiten & Lieferanten", text: "Abhängigkeiten zu anderen Projekten, Lieferanten und Systemen sind transparent und unter Kontrolle." },
+      { dim: "Liefer-Zuversicht", text: "Wenn ich ehrlich bin, bin ich zuversichtlich, dass das Vorhaben in Zeit, Budget und Qualität liefert." },
+    ],
+    options: ["Trifft voll zu", "Trifft eher zu", "Trifft eher nicht zu", "Trifft nicht zu"],
+    results: {
+      green: { word: "Grün - auf Kurs", head: "Ihr Vorhaben steht auf solider Grundlage.", para: "Die Kernfaktoren stimmen. Halten Sie die Disziplin und schärfen Sie die wenigen offenen Punkte gezielt nach, damit aus einem guten Stand ein sicheres Ergebnis wird." },
+      yellow: { word: "Gelb - wachsam sein", head: "Es zeigen sich erste Warnsignale.", para: "Einzelne Bereiche sind verwundbar. Jetzt ist der richtige Zeitpunkt für eine unabhängige Standortbestimmung, bevor aus Risiken echte Probleme werden und der Handlungsspielraum schrumpft." },
+      red: { word: "Rot - Handlungsbedarf", head: "Mehrere kritische Schwachstellen gefährden das Ergebnis.", para: "Die Signale sprechen für ein Vorhaben, das ohne Gegensteuern aus dem Ruder läuft. Eine unabhängige, schonungslose Standortbestimmung schafft jetzt Klarheit und die Basis für den Kurswechsel." },
+    },
+    eyebrow: "Selbsttest · 12 Fragen",
+    questionOf: (n: number, total: number) => ["Frage", `von ${total}`, n] as const,
+    intro: "Zwölf kurze Aussagen geben Ihnen in fünf Minuten eine ehrliche Standortbestimmung. Es werden keine Daten gespeichert oder übermittelt.",
+    back: "← Zurück",
+    resultEyebrow: "Ihr ehrlicher Projektstatus",
+    pointsOf: (max: number) => `von ${max} Punkten`,
+    criticalStrong: "Einzelne Antworten wiegen schwer.",
+    criticalRest: "Fehlendes Vertrauen in den Status, ein schwacher Sponsor oder geringe Liefer-Zuversicht sind Warnsignale, unabhängig vom Gesamtergebnis.",
+    focusHeading: "Worauf Sie jetzt achten sollten",
+    ctaHead: "Schaffen Sie Gewissheit mit einem Project Reality Check.",
+    ctaBody: "In wenigen Tagen erhalten Sie eine unabhängige Standortbestimmung Ihres Vorhabens: eine belastbare Entscheidungsgrundlage für Ihren Lenkungsausschuss, zum Fixpreis. Und falls nötig, bringen wir das Projekt wieder auf Kurs.",
+    ctaPrimary: "Project Reality Check anfragen",
+    ctaPrimaryHref: "/kontakt",
+    ctaSecondary: "Mehr erfahren",
+    ctaSecondaryHref: "/projectrealitycheck",
+    restart: "Selbsttest wiederholen",
+    portraitRole: "Gründer und Inhaber",
+  },
+  en: {
+    questions: [
+      { dim: "Goals & scope", text: "The goals, scope and success criteria of the initiative are clearly defined, and all key stakeholders understand them the same way." },
+      { dim: "Sponsorship & governance", text: "The initiative has an active sponsor and a functioning steering committee that takes decisions promptly." },
+      { dim: "Status transparency", text: "I trust the status reporting. When a report shows green, it really is green." },
+      { dim: "Realistic planning", text: "The schedule and cost plan are based on a sound estimate, not on a wished-for date." },
+      { dim: "Resources & team", text: "The right people are on the project with enough capacity. Key roles are filled and not overloaded." },
+      { dim: "Risk management", text: "The main risks are known, have an owner and are actively managed, not just kept in a list." },
+      { dim: "Schedule & budget", text: "The initiative is on plan, without repeated schedule or budget shifts." },
+      { dim: "Decision speed", text: "Necessary decisions are taken quickly. The project rarely waits for approvals." },
+      { dim: "Requirements & changes", text: "Requirements are stable and changes are assessed in a controlled way, without creeping scope growth." },
+      { dim: "Acceptance & change", text: "The affected organisation is involved and prepared for the change. Acceptance is ensured." },
+      { dim: "Dependencies & suppliers", text: "Dependencies on other projects, suppliers and systems are transparent and under control." },
+      { dim: "Delivery confidence", text: "If I am honest, I am confident that the initiative will deliver on time, on budget and to the required quality." },
+    ],
+    options: ["Fully agree", "Somewhat agree", "Somewhat disagree", "Disagree"],
+    results: {
+      green: { word: "Green - on track", head: "Your initiative stands on a solid foundation.", para: "The core factors are right. Keep up the discipline and sharpen the few open points so that a good position becomes a secure result." },
+      yellow: { word: "Amber - stay alert", head: "First warning signs are showing.", para: "Some areas are vulnerable. Now is the right time for an independent assessment, before risks turn into real problems and your room for manoeuvre shrinks." },
+      red: { word: "Red - action needed", head: "Several critical weaknesses put the result at risk.", para: "The signals point to an initiative that will get out of hand without corrective action. An independent, candid assessment now creates clarity and the basis for a change of course." },
+    },
+    eyebrow: "Self-test · 12 questions",
+    questionOf: (n: number, total: number) => ["Question", `of ${total}`, n] as const,
+    intro: "Twelve short statements give you an honest assessment in five minutes. No data is stored or transmitted.",
+    back: "← Back",
+    resultEyebrow: "Your honest project status",
+    pointsOf: (max: number) => `of ${max} points`,
+    criticalStrong: "Some answers carry extra weight.",
+    criticalRest: "A lack of trust in the status, a weak sponsor or low delivery confidence are warning signs, regardless of the overall result.",
+    focusHeading: "What to pay attention to now",
+    ctaHead: "Gain certainty with a Project Reality Check.",
+    ctaBody: "Within a few days, you receive an independent assessment of your initiative: a sound basis for your steering committee's decisions, at a fixed price. And if needed, we bring the project back on track.",
+    ctaPrimary: "Request a Project Reality Check",
+    ctaPrimaryHref: "/en/kontakt",
+    ctaSecondary: "Learn more",
+    ctaSecondaryHref: "/en/projectrealitycheck",
+    restart: "Repeat the self-test",
+    portraitRole: "Founder and owner",
+  },
+};
 
+const OPTION_VALUES = [3, 2, 1, 0] as const;
 const CRITICAL_INDEXES = [1, 2, 11] as const;
-const MAX_SCORE = QUESTIONS.length * 3;
+const QUESTION_COUNT = COPY.de.questions.length;
+const MAX_SCORE = QUESTION_COUNT * 3;
 
 type Step = "quiz" | "result";
 
-function resultForScore(total: number) {
-  if (total >= 28) {
-    return {
-      word: "Grün - auf Kurs",
-      color: "#2E9E6B",
-      head: "Ihr Vorhaben steht auf solider Grundlage.",
-      para: "Die Kernfaktoren stimmen. Halten Sie die Disziplin und schärfen Sie die wenigen offenen Punkte gezielt nach, damit aus einem guten Stand ein sicheres Ergebnis wird.",
-    };
-  }
-  if (total >= 18) {
-    return {
-      word: "Gelb - wachsam sein",
-      color: "#E0A526",
-      head: "Es zeigen sich erste Warnsignale.",
-      para: "Einzelne Bereiche sind verwundbar. Jetzt ist der richtige Zeitpunkt für eine unabhängige Standortbestimmung, bevor aus Risiken echte Probleme werden und der Handlungsspielraum schrumpft.",
-    };
-  }
-  return {
-    word: "Rot - Handlungsbedarf",
-    color: "#D2473D",
-    head: "Mehrere kritische Schwachstellen gefährden das Ergebnis.",
-    para: "Die Signale sprechen für ein Vorhaben, das ohne Gegensteuern aus dem Ruder läuft. Eine unabhängige, schonungslose Standortbestimmung schafft jetzt Klarheit und die Basis für den Kurswechsel.",
-  };
+function resultForScore(total: number, locale: SelfTestLocale) {
+  const r = COPY[locale].results;
+  if (total >= 28) return { ...r.green, color: "#2E9E6B" };
+  if (total >= 18) return { ...r.yellow, color: "#E0A526" };
+  return { ...r.red, color: "#D2473D" };
 }
 
-export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) {
+export function ProjectSelfTest({
+  id = "projekt-selbsttest",
+  locale = "de",
+}: {
+  id?: string;
+  locale?: SelfTestLocale;
+}) {
+  const t = COPY[locale];
+  const QUESTIONS = t.questions;
   const [step, setStep] = useState<Step>("quiz");
   const [index, setIndex] = useState(0);
-  const [answers, setAnswers] = useState<Array<number | null>>(() => Array(QUESTIONS.length).fill(null));
+  const [answers, setAnswers] = useState<Array<number | null>>(() => Array(QUESTION_COUNT).fill(null));
   const sectionRef = useRef<HTMLElement | null>(null);
 
   const total = useMemo(() => answers.reduce<number>((sum, value) => sum + (value ?? 0), 0), [answers]);
-  const result = resultForScore(total);
+  const result = resultForScore(total, locale);
   const weakest = useMemo(
     () =>
       QUESTIONS.map((q, i) => ({ dim: q.dim, value: answers[i] ?? 0 }))
         .filter((item) => item.value <= 1)
         .sort((a, b) => a.value - b.value)
         .slice(0, 3),
-    [answers],
+    [answers, QUESTIONS],
   );
   const hasCriticalSignal = CRITICAL_INDEXES.some((i) => (answers[i] ?? 0) <= 1);
   const progress = step === "result" ? 100 : Math.round(((index + 1) / QUESTIONS.length) * 100);
@@ -141,7 +158,7 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
   }
 
   function restart() {
-    setAnswers(Array(QUESTIONS.length).fill(null));
+    setAnswers(Array(QUESTION_COUNT).fill(null));
     setIndex(0);
     setStep("quiz");
     keepBlockInView();
@@ -161,12 +178,13 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
             {step === "quiz" ? (
               <div className="px-6 py-8 sm:px-9 md:px-10 md:py-9">
                 <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-[#4A90D9]">
-                  Selbsttest · 12 Fragen
+                  {t.eyebrow}
                 </p>
                 <div className="mt-4 border-t border-[#e3e8f0] pt-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <p className="text-[14px] font-semibold text-brand-900">
-                      Frage <span className="text-[#4A90D9]">{index + 1}</span> von {QUESTIONS.length}
+                      {t.questionOf(index + 1, QUESTIONS.length)[0]} <span className="text-[#4A90D9]">{index + 1}</span>{" "}
+                      {t.questionOf(index + 1, QUESTIONS.length)[1]}
                     </p>
                     <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#6b7180]">{question.dim}</p>
                   </div>
@@ -182,7 +200,8 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
                       {question.text}
                     </h2>
                     <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                      {OPTIONS.map((option) => {
+                      {OPTION_VALUES.map((value, oi) => {
+                        const option = { value, label: t.options[oi] };
                         const selected = answers[index] === option.value;
                         return (
                           <button
@@ -210,8 +229,7 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
                     </div>
                     {index === 0 ? (
                       <p className="mt-5 border-t border-[#e3e8f0] pt-4 text-[14px] leading-relaxed text-[#6b7180]">
-                        Zwölf kurze Aussagen geben Ihnen in fünf Minuten eine ehrliche Standortbestimmung. Es werden
-                        keine Daten gespeichert oder übermittelt.
+                        {t.intro}
                       </p>
                     ) : null}
                   </div>
@@ -225,7 +243,7 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
                     onClick={back}
                     className="inline-flex min-h-11 items-center rounded-full px-1 text-[15px] font-semibold text-brand-900 transition hover:text-[#4A90D9]"
                   >
-                    ← Zurück
+                    {t.back}
                   </button>
                   </div>
                 ) : null}
@@ -235,7 +253,7 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
           {step === "result" ? (
             <div className="px-6 py-8 sm:px-9 sm:py-10 md:px-14 md:py-14">
               <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-[#4A90D9]">
-                Ihr ehrlicher Projektstatus
+                {t.resultEyebrow}
               </p>
               <div className="mt-7 flex flex-col gap-7 md:flex-row md:items-center">
                 <div className="relative h-[130px] w-[130px] shrink-0">
@@ -255,7 +273,7 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <b className="text-[34px] font-semibold leading-none text-brand-900">{total}</b>
-                    <span className="mt-1 text-[13px] font-semibold text-[#6b7180]">von {MAX_SCORE} Punkten</span>
+                    <span className="mt-1 text-[13px] font-semibold text-[#6b7180]">{t.pointsOf(MAX_SCORE)}</span>
                   </div>
                 </div>
                 <div className="min-w-0">
@@ -275,16 +293,14 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
 
               {hasCriticalSignal ? (
                 <div className="mt-8 rounded-[14px] border border-[#E0A526]/35 bg-[#fdf7ea] px-5 py-4 text-[15px] leading-relaxed text-[#6a5417]">
-                  <b className="font-semibold text-[#8a6a12]">Einzelne Antworten wiegen schwer.</b> Fehlendes Vertrauen
-                  in den Status, ein schwacher Sponsor oder geringe Liefer-Zuversicht sind Warnsignale, unabhängig vom
-                  Gesamtergebnis.
+                  <b className="font-semibold text-[#8a6a12]">{t.criticalStrong}</b> {t.criticalRest}
                 </div>
               ) : null}
 
               {weakest.length ? (
                 <div className="mt-8">
                   <h4 className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#6b7180]">
-                    Worauf Sie jetzt achten sollten
+                    {t.focusHeading}
                   </h4>
                   <ul className="mt-4 grid gap-2">
                     {weakest.map((item) => (
@@ -298,24 +314,22 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
               ) : null}
 
               <div className="mt-9 rounded-[20px] bg-gradient-to-br from-brand-900 to-[#2e3e96] px-6 py-7 text-white md:px-8 md:py-8">
-                <h4 className="text-[22px] font-semibold leading-tight">Schaffen Sie Gewissheit mit einem Project Reality Check.</h4>
+                <h4 className="text-[22px] font-semibold leading-tight">{t.ctaHead}</h4>
                 <p className="mt-3 max-w-[62ch] text-[16px] leading-relaxed text-white/82">
-                  In wenigen Tagen erhalten Sie eine unabhängige Standortbestimmung Ihres Vorhabens: eine belastbare
-                  Entscheidungsgrundlage für Ihren Lenkungsausschuss, zum Fixpreis. Und falls nötig, bringen wir das
-                  Projekt wieder auf Kurs.
+                  {t.ctaBody}
                 </p>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Link
-                    href="/kontakt"
+                    href={t.ctaPrimaryHref}
                     className="inline-flex min-h-12 items-center justify-center rounded-full bg-white px-6 text-[15px] font-semibold text-brand-900 transition hover:bg-[#eaf0f9]"
                   >
-                    Project Reality Check anfragen
+                    {t.ctaPrimary}
                   </Link>
                   <Link
-                    href="/projectrealitycheck"
+                    href={t.ctaSecondaryHref}
                     className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/28 px-6 text-[15px] font-semibold text-white transition hover:bg-white/10"
                   >
-                    Mehr erfahren
+                    {t.ctaSecondary}
                   </Link>
                 </div>
               </div>
@@ -325,7 +339,7 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
                 onClick={restart}
                 className="mx-auto mt-7 flex min-h-11 items-center rounded-full px-4 text-[15px] font-semibold text-brand-900 transition hover:text-[#4A90D9]"
               >
-                Selbsttest wiederholen
+                {t.restart}
               </button>
             </div>
           ) : null}
@@ -341,7 +355,7 @@ export function ProjectSelfTest({ id = "projekt-selbsttest" }: { id?: string }) 
             />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#11183f] via-[#11183f]/85 to-transparent px-6 pb-6 pt-20 text-white">
               <p className="text-[18px] font-semibold">Daniel Sengstag</p>
-              <p className="mt-1 text-[14px] text-white/75">Gründer und Inhaber</p>
+              <p className="mt-1 text-[14px] text-white/75">{t.portraitRole}</p>
             </div>
           </aside>
         </div>

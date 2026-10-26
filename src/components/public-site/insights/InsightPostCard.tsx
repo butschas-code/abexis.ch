@@ -1,5 +1,5 @@
-import { PublicImage as Image } from "@/components/site/PublicImage";
 import Link from "next/link";
+import { BlogThumbnail } from "@/components/public-site/insights/BlogThumbnail";
 import { resolvePostHeroImageUrl } from "@/lib/cms/resolve-post-hero-image";
 import type { PublishedPostWithId } from "@/public-site/cms";
 
@@ -41,23 +41,11 @@ export function InsightPostCard({
         href={href}
         className="relative flex h-full flex-col overflow-hidden rounded-[27px] bg-white shadow-[0_1px_0_rgba(0,0,0,0.04),0_18px_44px_-28px_rgba(38,51,124,0.35)] ring-1 ring-black/[0.05] transition duration-500 hover:-translate-y-[3px] hover:shadow-[0_24px_56px_-24px_rgba(38,51,124,0.45)] hover:ring-[var(--brand-500)]/22"
       >
-        <div className="relative isolate aspect-[16/10] w-full overflow-hidden bg-[#f2f3f7]">
-          <Image
-            src={img}
-            alt=""
-            fill
-            className="object-cover saturate-[0.78] contrast-[1.08] transition duration-[1.2s] group-hover:scale-[1.04]"
-            sizes={sizes ?? "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
-            unoptimized={img.startsWith("data:")}
-          />
-          <div className="abexis-tint-overlay" />
-          {categoryLine ? (
-            <span className="absolute bottom-4 left-5 max-w-[90%] rounded-full bg-white/92 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#1d1d1f] shadow-sm backdrop-blur-sm">
-              {categoryLine}
-            </span>
-          ) : null}
-        </div>
+        <BlogThumbnail src={img} sizes={sizes ?? "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"} />
         <div className={`flex flex-1 flex-col ${titlePad}`}>
+          {categoryLine ? (
+            <span className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--brand-900)]">{categoryLine}</span>
+          ) : null}
           {dateStr ? (
             <time className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#86868b]">{dateStr}</time>
           ) : null}

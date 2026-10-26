@@ -1,4 +1,4 @@
-import { PublicImage as Image } from "@/components/site/PublicImage";
+import { BlogThumbnail } from "@/components/public-site/insights/BlogThumbnail";
 import Link from "next/link";
 import { resolvePostHeroImageUrl } from "@/lib/cms/resolve-post-hero-image";
 import type { PublishedPostWithId } from "@/public-site/cms";
@@ -53,20 +53,11 @@ export function InsightsFeatured({ primary, secondary = [], hrefFor, categoryLin
       <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8 lg:items-stretch">
         <Link
           href={hrefFor(primary)}
-          className="group relative block overflow-hidden rounded-[32px] bg-[#0a0a0b] shadow-[0_32px_80px_-40px_rgba(20,28,64,0.75)] ring-1 ring-white/10"
+          className="group relative block overflow-hidden rounded-[32px] bg-[#151d52] shadow-[0_32px_80px_-40px_rgba(20,28,64,0.75)] ring-1 ring-white/10"
         >
-          <div className="relative isolate aspect-[16/11] w-full md:aspect-auto md:min-h-[320px] lg:min-h-[380px]">
-            <Image
-              src={hero}
-              alt=""
-              fill
-              className="object-cover saturate-[0.78] contrast-[1.08] opacity-[0.92] transition duration-[1.4s] group-hover:scale-[1.03] group-hover:opacity-100"
-              sizes="(min-width: 1024px) 58vw, 100vw"
-              priority
-              unoptimized={hero.startsWith("data:")}
-            />
-            <div className="abexis-tint-overlay" />
-            <div className="absolute inset-x-0 bottom-0 p-7 md:p-9 lg:p-10">
+          <BlogThumbnail src={hero} sizes="(min-width: 1024px) 58vw, 100vw" priority />
+          <div>
+            <div className="p-7 md:p-9 lg:p-10">
               {dateStr ? (
                 <time className="text-[11px] font-medium uppercase tracking-[0.2em] text-white/55">{dateStr}</time>
               ) : null}
@@ -75,7 +66,7 @@ export function InsightsFeatured({ primary, secondary = [], hrefFor, categoryLin
                   {categoryLine}
                 </span>
               ) : null}
-              <h3 className="mt-4 max-w-[20ch] font-serif text-[28px] font-medium leading-[1.08] tracking-[-0.03em] text-white text-balance md:max-w-[24ch] md:text-[36px] lg:text-[40px]">
+              <h3 className="mt-4 max-w-[28ch] font-serif text-[24px] font-medium leading-[1.12] tracking-[-0.025em] text-white text-balance md:text-[28px]">
                 {primary.title}
               </h3>
               {primary.excerpt ? (
@@ -105,17 +96,7 @@ export function InsightsFeatured({ primary, secondary = [], hrefFor, categoryLin
                   href={hrefFor(post)}
                   className="group flex gap-4 rounded-2xl border border-black/[0.06] bg-white/80 p-3 pr-4 shadow-sm ring-1 ring-black/[0.03] transition hover:border-[var(--brand-500)]/25 hover:shadow-md"
                 >
-                  <div className="relative isolate h-[104px] w-[120px] shrink-0 overflow-hidden rounded-xl bg-[#f2f3f7]">
-                    <Image
-                      src={smImg}
-                      alt=""
-                      fill
-                      className="object-cover saturate-[0.78] contrast-[1.08] transition duration-700 group-hover:scale-105"
-                      sizes="120px"
-                      unoptimized={smImg.startsWith("data:")}
-                    />
-                    <div className="abexis-tint-overlay" />
-                  </div>
+                  <BlogThumbnail src={smImg} sizes="140px" className="w-[140px] shrink-0 rounded-xl" />
                   <div className="flex min-w-0 flex-1 flex-col justify-center py-1">
                     {smDate ? (
                       <time className="text-[10px] font-medium uppercase tracking-[0.14em] text-[#a1a1a6]">{smDate}</time>

@@ -110,7 +110,7 @@ export function DanielSengstagProfilePage({
       <PageHero
         imageSrc={images.hero}
         priority
-        imageObjectClassName="object-[center_22%]"
+        imageObjectClassName="object-top"
         intro={
           <div className="space-y-3">
             <p className="font-medium text-[#1d1d1f]">{copy.hero.line}</p>

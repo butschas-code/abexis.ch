@@ -84,7 +84,7 @@ export default async function EnglishTeamProfilePage({ params }: Props) {
       wrapContentInMotion={false}
       contentClassName="pt-10 md:pt-12"
       heroImage={p.image}
-      heroImageObjectClassName="object-[center_28%]"
+      heroImageObjectClassName="object-top"
     >
       <SchemaMarkup
         type="Person"

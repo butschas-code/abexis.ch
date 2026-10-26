@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { HomeBlogTeasers } from "@/components/home/HomeBlogTeasers";
+import { HomeClaritySection } from "@/components/home/HomeClaritySection";
 import { HomeFinalCtaSection } from "@/components/home/HomeFinalCtaSection";
 import { HomeHero } from "@/components/home/HomeHero";
 import { HomeProcessSection } from "@/components/home/HomeProcessSection";
@@ -8,19 +9,22 @@ import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { HomeWhoWeAreSection } from "@/components/home/HomeWhoWeAreSection";
 import { PartnershipsMarquee, partnershipsIntroEn } from "@/components/home/PartnershipsMarquee";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { WelcomeSection } from "@/components/home/WelcomeSection";
+import { HomeIntroStrip } from "@/components/home/HomeIntroStrip";
 import { ServiceGroupsSection } from "@/components/leistungen/ServiceGroupsSection";
 import { MotionSection } from "@/components/motion/MotionSection";
+import { ProjectSelfTest } from "@/components/project-reality-check/ProjectSelfTest";
 import { HeroHeadlineBrandAccent } from "@/components/site/HeroHeadlineBrandAccent";
 import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectRealityCheckCta";
 import {
+  homeClarityContentEn,
   homeClosingContentEn,
   homeHeroContentEn,
+  homeIntroStripEn,
   homeProcessContentEn,
   homeWhoWeAreContentEn,
 } from "@/data/home-page-content";
 import { homeTestimonialsEn } from "@/data/home-testimonials";
-import { homeWelcomeSectionEn, siteConfig } from "@/data/pages";
+import { siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
@@ -64,7 +68,7 @@ export default function EnglishHomePage() {
         </div>
       </HomeHero>
 
-      <WelcomeSection content={homeWelcomeSectionEn} contactHref="/en/kontakt" contactLabel="Contact Abexis" />
+      <HomeIntroStrip content={homeIntroStripEn} />
 
       <ServiceGroupsSection locale="en" id="leistungen" />
 
@@ -76,6 +80,8 @@ export default function EnglishHomePage() {
         profileLabel="Profile"
         teamProfileLabel="Profile"
       />
+
+      <ProjectSelfTest locale="en" id="project-self-test" />
 
       <HomeBlogTeasers heading="From the blog" allLabel="All articles" allHref="/en/blog" dateLocale="en-GB" />
 
@@ -97,6 +103,8 @@ export default function EnglishHomePage() {
           items={homeTestimonialsEn}
         />
       </MotionSection>
+
+      <HomeClaritySection content={homeClarityContentEn} />
 
       <MotionSection>
         <PartnershipsMarquee eyebrow="Partnerships" headline="Partnerships" intro={partnershipsIntroEn} />

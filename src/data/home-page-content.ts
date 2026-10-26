@@ -13,6 +13,13 @@ export const homeHeroContent = {
   secondaryCta: { href: "/kontakt" as const, label: "Unverbindliches Gespräch" },
 } as const;
 
+/** Audience strip under the hero (client homepage draft, Oct 2026). */
+export const homeIntroStrip = {
+  audience: "Für Geschäftsleitungen und Verwaltungsräte",
+  segment: "KMU und anspruchsvolle Organisationen",
+  cta: { href: "/kontakt", label: "Im Gespräch beginnt die Zusammenarbeit" },
+} as const;
+
 export const homeWhoWeAreContent = {
   eyebrow: "Wer wir sind",
   headline: "Erfahrung, die einordnet und Verantwortung übernimmt.",
@@ -42,6 +49,28 @@ export const homeProcessContent = {
   ] as const,
 } as const;
 
+export const homeClarityContent = {
+  eyebrow: "Einordnung",
+  without: {
+    title: "Ohne klare Einordnung:",
+    bullets: [
+      "Risiken werden spät erkannt",
+      "Entscheidungen verzögern sich",
+      "Unterschiedliche Sichtweisen im Management",
+      "Fortschritt ist schwer einzuordnen",
+    ],
+  },
+  with: {
+    title: "Mit klarer Einordnung:",
+    bullets: [
+      "Klare Sicht auf die tatsächliche Situation",
+      "Risiken sind benannt und priorisiert",
+      "Gemeinsames Verständnis entsteht",
+      "Entscheidungen können getroffen werden",
+    ],
+  },
+} as const;
+
 export const homeClosingContent = {
   headline: "Nehmen wir uns 30 Minuten.",
   body: "Im Gespräch klären wir Ihre Situation und geben eine erste Einschätzung. Danach entscheiden Sie, ob ein nächster Schritt sinnvoll ist.",
@@ -55,6 +84,12 @@ export const homeHeroContentEn = {
   body: "We advise executive teams and take responsibility for delivery.",
   primaryCta: { href: "#leistungen" as const, label: "Explore our services" },
   secondaryCta: { href: "/en/kontakt" as const, label: "Non-binding conversation" },
+} as const;
+
+export const homeIntroStripEn = {
+  audience: "For executive teams and boards of directors",
+  segment: "SMEs and demanding organisations",
+  cta: { href: "/en/kontakt", label: "Collaboration starts with a conversation" },
 } as const;
 
 export const homeWhoWeAreContentEn = {
@@ -84,6 +119,28 @@ export const homeProcessContentEn = {
     { title: "Lead delivery", body: "We work with your people in charge and make progress visible." },
     { title: "Follow through on results", body: "We review the agreed goals and organise the handover." },
   ] as const,
+} as const;
+
+export const homeClarityContentEn = {
+  eyebrow: "Perspective",
+  without: {
+    title: "Without clear classification:",
+    bullets: [
+      "Risks are recognized late",
+      "Decisions are delayed",
+      "Different views emerge in management",
+      "Progress is hard to judge",
+    ],
+  },
+  with: {
+    title: "With clear classification:",
+    bullets: [
+      "Clear view of the real situation",
+      "Risks are named and prioritized",
+      "A shared understanding emerges",
+      "Decisions can be made",
+    ],
+  },
 } as const;
 
 export const homeClosingContentEn = {

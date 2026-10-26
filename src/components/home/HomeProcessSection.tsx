@@ -1,7 +1,7 @@
 import { PublicImage as Image } from "@/components/site/PublicImage";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { homeProcessContent } from "@/data/home-page-content";
-import { fokusPageHeroImages } from "@/data/site-images";
+import { homeProcessImage } from "@/data/site-images";
 
 type HomeProcessCopy = {
   eyebrow: string;
@@ -16,7 +16,7 @@ export function HomeProcessSection({ content = homeProcessContent }: { content?:
       <div className="mx-auto grid min-w-0 max-w-[1068px] items-center gap-8 overflow-x-hidden pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:gap-10 sm:pl-6 sm:pr-6 md:gap-12 lg:grid-cols-[1fr_1.05fr]">
         <div className="relative aspect-[4/3] order-2 overflow-hidden rounded-[22px] bg-[#f5f5f7] shadow-[var(--apple-shadow-lg)] ring-1 ring-black/[0.05] sm:rounded-[28px] lg:order-1 lg:rounded-[32px]">
           <Image
-            src={fokusPageHeroImages.prozessoptimierung}
+            src={homeProcessImage}
             alt=""
             fill
             className="object-cover saturate-[0.78] contrast-[1.08]"

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AboutTeamGrid } from "@/components/home/AboutTeamGrid";
 import { homeWhoWeAreContent } from "@/data/home-page-content";
 import { teamProfiles } from "@/data/pages";
+import { teamPortraitThumb } from "@/data/site-images";
 import { MotionSection } from "@/components/motion/MotionSection";
 
 type WhoWeAreCopy = {
@@ -43,7 +44,7 @@ export function HomeWhoWeAreSection({
           <div className="mx-auto w-full max-w-md md:mx-0 md:max-w-none">
             <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[20px] bg-[#f5f5f7] shadow-[var(--apple-shadow)] ring-1 ring-black/[0.05] sm:rounded-[24px] md:rounded-[28px]">
               <Image
-                src={daniel.image}
+                src={teamPortraitThumb("danielsengstag")}
                 alt={daniel.name}
                 fill
                 className="object-cover object-center"
