@@ -44,7 +44,8 @@ export type MainNavItem =
   | {
       href: string;
       label: string;
-      children: readonly { href: string; label: string }[];
+      /** `group` renders a heading in the dropdown (services menu follows the four service groups). */
+      children: readonly { href: string; label: string; group?: string }[];
       /** If false, the top-level label is not a link (dropdown only). Default true. */
       parentIsLink?: boolean;
     };
@@ -56,16 +57,17 @@ export const mainNav: MainNavItem[] = [
     parentIsLink: false,
     children: [
       { href: "/leistungen", label: "Überblick" },
-      { href: "/fokusthemen/virtual-management-office", label: "Virtual Management Office" },
-      { href: "/fokusthemen/unternehmensstrategie", label: "Unternehmensstrategie" },
-      { href: "/fokusthemen/vertriebmarketing", label: "Vertrieb & Marketing" },
-      { href: "/fokusthemen/digitale-transformation", label: "Digitale Transformation" },
-      { href: "/fokusthemen/plm-pdm", label: "PLM/PDM Beratung" },
-      { href: "/fokusthemen/prozessoptimierung", label: "Prozessoptimierung" },
-      { href: "/fokusthemen/projektmanagement", label: "Projektmanagement" },
-      { href: "/fokusthemen/risikomanagement", label: "Risikomanagement" },
-      { href: "/projectrealitycheck", label: "Project Reality Check" },
-      { href: "/fokusthemen/veränderungsmanagement", label: "Veränderungsmanagement" },
+      { href: "/fokusthemen/virtual-management-office", label: "Virtual Management Office", group: "Strategie und Management" },
+      { href: "/fokusthemen/unternehmensstrategie", label: "Unternehmensstrategie", group: "Strategie und Management" },
+      { href: "/fokusthemen/vertriebmarketing", label: "Vertrieb und Marketing", group: "Strategie und Management" },
+      { href: "/fokusthemen/digitale-transformation", label: "Digitale Transformation", group: "Transformation und Technologie" },
+      { href: "/fokusthemen/plm-pdm", label: "PLM/PDM Beratung und Projektleitung", group: "Transformation und Technologie" },
+      { href: "/fokusthemen/prozessoptimierung", label: "Prozessoptimierung", group: "Transformation und Technologie" },
+      { href: "/fokusthemen/projektmanagement", label: "Projektmanagement", group: "Projekte und Risiken" },
+      { href: "/fokusthemen/risikomanagement", label: "Risikomanagement", group: "Projekte und Risiken" },
+      { href: "/projectrealitycheck", label: "Project Reality Check", group: "Projekte und Risiken" },
+      { href: "/fokusthemen/veränderungsmanagement", label: "Veränderungsmanagement", group: "Menschen und Organisation" },
+      { href: "/executive-search", label: "Executive Search", group: "Menschen und Organisation" },
     ],
   },
   {
@@ -89,16 +91,17 @@ export const mainNavEn: MainNavItem[] = [
     parentIsLink: false,
     children: [
       { href: "/en/leistungen", label: "Overview" },
-      { href: "/en/fokusthemen/virtual-management-office", label: "Virtual Management Office" },
-      { href: "/en/fokusthemen/unternehmensstrategie", label: "Corporate Strategy" },
-      { href: "/en/fokusthemen/vertriebmarketing", label: "Sales & Marketing" },
-      { href: "/en/fokusthemen/digitale-transformation", label: "Digital Transformation" },
-      { href: "/en/fokusthemen/plm-pdm", label: "PLM/PDM Consulting" },
-      { href: "/en/fokusthemen/prozessoptimierung", label: "Process Optimization" },
-      { href: "/en/fokusthemen/projektmanagement", label: "Project Management" },
-      { href: "/en/fokusthemen/risikomanagement", label: "Risk Management" },
-      { href: "/en/projectrealitycheck", label: "Project Reality Check" },
-      { href: "/en/fokusthemen/veränderungsmanagement", label: "Change Management" },
+      { href: "/en/fokusthemen/virtual-management-office", label: "Virtual Management Office", group: "Strategy and management" },
+      { href: "/en/fokusthemen/unternehmensstrategie", label: "Corporate Strategy", group: "Strategy and management" },
+      { href: "/en/fokusthemen/vertriebmarketing", label: "Sales & Marketing", group: "Strategy and management" },
+      { href: "/en/fokusthemen/digitale-transformation", label: "Digital Transformation", group: "Transformation and technology" },
+      { href: "/en/fokusthemen/plm-pdm", label: "PLM/PDM Consulting", group: "Transformation and technology" },
+      { href: "/en/fokusthemen/prozessoptimierung", label: "Process Optimization", group: "Transformation and technology" },
+      { href: "/en/fokusthemen/projektmanagement", label: "Project Management", group: "Projects and risks" },
+      { href: "/en/fokusthemen/risikomanagement", label: "Risk Management", group: "Projects and risks" },
+      { href: "/en/projectrealitycheck", label: "Project Reality Check", group: "Projects and risks" },
+      { href: "/en/fokusthemen/veränderungsmanagement", label: "Change Management", group: "People and organisation" },
+      { href: "/en/executive-search", label: "Executive Search", group: "People and organisation" },
     ],
   },
   {
@@ -149,6 +152,26 @@ export const homeLeadParagraph =
   "Als gefragte Managementberatung helfen wir Ihrem Unternehmen strategisch voranzukommen, Wachstumspotenziale konsequent zu nutzen, Umsatz- und Ertragsziele zu erreichen, wirksame Strukturen und Prozesse zu etablieren und Ihr Unternehmen noch fitter für die Zukunft zu gestalten.";
 
 /** Begrüssung unter dem Hero (ersetzt den früheren «Impulse»-Block mit Blog-Titeln) */
+export const homeWelcomeSection = {
+  eyebrow: "Willkommen",
+  title: "Schön, dass Sie zu uns finden, ",
+  titleAccent: "herzlich willkommen.",
+  paragraphs: [
+    "Bei Abexis begleiten wir Unternehmen und Führungsteams dort, wo es zählt: Strategie, Digitalisierung, Veränderung, Vertrieb und Projekte, immer mit dem Fokus auf greifbare Resultate und eine Zusammenarbeit auf Augenhöhe.",
+    "Schauen Sie sich unsere Schwerpunkte an, lesen Sie einen Beitrag im Blog oder nehmen Sie Kontakt auf, wenn Sie den Austausch suchen. Wir freuen uns, von Ihnen zu hören.",
+  ],
+} as const;
+
+export const homeWelcomeSectionEn = {
+  eyebrow: "Welcome",
+  title: "Good to have you here, ",
+  titleAccent: "welcome to Abexis.",
+  paragraphs: [
+    "At Abexis, we support companies and leadership teams where it counts: strategy, digitalization, change, sales and projects, always with a focus on tangible results and collaboration at eye level.",
+    "Explore our areas of focus, read an insight from the blog or contact us if you would like to start a conversation. We look forward to hearing from you.",
+  ],
+} as const;
+
 export const homeDifferentiators = [
   {
     label: "Strategie vor Technologie",

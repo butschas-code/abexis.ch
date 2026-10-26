@@ -8,7 +8,7 @@ import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { HomeWhoWeAreSection } from "@/components/home/HomeWhoWeAreSection";
 import { PartnershipsMarquee, partnershipsIntroEn } from "@/components/home/PartnershipsMarquee";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { FeaturedOffersSection } from "@/components/leistungen/FeaturedOffersSection";
+import { WelcomeSection } from "@/components/home/WelcomeSection";
 import { ServiceGroupsSection } from "@/components/leistungen/ServiceGroupsSection";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { HeroHeadlineBrandAccent } from "@/components/site/HeroHeadlineBrandAccent";
@@ -20,7 +20,7 @@ import {
   homeWhoWeAreContentEn,
 } from "@/data/home-page-content";
 import { homeTestimonialsEn } from "@/data/home-testimonials";
-import { siteConfig } from "@/data/pages";
+import { homeWelcomeSectionEn, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
@@ -64,9 +64,9 @@ export default function EnglishHomePage() {
         </div>
       </HomeHero>
 
-      <ServiceGroupsSection locale="en" id="leistungen" />
+      <WelcomeSection content={homeWelcomeSectionEn} contactHref="/en/kontakt" contactLabel="Contact Abexis" />
 
-      <FeaturedOffersSection locale="en" />
+      <ServiceGroupsSection locale="en" id="leistungen" />
 
       <HomeProcessSection content={homeProcessContentEn} />
 

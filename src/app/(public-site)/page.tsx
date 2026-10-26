@@ -8,7 +8,7 @@ import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { HomeWhoWeAreSection } from "@/components/home/HomeWhoWeAreSection";
 import { PartnershipsMarquee } from "@/components/home/PartnershipsMarquee";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { FeaturedOffersSection } from "@/components/leistungen/FeaturedOffersSection";
+import { WelcomeSection } from "@/components/home/WelcomeSection";
 import { ServiceGroupsSection } from "@/components/leistungen/ServiceGroupsSection";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { HeroHeadlineBrandAccent } from "@/components/site/HeroHeadlineBrandAccent";
@@ -60,9 +60,9 @@ export default function HomePage() {
         </div>
       </HomeHero>
 
-      <ServiceGroupsSection id="leistungen" />
+      <WelcomeSection />
 
-      <FeaturedOffersSection />
+      <ServiceGroupsSection id="leistungen" />
 
       <HomeProcessSection />
 

@@ -19,7 +19,6 @@ const de = {
     body: "Externe Managementunterstützung für CEO und Geschäftsleitung. Wir bereiten Entscheide vor und koordinieren die Umsetzung Ihrer wichtigsten Vorhaben.",
     note: "Flexibel eingebunden. Mit klar vereinbartem Auftrag.",
     primaryCta: "VMO-Gespräch vereinbaren",
-    secondaryCta: "Angebotsmodelle",
   },
   board: {
     ariaLabel: "Illustrative Managementübersicht",
@@ -245,7 +244,8 @@ const de = {
     eyebrow: "Nächster Schritt",
     title: "Wo braucht Ihre Geschäftsleitung Entlastung?",
     body: "In einem unverbindlichen Gespräch klären wir Ihre Ausgangslage und den passenden Umfang der Unterstützung.",
-    primaryCta: "VMO-Gespräch vereinbaren",
+    primaryCta: "VMO-Gespräch anfragen",
+    mailSubject: "Anfrage Abexis Virtual Management Office",
     secondaryCta: "Zum Kontaktformular",
   },
 };
@@ -266,7 +266,6 @@ const en: VmoContent = {
     body: "External management support for the CEO and executive team. We prepare decisions and coordinate the delivery of your most important initiatives.",
     note: "Flexibly integrated. With a clearly agreed mandate.",
     primaryCta: "Book a VMO conversation",
-    secondaryCta: "Engagement models",
   },
   board: {
     ariaLabel: "Illustrative management overview",
@@ -492,7 +491,8 @@ const en: VmoContent = {
     eyebrow: "Next step",
     title: "Where does your executive team need relief?",
     body: "In a non-binding conversation, we clarify your situation and the right scope of support.",
-    primaryCta: "Book a VMO conversation",
+    primaryCta: "Request a VMO conversation",
+    mailSubject: "Enquiry Abexis Virtual Management Office",
     secondaryCta: "Go to contact form",
   },
 };

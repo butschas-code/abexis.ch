@@ -48,7 +48,6 @@ export function FokusVirtualManagementOffice({ locale = "de" }: { locale?: VmoLo
   const homePath = english ? "/en/home" : "/";
   const servicesPath = english ? "/en/leistungen" : "/leistungen";
   const contactPath = english ? "/en/kontakt" : "/kontakt";
-  const bookingUrl = english ? siteConfig.bookingUrlEn : siteConfig.bookingUrlDe;
 
   return (
     <div lang={english ? "en" : "de"}>
@@ -80,21 +79,13 @@ export function FokusVirtualManagementOffice({ locale = "de" }: { locale?: VmoLo
                 <HeroHeadlineBrandAccent>{c.hero.titleLines[1]}</HeroHeadlineBrandAccent>
               </h1>
               <p className="mt-6 max-w-[52ch] text-[17px] leading-relaxed text-white/80 sm:text-[19px]">{c.hero.body}</p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <div className="mt-8">
                 <a
-                  href={bookingUrl}
-                  target="_blank"
-                  rel="noreferrer"
+                  href="#kontakt"
                   className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#45b3e2] px-7 text-sm font-semibold text-[#0f1640] transition hover:bg-[#6cc4ea]"
                 >
                   {c.hero.primaryCta} ↗
                 </a>
-                <Link
-                  href="#modelle"
-                  className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/25 px-7 text-sm font-semibold text-white transition hover:bg-white/10"
-                >
-                  {c.hero.secondaryCta} ↓
-                </Link>
               </div>
               <p className="mt-6 text-[14px] font-medium text-white/55">{c.hero.note}</p>
             </div>
@@ -311,9 +302,7 @@ export function FokusVirtualManagementOffice({ locale = "de" }: { locale?: VmoLo
             <div className="mt-8 flex flex-col gap-5 rounded-[22px] bg-white p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
               <p className="max-w-[60ch] text-[16px] leading-relaxed text-[#3d3d41]">{c.setup.bottom}</p>
               <a
-                href={bookingUrl}
-                target="_blank"
-                rel="noreferrer"
+                href="#kontakt"
                 className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-[#26337c] px-7 text-sm font-semibold text-white transition hover:bg-[#3550a4]"
               >
                 {c.setup.cta} ↗
@@ -335,15 +324,15 @@ export function FokusVirtualManagementOffice({ locale = "de" }: { locale?: VmoLo
           <div className="mx-auto max-w-[1068px] px-5 py-16 sm:px-6 md:py-24">
             <SectionHeading eyebrow={c.closing.eyebrow} title={c.closing.title} intro={c.closing.body} light />
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-              <a href={bookingUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-12 items-center justify-center rounded-full bg-white px-7 text-sm font-semibold text-[#26337c] transition hover:bg-[#eef2fb]">
+              <a href={mailtoFor(c.closing.mailSubject)} className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#45b3e2] px-7 text-sm font-semibold text-[#0f1640] transition hover:bg-[#6cc4ea]">
                 {c.closing.primaryCta} ↗
               </a>
-              <Link href={contactPath} className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/25 px-7 text-sm font-semibold text-white transition hover:bg-white/10">
-                {c.closing.secondaryCta}
-              </Link>
-              <a href={`tel:${siteConfig.phoneTel}`} className="inline-flex min-h-12 items-center justify-center px-3 text-sm font-semibold text-white/80 hover:text-white">
+              <a href={`tel:${siteConfig.phoneTel}`} className="inline-flex min-h-12 items-center justify-center px-3 text-sm font-semibold text-white/85 hover:text-white">
                 {siteConfig.phoneDisplay}
               </a>
+              <Link href={contactPath} className="inline-flex min-h-12 items-center justify-center px-3 text-sm font-semibold text-white/85 hover:text-white">
+                {c.closing.secondaryCta} →
+              </Link>
             </div>
           </div>
         </MotionSection>

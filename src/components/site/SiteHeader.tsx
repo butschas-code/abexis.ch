@@ -72,6 +72,21 @@ function ChevronDown({ open }: { open: boolean }) {
   );
 }
 
+type NavChild = { href: string; label: string; group?: string };
+
+/** Ordered groups when children carry `group`; null keeps the flat dropdown. */
+function groupChildren(children: readonly NavChild[]) {
+  if (!children.some((c) => c.group)) return null;
+  const groups: { title: string; items: NavChild[] }[] = [];
+  for (const c of children) {
+    const title = c.group ?? "";
+    const last = groups[groups.length - 1];
+    if (last && last.title === title) last.items.push(c);
+    else groups.push({ title, items: [c] });
+  }
+  return groups;
+}
+
 function DesktopSubmenu({
   item,
   pathname,
@@ -80,7 +95,7 @@ function DesktopSubmenu({
   item: {
     href: string;
     label: string;
-    children: readonly { href: string; label: string }[];
+    children: readonly { href: string; label: string; group?: string }[];
     parentIsLink?: boolean;
   };
   pathname: string;
@@ -92,6 +107,7 @@ function DesktopSubmenu({
   const reduce = useReducedMotion();
 
   const [overviewChild, ...restChildren] = item.children;
+  const childGroups = groupChildren(restChildren);
   const overviewActive =
     pathname === overviewChild.href ||
     (overviewChild.href !== "/" && pathname.startsWith(`${overviewChild.href}/`));
@@ -143,7 +159,9 @@ function DesktopSubmenu({
             exit={reduce ? undefined : { opacity: 0, y: -5, scale: 0.98 }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             style={{ transformOrigin: "top left" }}
-            className="absolute left-0 top-full z-50 min-w-[15rem] max-w-[min(100vw-2rem,24rem)] pt-2"
+            className={`absolute left-0 top-full z-50 pt-2 ${
+              childGroups ? "w-[min(100vw-2rem,36rem)]" : "min-w-[15rem] max-w-[min(100vw-2rem,24rem)]"
+            }`}
           >
             <div className="overflow-hidden rounded-xl border border-black/[0.07] bg-white/[0.97] shadow-[0_32px_80px_rgba(0,0,0,0.16),0_6px_24px_rgba(0,0,0,0.08)] backdrop-blur-xl">
               {/* Top gradient accent */}
@@ -192,7 +210,40 @@ function DesktopSubmenu({
                 </svg>
               </Link>
 
-              {restChildren.length > 0 && (
+              {childGroups ? (
+                <>
+                  <div className="border-t border-black/[0.05]" />
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-3 p-3">
+                    {childGroups.map((g) => (
+                      <div key={g.title}>
+                        <p className="px-2 pb-1 pt-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#26337c]/50">
+                          {g.title}
+                        </p>
+                        {g.items.map((c) => {
+                          const subActive =
+                            pathname === c.href || (c.href !== "/" && pathname.startsWith(`${c.href}/`));
+                          return (
+                            <Link
+                              key={c.href}
+                              href={c.href}
+                              role="menuitem"
+                              onClick={() => setSubmenuOpen(false)}
+                              className={`block rounded-lg px-2 py-[7px] text-[13.5px] leading-snug transition-colors duration-150 ${
+                                subActive
+                                  ? "bg-[#26337c]/[0.07] font-medium text-[#26337c]"
+                                  : "text-[#3a3a40] hover:bg-[#f4f6fb] hover:text-[#26337c]"
+                              }`}
+                            >
+                              {c.label}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                restChildren.length > 0 && (
                 <>
                   <div className="border-t border-black/[0.05]" />
                   <div className="py-1.5">
@@ -253,6 +304,7 @@ function DesktopSubmenu({
                     })}
                   </div>
                 </>
+                )
               )}
             </div>
           </motion.div>
@@ -462,12 +514,19 @@ export function SiteHeader() {
                           </div>
                           {subOpen ? (
                             <div id={subId} className="ml-2 border-l border-black/[0.08] pl-2 pb-1">
-                              {item.children.map((c) => {
+                              {item.children.map((c, ci) => {
                                 const a =
                                   pathname === c.href || (c.href !== "/" && pathname.startsWith(`${c.href}/`));
+                                const groupHeading =
+                                  c.group && c.group !== item.children[ci - 1]?.group ? (
+                                    <p className="px-3 pb-1 pt-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#26337c]/55">
+                                      {c.group}
+                                    </p>
+                                  ) : null;
                                 return (
+                                  <div key={c.href}>
+                                  {groupHeading}
                                   <Link
-                                    key={c.href}
                                     href={c.href}
                                     className={subLinkClassName(a)}
                                     onClick={() => {
@@ -477,6 +536,7 @@ export function SiteHeader() {
                                   >
                                     {c.label}
                                   </Link>
+                                  </div>
                                 );
                               })}
                             </div>

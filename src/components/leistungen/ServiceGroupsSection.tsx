@@ -2,17 +2,8 @@ import Link from "next/link";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { getServiceGroupsContent, type ServiceGroupsLocale } from "@/data/service-groups";
 
-/** Editorial list of the four service groups (homepage + Leistungen overview). */
-export function ServiceGroupsSection({
-  locale = "de",
-  id,
-  showAllLink = true,
-}: {
-  locale?: ServiceGroupsLocale;
-  id?: string;
-  /** Hidden on the Leistungen page itself, where the link would point back to the same page. */
-  showAllLink?: boolean;
-}) {
+/** Homepage: editorial list of the four service groups, as in the client's draft. */
+export function ServiceGroupsSection({ locale = "de", id }: { locale?: ServiceGroupsLocale; id?: string }) {
   const c = getServiceGroupsContent(locale).services;
 
   return (
@@ -26,11 +17,9 @@ export function ServiceGroupsSection({
             </h2>
             <p className="mt-5 text-[17px] leading-relaxed text-[#6e6e73] md:text-[18px]">{c.intro}</p>
           </div>
-          {showAllLink ? (
-            <Link href={c.allHref} className="inline-flex min-h-11 shrink-0 items-center font-semibold text-[#26337c] hover:text-[#3550a4]">
-              {c.allLabel} ↗
-            </Link>
-          ) : null}
+          <Link href={c.allHref} className="inline-flex min-h-11 shrink-0 items-center font-semibold text-[#26337c] hover:text-[#3550a4]">
+            {c.allLabel} ↗
+          </Link>
         </div>
 
         <div className="mt-12 grid gap-x-14 gap-y-14 md:mt-16 lg:grid-cols-2">

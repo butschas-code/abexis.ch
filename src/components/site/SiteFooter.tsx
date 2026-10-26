@@ -31,28 +31,33 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
   const pathname = usePathname();
   const english = isEnglishPath(pathname);
+  // Same order as the four service groups in the header menu; Executive Search is listed under companyLinks.
   const servicesLinks = english
     ? [
         { href: "/en/leistungen", label: "Overview" },
-        { href: "/en/projectrealitycheck", label: "Project Reality Check" },
-        { href: "/en/fokusthemen/digitale-transformation", label: "Digital Transformation" },
+        { href: "/en/fokusthemen/virtual-management-office", label: "Virtual Management Office" },
         { href: "/en/fokusthemen/unternehmensstrategie", label: "Corporate Strategy" },
         { href: "/en/fokusthemen/vertriebmarketing", label: "Sales & Marketing" },
-        { href: "/en/fokusthemen/veränderungsmanagement", label: "Change Management" },
+        { href: "/en/fokusthemen/digitale-transformation", label: "Digital Transformation" },
+        { href: "/en/fokusthemen/plm-pdm", label: "PLM/PDM Consulting" },
         { href: "/en/fokusthemen/prozessoptimierung", label: "Process Optimization" },
         { href: "/en/fokusthemen/projektmanagement", label: "Project Management" },
         { href: "/en/fokusthemen/risikomanagement", label: "Risk Management" },
+        { href: "/en/projectrealitycheck", label: "Project Reality Check" },
+        { href: "/en/fokusthemen/veränderungsmanagement", label: "Change Management" },
       ]
     : [
         { href: "/leistungen", label: "Überblick" },
-        { href: "/projectrealitycheck", label: "Project Reality Check" },
-        { href: "/fokusthemen/digitale-transformation", label: "Digitale Transformation" },
+        { href: "/fokusthemen/virtual-management-office", label: "Virtual Management Office" },
         { href: "/fokusthemen/unternehmensstrategie", label: "Unternehmensstrategie" },
-        { href: "/fokusthemen/vertriebmarketing", label: "Vertrieb & Marketing" },
-        { href: "/fokusthemen/veränderungsmanagement", label: "Veränderungsmanagement" },
+        { href: "/fokusthemen/vertriebmarketing", label: "Vertrieb und Marketing" },
+        { href: "/fokusthemen/digitale-transformation", label: "Digitale Transformation" },
+        { href: "/fokusthemen/plm-pdm", label: "PLM/PDM Beratung und Projektleitung" },
         { href: "/fokusthemen/prozessoptimierung", label: "Prozessoptimierung" },
         { href: "/fokusthemen/projektmanagement", label: "Projektmanagement" },
         { href: "/fokusthemen/risikomanagement", label: "Risikomanagement" },
+        { href: "/projectrealitycheck", label: "Project Reality Check" },
+        { href: "/fokusthemen/veränderungsmanagement", label: "Veränderungsmanagement" },
       ];
   const companyLinks = english
     ? [
