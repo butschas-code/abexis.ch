@@ -72,8 +72,7 @@ export function FokusVirtualManagementOffice({ locale = "de" }: { locale?: VmoLo
           />
           <div className="mx-auto grid max-w-[1068px] items-center gap-12 px-5 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
             <div className="min-w-0">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{c.hero.eyebrow}</p>
-              <h1 className="mt-4 text-[clamp(1.9rem,5vw+0.4rem,3.1rem)] font-semibold leading-[1.05] tracking-[-0.035em] text-white text-balance">
+              <h1 className="text-[clamp(1.9rem,5vw+0.4rem,3.1rem)] font-semibold leading-[1.05] tracking-[-0.035em] text-white text-balance">
                 {c.hero.titleLines[0]}
                 <br />
                 <HeroHeadlineBrandAccent>{c.hero.titleLines[1]}</HeroHeadlineBrandAccent>

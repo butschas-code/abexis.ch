@@ -49,8 +49,7 @@ export function ServiceGuidePage({ content: c }: { content: Guide }) {
           <a href={bookingUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#26337c] px-7 text-sm font-semibold text-white transition hover:bg-[#3550a4]">{c.closing.cta}</a>
           <Link href={parentPath} className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#26337c]/20 px-7 text-sm font-semibold text-[#26337c] transition hover:border-[#26337c]/40 hover:bg-[#f7f8fc]">{parentLabels[c.parent][localeKey]} →</Link>
         </>}>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{c.eyebrow}</p>
-          <h1 className="mt-3 max-w-[23ch] text-[clamp(2.15rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance"><HeroHeadlineText>{c.title}</HeroHeadlineText></h1>
+          <h1 className="max-w-[23ch] text-[clamp(2.15rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance"><HeroHeadlineText>{c.title}</HeroHeadlineText></h1>
         </PageHero>
 
         <MotionSection className="bg-white"><div className="mx-auto max-w-[1068px] px-5 py-16 sm:px-6 md:py-24"><div className="rounded-[26px] border border-[#26337c]/10 bg-[#f5f6fa] p-7 sm:p-10 md:p-12"><p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#26337c]">{english ? "Direct answer" : "Direkte Antwort"}</p><h2 className="mt-3 max-w-[25ch] text-[28px] font-semibold leading-[1.12] tracking-[-0.03em] text-[#1d1d1f] sm:text-[36px]">{c.answer.title}</h2><p className="mt-5 max-w-[78ch] text-[17px] leading-relaxed text-[#4b4b50]">{c.answer.body}</p></div></div></MotionSection>

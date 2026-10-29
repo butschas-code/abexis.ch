@@ -7,6 +7,7 @@ import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { danielSengstagContentEn } from "@/data/daniel-sengstag";
 import { homeTestimonialsEn } from "@/data/home-testimonials";
 import { footerPartners, teamOrder, teamProfiles } from "@/data/pages";
+import { teamPortraitThumb } from "@/data/site-images";
 import { teamProfilesEn } from "@/data/team-profiles-en";
 import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
@@ -72,11 +73,11 @@ export default function EnglishAboutPage() {
                   style={{ minHeight: 240 }}
                 >
                   <Image
-                    src={p.image}
+                    src={teamPortraitThumb(slug)}
                     alt=""
                     fill
                     className="object-cover object-top transition-opacity hover:opacity-95"
-                    quality={95}
+                    quality={90}
                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 224px, 256px"
                   />
                 </Link>
@@ -123,7 +124,7 @@ export default function EnglishAboutPage() {
                     className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-xl bg-[#f5f5f7] outline-none ring-1 ring-black/[0.06] transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
                     aria-label={`Profile: ${p.name}`}
                   >
-                    <Image src={p.image} alt="" fill className="object-cover object-top" quality={95} sizes="72px" />
+                    <Image src={teamPortraitThumb(slug)} alt="" fill className="object-cover object-top" quality={90} sizes="72px" />
                   </Link>
                   <div className="min-w-0 pt-0.5">
                     <h3 className="text-[18px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">

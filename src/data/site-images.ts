@@ -104,11 +104,11 @@ export const partnershipBannerLogos = HOME.slice(22, 37);
 
 /** Grosse Hero-Fotos aus den Fokusthemen-Detailseiten (ohne Logo) */
 export const fokusPageHeroImages = {
-  "digitale-transformation": (scraped["https://www.abexis.ch/fokusthemen/digitale-transformation"] as string[])[1],
-  unternehmensstrategie: (scraped["https://www.abexis.ch/fokusthemen/unternehmensstrategie"] as string[])[1],
-  vertriebmarketing: (scraped["https://www.abexis.ch/fokusthemen/vertriebmarketing"] as string[])[1],
-  veränderungsmanagement: (scraped["https://www.abexis.ch/fokusthemen/ver%C3%A4nderungsmanagement"] as string[])[1],
-  prozessoptimierung: (scraped["https://www.abexis.ch/fokusthemen/prozessoptimierung"] as string[])[1],
+  "digitale-transformation": "/images/focus/digitale-transformation.webp",
+  unternehmensstrategie: "/images/focus/unternehmensstrategie.webp",
+  vertriebmarketing: "/images/focus/vertriebmarketing.webp",
+  veränderungsmanagement: "/images/focus/veraenderungsmanagement.webp",
+  prozessoptimierung: "/images/focus/prozessoptimierung.webp",
   projektmanagement: projektmanagementHeroImage,
   "plm-pdm": plmPdmHeroImage,
   "virtual-management-office": vmoTeaserImage,

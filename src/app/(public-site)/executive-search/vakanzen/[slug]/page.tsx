@@ -81,8 +81,7 @@ export default async function VacancyDetailPage({ params }: Props) {
           </div>
         }
       >
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Aktuelles Mandat</p>
-        <h1 className="mt-3 max-w-[36ch] text-[clamp(1.875rem,6vw+0.65rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:text-[56px] md:leading-[1.02]">
+        <h1 className="max-w-[36ch] text-[clamp(1.875rem,6vw+0.65rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:text-[56px] md:leading-[1.02]">
           <HeroHeadlineText>{v.title}</HeroHeadlineText>
         </h1>
       </PageHero>

@@ -463,8 +463,7 @@ export function FokusEnglishPage({ page }: { page: EnglishFocusPageData }) {
           </>
         }
       >
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{page.subtitle}</p>
-        <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
+        <h1 className="max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
           <HeroHeadlineText>{page.heroTitle}</HeroHeadlineText>
         </h1>
       </PageHero>

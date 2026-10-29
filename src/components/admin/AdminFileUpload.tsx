@@ -13,6 +13,59 @@ interface AdminFileUploadProps {
   className?: string;
 }
 
+/**
+ * Downscales raster images client-side (max 1600px, WebP 82%) to avoid uploading
+ * multi-megabyte raw camera files into Firebase Storage.
+ */
+async function compressImageForUpload(file: File, maxDim = 1600): Promise<{ file: File; extension: string }> {
+  if (!file.type.startsWith("image/") || file.type.includes("svg") || file.type.includes("gif")) {
+    return { file, extension: "" };
+  }
+
+  return new Promise((resolve) => {
+    const img = new window.Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      let { width, height } = img;
+      if (width > maxDim || height > maxDim) {
+        if (width > height) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return resolve({ file, extension: "" });
+
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(
+        (blob) => {
+          if (!blob || blob.size >= file.size) {
+            return resolve({ file, extension: "" });
+          }
+          const baseName = file.name.replace(/\.[^/.]+$/, "");
+          const compressed = new File([blob], `${baseName}.webp`, { type: "image/webp" });
+          resolve({ file: compressed, extension: ".webp" });
+        },
+        "image/webp",
+        0.82
+      );
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve({ file, extension: "" });
+    };
+    img.src = objectUrl;
+  });
+}
+
 export function AdminFileUpload({
   path,
   onUploadSuccess,
@@ -25,24 +78,26 @@ export function AdminFileUpload({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const rawFile = e.target.files?.[0];
+    if (!rawFile) return;
 
     setUploading(true);
     setError(null);
 
     try {
+      const { file: uploadFile, extension } = await compressImageForUpload(rawFile);
+
       // Use the provided path, but ensure the filename is appended if it's a directory-like path
-      // If the path already has an extension, we use it as is (overwriting or specific file)
-      // Otherwise we append the filename
       let finalPath = path;
       if (!path.includes(".") || path.endsWith("/")) {
-        const cleanName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
+        const cleanName = uploadFile.name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
         finalPath = path.endsWith("/") ? `${path}${cleanName}` : `${path}/${cleanName}`;
+      } else if (extension && !finalPath.endsWith(extension)) {
+        finalPath = finalPath.replace(/\.[a-zA-Z0-9]+$/, extension);
       }
 
-      const url = await uploadCmsFile(file, finalPath);
-      onUploadSuccess(url, { storagePath: finalPath, file });
+      const url = await uploadCmsFile(uploadFile, finalPath);
+      onUploadSuccess(url, { storagePath: finalPath, file: uploadFile });
     } catch (err) {
       console.error("Upload error:", err);
       setError(err instanceof Error ? err.message : "Upload fehlgeschlagen.");

@@ -45,8 +45,7 @@ export default function LeistungenPage() {
         }
         actions={<HeroProjectRealityCheckCta />}
       >
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">Leistungen</p>
-        <h1 className="mt-3 max-w-[22ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance md:max-w-[32ch] md:text-[56px] md:leading-[1.02]">
+        <h1 className="max-w-[22ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance md:max-w-[32ch] md:text-[56px] md:leading-[1.02]">
           <HeroHeadlineText>Beratung mit Substanz für Entscheidungen, die Wirkung entfalten.</HeroHeadlineText>
         </h1>
         <p className="mt-5 max-w-[48ch] text-[17px] leading-relaxed text-white/88 text-balance sm:text-[19px]">

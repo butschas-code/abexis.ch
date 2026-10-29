@@ -4,6 +4,7 @@ import { MotionSection } from "@/components/motion/MotionSection";
 import { InteriorPageLayout } from "@/components/site/InteriorPageLayout";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { footerPartners, teamOrder, teamProfiles } from "@/data/pages";
+import { teamPortraitThumb } from "@/data/site-images";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { localizedAlternates } from "@/lib/seo/localized-metadata";
 
@@ -57,11 +58,11 @@ export default function UeberUnsPage() {
                   style={{ minHeight: 240 }}
                 >
                   <Image
-                    src={p.image}
+                    src={teamPortraitThumb(slug)}
                     alt=""
                     fill
                     className="object-cover object-top transition-opacity hover:opacity-95"
-                    quality={95}
+                    quality={90}
                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 224px, 256px"
                   />
                 </Link>
@@ -115,11 +116,11 @@ export default function UeberUnsPage() {
                     aria-label={`Profil: ${p.name}`}
                   >
                     <Image
-                      src={p.image}
+                      src={teamPortraitThumb(slug)}
                       alt=""
                       fill
                       className="object-cover object-top"
-                      quality={95}
+                      quality={90}
                       sizes="72px"
                     />
                   </Link>

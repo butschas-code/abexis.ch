@@ -585,8 +585,7 @@ export function ProjectFitCheck({ locale = "de", afterHero }: { locale?: "de" | 
           </>
         }
       >
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{s.heroEyebrow}</p>
-        <h1 className="mt-3 max-w-[22rem] text-[clamp(1.75rem,6vw+0.35rem,3.5rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-balance sm:max-w-[28ch] sm:leading-[1.06]">
+        <h1 className="max-w-[22rem] text-[clamp(1.75rem,6vw+0.35rem,3.5rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-balance sm:max-w-[28ch] sm:leading-[1.06]">
           <span className="text-white">{s.heroTitle1}</span>
           <br />
           <HeroHeadlineBrandAccent>{s.heroTitle2}</HeroHeadlineBrandAccent>

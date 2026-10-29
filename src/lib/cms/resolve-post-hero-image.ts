@@ -1,4 +1,4 @@
-import { resolvePublicImageUrl } from "@/lib/images/resolve-public-image-url";
+import { resolveThumbnailUrl } from "@/lib/images/resolve-thumbnail-url";
 import { getBlogListCoverByIndex } from "@/data/site-images";
 
 /**
@@ -18,6 +18,7 @@ function stablePoolIndexForPost(post: { id: string; slug: string }): number {
  * Resolves a URL suitable for `next/image` and hero surfaces:
  * - Uses CMS `heroImageUrl` when it looks like an absolute image URL
  * - Upgrades legacy Hoststar `http://` to `https://` (Image + hotlinking)
+ * - Resolves to prebuilt compressed WebP thumbnails whenever available
  * - Otherwise returns a stock blog cover, stable per post
  */
 export function resolvePostHeroImageUrl(post: { heroImageUrl: string | null; id: string; slug: string }): string {
@@ -25,13 +26,13 @@ export function resolvePostHeroImageUrl(post: { heroImageUrl: string | null; id:
   if (u) {
     if (/^https?:\/\//i.test(u)) {
       if (u.startsWith("http://files.designer.hoststar.ch")) {
-        return `https://${u.slice("http://".length)}`;
+        return resolveThumbnailUrl(`https://${u.slice("http://".length)}`);
       }
-      return resolvePublicImageUrl(u);
+      return resolveThumbnailUrl(u);
     }
     if (u.startsWith("//") && u.length > 2) {
-      return `https:${u}`;
+      return resolveThumbnailUrl(`https:${u}`);
     }
   }
-  return getBlogListCoverByIndex(stablePoolIndexForPost(post));
+  return resolveThumbnailUrl(getBlogListCoverByIndex(stablePoolIndexForPost(post)));
 }

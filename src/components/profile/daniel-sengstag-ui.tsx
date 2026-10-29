@@ -127,8 +127,7 @@ export function DanielSengstagProfilePage({
         }
       >
         <div className="max-w-[40rem]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{copy.hero.credentials}</p>
-          <h1 className="mt-3 text-[clamp(1.875rem,6.5vw+0.6rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:text-[52px] md:leading-[1.02]">
+          <h1 className="text-[clamp(1.875rem,6.5vw+0.6rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:text-[52px] md:leading-[1.02]">
             <HeroHeadlineText>{copy.hero.name}</HeroHeadlineText>
           </h1>
         </div>

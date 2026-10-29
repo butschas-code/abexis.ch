@@ -42,8 +42,7 @@ export default function EnglishHomePage() {
       <SchemaMarkup type="Home" path="/en/home" />
       <HomeHero>
         <div className="min-w-0 max-w-[40rem] md:max-w-[44rem]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{h.eyebrow}</p>
-          <h1 className="hero-home-title-shadow mt-3 text-[clamp(1.6rem,5.2vw+0.4rem,2.5rem)] font-semibold leading-none tracking-[-0.03em] text-balance break-words sm:text-[38px] md:text-[52px]">
+          <h1 className="hero-home-title-shadow text-[clamp(1.6rem,5.2vw+0.4rem,2.5rem)] font-semibold leading-none tracking-[-0.03em] text-balance break-words sm:text-[38px] md:text-[52px]">
             <span className="text-white">{h.titleLines[0]}</span>
             <br />
             <HeroHeadlineBrandAccent>{h.titleLines[1]}</HeroHeadlineBrandAccent>

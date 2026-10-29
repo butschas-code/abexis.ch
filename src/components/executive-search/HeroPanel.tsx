@@ -54,11 +54,8 @@ export function HeroPanel({
         </>
       }
     >
-      {eyebrow ? (
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{eyebrow}</p>
-      ) : null}
       <h1
-        className={`max-w-[32ch] text-[clamp(1.875rem,6vw+0.65rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:max-w-[40ch] md:text-[56px] md:leading-[1.02] ${eyebrow ? "mt-3" : ""}`}
+        className="max-w-[32ch] text-[clamp(1.875rem,6vw+0.65rem,2.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:text-[40px] sm:leading-[1.05] md:max-w-[40ch] md:text-[56px] md:leading-[1.02]"
       >
         <HeroHeadlineText>{title}</HeroHeadlineText>
       </h1>

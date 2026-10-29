@@ -1,19 +1,26 @@
 /**
- * Small WebP thumbnails for card images (service cards, team portraits).
+ * Small WebP thumbnails for card images (service cards, team portraits, blog posts).
  * `images.unoptimized` is on (see next.config.ts), so the browser would otherwise download
- * the full-size originals (up to ~5000 px) for ~300–500 px cards.
+ * the full-size originals (up to ~5000 px, ~2–19 MB) for ~300–500 px cards.
  *
  * Run after changing a card image: `pnpm run thumbnails`
- * Output: `public/images/thumbs/<name>.webp` (committed). Add new cards to MANIFEST and to
- * `thumbnailImages` in `src/data/site-images.ts`.
+ * Flags:
+ *   --force  Re-download and re-compress even if thumbnail already exists on disk.
+ *
+ * Output:
+ *   `public/images/thumbs/<name>.webp` (site cards & team)
+ *   `public/images/thumbs/blog/<uuid>.webp` (blog covers)
+ *   `src/data/blog-thumbnails-manifest.json` (active blog thumbnail UUID list)
  */
 import fs from "fs";
 import path from "path";
 import sharp from "sharp";
 
-/** Cards render at ~300–500 CSS px; the client asked for ~500 px wide sources. */
 const CARD_WIDTH = 500;
+const BLOG_CARD_WIDTH = 600;
 const OUT_DIR = path.join(process.cwd(), "public", "images", "thumbs");
+const BLOG_OUT_DIR = path.join(OUT_DIR, "blog");
+const MANIFEST_PATH = path.join(process.cwd(), "src", "data", "blog-thumbnails-manifest.json");
 const WEBP_OPTS = { quality: 80, effort: 6 };
 
 const hoststar = (file) => `https://files.designer.hoststar.ch/${file.slice(0, 2)}/${file.slice(2, 4)}/${file}`;
@@ -54,14 +61,94 @@ async function load(src) {
   return Buffer.from(await res.arrayBuffer());
 }
 
-async function main() {
-  await fs.promises.mkdir(OUT_DIR, { recursive: true });
+async function buildStaticCards(force = false) {
+  console.log("--- Building site & team card thumbnails ---");
   for (const { name, src, width = CARD_WIDTH } of MANIFEST) {
-    const input = await load(src);
     const dest = path.join(OUT_DIR, `${name}.webp`);
+    if (!force && fs.existsSync(dest) && fs.statSync(dest).size > 0) {
+      continue;
+    }
+    const input = await load(src);
     const info = await sharp(input).rotate().resize({ width, withoutEnlargement: true }).webp(WEBP_OPTS).toFile(dest);
     console.log(`${path.relative(process.cwd(), dest)}  ${info.width}x${info.height}  ${Math.round(info.size / 1024)} KB`);
   }
+}
+
+async function buildBlogThumbnails(force = false) {
+  console.log("--- Building blog thumbnails ---");
+  await fs.promises.mkdir(BLOG_OUT_DIR, { recursive: true });
+
+  const rawPath = path.join(process.cwd(), "src", "data", "scraped-images-raw.json");
+  const legacyPostsPath = path.join(process.cwd(), "data", "legacy-abexis-posts.json");
+
+  let allUrls = [];
+  if (fs.existsSync(rawPath)) {
+    const raw = JSON.parse(fs.readFileSync(rawPath, "utf8"));
+    const blogCovers = (raw["https://www.abexis.ch/blog"] || []).filter(
+      (u) => !u.includes("9fa6de2e-48f4-4837-8a9b-43f06f5ecc7f")
+    );
+    allUrls.push(...blogCovers);
+  }
+
+  if (fs.existsSync(legacyPostsPath)) {
+    const legacy = JSON.parse(fs.readFileSync(legacyPostsPath, "utf8"));
+    const legacyUrls = legacy.map((p) => p.heroImageUrl).filter(Boolean);
+    allUrls.push(...legacyUrls);
+  }
+
+  const UUID_RE = /([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i;
+  const uniqueItems = new Map();
+
+  for (const u of allUrls) {
+    const match = u.match(UUID_RE);
+    if (!match) continue;
+    const uuid = match[1].toLowerCase();
+    if (!uniqueItems.has(uuid)) {
+      uniqueItems.set(uuid, u.replace("http://", "https://"));
+    }
+  }
+
+  console.log(`Found ${uniqueItems.size} unique blog cover images.`);
+  const uuids = [];
+  let generated = 0;
+  let skipped = 0;
+
+  for (const [uuid, url] of uniqueItems.entries()) {
+    uuids.push(uuid);
+    const dest = path.join(BLOG_OUT_DIR, `${uuid}.webp`);
+    if (!force && fs.existsSync(dest) && fs.statSync(dest).size > 0) {
+      skipped++;
+      continue;
+    }
+
+    try {
+      const input = await load(url);
+      const info = await sharp(input)
+        .rotate()
+        .resize({ width: BLOG_CARD_WIDTH, withoutEnlargement: true })
+        .webp(WEBP_OPTS)
+        .toFile(dest);
+      console.log(`[blog thumb] ${uuid}.webp  ${info.width}x${info.height}  ${Math.round(info.size / 1024)} KB`);
+      generated++;
+    } catch (err) {
+      console.warn(`[blog thumb fail] ${uuid}: ${err.message}`);
+    }
+  }
+
+  console.log(`Blog thumbnails: ${generated} generated, ${skipped} already up to date.`);
+
+  // Write manifest so Next.js client & server know exactly which thumbnails are ready
+  uuids.sort();
+  fs.writeFileSync(MANIFEST_PATH, JSON.stringify(uuids, null, 2));
+  console.log(`Updated manifest: ${MANIFEST_PATH} (${uuids.length} entries)`);
+}
+
+async function main() {
+  const force = process.argv.includes("--force");
+  await fs.promises.mkdir(OUT_DIR, { recursive: true });
+  await buildStaticCards(force);
+  await buildBlogThumbnails(force);
+  console.log("All thumbnails processed successfully.");
 }
 
 main().catch((e) => {

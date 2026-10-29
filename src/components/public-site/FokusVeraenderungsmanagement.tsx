@@ -256,10 +256,7 @@ export function FokusVeraenderungsmanagement() {
           </>
         }
       >
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">
-          {meta.subtitle}
-        </p>
-        <h1 className="mt-3 max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
+        <h1 className="max-w-[22ch] text-[clamp(2.25rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
           <HeroHeadlineText>Veränderung scheitert nicht an der Strategie. Sie scheitert an den Menschen.</HeroHeadlineText>
         </h1>
       </PageHero>

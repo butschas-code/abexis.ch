@@ -39,8 +39,7 @@ export function GuideHubPage({ locale }: { locale: ServiceGuideLocale }) {
           priority
           intro={<p>{english ? "Clear, practical answers for leaders preparing important decisions and initiatives." : "Klare, praxisnahe Antworten für Führungskräfte, die wichtige Entscheidungen und Vorhaben vorbereiten."}</p>}
         >
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">{english ? "Knowledge and guidance" : "Wissen und Orientierung"}</p>
-          <h1 className="mt-3 max-w-[23ch] text-[clamp(2.15rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
+          <h1 className="max-w-[23ch] text-[clamp(2.15rem,7vw+0.5rem,3.875rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-white text-balance">
             <HeroHeadlineText>{english ? "Guides for decisions with lasting impact." : "Ratgeber für Entscheidungen mit nachhaltiger Wirkung."}</HeroHeadlineText>
           </h1>
         </PageHero>

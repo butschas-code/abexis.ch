@@ -1,4 +1,5 @@
 import { PublicImage as Image } from "@/components/site/PublicImage";
+import { resolveThumbnailUrl } from "@/lib/images/resolve-thumbnail-url";
 
 /**
  * Blog post images are LinkedIn thumbnails with text baked in, in mixed ratios (mostly 3:2, also 1:1,
@@ -16,11 +17,12 @@ export function BlogThumbnail({
   priority?: boolean;
   className?: string;
 }) {
+  const thumbSrc = resolveThumbnailUrl(src);
   return (
     <div className={`relative isolate aspect-[3/2] w-full overflow-hidden bg-[#eef1f7] ${className}`}>
-      <Image src={src} alt="" aria-hidden fill sizes={sizes} className="scale-110 object-cover opacity-55 blur-2xl" />
+      <Image src={thumbSrc} alt="" aria-hidden fill sizes={sizes} className="scale-110 object-cover opacity-55 blur-2xl" />
       <Image
-        src={src}
+        src={thumbSrc}
         alt=""
         fill
         sizes={sizes}
