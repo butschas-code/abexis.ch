@@ -9,7 +9,6 @@ import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { HomeWhoWeAreSection } from "@/components/home/HomeWhoWeAreSection";
 import { PartnershipsMarquee } from "@/components/home/PartnershipsMarquee";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { HomeIntroStrip } from "@/components/home/HomeIntroStrip";
 import { ServiceGroupsSection } from "@/components/leistungen/ServiceGroupsSection";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { ProjectSelfTest } from "@/components/project-reality-check/ProjectSelfTest";
@@ -61,8 +60,6 @@ export default function HomePage() {
           </div>
         </div>
       </HomeHero>
-
-      <HomeIntroStrip />
 
       <ServiceGroupsSection id="leistungen" />
 

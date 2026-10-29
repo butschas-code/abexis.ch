@@ -278,7 +278,6 @@ export function FokusProzessoptimierung() {
                 schlanker, transparenter Prozess : mit oder ohne Technologie.
               </p>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
 
           {/* Right half : navy */}
@@ -298,7 +297,6 @@ export function FokusProzessoptimierung() {
                 eines schlechten Prozesses erzeugt nur schnellere Fehler.
               </p>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
           </div>
         </div>
       </MotionSection>

@@ -9,7 +9,6 @@ import { HomeVacancyTeasers } from "@/components/home/HomeVacancyTeasers";
 import { HomeWhoWeAreSection } from "@/components/home/HomeWhoWeAreSection";
 import { PartnershipsMarquee, partnershipsIntroEn } from "@/components/home/PartnershipsMarquee";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { HomeIntroStrip } from "@/components/home/HomeIntroStrip";
 import { ServiceGroupsSection } from "@/components/leistungen/ServiceGroupsSection";
 import { MotionSection } from "@/components/motion/MotionSection";
 import { ProjectSelfTest } from "@/components/project-reality-check/ProjectSelfTest";
@@ -19,7 +18,6 @@ import {
   homeClarityContentEn,
   homeClosingContentEn,
   homeHeroContentEn,
-  homeIntroStripEn,
   homeProcessContentEn,
   homeWhoWeAreContentEn,
 } from "@/data/home-page-content";
@@ -67,8 +65,6 @@ export default function EnglishHomePage() {
           </div>
         </div>
       </HomeHero>
-
-      <HomeIntroStrip content={homeIntroStripEn} />
 
       <ServiceGroupsSection locale="en" id="leistungen" />
 

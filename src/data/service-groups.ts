@@ -213,8 +213,6 @@ const de = {
     title: "Was Ihr Unternehmen jetzt weiterbringt.",
     intro:
       "Eine strategische Frage, ein konkretes Vorhaben oder zusätzliche Managementkapazität: Wir richten unseren Beitrag an Ihrer Aufgabe aus.",
-    allLabel: "Alle Leistungen im Überblick",
-    allHref: "/leistungen",
     groups: groupsDe,
   },
 };
@@ -227,8 +225,6 @@ const en: ServiceGroupsContent = {
     title: "What moves your company forward now.",
     intro:
       "A strategic question, a specific initiative or additional management capacity: we shape our contribution around your task.",
-    allLabel: "All services at a glance",
-    allHref: "/en/leistungen",
     groups: groupsEn,
   },
 };

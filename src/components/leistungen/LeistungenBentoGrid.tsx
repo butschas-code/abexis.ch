@@ -25,7 +25,7 @@ export function LeistungenBentoGrid({
     <div lang={locale} className="space-y-16 md:space-y-20">
       {groups.map((group, gi) => (
         <section key={group.title}>
-          <div className="mb-6 border-t border-black/[0.06] pt-6 md:mb-8">
+          <div className={`mb-6 md:mb-8 ${gi > 0 ? "border-t border-black/[0.06] pt-6" : ""}`}>
             <GroupHeading className="text-[26px] font-semibold leading-tight tracking-[-0.025em] text-[#1d1d1f] md:text-[30px]">{group.title}</GroupHeading>
             <p className="mt-2 text-[15px] leading-relaxed text-[#6e6e73]">{group.body}</p>
           </div>

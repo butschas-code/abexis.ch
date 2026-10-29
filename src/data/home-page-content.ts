@@ -13,13 +13,6 @@ export const homeHeroContent = {
   secondaryCta: { href: "/kontakt" as const, label: "Unverbindliches Gespräch" },
 } as const;
 
-/** Audience strip under the hero (client homepage draft, Oct 2026). */
-export const homeIntroStrip = {
-  audience: "Für Geschäftsleitungen und Verwaltungsräte",
-  segment: "KMU und anspruchsvolle Organisationen",
-  cta: { href: "/kontakt", label: "Im Gespräch beginnt die Zusammenarbeit" },
-} as const;
-
 export const homeWhoWeAreContent = {
   eyebrow: "Wer wir sind",
   headline: "Erfahrung, die einordnet und Verantwortung übernimmt.",
@@ -84,12 +77,6 @@ export const homeHeroContentEn = {
   body: "We advise executive teams and take responsibility for delivery.",
   primaryCta: { href: "#leistungen" as const, label: "Explore our services" },
   secondaryCta: { href: "/en/kontakt" as const, label: "Non-binding conversation" },
-} as const;
-
-export const homeIntroStripEn = {
-  audience: "For executive teams and boards of directors",
-  segment: "SMEs and demanding organisations",
-  cta: { href: "/en/kontakt", label: "Collaboration starts with a conversation" },
 } as const;
 
 export const homeWhoWeAreContentEn = {

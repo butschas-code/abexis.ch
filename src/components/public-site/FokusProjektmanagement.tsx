@@ -274,7 +274,6 @@ export function FokusProjektmanagement() {
                 dort, wo Verstärkung am meisten bewirkt.
               </p>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
 
           {/* Right half : navy */}
@@ -294,7 +293,6 @@ export function FokusProjektmanagement() {
                 konkrete Empfehlungen für die Neuausrichtung.
               </p>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
           </div>
         </div>
       </MotionSection>
@@ -322,7 +320,6 @@ export function FokusProjektmanagement() {
               <span aria-hidden>→</span>
             </Link>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#45b3e2]/60 via-[#c9a96e]/40 to-transparent" />
         </div>
       </MotionSection>
 

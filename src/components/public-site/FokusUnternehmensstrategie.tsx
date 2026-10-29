@@ -7,15 +7,11 @@ import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { fokusPageHeroImages } from "@/data/site-images";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
-import { resolvePublicImageUrl } from "@/lib/images/resolve-public-image-url";
 
 // ─── Static data : module level, no re-allocation ────────────────────────────
 
 const meta = fokusthemenMeta.find((m) => m.slug === "unternehmensstrategie")!;
 const heroImage = fokusPageHeroImages["unternehmensstrategie"];
-const contentImage = resolvePublicImageUrl(
-  "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2Fe006b913-0cb3-4631-9d9d-7304bc2bab8e.jpg?alt=media",
-);
 
 const prozessSchritte = [
   {
@@ -228,7 +224,6 @@ export function FokusUnternehmensstrategie() {
                 Wettbewerbsvorteile zu erzielen.
               </p>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/60 via-[#c9a96e]/20 to-transparent" />
           </div>
 
           {/* Right half : navy: content tracks the 1068px centre column */}
@@ -248,7 +243,6 @@ export function FokusUnternehmensstrategie() {
                 Einklang stehen.
               </p>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#26337c] via-[#45b3e2]/60 to-transparent" />
           </div>
         </div>
 
@@ -343,24 +337,6 @@ export function FokusUnternehmensstrategie() {
           </div>
         </MotionSection>
       </section>
-
-      {/* ── IMAGE BREAK ──────────────────────────────────────────────────── */}
-      <div className="relative h-[380px] overflow-hidden md:h-[480px]">
-        <img
-          src={contentImage}
-          alt="Strategieprozess in der Praxis"
-          className="absolute inset-0 h-full w-full object-cover"
-          loading="lazy"
-        />
-        <div
-          className="absolute inset-0"
-          aria-hidden
-          style={{
-            background:
-              "linear-gradient(to top, rgba(26,31,56,0.55) 0%, transparent 55%), linear-gradient(to bottom, rgba(26,31,56,0.2) 0%, transparent 30%)",
-          }}
-        />
-      </div>
 
       {/* ── 5. PULL QUOTE ────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#1a1f38]">
