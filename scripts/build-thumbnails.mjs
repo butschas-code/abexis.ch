@@ -31,7 +31,7 @@ const MANIFEST = [
   { name: "service-prozessoptimierung", src: hoststar("86af60f1-9ed6-4736-9be9-07449647064b.jpg") },
   { name: "service-projektmanagement", src: "public/images/focus/projektmanagement.webp" },
   { name: "service-plm-pdm", src: "public/images/focus/plm-pdm.webp" },
-  { name: "service-risikomanagement", src: "public/images/focus/risikomanagement.webp" },
+  { name: "service-risikomanagement", src: "public/images/focus/risikomanagement-diagram.webp" },
   { name: "service-executive-search", src: "public/images/daniel-sengstag/hero.webp" },
   // Team portraits (keys match `teamProfiles`)
   { name: "team-danielsengstag", src: hoststar("4f9e368c-3919-4b65-8c73-ad8c8f493d75.jpg") },

@@ -360,7 +360,7 @@ async function nextApprovalPublishSlot(form: BlogAutomationFormState, from = new
     return nextSelectedPostingSlot(form, new Date(Math.max(latestScheduled.getTime() + 60_000, from.getTime())));
   }
 
-  let candidate = DateTime.fromJSDate(latestScheduled, { zone });
+  let candidate: DateTime = DateTime.fromJSDate(latestScheduled, { zone });
   const minTime = DateTime.fromJSDate(from, { zone }).plus({ minutes: 1 }).toMillis();
   do {
     candidate = advancePostingSlot(candidate, recurrence);

@@ -7,15 +7,12 @@ import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { fokusPageHeroImages } from "@/data/site-images";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
-import { resolvePublicImageUrl } from "@/lib/images/resolve-public-image-url";
 
 // ─── Static data : module level, no re-allocation ────────────────────────────
 
 const meta = fokusthemenMeta.find((m) => m.slug === "vertriebmarketing")!;
 const heroImage = fokusPageHeroImages["vertriebmarketing"];
-const contentImage = resolvePublicImageUrl(
-  "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F5e9dd04f-ea8b-4c80-9830-7579ef4024df.png?alt=media",
-);
+const contentImage = "/images/focus/vertriebmarketing-denkrahmen.webp";
 
 const handlungsfelder = [
   {
@@ -405,7 +402,9 @@ export function FokusVertriebMarketing() {
               <img
                 src={contentImage}
                 alt="Design Thinking Prozess: Problemraum und Lösungsraum"
-                className="mx-auto w-full max-w-[860px] object-contain"
+                width={1024}
+                height={576}
+                className="mx-auto h-auto w-full max-w-[860px] object-contain"
                 loading="lazy"
               />
             </div>
@@ -690,14 +689,6 @@ export function FokusVertriebMarketing() {
               >
                 Online-Kalender öffnen
               </Link>
-            </div>
-          </div>
-
-          <div className="mt-16 flex items-center gap-4 opacity-20">
-            <div className="h-px flex-1 bg-white" />
-            <div className="relative h-4 w-4">
-              <div className="absolute top-0 left-0 h-4 w-px bg-white" />
-              <div className="absolute top-0 left-0 h-px w-4 bg-white" />
             </div>
           </div>
         </div>

@@ -85,7 +85,7 @@ export type EnglishFocusPage = {
 };
 
 const salesFrameworkImage =
-  "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F5e9dd04f-ea8b-4c80-9830-7579ef4024df.png?alt=media";
+  "/images/focus/vertriebmarketing-denkrahmen.webp";
 
 export const englishFocusPages: readonly EnglishFocusPage[] = [
   {

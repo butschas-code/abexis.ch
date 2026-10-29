@@ -9,7 +9,7 @@ import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { contactHrefWithInterests } from "@/data/contact-meeting-interests";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { getRisikomanagementContent, type RisikomanagementLocale } from "@/data/risikomanagement-content";
-import { fokusPageHeroImages } from "@/data/site-images";
+import { fokusPageHeroImages, risikomanagementDiagramImage } from "@/data/site-images";
 
 function LCorner({ className = "" }: { className?: string }) {
   return (
@@ -108,11 +108,10 @@ function QuestionRail({ questions }: { questions: readonly string[] }) {
                 {num}
               </div>
               <div
-                className={`group relative min-w-0 flex-1 overflow-hidden rounded-2xl border border-black/[0.06] px-5 py-5 transition-all duration-300 md:px-6 md:py-6 ${
-                  isLinen
+                className={`group relative min-w-0 flex-1 overflow-hidden rounded-2xl border border-black/[0.06] px-5 py-5 transition-all duration-300 md:px-6 md:py-6 ${isLinen
                     ? "bg-[#faf8f2] hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(38,51,124,0.08)]"
                     : "bg-white hover:-translate-y-0.5 hover:border-[#26337c]/15 hover:shadow-[0_12px_32px_rgba(38,51,124,0.08)]"
-                }`}
+                  }`}
               >
                 <LCorner className="top-3 right-3 text-[#c9a96e]/25" />
                 <p className="relative text-[15px] font-semibold leading-snug tracking-[-0.01em] text-[#1d1d1f] md:text-[16px]">
@@ -480,7 +479,28 @@ export function FokusRisikomanagement({ locale = "de" }: Props) {
               <p className="text-[17px] leading-relaxed text-[#6e6e73] md:pb-1">{c.problem.intro}</p>
             </div>
 
-            <div className="mt-12 rounded-2xl border border-black/[0.06] bg-[#f5f5f7] p-6 md:p-8">
+            {/* ── 360° Risk Management Framework diagram ──────────────── */}
+            <div className="mt-10 overflow-hidden rounded-2xl border border-black/[0.05] bg-[#f5f5f7] p-8 md:p-12">
+              <img
+                src={risikomanagementDiagramImage}
+                alt={
+                  locale === "en"
+                    ? "Risk Management Framework: 360° overview of project risks"
+                    : "Risikomanagement 360°-Radar: Ganzheitliche Betrachtung von Projektrisiken"
+                }
+                width={2752}
+                height={1536}
+                className="mx-auto h-auto w-full max-w-[760px] object-contain"
+                loading="lazy"
+              />
+              <p className="mt-5 text-center text-[12px] text-[#86868b]">
+                {locale === "en"
+                  ? "Holistic risk radar: Connecting deadlines, dependencies, governance and early signals to protect project delivery."
+                  : "Ganzheitlicher Risiko-Radar: Verknüpfung von Terminen, Abhängigkeiten, Governance und Frühsignalen zur Absicherung des Projekterfolgs."}
+              </p>
+            </div>
+
+            <div className="mt-8 rounded-2xl border border-black/[0.06] bg-[#f5f5f7] p-6 md:p-8">
               <div className="flex flex-wrap items-baseline justify-between gap-3">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#86868b]">
                   {labels.typischeFragen}

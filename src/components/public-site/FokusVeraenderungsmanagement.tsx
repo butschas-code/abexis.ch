@@ -667,14 +667,6 @@ export function FokusVeraenderungsmanagement() {
               </Link>
             </div>
           </div>
-
-          <div className="mt-16 flex items-center gap-4 opacity-20">
-            <div className="h-px flex-1 bg-white" />
-            <div className="relative h-4 w-4">
-              <div className="absolute top-0 left-0 h-4 w-px bg-white" />
-              <div className="absolute top-0 left-0 h-px w-4 bg-white" />
-            </div>
-          </div>
         </div>
       </section>
     </InteriorPageRoot>

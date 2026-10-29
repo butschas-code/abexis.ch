@@ -196,9 +196,9 @@ function FrameworkSection({ page }: { page: EnglishFocusPageData }) {
           <Image
             src={page.framework.image}
             alt={page.framework.alt}
-            width={1200}
-            height={520}
-            className="mx-auto w-full max-w-[860px] object-contain"
+            width={1024}
+            height={576}
+            className="mx-auto h-auto w-full max-w-[860px] object-contain"
           />
         </div>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -421,14 +421,6 @@ function FinalCta({ page }: { page: EnglishFocusPageData }) {
               Open online calendar
             </a>
           </div>
-        </div>
-        <div className="mt-16 flex items-center gap-4 opacity-20">
-          <div className="h-px flex-1 bg-white" />
-          <div className="relative h-4 w-4">
-            <div className="absolute top-0 left-0 h-4 w-px bg-white" />
-            <div className="absolute top-0 left-0 h-px w-4 bg-white" />
-          </div>
-          <div className="h-px flex-1 bg-white" />
         </div>
       </div>
     </section>
