@@ -61,6 +61,41 @@ export function normalizeSwissGermanText(value: string): string {
 }
 
 /**
+ * Strips all emojis from text or HTML fragments.
+ * Keeps public copy and LinkedIn teasers free from AI-typical emoji clutter.
+ */
+export function stripEmojis(value: string): string {
+  if (!value) return "";
+  return value
+    .replace(/\p{Extended_Pictographic}/gu, "")
+    .replace(/[^\S\r\n]{2,}/g, " ")
+    .replace(/^[^\S\r\n]+/gm, "")
+    .replace(/[^\S\r\n]+$/gm, "");
+}
+
+/**
+ * Replaces parenthetical Gedankenstriche (em-dash `—` or spaced en-dash ` – `)
+ * with natural commas, avoiding the conspicuous LLM dash-cadence.
+ * Preserves hyphens in compound words (e.g. "KMU-Inhaber") and unspaced number ranges (e.g. "2024–2026").
+ */
+export function cleanGedankenstriche(value: string): string {
+  if (!value) return "";
+  let out = value;
+  // Spaced em-dash or en-dash between words -> comma
+  out = out.replace(/([^\s,;:.!?])\s+[—–]\s+([^\s])/g, "$1, $2");
+  // Any unspaced em-dash (—) -> comma
+  out = out.replace(/([^\s,;:.!?])\s*—\s*([^\s])/g, "$1, $2");
+  // Standalone em-dash at start of lines or paragraphs
+  out = out.replace(/(?:^|\n)\s*—\s*/g, "\n");
+  // Remaining isolated em-dashes
+  out = out.replace(/\s*—\s*/g, ", ");
+  // Tidy duplicate or broken punctuation
+  out = out.replace(/,\s*,+/g, ",");
+  out = out.replace(/,\s*([.:;!?])/g, "$1");
+  return out;
+}
+
+/**
  * Repairs generated/CMS bodies that were accidentally stored as escaped HTML,
  * e.g. `&lt;section&gt;&lt;p&gt;...`, before the strict sanitizer runs.
  */
@@ -209,6 +244,9 @@ export function cleanGeneratedBlogArticleHtml(html: string): string {
     .replace(EXTERNAL_URL_PATTERN, "");
 
   out = stripHtmlBlocksMatching(out, COMPETITOR_REFERENCE_PATTERN);
+
+  out = stripEmojis(out);
+  out = cleanGedankenstriche(out);
 
   return restoreImgTags(
     normalizeSwissGermanText(out)

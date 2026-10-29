@@ -8,6 +8,7 @@ import { CMS_PATHS } from "@/admin/paths";
 import { useCmsAuth } from "@/cms/auth/cms-auth-context";
 import {
   DEFAULT_BLOG_AUTOMATION_FORM,
+  DEFAULT_BRAND_INSTRUCTIONS,
   type BlogAutomationFormState,
   type QueuedBlogTopicRow,
 } from "@/cms/services/blog-automation-admin-client";
@@ -829,6 +830,31 @@ export function BlogAutomationClient() {
                     ))}
                   </div>
                 </fieldset>
+                <div className="space-y-2 md:col-span-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <label htmlFor="brandInstructionsInput" className="text-[14px] font-medium text-[var(--apple-text)]">
+                      Redaktionsrichtlinien &amp; Schreibstil (KI-Systemanweisung)
+                    </label>
+                    <button
+                      type="button"
+                      className={`${adminBtnGhost} !min-h-[28px] px-2.5 text-[12px]`}
+                      onClick={() => patch({ brandInstructions: DEFAULT_BRAND_INSTRUCTIONS })}
+                      title="Setzt die Standard-Richtlinien von Daniel Sengstag ein"
+                    >
+                      Standard wiederherstellen
+                    </button>
+                  </div>
+                  <p className={`text-[13px] ${adminBody}`}>
+                    Gilt für alle neu generierten Blogartikel und LinkedIn-Posts. Definiert Praktiker-Ton, Tabuwörter und Qualitätsregeln, damit die Texte nicht nach generischer KI klingen.
+                  </p>
+                  <textarea
+                    id="brandInstructionsInput"
+                    className={`${adminInput} min-h-[190px] resize-y font-mono text-[13px] leading-relaxed`}
+                    value={form.brandInstructions}
+                    onChange={(e) => patch({ brandInstructions: e.target.value })}
+                    placeholder={DEFAULT_BRAND_INSTRUCTIONS}
+                  />
+                </div>
               </div>
             </div>
 

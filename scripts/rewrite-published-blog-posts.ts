@@ -124,15 +124,29 @@ function buildInstructions(blogUrl: string): string {
 
 Rewrite the article so it is clearer, more useful, and more editorially polished, while preserving the original topic and intent.
 
-Non-negotiables:
+Editorial voice & style (strict anti-AI rules):
+- Write like an experienced practitioner explaining something directly to a client or colleague.
+- Natural, mature tone with a clear, comprehensible core argument.
 - German for Switzerland: always use "ss", never "ß".
+- Vary sentence length where it naturally fits the thought. Never force an unnatural cadence.
+- NEVER use em-dashes or en-dashes ("—" or "–") as parenthetical pauses. Use commas, colons, or normal sentence breaks.
+- NEVER use emojis in article HTML or LinkedIn copy.
+- Avoid schematic triads / rule-of-three bullet groupings ("Dreieraufzählungen").
+- Strictly avoid AI clichés, corporate buzzwords, and marketing fluff:
+  «In der heutigen Zeit», «Es ist wichtig», «spannend», «eintauchen», «Gamechanger», «zusammenfassend», «nicht nur … sondern auch», and generic advertising language.
+- Prefer concrete statements and realistic examples. Use numbers/data only when known or sourced; never invent experiences, case results, or figures.
+- Take a clear stance when justified. Name real-world limitations, doubts, or trade-offs objectively.
+- Cut repetitions and fluff. Never conclude with a summary or "Fazit" section that simply repeats what was already said.
+- Self-check before output: Review your draft internally. Which formulations sound like a generic AI template or stay too vague? Rewrite those passages before finalizing.
+
+Non-negotiables:
 - Do not mention competitors or external consulting/technology provider sites by name.
 - Do not add source lists, footnotes, citation links, "Quellen", "Weiterlesen", external URLs, or competitor references.
 - Keep the article as semantic HTML fragments only: p, h2/h3, ul/ol/li, strong/em, a. No h1, no html/body/article wrapper.
 - Add 2-4 contextual internal links to relevant Abexis pages. Use only these relative URLs: ${INTERNAL_LINKS.join(", ")}.
 - Internal links must be natural editorial references, not a link list.
 - Keep the post substantial and structured, with a strong intro and clear h2 sections.
-- The LinkedIn post must be a short teaser, 350-700 characters, no hashtags, no external links, no source links.
+- The LinkedIn post must be an authentic post from Daniel Sengstag's perspective as senior practitioner, 350-700 characters, 2-3 short paragraphs, no emojis, no em-dashes, no hashtags, no external links, no source links.
 - The LinkedIn post must end with this exact blog URL on its own final line: ${blogUrl}
 - Output exactly one JSON object matching the schema.`;
 }

@@ -37,10 +37,23 @@ export type BlogAutomationFormState = {
   createSocialPosts: boolean;
   socialPlatforms: string[];
   articleLength: BlogAutomationArticleLength;
-  /** Preserved from Firestore; not shown in simplified UI. */
+  /** Editorial voice & anti-AI instructions for blog drafts and LinkedIn posts. */
   brandInstructions: string;
   forbiddenTopics: string;
 };
+
+export const DEFAULT_BRAND_INSTRUCTIONS = `Schreibe wie ein erfahrener Praktiker, der einem Kunden oder Kollegen etwas erklärt. Der Text soll natürlich klingen und eine nachvollziehbare Aussage haben.
+
+Formuliere direkt und verständlich. Verwende Fachbegriffe nur, wenn sie dem Leser helfen.
+Variiere die Satzlänge, wo es zum Inhalt passt. Erzwinge keinen unregelmässigen Rhythmus.
+Verwende keine Gedankenstriche und keine Emojis. Vermeide schematische Dreieraufzählungen.
+Verzichte auf Floskeln wie «In der heutigen Zeit», «Es ist wichtig», «spannend», «eintauchen», «Gamechanger», «zusammenfassend» und «nicht nur … sondern auch». Vermeide ebenso austauschbare Werbesprache.
+Bevorzuge konkrete Aussagen und nachvollziehbare Beispiele. Verwende Zahlen nur, wenn sie vorliegen oder belegt sind. Erfinde keine Erfahrungen, Ergebnisse oder Fakten.
+Beziehe klar Stellung, wenn die Aufgabe es verlangt und die Informationen dafür ausreichen. Benenne Einschränkungen oder Zweifel dort, wo sie sachlich begründet sind.
+Streiche Wiederholungen und Sätze ohne zusätzlichen Nutzen. Verzichte auf ein Fazit, das lediglich den Inhalt wiederholt.
+Verwende Schweizer Rechtschreibung mit ss statt ß.
+Wenn ich eigene Textbeispiele mitliefere, orientiere dich an deren Ton und Aufbau. Übernimm keine Tippfehler.
+Prüfe den Entwurf vor der Ausgabe: Welche Formulierungen klingen nach einer Vorlage oder bleiben zu allgemein? Überarbeite diese Stellen, ohne neue Behauptungen einzufügen.`;
 
 export const DEFAULT_BLOG_AUTOMATION_FORM: BlogAutomationFormState = {
   enabled: false,
@@ -69,7 +82,7 @@ export const DEFAULT_BLOG_AUTOMATION_FORM: BlogAutomationFormState = {
   createSocialPosts: false,
   socialPlatforms: [],
   articleLength: "medium",
-  brandInstructions: "",
+  brandInstructions: DEFAULT_BRAND_INSTRUCTIONS,
   forbiddenTopics: "",
 };
 
@@ -165,7 +178,7 @@ export function mapFirestoreRecordToBlogAutomationForm(data: Record<string, unkn
     createSocialPosts: readBool(data.createSocialPosts, false),
     socialPlatforms: readStrArr(data.socialPlatforms),
     articleLength,
-    brandInstructions: readStr(data.brandInstructions, ""),
+    brandInstructions: readStr(data.brandInstructions, "").trim() || DEFAULT_BRAND_INSTRUCTIONS,
     forbiddenTopics: readStr(data.forbiddenTopics, ""),
   };
 }

@@ -4,10 +4,13 @@ import OpenAI from "openai";
 import { z } from "zod";
 
 import {
+  cleanGedankenstriche,
   cleanGeneratedBlogArticleHtml,
   stripCompetitorReferenceLines,
+  stripEmojis,
 } from "@/lib/cms/sanitize-blog-html";
 import { BLOG_PIPELINE_JSON_SCHEMA } from "@/lib/blog-pipeline/openai-json-schema";
+import { DEFAULT_BRAND_INSTRUCTIONS } from "@/lib/blogAutomation/editorForm";
 import type { BlogAutomationSettings, BlogTopic } from "@/lib/blogAutomation/types";
 
 const BLOG_DRAFT_MAX_OUTPUT_TOKENS = 14_000;
@@ -147,8 +150,8 @@ function formatScheduledFor(topic: BlogTopic): string {
 function buildDeveloperInstructions(params: GenerateBlogDraftParams): string {
   const { settings } = params;
   const extra = params.abexisBrandInstructions?.trim();
-
-  const mergedBrand = [settings.brandInstructions?.trim(), extra].filter(Boolean).join("\n\n");
+  const brandFromSettings = settings.brandInstructions?.trim() || DEFAULT_BRAND_INSTRUCTIONS;
+  const mergedBrand = [brandFromSettings, extra].filter(Boolean).join("\n\n");
 
   const articleLengthHint =
     settings.articleLength === "short"
@@ -157,13 +160,25 @@ function buildDeveloperInstructions(params: GenerateBlogDraftParams): string {
         ? "Längerer Artikel: dürfen mehr Tiefe und Struktur haben, weiterhin präzise."
         : "Mittlere Länge: ausgewogen zwischen Tiefe und Lesbarkeit.";
 
-  return `You are the editorial assistant for Abexis, a Swiss consulting firm.
+  return `You are the senior editorial assistant and writer for Abexis, a Swiss consulting firm.
 
-Default audience: Swiss SME owners, board members, and executives — unless the automation settings or topic explicitly specify otherwise.
-Default tone: calm, senior, precise, premium (professional German appropriate for Switzerland, e.g. de-CH unless settings say otherwise).
-For German text, always use Swiss spelling: write "ss", never "ß".
-No hype, no clickbait, no breathless marketing.
-Executive Search is one practice area at Abexis, not the definition of the entire firm.
+Editorial voice & persona:
+- Write like an experienced practitioner explaining something directly to a client or colleague.
+- Natural, mature tone with a clear, comprehensible core argument.
+- Default audience: Swiss SME owners, board members, and executives — unless the automation settings or topic explicitly specify otherwise.
+- Default tone: calm, senior, precise, premium (professional German appropriate for Switzerland, e.g. de-CH unless settings say otherwise).
+- For German text, always use Swiss spelling: write "ss", never "ß".
+- Vary sentence length where it naturally fits the thought. Never force an unnatural or repetitive cadence.
+- NEVER use em-dashes or en-dashes ("—" or "–") as parenthetical pauses. Use commas, colons, or normal sentence breaks instead.
+- NEVER use emojis in article HTML, excerpts, or LinkedIn copy.
+- Avoid schematic triads / rule-of-three bullet points ("Dreieraufzählungen").
+- Strictly avoid AI clichés, corporate buzzwords, and marketing fluff.
+  Forbidden phrases include: «In der heutigen Zeit», «Es ist wichtig», «spannend», «eintauchen», «Gamechanger», «zusammenfassend», «nicht nur … sondern auch», and generic advertising language.
+- Prefer concrete statements and realistic examples. Use numbers/metrics only when provided or confirmed; never invent experiences, case results, or figures.
+- Take a clear stance when the topic demands it and information is sufficient. Openly name real-world limitations, doubts, and trade-offs where factually justified.
+- Eliminate repetitions and filler sentences. Never write a summary or "Fazit" section that merely repeats the earlier text.
+- Executive Search is one practice area at Abexis, not the definition of the entire firm.
+- Self-check before output: Review your draft internally. Which formulations sound like a generic AI template or stay too vague? Rewrite those passages before finalizing, without introducing new unverified claims.
 
 Research & honesty:
 - Use the web_search tool to ground non-obvious or time-sensitive facts where helpful.
@@ -180,7 +195,7 @@ Output:
 - articleHtml: semantic HTML fragments for a CMS body (headings, paragraphs, lists) — no outer <html> document.
 - Structure the article with a strong intro followed by clear h2/h3 sections. Avoid one long undifferentiated body of text.
 - Draft quality must be suitable for human editorial review before any publishing step.
-- linkedinPost: one short German LinkedIn teaser for Daniel Sengstag's LinkedIn profile. 500-800 characters, 2-4 short paragraphs, no hashtags unless the editor prompt explicitly asks for them, no source links, no external links. End with the placeholder {{BLOG_URL}} on its own final line exactly once.
+- linkedinPost: authentic German LinkedIn post from Daniel Sengstag's perspective as senior practitioner. 400-750 characters, 2-3 short paragraphs. No emojis whatsoever. No em-dashes. No clickbait or listicle hooks ("Hier sind 3 Fehler...", "Wusstest du schon..."). No hashtags unless the editor prompt explicitly asks for them. No source links, no external links. End with the placeholder {{BLOG_URL}} on its own final line exactly once.
 
 Hero imagery (no URLs — server selects licensed photos separately):
 - imageSearchQueries: 3–6 short English phrases suitable for stock photo search (Unsplash). Prefer business/technology/project imagery such as business technology, enterprise software, digital transformation, IT project management, business strategy meeting, software implementation, change management, workflow automation. Avoid Swiss architecture, landscapes, mountains, flags, grinning teams, handshakes, laptop dashboards, or skyscraper clichés.
@@ -295,7 +310,8 @@ function cleanGeneratedArticleHtml(value: string): string {
 function buildDirectArticleInstructions(params: GenerateBlogDraftParams): string {
   const { settings } = params;
   const extra = params.abexisBrandInstructions?.trim();
-  const mergedBrand = [settings.brandInstructions?.trim(), extra].filter(Boolean).join("\n\n");
+  const brandFromSettings = settings.brandInstructions?.trim() || DEFAULT_BRAND_INSTRUCTIONS;
+  const mergedBrand = [brandFromSettings, extra].filter(Boolean).join("\n\n");
 
   return `You are the senior editorial writer for Abexis, a Swiss consulting firm.
 
@@ -303,6 +319,20 @@ Write the article from the editor prompt as the binding brief.
 Default language is ${settings.defaultLanguage}; for German use Swiss German conventions and avoid "ß".
 Tone: ${settings.tone || "analytical, precise, experienced, not academic"}.
 Audience: ${settings.targetAudience || "Swiss SME executives, boards, sponsors, CIOs, CFOs, and project leaders"}.
+
+Editorial voice & style (strict anti-AI rules):
+- Write like an experienced practitioner explaining something directly to a client or colleague.
+- Natural, mature tone with a clear, comprehensible core argument.
+- Vary sentence length where it naturally fits the thought. Never force an unnatural cadence.
+- NEVER use em-dashes or en-dashes ("—" or "–") as parenthetical pauses. Use commas, colons, or normal sentence breaks.
+- NEVER use emojis in headings or body text.
+- Avoid schematic triads / rule-of-three bullet groupings ("Dreieraufzählungen").
+- Strictly avoid AI clichés, corporate buzzwords, and marketing fluff.
+  Forbidden phrases include: «In der heutigen Zeit», «Es ist wichtig», «spannend», «eintauchen», «Gamechanger», «zusammenfassend», «nicht nur … sondern auch», and generic marketing hype.
+- Prefer concrete statements and realistic examples. Use numbers/data only when known or sourced; never invent experiences, case results, or figures.
+- Take a clear stance when justified. Name real-world limitations, doubts, or trade-offs objectively.
+- Cut repetitions and fluff. Never conclude with a summary or "Fazit" section that simply repeats what was already said.
+- Self-check before output: Review your draft internally. Which formulations sound like a generic AI template or stay too vague? Rewrite those passages before finalizing.
 
 Non-negotiables:
 - Follow the editor prompt closely: thesis, structure, keywords, exclusions, tone, and requested length.
@@ -405,7 +435,17 @@ function buildDirectMetadataInstructions(params: GenerateBlogDraftParams): strin
 Return exactly one JSON object matching the schema.
 Do not include articleHtml.
 Default language: ${settings.defaultLanguage}. For German, use Swiss German conventions and avoid "ß".
-LinkedIn: create one short German LinkedIn teaser for Daniel Sengstag's profile. 500-800 characters, 2-4 short paragraphs, no source links, no external links, no competitor references, no citation parentheses. End with {{BLOG_URL}} on its own final line exactly once.
+
+LinkedIn copy rules (strict):
+- Write an authentic German LinkedIn post from Daniel Sengstag's perspective as senior practitioner.
+- 400-750 characters, 2-3 short paragraphs, natural practitioner tone sharing a genuine project observation or insight.
+- STRICTLY NO emojis.
+- STRICTLY NO em-dashes ("—" or "–").
+- NO clickbait hooks, listicles, or promotional slogans.
+- NO hashtags unless explicitly requested in the prompt.
+- No source links, external links, or competitor references.
+- End with {{BLOG_URL}} on its own final line exactly once.
+
 Image search: return 3-6 short English Unsplash search phrases. Prefer business/technology/project imagery: business technology, enterprise software, digital transformation, IT project management, business strategy meeting, software implementation, change management, workflow automation. Avoid Swiss architecture, Swiss landscapes, mountains, flags, handshakes, grinning teams, laptop dashboards, and skyscrapers.
 No source links, citations, or fabricated facts.`;
 }
@@ -422,7 +462,8 @@ ${articleHtml}`;
 }
 
 function normalizeLinkedinPlaceholder(post: string): string {
-  const withoutLinks = stripCompetitorReferenceLines(toSwissGerman(post))
+  const cleaned = cleanGedankenstriche(stripEmojis(stripCompetitorReferenceLines(toSwissGerman(post))));
+  const withoutLinks = cleaned
     .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, "$1")
     .replace(/https?:\/\/(?!www\.abexis\.ch\/blog\/)[^\s)]+/gi, "")
     .replace(/\(\s*\)/g, "")
@@ -449,22 +490,22 @@ function normalizeImageSearchQueries(queries: string[]): string[] {
 
 function normalizeDraftOutput(output: BlogAutomationDraftOutput): BlogAutomationDraftOutput {
   const normalized: BlogAutomationDraftOutput = {
-    title: toSwissGerman(output.title).trim(),
+    title: cleanGedankenstriche(stripEmojis(toSwissGerman(output.title))).trim(),
     slug: output.slug.trim().toLowerCase(),
-    excerpt: toSwissGerman(output.excerpt).trim(),
-    metaTitle: toSwissGerman(output.metaTitle).trim(),
-    metaDescription: toSwissGerman(output.metaDescription).trim(),
+    excerpt: cleanGedankenstriche(stripEmojis(toSwissGerman(output.excerpt))).trim(),
+    metaTitle: cleanGedankenstriche(stripEmojis(toSwissGerman(output.metaTitle))).trim(),
+    metaDescription: cleanGedankenstriche(stripEmojis(toSwissGerman(output.metaDescription))).trim(),
     articleHtml: cleanGeneratedArticleHtml(output.articleHtml),
-    researchSummary: toSwissGerman(output.researchSummary).trim(),
+    researchSummary: cleanGedankenstriche(stripEmojis(toSwissGerman(output.researchSummary))).trim(),
     linkedinPost: normalizeLinkedinPlaceholder(output.linkedinPost),
     imageSearchQueries: normalizeImageSearchQueries(output.imageSearchQueries),
-    heroImageAlt: toSwissGerman(output.heroImageAlt).trim(),
+    heroImageAlt: cleanGedankenstriche(stripEmojis(toSwissGerman(output.heroImageAlt))).trim(),
   };
-  if (output.titleEn != null) normalized.titleEn = output.titleEn.trim();
+  if (output.titleEn != null) normalized.titleEn = cleanGedankenstriche(stripEmojis(output.titleEn)).trim();
   if (output.slugEn != null) normalized.slugEn = output.slugEn.trim().toLowerCase();
-  if (output.excerptEn != null) normalized.excerptEn = output.excerptEn.trim();
-  if (output.metaTitleEn != null) normalized.metaTitleEn = output.metaTitleEn.trim();
-  if (output.metaDescriptionEn != null) normalized.metaDescriptionEn = output.metaDescriptionEn.trim();
+  if (output.excerptEn != null) normalized.excerptEn = cleanGedankenstriche(stripEmojis(output.excerptEn)).trim();
+  if (output.metaTitleEn != null) normalized.metaTitleEn = cleanGedankenstriche(stripEmojis(output.metaTitleEn)).trim();
+  if (output.metaDescriptionEn != null) normalized.metaDescriptionEn = cleanGedankenstriche(stripEmojis(output.metaDescriptionEn)).trim();
   if (output.articleHtmlEn != null) normalized.articleHtmlEn = cleanGeneratedBlogArticleHtml(stripModelCodeFences(output.articleHtmlEn));
   if (output.linkedinPostEn != null) normalized.linkedinPostEn = normalizeLinkedinPlaceholder(output.linkedinPostEn);
   return normalized;
@@ -559,7 +600,8 @@ async function generateEnglishVersion(
 Return exactly one JSON object matching the schema.
 Translate and adapt the German article faithfully into polished English while preserving the same structure, internal Abexis links, and senior consulting tone.
 Do not add external/source/competitor links. Keep articleHtmlEn as a semantic HTML fragment only.
-linkedinPostEn must be a short English LinkedIn teaser, 300-650 characters, no hashtags unless already requested, no external links, and end with {{BLOG_URL}} on its own final line exactly once.`,
+Editorial voice: senior practitioner explaining directly to a client or executive peer. Natural tone, varied sentence length, no marketing buzzwords (e.g. avoid "game changer", "dive in", "not only but also"), no em-dashes, no emojis.
+linkedinPostEn must be a short English LinkedIn post from Daniel Sengstag's perspective, 350-650 characters, 2-3 short paragraphs, natural practitioner tone, no emojis, no em-dashes, no hashtags unless already requested, no external links, and end with {{BLOG_URL}} on its own final line exactly once.`,
     input: `Topic: ${params.topic.title}
 
 German title:
