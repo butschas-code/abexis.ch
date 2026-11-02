@@ -7,7 +7,7 @@ import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { PageHero } from "@/components/site/PageHero";
 import { type ServiceGuideLocale, type ServiceGuidePage as Guide, getAllServiceGuides } from "@/data/service-guide-pages";
 import { siteConfig } from "@/data/pages";
-import { executiveSearchHeroImage, fokusPageHeroImages } from "@/data/site-images";
+import { executiveSearchHeroImage, fokusHeroObjectClass, fokusPageHeroImages } from "@/data/site-images";
 import { guideHubPath, guidePath } from "@/lib/seo/guide-routes";
 
 const parentLabels: Record<string, { de: string; en: string }> = {
@@ -45,7 +45,7 @@ export function ServiceGuidePage({ content: c }: { content: Guide }) {
           { name: c.meta.title, url: path },
         ]} />
 
-        <PageHero imageSrc={heroImage} priority intro={<p>{c.lead}</p>} actions={<>
+        <PageHero imageSrc={heroImage} imageObjectClassName={focusParent ? fokusHeroObjectClass[c.parent as keyof typeof fokusPageHeroImages] : undefined} priority intro={<p>{c.lead}</p>} actions={<>
           <a href={bookingUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#26337c] px-7 text-sm font-semibold text-white transition hover:bg-[#3550a4]">{c.closing.cta}</a>
           <Link href={parentPath} className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#26337c]/20 px-7 text-sm font-semibold text-[#26337c] transition hover:border-[#26337c]/40 hover:bg-[#f7f8fc]">{parentLabels[c.parent][localeKey]} →</Link>
         </>}>

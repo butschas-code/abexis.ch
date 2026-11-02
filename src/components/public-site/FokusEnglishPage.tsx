@@ -8,7 +8,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 import { type EnglishFocusItem, type EnglishFocusPage as EnglishFocusPageData } from "@/data/english-focus-pages";
 import { siteConfig } from "@/data/pages";
-import { fokusPageHeroImages } from "@/data/site-images";
+import { fokusHeroObjectClass, fokusPageHeroImages } from "@/data/site-images";
 
 function LCorner({ className = "" }: { className?: string }) {
   return (
@@ -446,6 +446,7 @@ export function FokusEnglishPage({ page }: { page: EnglishFocusPageData }) {
 
       <PageHero
         imageSrc={heroImage}
+        imageObjectClassName={fokusHeroObjectClass[page.slug]}
         priority
         intro={<p>{page.heroBody}</p>}
         actions={

@@ -18,8 +18,17 @@ export const homeTextureBar = HOME[1];
 /** Executive Search hero: restrained corporate architecture instead of generic office stock. */
 export const executiveSearchHeroImage = "/images/daniel-sengstag/hero.webp";
 
-/** Projektmanagement card + Fokus-Hero — team editorial, self-hosted. */
+/** Projektmanagement card + Fokus-Hero — client photo (title is part of the artwork). */
 export const projektmanagementHeroImage = "/images/focus/projektmanagement.webp";
+
+/**
+ * These client photos include a large English title. Hero crops keep that title out of the
+ * headline band. The full title stays visible on the service cards.
+ */
+export const fokusHeroObjectClass: Partial<Record<keyof typeof fokusPageHeroImages, string>> = {
+  vertriebmarketing: "object-bottom",
+  projektmanagement: "object-[center_18%]",
+};
 
 /** PLM/PDM consulting hero supplied by the client. */
 export const plmPdmHeroImage = "/images/focus/plm-pdm.webp";

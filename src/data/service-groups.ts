@@ -12,8 +12,8 @@ type ServiceItem = {
   body: string;
   href: string;
   imageKey: keyof typeof serviceCardImages;
-  /** Client artwork has text at the top; keep it in frame when cropped. */
-  imagePosition?: "object-top";
+  /** Keep baked-in title text inside the card crop. */
+  imagePosition?: "object-top" | "object-bottom";
 };
 type ServiceGroup = { title: string; body: string; items: readonly ServiceItem[] };
 
@@ -76,6 +76,7 @@ const groupsDe: readonly ServiceGroup[] = [
         body: "Projektleitung übernehmen, Teams verstärken und anspruchsvolle Vorhaben stabilisieren.",
         href: "/fokusthemen/projektmanagement",
         imageKey: "projektmanagement",
+        imagePosition: "object-bottom",
       },
       {
         title: "Risikomanagement",
@@ -171,6 +172,7 @@ const groupsEn: readonly ServiceGroup[] = [
         body: "Take over project leadership, strengthen teams and stabilise demanding initiatives.",
         href: "/en/fokusthemen/projektmanagement",
         imageKey: "projektmanagement",
+        imagePosition: "object-bottom",
       },
       {
         title: "Risk management",

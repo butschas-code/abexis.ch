@@ -4,7 +4,7 @@ import { HeroProjectRealityCheckCta } from "@/components/site/HeroProjectReality
 import { HeroHeadlineText } from "@/components/site/HeroHeadlineBrandAccent";
 import { PageHero } from "@/components/site/PageHero";
 import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
-import { fokusPageHeroImages } from "@/data/site-images";
+import { fokusHeroObjectClass, fokusPageHeroImages } from "@/data/site-images";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
 
@@ -223,6 +223,7 @@ export function FokusProjektmanagement() {
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
       <PageHero
         imageSrc={heroImage}
+        imageObjectClassName={fokusHeroObjectClass.projektmanagement}
         priority
         intro={
           <p>

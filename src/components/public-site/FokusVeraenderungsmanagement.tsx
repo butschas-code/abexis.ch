@@ -7,15 +7,11 @@ import { InteriorPageRoot } from "@/components/site/InteriorPageLayout";
 import { fokusPageHeroImages } from "@/data/site-images";
 import { fokusthemenMeta, siteConfig } from "@/data/pages";
 import { SchemaMarkup } from "@/components/public-site/SchemaMarkup";
-import { resolvePublicImageUrl } from "@/lib/images/resolve-public-image-url";
 
 // ─── Static data : module level, no re-allocation ────────────────────────────
 
 const meta = fokusthemenMeta.find((m) => m.slug === "veränderungsmanagement")!;
 const heroImage = fokusPageHeroImages["veränderungsmanagement"];
-const contentImage = resolvePublicImageUrl(
-  "https://firebasestorage.googleapis.com/v0/b/abexis-cms.firebasestorage.app/o/cms%2Fmedia%2Fmigrated%2F3f6bff6e-7e5a-4da7-92ad-f900954f953f.jpeg?alt=media",
-);
 
 const handlungsfelder = [
   {
@@ -264,7 +260,7 @@ export function FokusVeraenderungsmanagement() {
       {/* ── 2. SPLIT PANEL : Veränderungsmanagement vs. Projektmanagement ── */}
       <MotionSection>
         <div className="overflow-hidden md:grid md:grid-cols-2">
-          {/* Left half : navy */}
+          {/* Left half : navy. This page's topic leads; Projektmanagement is the comparison. */}
           <div className="relative bg-[#1a2260]">
             <div className="relative ml-auto max-w-[534px] px-8 py-14 md:px-12 md:py-20">
               <LCorner className="top-6 left-6 text-[#45b3e2]/30" />
@@ -273,11 +269,12 @@ export function FokusVeraenderungsmanagement() {
                 Dimension 1
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-white">
-                Projektmanagement
+                Veränderungsmanagement
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-white/65">
-                Steuert Scope, Zeit, Budget und Qualität. Es sorgt dafür, dass die richtigen Dinge
-                in der richtigen Reihenfolge umgesetzt werden : technisch korrekt und termingerecht.
+                Sorgt dafür, dass Menschen die Veränderung verstehen, akzeptieren und mittragen.
+                Ohne diese menschliche Dimension scheitern selbst technisch perfekte Projekte ,
+                im Widerstand, in der Ablehnung oder im stillen Boykott.
               </p>
             </div>
           </div>
@@ -291,12 +288,11 @@ export function FokusVeraenderungsmanagement() {
                 Dimension 2
               </h2>
               <h3 className="mt-3 text-[clamp(1.375rem,3vw+0.5rem,1.875rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#1d1d1f]">
-                Veränderungsmanagement
+                Projektmanagement
               </h3>
               <p className="mt-5 text-[16px] leading-relaxed text-[#6e6e73]">
-                Sorgt dafür, dass Menschen die Veränderung verstehen, akzeptieren und mittragen.
-                Ohne diese menschliche Dimension scheitern selbst technisch perfekte Projekte ,
-                im Widerstand, in der Ablehnung oder im stillen Boykott.
+                Steuert Scope, Zeit, Budget und Qualität. Es sorgt dafür, dass die richtigen Dinge
+                in der richtigen Reihenfolge umgesetzt werden : technisch korrekt und termingerecht.
               </p>
             </div>
           </div>
@@ -386,8 +382,8 @@ export function FokusVeraenderungsmanagement() {
       {/* ── IMAGE BREAK ──────────────────────────────────────────────────── */}
       <div className="relative h-[380px] overflow-hidden md:h-[480px]">
         <img
-          src={contentImage}
-          alt="Change Management in der Praxis"
+          src={heroImage}
+          alt="Veränderungsmanagement"
           className="absolute inset-0 h-full w-full object-cover"
           loading="lazy"
         />
